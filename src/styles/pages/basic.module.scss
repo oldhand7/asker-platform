@@ -1,0 +1,21 @@
+.page {
+  width: 850rem;
+  padding-left: 30rem;
+  padding-right: 30rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: var(--container-width);
+
+  &-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 2em;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 48rem 0px;
+  }
+
+  &-content {
+    margin:  48rem 0px;
+  }
+}

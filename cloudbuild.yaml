@@ -1,0 +1,20 @@
+steps:
+- name: ubuntu
+  entrypoint: bash
+  args: ['-c', 'printenv > .env.production']
+  env:
+    - 'SMTP_USER=${_SMTP_USER}'
+    - 'SMTP_PASS=${_SMTP_PASS}'
+    - 'SMTP_HOST=${_SMTP_HOST}'
+    - 'SMTP_PORT=${_SMTP_PORT}'
+    - 'CLOUD_BUILD=${_CLOUD_BUILD}'
+    - 'FIREBASE_SERVICE_KEY=${_FIREBASE_SERVICE_KEY}'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/nextjs-app-platform', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/nextjs-app-platform']
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'nextjs-app-platform', '--image', 'gcr.io/$PROJECT_ID/nextjs-app-platform:latest', '--platform', 'managed', '--allow-unauthenticated', '--region', 'europe-central2']
+images:
+- gcr.io/$PROJECT_ID/nextjs-app-platform

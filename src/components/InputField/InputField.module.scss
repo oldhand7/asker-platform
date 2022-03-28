@@ -1,0 +1,25 @@
+.input-field {
+  &-error {
+    color: red;
+  }
+
+  &-label {
+    margin-bottom: 10rem;
+    display: block;
+  }
+
+  &-textarea {
+    height: 127rem;
+    width: 100%;
+    left: 284rem;
+    top: 1910rem;
+    background: #EEEEEE;
+    border-radius: 11rem;
+    border: 0;
+    padding: 20rem;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+}

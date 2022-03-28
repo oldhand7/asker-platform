@@ -1,0 +1,63 @@
+body {
+  &:after {
+    position: fixed;
+    content: 'MAX';
+    background: yellow;
+    color: black;
+    display: inline-block;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    font-size: 22px;
+  }
+
+  @media (max-width: 1920px) {
+    &:after {
+      content: '1920px';
+    }
+  }
+
+  @media (max-width: 1600px) {
+    &:after {
+      content: '1600px';
+      background: cyan;
+    }
+  }
+
+  @media (max-width: 1440px) {
+    &:after {
+      content: '1440px';
+      background: yellow;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    &:after {
+      content: '1200px';
+      background: cyan;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    &:after {
+      content: '1024px';
+      background: yellow;
+    }
+  }
+
+
+  @media (max-width: 768px) {
+    &:after {
+      content: '768px';
+      background: cyan;
+    }
+  }
+
+  @media (max-width: 540px) {
+      &:after {
+        content: '540px';
+        background: yellow;
+      }
+  }
+}

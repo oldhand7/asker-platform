@@ -1,0 +1,36 @@
+.contact-menu {
+  list-style: none;
+  padding: 0;
+  font-weight: 300;
+  font-size: 1em;
+  margin: 0;
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  &-item {
+    display: block;
+    margin-right: 10rem;
+    line-height: 2em;
+    margin-bottom: 10rem;
+    white-space: nowrap;
+  }
+
+  &-link {
+    display: inline-block;
+    margin-left: 10rem;
+  }
+
+  &-icon {
+    display: inline-block;
+    font-size: 1em;
+    position: relative;
+    top: 2rem;
+
+    svg {
+      height: 1em;
+      width: 1em;
+    }
+  }
+}

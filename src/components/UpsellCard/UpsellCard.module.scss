@@ -1,0 +1,32 @@
+@import 'styles/vars';
+
+.upsell-card {
+  padding: 40rem 40rem 80rem;
+  background: #FFFFFF;
+  box-shadow: 0px 10rem 30rem rgba(4, 4, 4, 0.13);
+  border-radius: 40px;
+  flex-direction: column;
+
+  &-title {
+    font-weight: 500;
+    font-size: 1.2em;
+    line-height: 30rem;
+    letter-spacing: 0.015em;
+    margin: 12rem 0px;
+  }
+
+  &-desc {
+    font-weight: 300;
+    letter-spacing: 0.015em;
+    margin: 35rem 0px 0px;
+  }
+
+  &-icon {
+    display: inline-block;
+    flex: 0;
+    display: block;
+    float: right;
+    font-size: 3em;
+    fill: $brand-green;
+  }
+}

@@ -1,0 +1,32 @@
+.text-input {
+  border: 0;
+  display: block;
+  flex: 1 1 100%;
+  padding: 0px 15rem;
+  min-width: 0;
+
+  &:focus {
+    outline: 0;
+  }
+
+  &-wrapper {
+    display: flex;
+    height: 4em;
+    border: 1px solid #DADADA;
+    box-sizing: border-box;
+    border-radius: 9px;
+    justify-content: center;
+    align-items: center;
+    padding: 20rem 15rem;
+    margin-left: -1px;
+    box-sizing: border-box;
+  }
+
+  &-icon {
+    border-right: 1px solid #AFAFAF;
+    padding-right: 0.5em;
+    flex: 1 0 1em;
+    font-size: 1.3em;
+  }
+
+}

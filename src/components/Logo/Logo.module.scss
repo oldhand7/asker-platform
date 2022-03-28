@@ -1,0 +1,14 @@
+@import 'styles/vars';
+
+.logo {
+  &-image {
+    max-width: 180rem;
+    max-height: 40rem;
+    object-fit: contain;
+    object-position: center center;
+
+    @media (max-width: 768px) {
+      max-height: 60rem;
+    }
+  }
+}

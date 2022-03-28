@@ -1,0 +1,46 @@
+.alert {
+  width: 100%;
+  padding: 10rem;
+  display: flex;
+  text-align: left;
+  border-bottom: 2px solid currentColor;
+  color: rgba(0, 0, 0, 0.9);
+  border-radius: 5px;
+  border: 1px solid #d7d9dd;
+  background: #e3e4e7;
+
+  &-danger,
+  &-error {
+    background: #f5d8db;
+    border-color: #f1c7cd;
+  }
+
+  &-success {
+    background: #d8edda;
+    border-color: #c8e8cb;
+  }
+
+  &-warning {
+    background: #fdf3cd;
+    border-color: #fceeb7;
+  }
+
+  &-info {
+    background: #d5edf3;
+    border-color: #c4e6ec;
+  }
+
+  &-message {
+    flex: 1;
+  }
+
+  &-close {
+    opacity: 0.5;
+    cursor: pointer;
+
+    &-icon {
+      height: 1em;
+      width: 1em;
+    }
+  }
+}

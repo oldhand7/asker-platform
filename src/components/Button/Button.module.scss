@@ -1,0 +1,25 @@
+.button {
+  color: white;
+  background: black;
+  background: #000000;
+  border-radius: 35px;
+  padding: 0 50rem;
+  border: 0;
+  line-height: 3em;
+  display: inline-block;
+  white-space: nowrap;
+
+  &[href]:hover {
+    text-decoration: underline !important;
+
+    span {
+      text-decoration: inherit;
+    }
+  }
+
+  & > * {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 2rem;
+  }
+}

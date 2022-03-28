@@ -1,0 +1,15 @@
+.icon {
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+
+  svg {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+  }
+
+  &-mail {
+    margin-top: 2px;
+  }
+}

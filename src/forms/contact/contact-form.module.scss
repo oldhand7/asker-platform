@@ -1,0 +1,30 @@
+.contact-form {
+  border-radius: 36px;
+  padding: 45rem 40rem;
+  background: white;
+  color: black;
+  text-align: right;
+
+  &-alert {
+    margin-bottom: 10rem;
+  }
+
+  &-field {
+    margin-bottom: 30rem;
+    text-align: left;
+  }
+
+  &-submit {
+    width: 201rem;
+    height: 51rem;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background: white;
+    margin-top: -10rem;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

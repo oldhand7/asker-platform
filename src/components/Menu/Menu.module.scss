@@ -1,0 +1,41 @@
+.menu {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  align-items: flex-end;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    margin-top: 50rem;
+  }
+
+  &-item {
+    margin: 0px 12.5rem;
+    display: inline-block;
+    height: 60%;
+    box-sizing: border-box;
+
+    @media (max-width: 768px) {
+      height: auto;
+      margin-bottom: 12.5rem;
+    }
+  }
+
+  &-item.active &-link,
+  &-item:hover  &-link {
+    border-bottom: 3rem solid black;
+  }
+
+  &-item.active &-link {
+    font-weight: bold;
+  }
+
+  &-link {
+    height: 100%;
+    display: inline-block;
+    border-bottom: 3rem solid transparent;
+    box-sizing: border-box;
+    outline: 0;
+  }
+}

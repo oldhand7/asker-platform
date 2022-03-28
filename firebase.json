@@ -1,0 +1,23 @@
+{
+  "hosting": {
+    "site": "asker-platform1",
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "run": {
+          "serviceId": "nextjs-app-platform",
+          "region": "europe-central2"
+        }
+      }
+    ]
+  },
+  "functions": {
+    "source": "cloud-functions"
+  }
+}

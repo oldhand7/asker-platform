@@ -1,0 +1,42 @@
+{
+  "name": "asker-platform",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "deploy": "firebase deploy"
+  },
+  "dependencies": {
+    "@splidejs/react-splide": "^0.6.20",
+    "babel-plugin-inline-react-svg": "^2.0.1",
+    "classnames": "^2.3.1",
+    "escape-html": "^1.0.3",
+    "firebase": "^9.6.9",
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.18.1",
+    "iron-session": "^6.1.1",
+    "next": "12.1.0",
+    "next-connect": "^0.12.2",
+    "node-cache": "^5.1.2",
+    "node-mailer": "^0.1.1",
+    "printenv": "^1.0.0",
+    "ra-data-simple-rest": "^3.19.10",
+    "ra-input-rich-text": "^3.19.10",
+    "react": "17.0.2",
+    "react-admin": "^3.19.10",
+    "react-admin-firebase": "^3.3.1",
+    "react-dom": "17.0.2",
+    "sass": "^1.49.9",
+    "slugify": "^1.6.5",
+    "striptags": "^3.2.0",
+    "tawkto-react": "^3.0.1",
+    "validatorjs": "^3.22.1"
+  },
+  "devDependencies": {
+    "eslint": "8.11.0",
+    "eslint-config-next": "12.1.0"
+  }
+}

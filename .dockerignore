@@ -1,0 +1,16 @@
+# blacklist everything
+/*
+
+# whitelist
+#
+!/Dockerfile
+!/package.json
+!/package-lock.json
+!/next.config.js
+!/jsconfig.json
+!/src/
+!/.env
+!/.env.production
+!/.babelrc
+!/firebase-service-creds.json
+!/i18n.json
