@@ -53,7 +53,7 @@ const useForm = (options = {}) => {
   const handleSet = (field, value) => {
     setValues({
       ...values,
-      [field]: !values[field]
+      [field]: value
     })
   }
 
@@ -64,7 +64,8 @@ const useForm = (options = {}) => {
       input: handleInput,
       submit: handleSubmit,
       toggle: handleToggle,
-      set: handleSet
+      set: handleSet,
+      setValues
     }
   ]
 }

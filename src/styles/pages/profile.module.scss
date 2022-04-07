@@ -1,0 +1,25 @@
+.profile-page {
+  padding: 20rem 0;
+
+  &-tabs {}
+
+  &-tab-list {
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #aaa;
+    padding-left: 50rem;
+  }
+
+  &-tab-panel {
+    margin: 0;
+    background: white;
+    padding: 40rem;
+    border-left:  1px solid #aaa;
+  }
+
+  &-form {
+    max-width: 420rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

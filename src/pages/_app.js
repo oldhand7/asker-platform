@@ -1,15 +1,17 @@
+import DefaultLayout from 'layouts/default/default-layout';
+
+import { withSite } from 'libs/site';
+import { withUser } from 'libs/user';
+import { withModal } from 'libs/modal';
+
 import 'styles/globals.scss'
 
-import DefaultLayout from 'layouts/default/default-layout';
-import AdminLayout from 'layouts/admin/admin-layout';
-import { withSite } from 'libs/site';
-
 function App({ Component, pageProps }) {
-  const Layout = Component.layout === 'admin' ? AdminLayout : DefaultLayout;
+  const Layout = Component.layout ? Component.layout : DefaultLayout;
 
   return <Layout>
     <Component {...pageProps} />
   </Layout>
 }
 
-export default withSite(App)
+export default withUser(withSite(withModal(App)))

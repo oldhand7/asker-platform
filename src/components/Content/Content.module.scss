@@ -1,4 +1,10 @@
+@import 'styles/vars';
+
 .content {
   min-height: calc(100vh - 200rem);
   padding-top: 100rem;
+  width: var(--container-width);
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
 }

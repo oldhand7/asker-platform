@@ -3,8 +3,7 @@ import { useContext } from "react";
 
 export const SiteContext = createContext();
 
-export const withSite = (WrappedComponent) => {
-  const withSite = (props) => {
+export const withSite = (WrappedComponent) => (props) => {
     const { pageProps: { config } } = props;
 
     return (
@@ -18,9 +17,6 @@ export const withSite = (WrappedComponent) => {
         {...props}
       /></SiteContext.Provider>
     );
-  };
-
-  return withSite;
-};
+}
 
 export const useSite = (locale) => useContext(SiteContext)

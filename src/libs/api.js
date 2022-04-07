@@ -9,18 +9,7 @@ export const sendContactMessage = values => {
     body: JSON.stringify(values)
   }
 
-  return fetcher(`/api/contact-form`, options);
-}
-
-export const getRoutes = (server = '/') => {
-  const options = {
-    method: 'GET',
-    headers: {
-      "Content-Type": "application/json"
-    }
-  }
-
-  return fetcher(`${server}api/routes`, options);
+  return fetcher(`${NEXT_PUBLIC_LANGING_PAGE_URL}api/contact-form`, options);
 }
 
 export const createPairSession = (uid, idToken) => {
@@ -47,4 +36,35 @@ export const logoutUser = () => {
   }
 
   return fetcher(`/api/auth/logout`, options);
+}
+
+export const createFirebaseUser = (email, password) => {
+  const options = {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email,
+      password
+    })
+  }
+
+  return fetcher(`/api/firebase-proxy/users/create`, options);
+}
+
+export const updateFirebaseUserEmailAndPassword = (uid, email, password) => {
+  const options = {
+    method: 'PUT',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      uid,
+      email,
+      password
+    })
+  }
+
+  return fetcher(`/api/firebase-proxy/users/password`, options);
 }

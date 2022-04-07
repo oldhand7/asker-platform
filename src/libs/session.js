@@ -1,7 +1,7 @@
 export const ironSessionOptions = {
-    cookieName: "proj",
+    cookieName: "user_plt",
     password: process.env.SESSION_SECRET,
     cookieOptions: {
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production"
     }
 }

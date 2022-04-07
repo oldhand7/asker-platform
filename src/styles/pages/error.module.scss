@@ -1,0 +1,10 @@
+.error-page {
+  &-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 22rem;
+    opacity: 0.25;
+  }
+}
