@@ -2,13 +2,23 @@
 
 .navbar {
   height: 100rem;
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
   box-shadow: 0px 10px 50px 0px rgba(4, 4, 4, 0.04);
+  position: absolute;
+  color: black;
+  background: white;
+
+  &-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: all 0.25s 0s ease-out;
+  }
+
+  &-offset {
+    top: -100rem;
+    transition: all 0.25s 0s;
+  }
 
   z-index: 10;
 
@@ -33,7 +43,8 @@
     }
   }
 
-  &.mobile {
+  &-mobile {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -41,37 +52,70 @@
     height: 100vh;
     background: rgba(255, 255, 255);
     padding: 20rem 20rem 40rem;
+    transition: all 0s 0s;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
   }
 
-  &.mobile &-menu {
+  &.mobile &-mobile {
+      display: flex;
+  }
+
+  &-mobile &-menu {
     display: flex;
     align-items: center;
     font-size: 2em;
+    margin-top: 200rem;
   }
 
-  &.mobile &-inner {
+  &-mobile &-inner {
     flex-direction: column;
   }
 
-
-  &-toggle {
+  &-open {
     display: none;
+    z-index: 10;
+    font-size: 1.5em;
 
     @media (max-width: 768px) {
       display: inline-block;
-      position: fixed;
+      position: absolute;
       right: 20rem;
       top: 50rem;
       transform: translateY(-50%);
     }
   }
 
-  &-session {
-    @media (max-width: 768px) {
-      display: none;
-      font-size: 1.5em;
+  &-close {
+    display: inline-block;
+    position: absolute;
+    right: 20rem;
+    top: 50rem;
+    transform: translateY(-50%);
+        font-size: 1.5em;
+  }
+
+  &.mobile &-open {
+    display: none;
+  }
+
+  &-fixed &-open {
+    svg {
+      fill: white;
     }
   }
+
+  &-session {
+    &-login {
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+
+    background: white;
+  }
+
 
   &.mobile &-session {
     @media (max-width: 768px) {

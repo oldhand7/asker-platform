@@ -1,5 +1,9 @@
 import * as Validator from 'validatorjs';
 
+Validator.register('phone_e164', function(value, requirement, attribute) { // requirement parameter defaults to null
+  return value.match(/^\+[1-9]\d{10,14}$/);
+}, 'The phone number is not valid E164 standard.');
+
 const parse = (errors) => {
   const keys = Object.keys(errors);
 

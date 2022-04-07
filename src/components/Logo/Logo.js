@@ -9,8 +9,8 @@ const Logo = ({ className, onClick, darkMode = false }) => {
   return <Link href="/"><a onClick={onClick} className={classNames(styles['logo'], className)}>
     {
       !darkMode ?
-      <img className={styles['logo-image']} src={Askerlogo.src} alt="ASKER" /> :
-      <img className={styles['logo-image']} src={AskerlogoInv.src} alt="ASKER" />
+      <img width="180rem" height="25rem" className={styles['logo-image']} src={Askerlogo.src} alt="ASKER" /> :
+      <img width="180rem" height="25rem" className={styles['logo-image']} src={AskerlogoInv.src} alt="ASKER" />
     }
   </a></Link>
 }

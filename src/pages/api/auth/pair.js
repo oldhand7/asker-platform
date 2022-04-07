@@ -5,7 +5,7 @@ import { validate } from 'libs/validator';
 import { getApp } from 'libs/firebase-admin';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
-import { getUser} from 'libs/firestore';
+import { getUser} from 'libs/firestore-admin';
 
 const handler = createApiHandler()
 

@@ -3,9 +3,9 @@
 .logo {
   &-image {
     max-width: 180rem;
-    max-height: 40rem;
+    max-height: 25rem;
     object-fit: contain;
-    object-position: center center;
+    object-position: left center;
 
     @media (max-width: 768px) {
       max-height: 60rem;

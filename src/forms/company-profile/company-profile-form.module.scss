@@ -1,0 +1,46 @@
+.company-profile-form {
+  border-radius: 36px;
+  background: white;
+  color: black;
+  text-align: right;
+
+  &-alert {
+    margin-bottom: 10rem;
+  }
+
+  &-field {
+    margin-bottom: 30rem;
+    text-align: left;
+  }
+
+  &-submit {
+    width: 201rem;
+    height: 51rem;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background: white;
+    margin-top: -10rem;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &-logo {
+    margin-bottom: 20rem;
+    text-align: center;
+    
+    &-image {
+      max-width: 300px;
+      max-height: 200px;
+      object-fit: contain;
+      object-position: center center;
+      display: inline-block;
+    }
+
+    &-uploader {
+      cursor: pointer;
+    }
+  }
+}

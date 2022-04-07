@@ -2,17 +2,9 @@
 
 .footer {
   border-top: 1px solid #F2F2F2;
-  border-bottom: 1px solid #F2F2F2;
   padding: 30rem 0 30rem;
-  margin-bottom: 15rem;
-  background: black;
-  color: white;
-  fill: white;
+  background: white;
   font-size: 0.9em;
-
-  svg {
-    fill: white;
-  }
 
   &-inner {
     width: var(--container-width);
@@ -20,6 +12,7 @@
     margin-right: auto;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 
     @media (max-width: 1024px) {
       flex-direction: column;
@@ -34,6 +27,7 @@
     font-weight: 300;
     align-items: center;
     letter-spacing: 0.015em;
+    max-width: 100%;
 
     &-logo {
       display: inline-block;
@@ -76,6 +70,10 @@
       white-space: nowrap;
       margin-right: 30rem;
 
+      @media (max-width: 1024px) {
+        margin-right: 0px;
+      }
+
       &:hover {
         text-decoration: underline;
       }
@@ -88,8 +86,9 @@
     opacity: 0.5;
   }
 
-  &-flex {
-    width: var(--container-width);
+  &-footer {
+    flex: 1 0 100%;
+    margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
     display: flex;
@@ -98,6 +97,7 @@
     padding-bottom: 1em;
     line-height: 2em;
     font-size: 0.9em;
+    background: white;
 
     @media (max-width: 1024px) {
       flex-direction: column;

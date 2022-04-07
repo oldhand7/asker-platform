@@ -15,7 +15,7 @@ const Footer = () => {
     <div className={styles['footer-inner']}>
       <div className={styles['footer-company']}>
         <Logo className={styles['footer-company-logo']} darkMode={true} />
-        <p className={styles['footer-company-text']}>{t && t('A platform that turns every recruiter into an interview professional by helping you hold structured and inclusive job interviews.')}</p>
+        <p className={styles['footer-company-text']}>{config && config['company-about']}</p>
         <div className={styles['footer-company-social']}>
           <h3 className={styles['footer-company-social-title']}>{t('Social')}</h3>
           <SocialMenu links={{
@@ -28,14 +28,16 @@ const Footer = () => {
         <h3 className={styles['footer-contact-widget-title']}>{t('Contact')}</h3>
         <ContactMenu email={config && config['company-email']} address={config && config['company-address']} />
       </div>
-    </div>
-  </div>
-  <div className={styles['footer-flex']}>
-      <div className={styles['footer-links']}>
-        <a href="/terms">{t('Terms and conditions')}</a>
-        <a href="/cookie-policy">{t('Cookie policy')}</a>
+      <div className={styles['footer-footer']}>
+          <div className={styles['footer-links']}>
+            {/*<a href="/terms">{t('Terms and conditions')}</a>*/}
+            <Link href={`${process.env.NEXT_PUBLIC_LANDING_PAGE_URL}cookie-policy`}>
+              <a target="_blank" >{t('Cookie policy')}</a>
+            </Link>
+          </div>
+          <Copyright className={styles['footer-copyright']} />
       </div>
-      <Copyright className={styles['footer-copyright']} />
+    </div>
   </div>
   </>
 }

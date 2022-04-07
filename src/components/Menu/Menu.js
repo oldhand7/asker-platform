@@ -9,16 +9,12 @@ const menuItems = [
   {
     href: '/',
     title: 'Home'
-  },
-  {
-    href: '/about',
-    title: 'About us'
   }
 ]
 
 const Menu = ({ className, onClick, items = [] }) => {
   const router = useRouter();
-  
+
   return <ul className={classNames(styles['menu'], className)}>
     {items.map((menuItem, index) => {
       return <li onClick={onClick} key={menuItem.id} className={classNames(styles['menu-item'], router.asPath == menuItem.href ? styles['active'] : '')}>

@@ -5,7 +5,6 @@ import Content from 'components/Content/Content';
 import Script from 'next/script';
 import { getCookie } from 'libs/helper';
 import { useEffect } from 'react';
-import TawkTo from 'tawkto-react'
 import { withRouter } from 'next/router';
 
 import styles from './admin-layout.module.scss';

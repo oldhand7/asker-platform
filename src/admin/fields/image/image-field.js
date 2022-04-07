@@ -29,6 +29,7 @@ const ImageField = (props) => {
         src,
         title,
         alwaysSingle,
+        basePath,
         ...rest
     } = props;
     const record = useRecordContext(props);
@@ -91,9 +92,6 @@ const ImageField = (props) => {
 // What? TypeScript loses the displayName if we don't set it explicitly
 ImageField.displayName = 'ImageField';
 
-ImageField.defaultProps = {
-    addLabel: true,
-};
 
 ImageField.propTypes = {
     src: PropTypes.string,
