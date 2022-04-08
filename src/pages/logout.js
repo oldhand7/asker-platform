@@ -18,7 +18,7 @@ const LogoutPage = () => {
     } else {
       router.push('/login/')
     }
-  }, [router, user, userApi])
+  }, [user, userApi])
 
   return <div className={styles['logout-page']}>Loading...</div>
 }

@@ -11,26 +11,14 @@ const LoginPage = () => {
   const router = useRouter();
   const [user, userApi] = useUser()
 
-  const handleLogin = () => {
-    userApi.refresh()
-  }
-
   useEffect(() => {
     if (user) {
       router.push('/projects/')
     }
   }, [user])
 
-  useEffect(() => {
-    const { query } = router;
-
-    if (query.logout) {
-      userApi.logout()
-    }
-  }, [router])
-
   return <div className={styles['login-page']}>
-    <LoginForm className={styles['login-page-form']} authFunction={login} onSuccess={handleLogin} />
+    <LoginForm className={styles['login-page-form']} authFunction={login} onSuccess={userApi.refresh} />
   </div>
 }
 
