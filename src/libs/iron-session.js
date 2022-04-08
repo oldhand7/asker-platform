@@ -1,15 +1,14 @@
 import { withIronSessionSsr } from 'iron-session/next';
 
-export const shortTtl = 3600;
-export const longTtl = 3600 * 24 * 30;
+// export const shortTtl = 3600;
+// export const longTtl = 3600 * 24 * 30;
 
 export const sessionOptions = {
     cookieName: "user",
     password: process.env.SESSION_SECRET,
     cookieOptions: {
       secure: process.env.APP_ENV === "production",
-    },
-    ttl: shortTtl
+    }
 }
 
 export const withUserGuard = (handler, superadmin = false) => (req, res) => {
