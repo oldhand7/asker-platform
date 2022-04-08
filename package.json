@@ -7,7 +7,7 @@
     "test-dev": "export APP_ENV=testing && next dev",
     "build": "export APP_ENV=production && next build",
     "test-build": "export APP_ENV=testing && next build",
-    "start": "next start",
+    "start": "export APP_ENV=production && next start",
     "test-start": "export APP_ENV=testing && next start",
     "lint": "next lint",
     "deploy": "firebase deploy",
