@@ -1,5 +1,5 @@
 import { withIronSessionSsr } from 'iron-session/next';
-import { ironSessionOptions } from 'libs/session';
+import { ironSession } from 'libs/iron-session';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useUser } from 'libs/user'
@@ -16,11 +16,11 @@ const LogoutPage = () => {
       userApi.logout()
         .then(() => router.push('/login'))
     } else {
-      router.push('/login')
+      router.push('/login/')
     }
   }, [router, user, userApi])
 
-  return <div className={styles['logout-page']}>Logging out...</div>
+  return <div className={styles['logout-page']}>Loading...</div>
 }
 
 LogoutPage.layout = BlankLayout

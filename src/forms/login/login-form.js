@@ -51,10 +51,10 @@ const LoginForm  = ({ className, authFunction, onSuccess }) => {
       );
     }
 
-    return <form className={getClassNames()} onSubmit={control.submit(handleFormValues)}>
+    return <form data-test-id="login-form" className={getClassNames()} onSubmit={control.submit(handleFormValues)}>
         {error ? <Alert type="danger">{error.message}</Alert> : null}
 
-        <TextInputField value={values.username} className={styles['login-form-input-field']} label="Email" name="username" error={errors && errors.username}  onChange={control.input('username')}  />
+        <TextInputField value={values.username} className={styles['login-form-input-field']} label="Email" name="email" error={errors && errors.username}  onChange={control.input('username')}  />
         <PasswordInputField value={values.password} className={styles['login-form-input-field']} label="Password" name="password" error={errors && errors.password}  onChange={control.input('password')}  />
 
         <Button className={styles['login-form-submit']} type="submit" disabled={loading}>{!loading ? 'Login' : 'Loading...'}</Button>

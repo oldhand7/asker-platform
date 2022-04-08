@@ -1,6 +1,6 @@
 import { createApiHandler as getHandler } from 'libs/nc';
 import { withUserGuard } from 'libs/iron-session';
-import { ironSessionOptions as sessionOptions } from 'libs/session';
+import { sessionOptions } from 'libs/iron-session';
 import { getApp } from 'libs/firebase-admin';
 import { validate } from 'libs/validator';
 import { withIronSessionApiRoute } from 'iron-session/next';

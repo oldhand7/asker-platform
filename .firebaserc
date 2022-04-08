@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "asker-3e929"
-  }
+    "default": "asker-3e929",
+    "asker-dev": "asker-dev",
+    "asker-test": "asker-test-98028"
+  },
+  "targets": {}
 }

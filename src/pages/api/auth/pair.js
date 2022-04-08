@@ -1,5 +1,5 @@
 import { createApiHandler } from 'libs/nc';
-import { ironSessionOptions } from 'libs/session';
+import { sessionOptions } from 'libs/iron-session';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { validate } from 'libs/validator';
 import { getApp } from 'libs/firebase-admin';
@@ -26,9 +26,9 @@ handler.post(async (req, res) => {
         return;
     }
 
-    const decodedToken = await getAuth(getApp()).verifyIdToken(req.body.idToken)
+    const claims = await getAuth(getApp()).verifyIdToken(req.body.idToken)
 
-    if (decodedToken.uid != req.body.uid) {
+    if (claims.uid != req.body.uid) {
       res.status(401).end()
 
       return;
@@ -37,11 +37,9 @@ handler.post(async (req, res) => {
     try {
       const db = getFirestore(getApp())
 
-      const user = await getUser(db, req.body.uid)
-
       req.session.user = {
-          uid: req.body.uid,
-          superadmin: !!user.superadmin
+        ...claims,
+        env: process.env.NODE_ENV
       }
 
       await req.session.save()
@@ -57,4 +55,4 @@ handler.post(async (req, res) => {
     }
 })
 
-export default withIronSessionApiRoute(handler, ironSessionOptions);
+export default withIronSessionApiRoute(handler, sessionOptions);

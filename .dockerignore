@@ -12,5 +12,5 @@
 !/.env
 !/.env.production
 !/.babelrc
-!/firebase-service-creds.json
+!/firebase-service-creds-production.json
 !/i18n.json

@@ -3,7 +3,7 @@ import {
   getAuth as firebaseGetAuth,
   updatePassword, reauthenticateWithCredential,
   EmailAuthProvider, onAuthStateChanged, updateEmail } from 'firebase/auth'
-import { firebaseConfig } from 'libs/config';
+import { getFirebaseConfig } from 'libs/config';
 
 export const getApp = () => {
     const apps = getApps()
@@ -12,7 +12,7 @@ export const getApp = () => {
       return apps[0]
     }
 
-    return initializeApp(firebaseConfig);
+    return initializeApp(getFirebaseConfig());
 }
 
 export const changePassword = async (oldPassword, newPassword) => {

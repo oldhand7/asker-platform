@@ -1,3 +1,5 @@
+import { withIronSessionSsr } from 'iron-session/next';
+
 export const shortTtl = 3600;
 export const longTtl = 3600 * 24 * 30;
 
@@ -5,7 +7,7 @@ export const sessionOptions = {
     cookieName: "user",
     password: process.env.SESSION_SECRET,
     cookieOptions: {
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.APP_ENV === "production",
     },
     ttl: shortTtl
 }
@@ -23,3 +25,19 @@ export const withUserGuard = (handler, superadmin = false) => (req, res) => {
 
   handler(req, res);
 };
+
+
+export const withUserGuardSsr = (handler, redirect = '/logout/') => withIronSessionSsr(async (context) => {
+  const { req } = context;
+
+  if (!req.session.user) {
+    return {
+      redirect: {
+        destination: redirect,
+        permenant: false
+      }
+    }
+  }
+
+  return handler(context);
+}, sessionOptions)

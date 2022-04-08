@@ -11,7 +11,7 @@ const UserCard = ({ title = '', avatar = '', className, onClick }) => {
     )
   }
 
-  return <div className={getClassNames()} onClick={onClick}>
+  return <div data-test-id="user-card" className={getClassNames()} onClick={onClick}>
     {avatar ? <Avatar src={avatar} className={styles['user-card-avatar']} /> : null}
     <span className={styles['user-card-title']}>
       {title}

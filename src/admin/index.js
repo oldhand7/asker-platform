@@ -8,8 +8,7 @@ import { SettingsList, SettingsEdit, SettingsAdd } from 'admin/resources/setting
 import { TranslationsList, TranslationsEdit, TranslationsAdd } from 'admin/resources/translations/translations-resource';
 import { UsersList, UsersEdit, UsersAdd } from 'admin/resources/users/users-resource';
 import { CompaniesList, CompaniesEdit, CompaniesAdd } from 'admin/resources/companies/companies-resource';
-
-import { firebaseConfig } from 'libs/config';
+import { getFirebaseConfig } from 'libs/config';
 
 import CustomAuthProvider from 'admin/auth-providers/custom/custom-auth-provider';
 import CustomDataProvider from 'admin/data-providers/custom/custom-data-provider';
@@ -19,7 +18,7 @@ import { createTheme } from '@material-ui/core/styles';
 const theme = createTheme({
     palette: {
         primary: {
-            main: lightBlue[500], 
+            main: lightBlue[500],
             light: lightBlue[300],
             dark: lightBlue[700],
         },
@@ -30,10 +29,10 @@ const theme = createTheme({
     }
 })
 
-const options = {}
+const firebaseConfig = getFirebaseConfig();
 
-const dataProvider = CustomDataProvider(firebaseConfig, options);
-const authProvider = CustomAuthProvider(firebaseConfig, options);
+const dataProvider = CustomDataProvider(firebaseConfig);
+const authProvider = CustomAuthProvider(firebaseConfig);
 
 const AdminApp = () => {
     return <Admin theme={theme} authProvider={authProvider} dataProvider={dataProvider}>

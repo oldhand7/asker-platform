@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "asker-test-98028",
+  "private_key_id": "bc1e6ada70c9f5f12386703004e0864a460e33c0",
+  "private_key": "Русский военный корабль, иди нахуй",
+  "client_email": "firebase-adminsdk-wmlqk@asker-test-98028.iam.gserviceaccount.com",
+  "client_id": "117780493447110512252",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-wmlqk%40asker-test-98028.iam.gserviceaccount.com"
+}

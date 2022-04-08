@@ -4,9 +4,7 @@ const {
   getAuth
 } = require('firebase-admin/auth')
 
-admin.initializeApp({
-  databaseURL: 'https://asker-3e929.firebaseio.com'
-})
+admin.initializeApp()
 
 admin.firestore().settings({
   ignoreUndefinedProperties: true
@@ -18,10 +16,15 @@ const defaultUser = {
 }
 
 const updateFirebaseUserFromProfile = async (uid, platformUser) => {
-  const {
-    images,
-    profile
-  } = platformUser;
+  const claims = {
+    superadmin: !!platformUser.superadmin,
+    companyId: platformUser.companyId,
+    type: platformUser.type
+  }
+
+  await getAuth().setCustomUserClaims(uid, claims)
+
+  const { images, profile } = platformUser;
 
   const data = {
     email: profile.email,
@@ -32,44 +35,21 @@ const updateFirebaseUserFromProfile = async (uid, platformUser) => {
     disabled: !!profile.disabled
   }
 
-  const claims = {
-    superadmin: !!platformUser.superadmin,
-    companyId: platformUser.companyId
-  }
-
-  await getAuth().setCustomUserClaims(uid, claims)
-
-  return getAuth().updateUser(uid, data)
+  return getAuth().updateUser(uid, data);
 }
-
-exports.firebaseAccountCreate = functions.auth.user().onCreate(async user => {
-  const snap = await admin.firestore()
-    .collection('users')
-    .doc(user.uid)
-    .get()
-
-  if (!snap.exists) {
-    await admin.firestore()
-      .collection('users')
-      .doc(user.uid)
-      .set({
-        ...defaultUser,
-        lastTouch: 'firebaseAccountCreate',
-        profile: JSON.parse(JSON.stringify(user))
-      })
-  }
-});
 
 exports.platformAccountCreate = functions.firestore.document('users/{docId}')
   .onCreate(async (snap, context) => {
     const platformUser = snap.data();
 
-    if (platformUser.lastTouch == 'firebaseAccountCreate') {
-      return null
-    }
-
     try {
-      const user = await updateFirebaseUserFromProfile(snap.id, platformUser)
+      let user;
+
+      if (platformUser.profile) {
+        user = await updateFirebaseUserFromProfile(snap.id, platformUser)
+      } else {
+        user = await getAuth().getUser(snap.id)
+      }
 
       return snap.ref.set({
         ...defaultUser,
@@ -104,11 +84,16 @@ exports.platformAccountUpdate = functions.firestore
     }
 
     try {
-      const user = await updateFirebaseUserFromProfile(change.after.id, platformUser)
+      let user;
+
+      if (platformUser.profile) {
+        user = await updateFirebaseUserFromProfile(change.after.id, platformUser)
+      } else {
+        user = await getAuth().getUser(change.after.id)
+      }
 
       return change.after.ref.set({
         ...platformUser,
-        companyName: await getCompanyNameById(change.after.companyId),
         lastTouch: 'platformAccountUpdate',
         profile: JSON.parse(JSON.stringify(user))
       }, {

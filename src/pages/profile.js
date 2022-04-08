@@ -7,6 +7,7 @@ import { useEffect} from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import AdminProfileForm from 'forms/admin-profile/admin-profile-form'
 import CompanyProfileForm from 'forms/company-profile/company-profile-form'
+import { withUserGuardSsr } from 'libs/iron-session';
 
 import 'react-tabs/style/react-tabs.css';
 import styles from 'styles/pages/profile.module.scss';
@@ -19,7 +20,7 @@ const ProfilePage = () => {
     if (!user) {
       router.push('/login')
     }
-  }, [router, user])
+  }, [user])
 
   return <div className={styles['profile-page']}>
     {user ? <Tabs className={styles['profile-page-tabs']}>
@@ -42,12 +43,12 @@ const ProfilePage = () => {
   </div>
 }
 
-export const getServerSideProps = async ({ req, res}) => {
+export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
   return {
     props: {
       config: await getSettings()
     }
   }
-}
+})
 
 export default ProfilePage;

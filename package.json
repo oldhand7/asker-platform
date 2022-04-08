@@ -3,16 +3,24 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "export APP_ENV=development && next dev",
+    "test-dev": "export APP_ENV=testing && next dev",
+    "build": "export APP_ENV=production && next build",
+    "test-build": "export APP_ENV=testing && next build",
     "start": "next start",
+    "test-start": "export APP_ENV=testing && next start",
     "lint": "next lint",
-    "deploy": "firebase deploy"
+    "deploy": "firebase deploy",
+    "cypress": "cypress open",
+    "cypress-run": "cypress run",
+    "test-server": "npm run test-build && npm run test-start",
+    "test": "start-test test-server 3000 cypress-run"
   },
   "dependencies": {
     "@splidejs/react-splide": "^0.6.20",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "classnames": "^2.3.1",
+    "dotenv": "^16.0.0",
     "escape-html": "^1.0.3",
     "firebase": "^9.6.9",
     "firebase-admin": "^10.0.2",
@@ -41,7 +49,9 @@
     "validatorjs": "^3.22.1"
   },
   "devDependencies": {
+    "cypress": "^9.5.3",
     "eslint": "8.11.0",
-    "eslint-config-next": "12.1.0"
+    "eslint-config-next": "12.1.0",
+    "start-server-and-test": "^1.14.0"
   }
 }

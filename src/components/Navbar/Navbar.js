@@ -82,7 +82,7 @@ const Navbar = ({ className, menu = [] }) => {
     )
   }
 
-  return <div className={getClassNames()}>
+  return <div id="navbar" className={getClassNames()}>
     <div className={styles['navbar-inner']}>
     <Logo darkMode={mode == 'fixed'} onClick={() => setMenuActive(false)} className={styles['navbar-logo']} />
     <Menu items={menuItems} onClick={() => setMenuActive(false)} className={styles['navbar-menu']} />

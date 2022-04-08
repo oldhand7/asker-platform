@@ -1,9 +1,12 @@
 const { initializeApp, getApps, applicationDefault } = require("firebase-admin/app");
 const { credential } = require("firebase-admin");
+import { getAppEnv } from 'libs/config';
 
-const firebaseServiceCreds = require('./../../firebase-service-creds.json');
+const firebaseServiceCreds = require(
+  `./../../firebase-service-creds-${getAppEnv()}.json`
+);
 
-const getApp = () => {
+const getApp = (env = null) => {
     const apps = getApps()
 
     if (apps.length) {
@@ -13,8 +16,7 @@ const getApp = () => {
     firebaseServiceCreds.private_key = process.env.FIREBASE_SERVICE_KEY.replace(/\\n/g, '\n');
 
     return initializeApp({
-        credential: credential.cert(firebaseServiceCreds),
-        databaseURL: 'https://asker-3e929.firebaseio.com'
+        credential: credential.cert(firebaseServiceCreds)
     });
 }
 

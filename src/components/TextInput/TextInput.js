@@ -22,7 +22,7 @@ const TextInput = ({ focus, className, type = 'text', value = '', name = '', onC
     {icon ? <div onClick={handleIconClick} className={styles['text-input-icon']}>
       <Icon icon={icon} />
     </div> : null}
-    <input id={`input-${name}`} className={styles['text-input']} ref={ref} type={type} value={value} onChange={onChange} autoComplete={autocomplete} placeholder={placeholder} />
+    <input id={`input-${name}`} name={name} className={styles['text-input']} ref={ref} type={type} value={value} onChange={onChange} autoComplete={autocomplete} placeholder={placeholder} />
   </div>
 }
 

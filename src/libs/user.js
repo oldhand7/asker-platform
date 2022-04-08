@@ -4,9 +4,15 @@ import { getAuth, signOut, signInWithEmailAndPassword, setPersistence, browserLo
 import { getApp, getUser as getFirebaseUser } from 'libs/firebase';
 const { collection, getFirestore, doc, getDoc, setDoc} = require('firebase/firestore');
 import { getCompany } from 'libs/company'
+import { createPairSession, logoutUser } from 'libs/api';
 
-export const destroySession = () => {
-  return signOut(getAuth(getApp())).then(() => {
+export const destroySession = (backend = true) => {
+  const auth = getAuth(getApp())
+
+  return Promise.all([
+      signOut(auth),
+      backend ? logoutUser() : Promise.resolve(),
+    ]).then(() => {
       localStorage.removeItem('user')
 
       return true;
@@ -22,6 +28,14 @@ export const login = async (email, password) => {
   return signInWithEmailAndPassword(auth, email, password)
     .then(async ({ user }) => {
       const platformUser = await getPlatformUser(user.uid)
+
+      const idToken = await user.getIdToken()
+
+      try {
+        const pairSession = await createPairSession(user.uid, idToken)
+      } catch (error) {
+        throw new Error("Pair session failed.")
+      }
 
       if (!platformUser) {
         throw new Error("User does not exist.")
@@ -40,8 +54,10 @@ export const login = async (email, password) => {
 
       return jointUser
     })
-    .catch(error => {
+    .catch(async error => {
       throw new Error("Invalid credentials")
+
+      await destroySession()
     })
 }
 

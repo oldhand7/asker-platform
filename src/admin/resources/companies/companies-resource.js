@@ -57,7 +57,7 @@ export const CompaniesEdit = props => {
 
     return <Edit {...props}>
         <SimpleForm validate={validateForm}>
-            <TextField source="name" label="Name" />
+            <TextInput source="name" label="Name" />
             <ImageInput source="images" multiple={true}>
               <ImageField source="src" title="title" />
             </ImageInput>
