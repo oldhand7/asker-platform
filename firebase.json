@@ -12,7 +12,7 @@
         "source": "**",
         "run": {
           "serviceId": "nextjs-app-platform",
-          "region": "europe-central2"
+          "region": "europe-west3"
         }
       }
     ]
