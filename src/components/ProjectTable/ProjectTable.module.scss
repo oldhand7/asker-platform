@@ -1,0 +1,45 @@
+.project-table {
+
+  table {
+    width: 100% ;
+    border-spacing:0px;
+    border-collapse:separate;
+    border-spacing: 0 20rem;
+
+    td {
+    }
+
+    thead {
+      margin-bottom: 20rem;
+      background: white;
+      text-align: left;
+      border-radius: 5px;
+
+      th {
+        color:  #878787;
+        line-height: 18rem;
+        font-size: 12rem;
+        font-weight: 500;
+        line-height: 64rem;
+        padding: 0 20rem 0 40rem;
+      }
+    }
+
+    tbody tr {
+      margin-bottom: 20rem;
+      background: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.250s 0s;
+
+      &:hover {
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+      }
+
+      td {
+        padding: 20rem 20rem 20rem 40rem;
+        height: 174rem;
+      }
+    }
+  }
+}

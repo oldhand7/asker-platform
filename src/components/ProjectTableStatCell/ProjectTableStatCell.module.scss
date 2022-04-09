@@ -1,0 +1,27 @@
+@import 'styles/vars';
+
+.project-table-stat-cell {
+  color: $brandish-grey;
+  white-space: nowrap;
+  line-height: 3em;
+
+  &-count {
+    font-size: 20rem;
+    color: #5B5B5B;
+    display: inline-block;
+    margin-right: 9rem;
+  }
+
+  &-status {
+    &-green {
+      color: $brandish-green;
+    }
+
+    &-label {
+      font-size: 10rem;
+      font-weight: 500;
+      position: relative;
+      top: -3px;
+    }
+  }
+}

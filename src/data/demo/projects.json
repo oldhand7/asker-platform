@@ -1,0 +1,405 @@
+[{
+    "id": 1,
+    "name": "Advanced homogeneous task-force",
+    "template": "Engineer",
+    "interviewer": "Datha Bruce",
+    "stages": [{
+      "name": "sit",
+      "type": "green"
+    }, {
+      "name": "duis",
+      "type": "green"
+    }, {
+      "name": "pretium",
+      "type": null
+    }, {
+      "name": "porttitor",
+      "type": null
+    }, {
+      "name": "sed",
+      "type": "mustard"
+    }],
+    "candidates": [{
+      "name": "Arleyne Jopke",
+      "status": "completed"
+    }, {
+      "name": "Donnamarie Pickering",
+      "status": "awaiting"
+    }, {
+      "name": "Demeter Livoir",
+      "status": "completed"
+    }, {
+      "name": "Prince Sawkin",
+      "status": "completed"
+    }, {
+      "name": "Illa Luetchford",
+      "status": "awaiting"
+    }, {
+      "name": "Nat Lennox",
+      "status": "awaiting"
+    }, {
+      "name": "Nathaniel Baroch",
+      "status": "completed"
+    }, {
+      "name": "Goran Meddemmen",
+      "status": "completed"
+    }]
+  },
+  {
+    "id": 2,
+    "name": "Implemented bi-directional success",
+    "template": "Electrician",
+    "interviewer": "Shell Poland",
+    "stages": [{
+      "name": "ipsum",
+      "type": "green"
+    }, {
+      "name": "vestibulum",
+      "type": "green"
+    }, {
+      "name": "at",
+      "type": "mustard"
+    }, {
+      "name": "sed",
+      "type": "green"
+    }],
+    "candidates": [{
+      "name": "Mariellen Nares",
+      "status": "awaiting"
+    }, {
+      "name": "Elianora Calow",
+      "status": "completed"
+    }, {
+      "name": "Chelsey Evreux",
+      "status": "completed"
+    }, {
+      "name": "Pryce Raubenheimers",
+      "status": "awaiting"
+    }, {
+      "name": "Lil Winger",
+      "status": "completed"
+    }]
+  },
+  {
+    "id": 3,
+    "name": "Phased holistic core",
+    "template": "Estimator",
+    "interviewer": "Hamish Dannohl",
+    "stages": [{
+      "name": "risus",
+      "type": "mustard"
+    }, {
+      "name": "tempor",
+      "type": "green"
+    }, {
+      "name": "sapien",
+      "type": "green"
+    }, {
+      "name": "vivamus",
+      "type": "green"
+    }, {
+      "name": "commodo",
+      "type": null
+    }],
+    "candidates": [{
+      "name": "Keven Gratrex",
+      "status": "completed"
+    }, {
+      "name": "Garey Ghidini",
+      "status": "completed"
+    }, {
+      "name": "Clare Ewers",
+      "status": "completed"
+    }, {
+      "name": "Eldon Dyke",
+      "status": "awaiting"
+    }, {
+      "name": "Devi Brittle",
+      "status": "awaiting"
+    }, {
+      "name": "Darryl Willimott",
+      "status": "completed"
+    }, {
+      "name": "Wheeler Guerin",
+      "status": "awaiting"
+    }, {
+      "name": "Nahum Collman",
+      "status": "awaiting"
+    }, {
+      "name": "Tanny Woodier",
+      "status": "awaiting"
+    }, {
+      "name": "Ara Libby",
+      "status": "completed"
+    }]
+  },
+  {
+    "id": 4,
+    "name": "Networked heuristic data-warehouse",
+    "template": "Subcontractor",
+    "interviewer": "Natal Benneyworth",
+    "stages": [{
+      "name": "aliquet",
+      "type": "mustard"
+    }, {
+      "name": "consequat",
+      "type": null
+    }, {
+      "name": "quisque",
+      "type": null
+    }, {
+      "name": "lectus",
+      "type": "mustard"
+    }],
+    "candidates": [{
+      "name": "Lorianna Attree",
+      "status": "awaiting"
+    }, {
+      "name": "Ilyssa Jenson",
+      "status": "completed"
+    }, {
+      "name": "Kiley Pepis",
+      "status": "completed"
+    }, {
+      "name": "Mariele Ivannikov",
+      "status": "completed"
+    }, {
+      "name": "Rafaellle Jouhan",
+      "status": "awaiting"
+    }]
+  },
+  {
+    "id": 5,
+    "name": "Cross-group value-added info-mediaries",
+    "template": "Architect",
+    "interviewer": "Zarla Dukes",
+    "stages": [{
+      "name": "porta",
+      "type": "green"
+    }, {
+      "name": "integer",
+      "type": null
+    }, {
+      "name": "hendrerit",
+      "type": null
+    }, {
+      "name": "rutrum",
+      "type": null
+    }],
+    "candidates": [{
+      "name": "Siana Paterno",
+      "status": "awaiting"
+    }, {
+      "name": "Guglielmo Bresnen",
+      "status": "awaiting"
+    }, {
+      "name": "Luce Pilsbury",
+      "status": "awaiting"
+    }, {
+      "name": "Eyde Smeuin",
+      "status": "awaiting"
+    }, {
+      "name": "Taite Cummungs",
+      "status": "awaiting"
+    }, {
+      "name": "Annabella Beesey",
+      "status": "awaiting"
+    }, {
+      "name": "Steve Godfray",
+      "status": "awaiting"
+    }]
+  },
+  {
+    "id": 6,
+    "name": "Function-based cohesive open system",
+    "template": "Subcontractor",
+    "interviewer": "Consuelo Cakebread",
+    "stages": [{
+      "name": "sit",
+      "type": null
+    }, {
+      "name": "nulla",
+      "type": null
+    }, {
+      "name": "sapien",
+      "type": "green"
+    }, {
+      "name": "bibendum",
+      "type": null
+    }],
+    "candidates": [{
+      "name": "Reilly Ebunoluwa",
+      "status": "awaiting"
+    }, {
+      "name": "Frants Wybrow",
+      "status": "awaiting"
+    }, {
+      "name": "Mendel Nevin",
+      "status": "awaiting"
+    }, {
+      "name": "Jorrie Leggat",
+      "status": "completed"
+    }, {
+      "name": "Brittani O'Kinedy",
+      "status": "completed"
+    }, {
+      "name": "Babara Aylmore",
+      "status": "completed"
+    }, {
+      "name": "Salomone McCoy",
+      "status": "awaiting"
+    }, {
+      "name": "Myca Osinin",
+      "status": "completed"
+    }, {
+      "name": "Charissa Whatling",
+      "status": "awaiting"
+    }, {
+      "name": "Adriano O'Farris",
+      "status": "awaiting"
+    }]
+  },
+  {
+    "id": 7,
+    "name": "Exclusive directional standardization",
+    "template": "Engineer",
+    "interviewer": "Lotty Boor",
+    "stages": [{
+      "name": "sed",
+      "type": null
+    }, {
+      "name": "fusce",
+      "type": null
+    }, {
+      "name": "pede",
+      "type": null
+    }, {
+      "name": "diam",
+      "type": "green"
+    }, {
+      "name": "luctus",
+      "type": null
+    }],
+    "candidates": [{
+      "name": "Farrel Ziehm",
+      "status": "awaiting"
+    }, {
+      "name": "Patin Burkart",
+      "status": "awaiting"
+    }]
+  },
+  {
+    "id": 8,
+    "name": "Versatile non-volatile migration",
+    "template": "Engineer",
+    "interviewer": "Dasya Viscovi",
+    "stages": [{
+      "name": "ut",
+      "type": null
+    }, {
+      "name": "nisl",
+      "type": "green"
+    }, {
+      "name": "vivamus",
+      "type": "mustard"
+    }],
+    "candidates": [{
+      "name": "Luke Buske",
+      "status": "completed"
+    }, {
+      "name": "Martica Mulran",
+      "status": "awaiting"
+    }, {
+      "name": "Kristin Bamling",
+      "status": "completed"
+    }, {
+      "name": "Gloriane Mintram",
+      "status": "completed"
+    }, {
+      "name": "Jamal Crumley",
+      "status": "completed"
+    }]
+  },
+  {
+    "id": 9,
+    "name": "Multi-lateral encompassing firmware",
+    "template": "Engineer",
+    "interviewer": "Griselda Thurlby",
+    "stages": [{
+      "name": "ipsum",
+      "type": "green"
+    }, {
+      "name": "nullam",
+      "type": null
+    }, {
+      "name": "porta",
+      "type": null
+    }, {
+      "name": "dolor",
+      "type": "mustard"
+    }],
+    "candidates": [{
+      "name": "Elayne McClymont",
+      "status": "awaiting"
+    }, {
+      "name": "Willamina Pareman",
+      "status": "awaiting"
+    }, {
+      "name": "Kareem Fass",
+      "status": "completed"
+    }]
+  },
+  {
+    "id": 10,
+    "name": "Business-focused modular database",
+    "template": "Electrician",
+    "interviewer": "Morgen Radki",
+    "stages": [{
+      "name": "sit",
+      "type": null
+    }, {
+      "name": "donec",
+      "type": "green"
+    }, {
+      "name": "nullam",
+      "type": null
+    }, {
+      "name": "vulputate",
+      "type": "mustard"
+    }, {
+      "name": "ac",
+      "type": null
+    }],
+    "candidates": [{
+      "name": "Drusie Krop",
+      "status": "awaiting"
+    }, {
+      "name": "Ruben Peacock",
+      "status": "completed"
+    }, {
+      "name": "Shandee Longega",
+      "status": "awaiting"
+    }, {
+      "name": "Vanessa Spittle",
+      "status": "awaiting"
+    }, {
+      "name": "Packston Masurel",
+      "status": "completed"
+    }, {
+      "name": "Pryce Stille",
+      "status": "awaiting"
+    }, {
+      "name": "Olivero Brogden",
+      "status": "completed"
+    }, {
+      "name": "Dareen Barock",
+      "status": "completed"
+    }, {
+      "name": "Vivi Premble",
+      "status": "completed"
+    }, {
+      "name": "Fredric Edington",
+      "status": "completed"
+    }]
+  }
+]

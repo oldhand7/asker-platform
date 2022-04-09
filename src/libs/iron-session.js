@@ -26,7 +26,11 @@ export const withUserGuard = (handler, superadmin = false) => (req, res) => {
 };
 
 
-export const withUserGuardSsr = (handler, redirect = '/logout/') => withIronSessionSsr(async (context) => {
+export const withUserGuardSsr = (handler, redirect = '/logout/', disable = false) => withIronSessionSsr(async (context) => {
+  if (disable) {
+    return handler(context);
+  }
+
   const { req } = context;
 
   if (!req.session.user) {

@@ -3,6 +3,9 @@ import { getSettings } from 'libs/firestore-admin';
 import { useUser } from 'libs/user';
 import { useEffect} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
+import ProjectTabe from 'components/ProjectTable/ProjectTable';
+import SearchWidget from 'components/SearchWidget/SearchWidget'
+import Button from 'components/Button/PlatformButton';
 
 import styles from 'styles/pages/projects.module.scss';
 
@@ -17,7 +20,12 @@ const ProjectsPage = () => {
   }, [user])
 
   return <div className={styles['projects-page']}>
-      Projects page
+      <div className={styles['projects-page-nav']}>
+          <SearchWidget />
+          <Button href='/projects/create/'>Create new project</Button>
+      </div>
+
+      <ProjectTabe className={styles['projects-page-table']} />
   </div>
 }
 
