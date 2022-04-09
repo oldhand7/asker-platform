@@ -1,0 +1,10 @@
+@import 'styles/vars';
+
+.platform-button {
+  border-radius: 5px;
+  background: $brandish-dark-green;
+  color: white;
+  font-size: 14rem;
+  line-height: 65rem;
+  font-weight: 500;
+}

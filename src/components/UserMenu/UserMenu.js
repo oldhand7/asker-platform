@@ -10,7 +10,6 @@ import styles from './UserMenu.module.scss';
 const UserMenu = ({ className }) => {
   const [open, setOpen] = useState(false);
   const [user] = useUser();
-
   const menuRef = useRef();
 
   const getClassNames = () => {
@@ -39,9 +38,9 @@ const UserMenu = ({ className }) => {
     }
   }, [open])
 
+
   return <div ref={menuRef} onClick={() => setOpen(!open)} className={getClassNames()}>
     <div className={styles['usermenu-head']}>
-
       <UserCard avatar={user && user.profile.photoURL} title={user && user.profile.displayName} className={styles['usermenu-head-card']}  />
       <CarretDown className={styles['usermenu-head-carret']} />
     </div>

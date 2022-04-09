@@ -35,6 +35,8 @@ const Navbar = ({ className, menu = [] }) => {
   const [config, t] = useSite();
   const [mode, setMode] = useState('normal');
   const [user] = useUser();
+  const [userLoaded, setUserLoaded] = useState(false);
+
   const {
     isScrollingUp,
     isScrollingDown,
@@ -73,6 +75,12 @@ const Navbar = ({ className, menu = [] }) => {
     setMenuActive(!menuActive)
   }
 
+  useEffect(() => {
+    if (user) {
+      setUserLoaded(true);
+    }
+  }, [user])
+
   const getClassNames = () => {
     return classNames(
       styles['navbar'],
@@ -87,7 +95,7 @@ const Navbar = ({ className, menu = [] }) => {
     <Logo darkMode={mode == 'fixed'} onClick={() => setMenuActive(false)} className={styles['navbar-logo']} />
     <Menu items={menuItems} onClick={() => setMenuActive(false)} className={styles['navbar-menu']} />
     {
-        user ? <UserMenu className={styles['navbar-session']} /> :
+        userLoaded ? <UserMenu className={styles['navbar-session']} /> :
         <>
           <MenuToggle className={styles['navbar-open']} onClick={handleMobileToggle} active={false} />
           <div className={styles['navbar-session-login']}><Link href="/login">Login</Link></div>
