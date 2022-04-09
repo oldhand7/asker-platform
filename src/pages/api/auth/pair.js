@@ -43,6 +43,8 @@ handler.post(async (req, res) => {
 
       await req.session.save()
 
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
       res.status(200).end()
     } catch (error) {
         res.status(404).json({
