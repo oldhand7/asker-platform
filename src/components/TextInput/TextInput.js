@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import Icon from 'components/Icon/Icon';
 import styles from './TextInput.module.scss';
 
-const TextInput = ({ focus, className, type = 'text', value = '', name = '', onChange, autocomplete = 'on', placeholder = '', icon }) => {
+const TextInput = ({ focus, className, name = '', ...props }) => {
   const ref = useRef();
 
   const handleIconClick = () => {
@@ -18,12 +18,7 @@ const TextInput = ({ focus, className, type = 'text', value = '', name = '', onC
     }
   }, [focus])
 
-  return <div className={classNames(styles['text-input-wrapper'], className)}>
-    {icon ? <div onClick={handleIconClick} className={styles['text-input-icon']}>
-      <Icon icon={icon} />
-    </div> : null}
-    <input id={`input-${name}`} name={name} className={styles['text-input']} ref={ref} type={type} value={value} onChange={onChange} autoComplete={autocomplete} placeholder={placeholder} />
-  </div>
+  return <input id={`input-${name}`} name={name} className={classNames(styles['text-input'], className)} ref={ref} {...props} />
 }
 
 export default TextInput

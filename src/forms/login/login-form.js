@@ -4,8 +4,8 @@ import { withRouter } from 'next/router';
 import { authenticateUser } from 'libs/api'
 import Alert from 'components/Alert/Alert';
 import classNames from 'classnames';
-import TextInputField from 'components/InputField/TextInputField';
-import PasswordInputField from 'components/InputField/PasswordInputField';
+import TextInputField from 'components/TextInputField/TextInputField';
+import PasswordInputField from 'components/PasswordInputField/PasswordInputField';
 import Button from 'components/Button/Button';
 
 import styles from './login-form.module.scss';
@@ -54,8 +54,8 @@ const LoginForm  = ({ className, authFunction, onSuccess }) => {
     return <form data-test-id="login-form" className={getClassNames()} onSubmit={control.submit(handleFormValues)}>
         {error ? <Alert type="danger">{error.message}</Alert> : null}
 
-        <TextInputField value={values.username} className={styles['login-form-input-field']} label="Email" name="email" error={errors && errors.username}  onChange={control.input('username')}  />
-        <PasswordInputField value={values.password} className={styles['login-form-input-field']} label="Password" name="password" error={errors && errors.password}  onChange={control.input('password')}  />
+        <TextInputField value={values.username} className={styles['login-form-input-field']} label="Email" name="email" error={errors && errors.username} placeholder="Email"  onChange={control.input('username')}  />
+        <PasswordInputField value={values.password} className={styles['login-form-input-field']} label="Password" name="password" error={errors && errors.password} placeholder="Password"  onChange={control.input('password')}  />
 
         <Button className={styles['login-form-submit']} type="submit" disabled={loading}>{!loading ? 'Login' : 'Loading...'}</Button>
     </form>

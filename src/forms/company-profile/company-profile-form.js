@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { sendContactMessage } from 'libs/api';
 import Alert from 'components/Alert/Alert';
 import { useState, useEffect } from 'react';
-import TextInputField from 'components/InputField/TextInputField';
+import TextInputField from 'components/TextInputField/TextInputField';
 import Button from 'components/Button/Button';
 import { useSite } from 'libs/site';
 import { useUser } from 'libs/user';
@@ -107,7 +107,7 @@ const CompanyProfileForm = ({ className }) => {
       </Uploader>
     </div>
 
-    <TextInputField value={values.name} placeholder={t('Name')} label={t('Name')}  error={errors ? t(errors.name) : null} onChange={control.input('name')} autocomplete='off' name='name' type='text' className={styles['company-profile-form-field']} />
+    <TextInputField value={values.name} placeholder={t('Name')} label={t('Name')}  error={errors ? t(errors.name) : null} onChange={control.input('name')}  name='name' type='text' className={styles['company-profile-form-field']} />
 
     <button className={styles['company-profile-form-submit']} disabled={loading} type="submit">{!loading ? t('Save') : t('Loading...')}</button>
   </form> : <Preloader />

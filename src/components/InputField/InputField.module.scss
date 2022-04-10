@@ -1,4 +1,8 @@
+@import 'styles/vars';
+
 .input-field {
+  position: relative;
+
   &-error {
     color: red;
   }
@@ -8,18 +12,32 @@
     display: block;
   }
 
-  &-textarea {
-    height: 127rem;
-    width: 100%;
-    left: 284rem;
-    top: 1910rem;
-    background: #EEEEEE;
-    border-radius: 11rem;
-    border: 0;
-    padding: 20rem;
+  &-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 15rem;
+    font-size: 25rem;
+  }
 
-    &:focus {
-      outline: 0;
+  &-with-icon &-input {
+    padding-left: 65rem;
+  }
+
+  &-with-icon &-wrapper {
+    &::after {
+      content: '';
+      position: absolute;
+      height: 2em;
+      width: 1px;
+      background: $brandish-grey;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 50rem;
     }
+  }
+
+  &-wrapper {
+    position: relative;
   }
 }

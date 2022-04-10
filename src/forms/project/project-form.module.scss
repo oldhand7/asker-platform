@@ -1,0 +1,61 @@
+@import 'styles/vars';
+
+.project-form {
+  display: flex;
+
+  &-sidebar {
+    flex: 1 1 356rem;
+    margin-right: 20rem;
+    border-radius: 13px;
+    background: white;
+    padding: 40rem 40rem 20rem;
+
+    &-widget {
+      &-title {
+        color: $brandish-grey;
+        font-weight: 500;
+        font-size: 20rem;
+        line-height: 30rem;
+      }
+    }
+  }
+
+  &-details {
+    flex: 1 1 100%;
+    background: white;
+    border-radius: 13px;
+    padding: 40rem;
+  }
+
+  &-details-inner {
+    max-width: 500px;
+  }
+
+  &-title {
+    color: $brandish-tar;
+    font-size: 24rem;
+    font-weight: 500;
+  }
+
+  &-field {
+    margin: 20rem 0 40rem;
+
+    &-name input {
+      background: rgba($brandish-dark-green, 0.15);
+    }
+
+    &-stages {
+      &-title {
+        color: $brandish-dark-green;
+        font-size: 20rem;
+        line-height: 30rem;
+        font-weight: 500;
+      }
+    }
+  }
+
+  &-submit {
+    width: 100%;
+    cursor: pointer;
+  }
+}

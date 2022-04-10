@@ -1,0 +1,24 @@
+@import "styles/vars";
+
+.project-form-interviewers {
+  &-list {
+    list-style: none;
+
+
+  }
+
+  &-autocomplete {
+    border: 2px solid #B7B7B7;
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin: 20rem 0;
+
+    input {
+      color: $brandish-tar !important;
+    }
+
+    svg {
+      stroke: $brandish-grey !important;
+    }
+  }
+}
