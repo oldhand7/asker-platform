@@ -1,0 +1,60 @@
+@import 'styles/vars';
+
+.project-form-stager {
+  display: block;
+  padding: 0;
+  list-style: none;
+  margin: 0;
+
+  &-item {
+    cursor: grab;
+
+    &-title {
+        font-size: 14rem;
+        color: $brandish-dark-green;
+        display: block;
+    }
+
+    &-empty &-title {
+      color: $brandish-grey;
+    }
+
+    &-body {
+      display: flex;
+      align-items: center;
+    }
+
+    &-control {
+      flex: 0 0 48rem;
+      padding-left: 20rem;
+    }
+
+    &-empty {
+      cursor: default;
+    }
+  }
+
+  &-stage {
+    flex: 1 1 100%;
+    border-radius: 7px;
+    line-height: 62rem;
+    padding: 0 20rem;
+    color: $brandish-tar;
+    background: rgba($brandish-grey, 0.15);
+    border: 2px solid $brandish-tar;
+    position: relative;
+
+    &-nav {
+      position: absolute;
+      right: 20rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  &-item-empty &-stage {
+    color: $brandish-grey;
+    background: rgba($brandish-grey, 0.1);
+    border: 2px dashed $brandish-grey;
+  }
+}

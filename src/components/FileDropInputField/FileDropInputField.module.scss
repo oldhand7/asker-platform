@@ -1,0 +1,27 @@
+@import 'styles/vars';
+
+.file-drop-input-field {
+  font-size: 14rem;
+
+  &-filearea {
+    background: rgba($brandish-grey, 0.15);
+    border: 1px dashed $brandish-grey;
+    color: $brandish-grey;
+    box-sizing: border-box;
+    border-radius: 10px;
+    text-align: center;
+    padding: 20rem 0 10rem;
+
+    &-icon {
+      font-size: 3em;
+    }
+
+    &-button {
+      background: rgba($brandish-grey, 0.2);
+      border-radius: 3px;
+      line-height: 40rem;
+      width: 160rem;
+      color: $brandish-dark-green;
+    }
+  }
+}

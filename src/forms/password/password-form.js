@@ -1,6 +1,6 @@
 import useForm from 'libs/use-form';
 import classNames from 'classnames';
-import TextInputField from 'components/InputField/TextInputField';
+import PasswordInputField from 'components/PasswordInputField/PasswordInputField';
 import Button from 'components/Button/Button';
 import { useSite } from 'libs/site';
 
@@ -27,7 +27,7 @@ const PasswordForm = ({ className, onSuccess }) => {
   }
 
   return <form method="POST" noValidate className={classNames(styles['password-form'], className)} onSubmit={control.submit(handleSubmit)}>
-    <TextInputField focus={true} value={values.password} placeholder={t('Password')} label={t('Password')} icon={null} error={errors ? t(errors.password) : null} onChange={control.input('password')} autocomplete='off' name='password' type='password' className={styles['password-form-field']} />
+    <PasswordInputField focus={true} value={values.password} placeholder={t('Password')} label={t('Password')} icon={null} error={errors ? t(errors.password) : null} onChange={control.input('password')} autoComplete='off' name='password' className={styles['password-form-field']} />
 
     <button className={styles['password-form-submit']} type="submit">{t('Submit')}</button>
   </form>

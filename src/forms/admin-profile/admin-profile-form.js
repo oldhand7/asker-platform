@@ -2,10 +2,8 @@ import useForm from 'libs/use-form';
 import classNames from 'classnames';
 import Alert from 'components/Alert/Alert';
 import { useState, useEffect } from 'react';
-import TextInputField from 'components/InputField/TextInputField';
+import TextInputField from 'components/TextInputField/TextInputField';
 import Button from 'components/Button/Button';
-import GenderNeutralUserSvg from './assets/icons/icons8_gender-neutral-user.svg'
-import EmailSvg from './assets/icons/fluent_mail-read-20-regular.svg'
 import { useSite } from 'libs/site';
 import Avatar from 'components/Avatar/Avatar';
 import { uploadCompanyFile, uploadUserFile } from 'libs/firestorage';
@@ -14,7 +12,10 @@ import { setUserProfile, useUser } from 'libs/user';
 import { useModal } from 'libs/modal'
 import PasswordModal from 'modals/password/password-modal'
 import Uploader from 'components/Uploader/Uploader'
-import TelephoneSvg from './assets/icons/telephone.svg'
+import PasswordInputField from 'components/PasswordInputField/PasswordInputField';
+import TelephoneIcon from 'components/Icon/TelephoneIcon';
+import EmailIcon from 'components/Icon/EmailIcon';
+import UserIcon from 'components/Icon/UserIcon';
 
 import styles from './admin-profile-form.module.scss';
 
@@ -159,18 +160,16 @@ const AdminProfileForm = ({ className }) => {
       </Uploader>
     </div>
 
-    <TextInputField placeholder={t('Name')} value={values.displayName}  label={t('Name')} icon={<GenderNeutralUserSvg />} error={errors ? t(errors.displayName) : null} onChange={control.input('displayName')} autocomplete='off' name='displayName' type='text' className={styles['admin-profile-form-field']} />
-
-    {/* @TODO: confirmation */}
-    <TextInputField placeholder={t('Mail')} value={values.email} label={t('Mail')} icon={'email'} icon={<EmailSvg />} error={errors ? t(errors.email) : null} onChange={control.input('email')} name='email' type='email' className={styles['admin-profile-form-field']} />
-    <TextInputField placeholder={t('Phone')} value={values.phoneNumber}  label={t('Phone')} icon={<TelephoneSvg />} error={errors ? t(errors.phoneNumber) : null} onChange={control.input('phoneNumber')} name='phoneNumber' type='text' className={styles['admin-profile-form-field']} />
+    <TextInputField placeholder={t('Name')} value={values.displayName}  label={t('Name')} icon={UserIcon} error={errors ? t(errors.displayName) : null} onChange={control.input('displayName')} autoComplete='off' name='displayName' type='text' className={styles['admin-profile-form-field']} />
+    <TextInputField placeholder={t('Mail')} value={values.email} label={t('Mail')} icon={EmailIcon} error={errors ? t(errors.email) : null} onChange={control.input('email')} name='email' type='email' className={styles['admin-profile-form-field']} />
+    <TextInputField placeholder={t('Phone')} value={values.phoneNumber}  label={t('Phone')} icon={TelephoneIcon} error={errors ? t(errors.phoneNumber) : null} onChange={control.input('phoneNumber')} name='phoneNumber' type='text' className={styles['admin-profile-form-field']} />
 
     <div style={{ marginBottom: '10rem' }}>
     {
       changePassword ?
       <>
-        <TextInputField type="password" placeholder={t('New password')} value={values.password}  label={t('New password')} error={errors ? t(errors.password) : null} onChange={control.input('password')} name='password' className={styles['admin-profile-form-field']} />
-        <TextInputField type="password" placeholder={t('New password (confirm)')} value={values.password_confirmation}  label={t('New password (confirm)')} error={errors ? t(errors.password_confirmation) : null} onChange={control.input('password_confirmation')} name='password_confirmation' className={styles['admin-profile-form-field']} />
+        <PasswordInputField placeholder={t('New password')} value={values.password}  label={t('New password')} error={errors ? t(errors.password) : null} onChange={control.input('password')} name='password' className={styles['admin-profile-form-field']} />
+        <PasswordInputField placeholder={t('New password (confirm)')} value={values.password_confirmation}  label={t('New password (confirm)')} error={errors ? t(errors.password_confirmation) : null} onChange={control.input('password_confirmation')} name='password_confirmation' className={styles['admin-profile-form-field']} />
       </> :  <button type="button" onClick={() => setChangePassword(true)} style={{ textDecoration: 'underline', border: 0, background: 0, cursor: 'pointer', color: 'blue'}}>{t('Change password')}</button>
     }
     </div>

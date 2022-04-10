@@ -1,0 +1,35 @@
+@import 'styles/vars';
+
+.feature-drag-drop-label {
+  cursor: pointer;
+  display: inline-block;
+  line-height: 56rem;
+  padding: 0 14rem;
+  min-width: 290rem;
+  font-weight: 500;
+  font-size: 16rem;
+  background: rgba($brandish-tar, 0.1);
+  border: 1px solid $brandish-tar;
+  box-sizing: border-box;
+  border-radius: 6px;
+  color: $brandish-tar;
+  white-space: nowrap;
+
+  &-other {}
+
+  &-evaluation {
+    background: rgba($brandish-forest-green, 0.1);
+    border: 1px solid $brandish-forest-green;
+    box-sizing: border-box;
+    border-radius: 6px;
+    color: $brandish-forest-green;
+  }
+
+  &-attraction {
+    background: rgba($brandish-caramel, 0.1);
+    border: 1px solid $brandish-caramel;
+    box-sizing: border-box;
+    border-radius: 6px;
+    color: $brandish-caramel;
+  }
+}
