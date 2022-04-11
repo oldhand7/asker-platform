@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic'
 
 const featureForms = {
+  'introduction': dynamic(() => import('forms/introduction/introduction-form')),
   'company-presentation': dynamic(() => import('forms/company-presentation/company-presentation-form'))
 }
 

@@ -54,7 +54,11 @@ const defaultValues = {
     null,
     null
   ],
-  config: {}
+  config: {
+    introduction: {
+      text: ''
+    }
+  }
 }
 
 const rules = {
