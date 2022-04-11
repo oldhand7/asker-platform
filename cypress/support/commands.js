@@ -23,3 +23,16 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', (username, password, delay = 1000) => {
+  cy.session([username, password], () => {
+    cy.visit('/login')
+
+    cy.get('form[data-test-id="login-form"]').within(() => {
+      cy.get('input[type="text"][name="email"]').type(username)
+      cy.get('input[type="password"][name="password"]').type(password)
+    }).submit().wait(delay)
+
+    cy.url().should('contain', '/projects/')
+  })
+})

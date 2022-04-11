@@ -6,6 +6,7 @@ import { withUserGuardSsr } from 'libs/iron-session'
 import ProjectTabe from 'components/ProjectTable/ProjectTable';
 import SearchWidget from 'components/SearchWidget/SearchWidget'
 import Button from 'components/Button/PlatformButton';
+import Head from 'next/head';
 
 import styles from 'styles/pages/projects.module.scss';
 
@@ -20,6 +21,9 @@ const ProjectsPage = () => {
   }, [user])
 
   return <div className={styles['projects-page']}>
+      <Head>
+        <title>Projects - Asker</title>
+      </Head>
       <div className={styles['projects-page-nav']}>
           <SearchWidget />
           <Button href='/projects/create/'>Create new project</Button>

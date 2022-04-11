@@ -1,18 +1,11 @@
 describe('User', () => {
   beforeEach(() => {
-    cy.visit('/login/', { failOnStatusCode: false })
-
-    cy.get('form[data-test-id="login-form"]').within(() => {
-      cy.get('input[type="text"][name="email"]').type('joe.doe@example.com')
-      cy.get('input[type="password"][name="password"]').type('test123')
-    }).submit().wait(2000)
-  })
-
-  it('should be redirected to projects page', () => {
-    cy.location('pathname').should('eq', '/projects/')
+    cy.login('joe.doe@example.com', 'test123', 2000)
   })
 
   it('should be identified as user that is logged in', () => {
+    cy.visit('/')
+
     cy.get('[data-test-id=user-card]').contains('Joe Doe')
 
     cy.request('/api/auth/check/')

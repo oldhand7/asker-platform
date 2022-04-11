@@ -4,6 +4,7 @@ import { useUser } from 'libs/user';
 import { useEffect} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import ProjectForm from 'forms/project/project-form';
+import Head from 'next/head';
 
 import styles from 'styles/pages/projects-create.module.scss';
 
@@ -18,6 +19,9 @@ const ProjectsCreatePage = () => {
   }, [user])
 
   return <div className={styles['projects-create-page']}>
+      <Head>
+        <title>Create Project - Asker</title>
+      </Head>
       <ProjectForm className={styles['projects-create-page-form']} />
   </div>
 }

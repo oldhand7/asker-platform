@@ -13,18 +13,18 @@ import { useState, useEffect } from 'react';
 import styles from './project-form.module.scss';
 
 const features = [
-  { id: 'team-presentation', title: 'Team & role presentation', type: 'attraction' },
-  { id: 'company-presentation', title: 'Company presentation', type: 'attraction' },
-  { id: 'salary', title: 'Salary', type: 'attraction' },
-  { id: 'candidate-questions', title: 'Candidate questions', type: 'attraction' },
-  { id: 'competency-questions', title: 'Competency based questions', type: 'evaluation' },
-  { id: 'motivation-questions', title: 'Motivation based questions', type: 'evaluation' },
-  { id: 'screening-questions', title: 'Screening questions', type: 'evaluation' },
-  { id: 'experience-questions', title: 'Experience based questions', type: 'evaluation' },
-  { id: 'hard-skill-questions', title: 'Hard skill based questions', type: 'evaluation' },
-  { id: 'culture-fit questions', title: 'Culture-fit based questions', type: 'evaluation' },
-  { id: 'summary', title: 'Summary', type: 'other' },
-  { id: 'others', title: 'Others', type: 'other' }
+  { id: 'team-presentation', name: 'Team & role presentation', type: 'attraction' },
+  { id: 'company-presentation', name: 'Company presentation', type: 'attraction' },
+  { id: 'salary', title: 'Salary', name: 'attraction' },
+  { id: 'candidate-questions', name: 'Candidate questions', type: 'attraction' },
+  { id: 'competency-questions', name: 'Competency based questions', type: 'evaluation' },
+  { id: 'motivation-questions', name: 'Motivation based questions', type: 'evaluation' },
+  { id: 'screening-questions', name: 'Screening questions', type: 'evaluation' },
+  { id: 'experience-questions', name: 'Experience based questions', type: 'evaluation' },
+  { id: 'hard-skill-questions', name: 'Hard skill based questions', type: 'evaluation' },
+  { id: 'culture-fit questions', name: 'Culture-fit based questions', type: 'evaluation' },
+  { id: 'summary', name: 'Summary', type: 'other' },
+  { id: 'others', name: 'Others', type: 'other' }
 ]
 
 const ProjectFormSidebar = () => {
@@ -54,13 +54,16 @@ const defaultValues = {
     null,
     null
   ],
-  config: {}
+  config: {
+    introduction: {
+      text: ''
+    }
+  }
 }
 
 const rules = {
   name: 'required',
-  interviewers: 'array|min:1',
-  interviewers: 'array|min:1',
+  interviewers: 'array|min:1'
 }
 
 const ProjectForm = ({ className }) => {
@@ -109,6 +112,38 @@ const ProjectForm = ({ className }) => {
     //@TODO: save data, redirect and show success message
   }
 
+  const handleStages = stages => {
+    const stageValuesCopy = {
+      ...values.config
+    }
+
+    const keys = Object.keys(values.config)
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+
+      if (!stages.find(stage => stage && key == stage.id)) {
+        delete stageValuesCopy[key]
+      }
+    }
+
+    let newStages = []
+
+    if (stages.every(s => s != null)) {
+      newStages = [...stages, null]
+    } else if (stages.length > 3 && stages.slice(-2).every(s => s == null)) {
+      newStages = stages.slice(0, -1)
+    } else {
+      newStages = stages
+    }
+
+    control.setValues({
+      ...values,
+      stages: newStages,
+      config: stageValuesCopy
+    })
+  }
+
   return <form onSubmit={control.submit(handleSubmit)} className={classNames(styles['project-form'], className)}>
     <ProjectFormSidebar />
 
@@ -120,10 +155,10 @@ const ProjectForm = ({ className }) => {
 
         <div className={classNames(styles['project-form-field'], styles['project-form-field-stages'])}>
           <h3 className={styles['project-form-field-title']}>Interview Stages</h3>
-          <ProjectFormStager onStageSelect={setStage} stages={values.stages} className={styles['project-form-stages']} onChange={control.input('stages', false)}  />
+          <ProjectFormStager onStages={handleStages} activeStage={stage} onStageSelect={setStage} stages={values.stages} className={styles['project-form-stages']}  />
         </div>
 
-        {stage ? <FeatureForm onError={onStageError} onValues={handleStageValues} feature={stage} /> : null}
+        {stage ? <FeatureForm values={values.config[stage.id]} onError={onStageError} onValues={handleStageValues}  feature={stage} /> : null}
 
         <div className={classNames(styles['project-form-field'], styles['project-form-field-interviewers'])}>
           <h3 className={styles['project-form-field-title']}>Assign interviewer</h3>
