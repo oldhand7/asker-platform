@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import Icon from 'components/Icon/Icon';
 import styles from './TextInput.module.scss';
 
-const TextInput = ({ focus, className, name = '', ...props }) => {
+const TextInput = ({ focus, className, name = '', type="text", ...props }) => {
   const ref = useRef();
 
   const handleIconClick = () => {
@@ -18,7 +18,7 @@ const TextInput = ({ focus, className, name = '', ...props }) => {
     }
   }, [focus])
 
-  return <input id={`input-${name}`} name={name} className={classNames(styles['text-input'], className)} ref={ref} {...props} />
+  return <input type={type} id={`input-${name}`} name={name} className={classNames(styles['text-input'], className)} ref={ref} {...props} />
 }
 
 export default TextInput
