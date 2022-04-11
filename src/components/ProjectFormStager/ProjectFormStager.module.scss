@@ -22,6 +22,16 @@
     &-body {
       display: flex;
       align-items: center;
+      width: 100%;
+    }
+
+    &-placeholder {
+      flex: 1;
+      position: relative;
+    }
+
+    &-feature {
+      width: 100%;
     }
 
     &-control {
@@ -34,15 +44,30 @@
     }
   }
 
-  &-stage {
+  &-feature {
+    width: 100%;
+
+    &:hover {
+      border: 2px solid $brandish-tar;
+    }
+  }
+
+  &-placeholder {
     flex: 1 1 100%;
-    border-radius: 7px;
     line-height: 62rem;
-    padding: 0 20rem;
-    color: $brandish-tar;
-    background: rgba($brandish-grey, 0.15);
-    border: 2px solid $brandish-tar;
     position: relative;
+
+    &-active {
+      border: 2px solid $brandish-tar;
+    }
+
+    &-empty {
+      padding: 0;
+      padding: 0 20rem;
+      color: $brandish-grey;
+      background: rgba($brandish-grey, 0.1);
+      border: 2px dashed $brandish-grey;
+    }
 
     &-nav {
       position: absolute;
@@ -50,11 +75,5 @@
       top: 50%;
       transform: translateY(-50%);
     }
-  }
-
-  &-item-empty &-stage {
-    color: $brandish-grey;
-    background: rgba($brandish-grey, 0.1);
-    border: 2px dashed $brandish-grey;
   }
 }
