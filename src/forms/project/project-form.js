@@ -15,7 +15,7 @@ import styles from './project-form.module.scss';
 const features = [
   { id: 'team-presentation', name: 'Team & role presentation', type: 'attraction' },
   { id: 'company-presentation', name: 'Company presentation', type: 'attraction' },
-  { id: 'salary', title: 'Salary', name: 'attraction' },
+  { id: 'salary', name: 'Salary', type: 'attraction' },
   { id: 'candidate-questions', name: 'Candidate questions', type: 'attraction' },
   { id: 'competency-questions', name: 'Competency based questions', type: 'evaluation' },
   { id: 'motivation-questions', name: 'Motivation based questions', type: 'evaluation' },
@@ -127,24 +127,26 @@ const ProjectForm = ({ className }) => {
       }
     }
 
-    let newStages = []
-
-    if (stages.every(s => s != null)) {
-      newStages = [...stages, null]
-    } else if (stages.length > 3 && stages.slice(-2).every(s => s == null)) {
-      newStages = stages.slice(0, -1)
-    } else {
-      newStages = stages
-    }
-
     control.setValues({
       ...values,
-      stages: newStages,
+      stages,
       config: stageValuesCopy
     })
   }
 
-  return <form onSubmit={control.submit(handleSubmit)} className={classNames(styles['project-form'], className)}>
+  const addStage = () => {
+    control.set('stages', [
+      ...values.stages,
+      null
+    ])
+  }
+
+  useEffect(() => {
+    setStage(null)
+  }, [values.stages])
+
+
+  return  <form onSubmit={control.submit(handleSubmit)} className={classNames(styles['project-form'], className)}>
     <ProjectFormSidebar />
 
     <div className={styles['project-form-details']}>
@@ -155,7 +157,10 @@ const ProjectForm = ({ className }) => {
 
         <div className={classNames(styles['project-form-field'], styles['project-form-field-stages'])}>
           <h3 className={styles['project-form-field-title']}>Interview Stages</h3>
+
           <ProjectFormStager onStages={handleStages} activeStage={stage} onStageSelect={setStage} stages={values.stages} className={styles['project-form-stages']}  />
+
+          {values.stages.length < 12 ? <button type="button" className={styles['project-form-add-stage']}onClick={addStage}>Add stage +</button> : null}
         </div>
 
         {stage ? <FeatureForm values={values.config[stage.id]} onError={onStageError} onValues={handleStageValues}  feature={stage} /> : null}

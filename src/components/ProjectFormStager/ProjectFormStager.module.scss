@@ -15,6 +15,14 @@
         display: block;
     }
 
+    &-active &-title {
+      text-decoration: underline;
+    }
+
+    &:hover &-title {
+      text-decoration: underline;
+    }
+
     &-empty &-title {
       color: $brandish-grey;
     }
@@ -26,8 +34,7 @@
     }
 
     &-placeholder {
-      flex: 1;
-      position: relative;
+      flex: 1 1 100%;
     }
 
     &-feature {
@@ -37,43 +44,24 @@
     &-control {
       flex: 0 0 48rem;
       padding-left: 20rem;
+
+      &-button {
+        background: 0;
+        border: 0;
+        cursor: pointer;
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        &:hover &-icon {
+          stroke: red;
+        }
+      }
     }
 
     &-empty {
       cursor: default;
-    }
-  }
-
-  &-feature {
-    width: 100%;
-
-    &:hover {
-      border: 2px solid $brandish-tar;
-    }
-  }
-
-  &-placeholder {
-    flex: 1 1 100%;
-    line-height: 62rem;
-    position: relative;
-
-    &-active {
-      border: 2px solid $brandish-tar;
-    }
-
-    &-empty {
-      padding: 0;
-      padding: 0 20rem;
-      color: $brandish-grey;
-      background: rgba($brandish-grey, 0.1);
-      border: 2px dashed $brandish-grey;
-    }
-
-    &-nav {
-      position: absolute;
-      right: 20rem;
-      top: 50%;
-      transform: translateY(-50%);
     }
   }
 }
