@@ -58,4 +58,16 @@
     width: 100%;
     cursor: pointer;
   }
+
+  &-add-stage {
+    color: $brandish-dark-green;
+    border: 0;
+    border-radius: 3px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 20rem;
+    cursor: pointer;
+    font-size: 14rem;
+  }
 }

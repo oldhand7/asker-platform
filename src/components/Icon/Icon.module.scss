@@ -1,3 +1,5 @@
+@import 'styles/vars';
+
 .icon {
   width: 1em;
   height: 1em;
@@ -5,5 +7,9 @@
 
   &-mail {
     margin-top: 2px;
+  }
+
+  &-trash {
+    stroke: $brandish-grey;
   }
 }

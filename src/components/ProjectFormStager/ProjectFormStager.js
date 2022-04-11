@@ -1,25 +1,11 @@
 import classNames from 'classnames';
 import TrashIcon from 'components/Icon/TrashIcon';
-import UpDownIcon from 'components/Icon/UpDownIcon';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import FeatureDragDropLabel from 'components/FeatureDragDropLabel/FeatureDragDropLabel';
 import { useEffect, useState } from 'react';
+import StageFeaturePlaceholder from 'components/StageFeaturePlaceholder/StageFeaturePlaceholder'
 
 import styles from './ProjectFormStager.module.scss';
-
-const FeaturePlaceholder = ({ className, children }) => (
-  <div className={classNames(styles['project-form-stager-placeholder'], !children ? styles['project-form-stager-placeholder-empty'] : null)}>
-    {
-      children ?
-      children :
-      <>
-        <span className={styles['project-form-stager-placeholder-name']}>Drag and drop here to add a section</span>
-      </>
-    }
-
-    <UpDownIcon className={styles['project-form-stager-placeholder-nav']} />
-  </div>
-)
 
 const ProjectFormStager = ({ className, onStages, stages = [], activeStage = null, onStageSelect, onStageDelete }) => {
   const [isBrowser, setIsBrowser] = useState(false);
@@ -28,15 +14,15 @@ const ProjectFormStager = ({ className, onStages, stages = [], activeStage = nul
     setIsBrowser(process.browser);
   }, [])
 
-
-  const handleStageNav = (dir, stage) => {
-    alert('Moving stage ' + dir)
-  }
-
-  const handleStageDelete = (stage, ev) => {
+  const handleStageDelete = (stage, index, ev) => {
     ev.stopPropagation();
 
-    if (confirm('Are you sure?') && onStages) {
+    if (!stage) {
+      onStages([
+        ...stages.slice(0, index),
+        ...stages.slice(index + 1)
+      ])
+    } else if (confirm('Are you sure?') && onStages) {
       onStages([
         ...stages.map(s => (s != stage) ? s : null)
       ])
@@ -45,6 +31,10 @@ const ProjectFormStager = ({ className, onStages, stages = [], activeStage = nul
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
+
+    if (!destination || destination.index == source.index) {
+      return;
+    }
 
     const newStages = [
       ...stages
@@ -60,27 +50,42 @@ const ProjectFormStager = ({ className, onStages, stages = [], activeStage = nul
     onStages(newStages)
   }
 
+  const handleFeatureDrop = (feature = null, index) => {
+    const stagesCopy = [
+      ...stages
+    ]
+
+    stagesCopy[index] = feature;
+
+    onStages(stagesCopy)
+
+    return;
+  }
+
   return isBrowser ? <DragDropContext onDragEnd={onDragEnd}>
     <Droppable droppableId='stager'>
     {(provided) => (
     <ul ref={provided.innerRef} {...provided.droppableProps} className={classNames(styles['project-form-stager'], className)}>
     {stages.map((stage, index) => (
-      <Draggable key={stage ? stage.id : `null-${index}`}  data-test-id={`stage-${index}`} draggableId={stage ? stage.id : `null-${index}`} index={index}>
+      <Draggable key={stage ? `${stage.id}-${index}` : `null-${index}`}  data-test-id={`stage-${index}`} draggableId={stage ? stage.id : `null-${index}`} index={index}>
         {(provided) => (
           <li
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
+          className={classNames(
+            styles['project-form-stager-item'],
+            stage && activeStage == stage ? styles['project-form-stager-item-active'] : ''
+          )}
            >
             <h6 className={styles['project-form-stager-item-title']}>Stage {index + 1}</h6>
 
             <div className={styles['project-form-stager-item-body']}>
-              <FeaturePlaceholder>
-                {stage ? <FeatureDragDropLabel onClick={() => onStageSelect(stage)} className={styles['project-form-stager-feature']} feature={stage} context='stager' /> : null}
-              </FeaturePlaceholder>
-
+              <StageFeaturePlaceholder onDrop={(item) => handleFeatureDrop(item, index)} className={styles['project-form-stager-item-placeholder']}>
+                {stage ? <FeatureDragDropLabel onClick={() => onStageSelect(stage)} className={styles['project-form-stager-item-feature']} feature={stage} context='stager' /> : null}
+              </StageFeaturePlaceholder>
               <div className={styles['project-form-stager-item-control']}>
-                <button type="button" onClick={(ev) => handleStageDelete(stage, ev)} className={styles['project-form-stager-item-control-button']}>
+                <button type="button" onClick={(ev) => handleStageDelete(stage, index, ev)} className={styles['project-form-stager-item-control-button']}>
                   <TrashIcon className={styles['project-form-stager-item-control-button-icon']} />
                 </button>
               </div>

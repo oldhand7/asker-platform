@@ -1,0 +1,29 @@
+@import 'styles/vars';
+
+.stage-feature-placeholder {
+  line-height: 62rem;
+  position: relative;
+
+  &-empty {
+    padding: 0;
+    padding: 0 20rem;
+    color: $brandish-grey;
+    background: rgba($brandish-grey, 0.1);
+    border: 2px dashed $brandish-grey;
+  }
+
+  &-nav {
+    position: absolute;
+    right: 20rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &-drop-candidate &-name {
+    visibility: hidden;
+  }
+
+  &-drop-candidate &-nav {
+    visibility: hidden;
+  }
+}
