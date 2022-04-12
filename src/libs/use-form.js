@@ -21,16 +21,17 @@ const useForm = (options = {}) => {
     }
   }, [pristine, values])
 
-  const handleSubmit = cb => {
+  const handleSubmit = (cb, onError, ev) => {
     return (ev) => {
      ev.preventDefault();
 
      const errors = validate(values, options.rules, options.messages);
 
      if (!errors) {
-       cb(values)
+       cb(values, ev)
      } else {
        setErrors(errors)
+       onError(errors, ev)
      }
    }
   }

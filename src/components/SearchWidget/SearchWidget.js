@@ -1,11 +1,14 @@
 import classNames from 'classnames';
 import useForm from 'libs/use-form';
-import SearchIcon from './assets/icons/search.svg'
+import ResetIcon from 'components/Icon/ResetIcon'
+import SearchIcon from 'components/Icon/SearchIcon'
+
 import { useRef, useEffect } from 'react';
 
 import styles from './SearchWidget.module.scss';
 
-const SearchWidget = ({ className, onQuery }) => {
+//@TODO: refactor without useForm if works
+const SearchWidget = ({ className, value = '', onQuery, onQueryValue }) => {
   const [values, errors, control] = useForm({ values: { q: '' } })
 
   const ref = useRef()
@@ -19,7 +22,7 @@ const SearchWidget = ({ className, onQuery }) => {
   }
 
   const handleSubmit = () => {
-    if (!errors) {
+    if (values.q && onQuery) {
       onQuery(values.q)
     }
   }
@@ -47,10 +50,23 @@ const SearchWidget = ({ className, onQuery }) => {
     }
   }, [values])
 
+  useEffect(() => {
+    control.set('q', value)
+  }, [value])
+
+  useEffect(() => {
+    if (onQueryValue) {
+      onQueryValue(values.q)
+    }
+  }, [values.q])
 
   return <div className={classNames(styles['search-widget'], className)}>
-    <input ref={ref} onChange={control.input('q')} className={styles['search-widget-input']} name="q" placeholder="Search" />
-    <SearchIcon onClick={handleSubmit} className={styles['search-widget-icon']} />
+    <input value={values.q} ref={ref} onChange={control.input('q')} className={styles['search-widget-input']} name="q" placeholder="Search" />
+    {
+      values.q ?
+      <ResetIcon onClick={() => control.set('q', '')} className={classNames(styles['search-widget-icon'], styles['search-widget-icon-close'])} /> :
+      <SearchIcon onClick={handleSubmit} className={classNames(styles['search-widget-icon'], styles['search-widget-icon-search'])} />
+    }
   </div>
 }
 

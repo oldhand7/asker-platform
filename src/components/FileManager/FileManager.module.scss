@@ -1,0 +1,19 @@
+@import 'styles/vars';
+
+.file-manager {
+  table {
+    width: 100%;
+
+    th {
+      text-align: left;
+      background: $brandish-grey;
+      color: white;
+      font-weight: 500;
+    }
+  }
+
+  &-link {
+      color: $brandish-tar;
+      text-decoration: underline;
+  }
+}

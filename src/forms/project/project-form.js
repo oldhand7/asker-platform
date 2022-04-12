@@ -9,40 +9,30 @@ import ProjectFormStager from 'components/ProjectFormStager/ProjectFormStager';
 import ProjectFormInterviewers from 'components/ProjectFormInterviewers/ProjectFormInterviewers';
 import FeatureForm from 'components/FeatureForm/FeatureForm';
 import { useState, useEffect } from 'react';
+import { features, featureTypes } from 'libs/features';
+import { addFlash } from 'libs/flash';
+import Alert from 'components/Alert/Alert';
+import { useUser } from 'libs/user';
+import { saveProject } from 'libs/firestore'
+import { useRouter } from 'next/router';
+import Preloader from 'components/Preloader/Preloader'
 
 import styles from './project-form.module.scss';
 
-const features = [
-  { id: 'team-presentation', name: 'Team & role presentation', type: 'attraction' },
-  { id: 'company-presentation', name: 'Company presentation', type: 'attraction' },
-  { id: 'salary', name: 'Salary', type: 'attraction' },
-  { id: 'candidate-questions', name: 'Candidate questions', type: 'attraction' },
-  { id: 'competency-questions', name: 'Competency based questions', type: 'evaluation' },
-  { id: 'motivation-questions', name: 'Motivation based questions', type: 'evaluation' },
-  { id: 'screening-questions', name: 'Screening questions', type: 'evaluation' },
-  { id: 'experience-questions', name: 'Experience based questions', type: 'evaluation' },
-  { id: 'hard-skill-questions', name: 'Hard skill based questions', type: 'evaluation' },
-  { id: 'culture-fit questions', name: 'Culture-fit based questions', type: 'evaluation' },
-  { id: 'summary', name: 'Summary', type: 'other' },
-  { id: 'others', name: 'Others', type: 'other' }
-]
-
 const ProjectFormSidebar = () => {
   return <div className={styles['project-form-sidebar']}>
-      <div className={styles['project-form-sidebar-widget']}>
-        <h3 className={styles['project-form-sidebar-widget-title']}>Attraction</h3>
-        <FeatureList className={styles['project-form-sidebar-features']} features={features.filter(f => f.type == 'attraction')} />
-      </div>
+      {featureTypes.map((featureType) => {
+        const targetFeatures = features.filter(f => f.type == featureType.id)
 
-      <div className={styles['project-form-sidebar-widget']}>
-        <h3 className={styles['project-form-sidebar-widget-title']}>Evaluation</h3>
-        <FeatureList className={styles['project-form-sidebar-features']} features={features.filter(f => f.type == 'evaluation')} />
-      </div>
+        if (targetFeatures.length == 0) {
+          return null;
+        }
 
-      <div className={styles['project-form-sidebar-widget']}>
-        <h3 className={styles['project-form-sidebar-widget-title']}>Other options</h3>
-        <FeatureList className={styles['project-form-sidebar-features']} features={features.filter(f => f.type == 'other')} />
-      </div>
+        return <div key={`feature-list-widget-${featureType.id}`} className={styles['project-form-sidebar-widget']}>
+          <h3 className={styles['project-form-sidebar-widget-title']}>{featureType.name}</h3>
+          <FeatureList className={styles['project-form-sidebar-features']} features={targetFeatures} />
+        </div>
+      })}
     </div>
 }
 
@@ -54,11 +44,13 @@ const defaultValues = {
     null,
     null
   ],
+  userId: null,
   config: {
     introduction: {
       text: ''
     }
-  }
+  },
+  template: null
 }
 
 const rules = {
@@ -66,23 +58,24 @@ const rules = {
   interviewers: 'array|min:1'
 }
 
-const ProjectForm = ({ className }) => {
+const messages = {
+  'min.interviewers': 'At least one interviewer is required.'
+}
+
+const ProjectForm = ({ project, className }) => {
   const [config, t] = useSite();
   const [stage, setStage] = useState(null);
   const [stageErrors, setStageErrors] = useState([]);
+  const [error, setError] =  useState(null);
+  const [user] = useUser();
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   const [values, errors, control] = useForm({
-    values: defaultValues,
-    rules
+    values: project ? project : defaultValues,
+    rules,
+    messages
   })
-
-  const handleInterviewerQuery = q => {
-    //@TODO
-  }
-
-  const handleDeleteInterviewer = interviewer => {
-    //@TODO
-  }
 
   const handleStageValues = (stageValues) => {
     control.set('config', {
@@ -103,14 +96,28 @@ const ProjectForm = ({ className }) => {
   }
 
   const handleSubmit = (values) => {
-    if (stageErrors) {
+    if (stageErrors.length) {
       setError(new Error('Some stages are invalid.'))
 
       return;
     }
 
-    //@TODO: save data, redirect and show success message
+    values.userId = user.profile.uid;
+    values.companyId = user.companyId;
+
+    setLoading(true)
+
+    saveProject(values)
+      .then(() => {
+        addFlash('Project saved.', 'success')
+        router.push('/projects/')
+      })
+      .catch(setError)
   }
+
+  useEffect(() => {
+    setLoading(false)
+  }, [error])
 
   const handleStages = stages => {
     const stageValuesCopy = {
@@ -145,8 +152,23 @@ const ProjectForm = ({ className }) => {
     setStage(null)
   }, [values.stages])
 
+  const handleSubmitFailure = () => {
+    if (errors) {
+      let errorEl = document.querySelector('.form-error')
 
-  return  <form onSubmit={control.submit(handleSubmit)} className={classNames(styles['project-form'], className)}>
+      if (!errorEl) {
+        errorEl = document.querySelector('.alert')
+      }
+
+      if (errorEl) {
+        errorEl.scrollIntoView({
+          block: 'center'
+        })
+      }
+    }
+  }
+
+  return  <form onSubmit={control.submit(handleSubmit, handleSubmitFailure)} className={classNames(styles['project-form'], className)}>
     <ProjectFormSidebar />
 
     <div className={styles['project-form-details']}>
@@ -169,7 +191,11 @@ const ProjectForm = ({ className }) => {
           <h3 className={styles['project-form-field-title']}>Assign interviewer</h3>
 
           <ProjectFormInterviewers className={styles['project-form-interviewers']} interviewers={values.interviewers} onChange={control.input('interviewers', false)} />
+
+          {errors && errors['interviewers'] ? <p className="form-error">{errors['interviewers']}</p> : null}
         </div>
+
+        {error ? <Alert type="error">{error.message}</Alert> : null}
 
         {
           stageErrors.length ?
@@ -181,9 +207,10 @@ const ProjectForm = ({ className }) => {
           </div> : null
         }
 
-        <Button disabled={errors || stageErrors.length} type="submit" className={styles['project-form-submit']}>Create project</Button>
+        <Button disabled={loading || errors || stageErrors.length} type="submit" className={styles['project-form-submit']}>{!loading ? (project ? 'Save project' : 'Create project') : 'Loading...'}</Button>
       </div>
     </div>
+    {loading ? <Preloader /> : null}
   </form>
 }
 

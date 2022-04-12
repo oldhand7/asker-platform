@@ -1,5 +1,6 @@
 import { getApp } from 'libs/firebase-admin';
-const { getFirestore } = require('firebase-admin/firestore');
+const { getFirestore, FieldPath } = require('firebase-admin/firestore');
+import { snap2data } from 'libs/helper';
 
 const db = getFirestore(getApp());
 
@@ -46,4 +47,26 @@ export const getUser = (db, uid) => {
     .doc(uid)
     .get()
     .then(snap => snap.data())
+}
+
+export const getCompanyProjects = (companyId, sort = 'createdAt', order = 'DESC') => {
+  if (!companyId) {
+    return Promise.resolve([])
+  }
+
+  return db.collection('projects')
+    .where('companyId', '==', companyId)
+    .orderBy(sort, order)
+    .get()
+    .then(snap2data)
+}
+
+export const getCompanyProject = (companyId, projectId) => {
+  return db
+    .collection('projects')
+    .where('companyId', '==', companyId)
+    .where(FieldPath.documentId(), '==', projectId)
+    .get()
+    .then(snap2data)
+    .then(res => res[0])
 }
