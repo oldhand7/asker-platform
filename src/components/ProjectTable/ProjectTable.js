@@ -2,6 +2,7 @@ import Table from 'rc-table';
 import classNames from 'classnames';
 import Stager from 'components/Stager/Stager';
 import ProjectTableStatCell from 'components/ProjectTableStatCell/ProjectTableStatCell';
+import { useRouter } from 'next/router';
 
 import styles from './ProjectTable.module.scss';
 
@@ -14,12 +15,18 @@ const columns = [
   {
     title: 'Template name',
     dataIndex: 'template',
-    key: 'template'
+    key: 'template',
+    render: (template) => template || '-'
   },
   {
     title: 'Interviewer name',
-    dataIndex: 'interviewer',
-    key: 'interviewer'
+    dataIndex: 'interviewers',
+    key: 'interviewers',
+    render: (interviewers) => {
+      return <div>
+        {interviewers.map(i => <p key={i.id}>{i.name}</p>)}
+      </div>
+    }
   },
   {
     title: 'Interview stages',
@@ -31,19 +38,26 @@ const columns = [
   },
   {
     title: "Status",
-    dataIndex: "candidates",
-    key: "candidates",
     render: (candidates, project) => {
       return <ProjectTableStatCell project={project} />
     }
   }
-
 ];
 
 import demoProjects from 'data/demo/projects.json';
 
 const ProjectTable = ({ className, data = demoProjects }) => {
-  return <Table rowKey={row => row.id} className={classNames(
+  const router = useRouter()
+
+  const rowHandler = record => {
+    return {
+      onClick: () => {
+        router.push(`/projects/${record.id}`)
+      }
+    }
+  }
+
+  return <Table onRow={rowHandler} rowKey={row => row.id} className={classNames(
     styles['project-table'],
     className
   )} columns={columns} data={data} />

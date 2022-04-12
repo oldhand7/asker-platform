@@ -127,3 +127,41 @@ export const trim = (str, chars) => {
 
     return (start > 0 || end < str.length) ? str.substring(start, end) : str;
 }
+
+export const snap2data = snap => {
+  const items = []
+
+  snap.forEach((item, i) => {
+    const data = item.data()
+
+    data.createdAt = data.createdAt && data.createdAt.seconds ? data.createdAt.seconds : '';
+    data.updatedAt = data.updatedAt && data.updatedAt.seconds ? data.updatedAt.seconds : '';
+    data.id = item.id
+
+    items.push(data)
+  });
+
+  return JSON.parse(JSON.stringify(items));
+}
+
+export const humanFileSize = (bytes, si=false, dp=1) => {
+  const thresh = si ? 1000 : 1024;
+
+  if (Math.abs(bytes) < thresh) {
+    return bytes + ' B';
+  }
+
+  const units = si
+    ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+    : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+  let u = -1;
+  const r = 10**dp;
+
+  do {
+    bytes /= thresh;
+    ++u;
+  } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+
+
+  return bytes.toFixed(dp) + ' ' + units[u];
+}

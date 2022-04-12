@@ -34,3 +34,5 @@ export const firebaseConfig = {
 export const getFirebaseConfig = () => {
   return firebaseConfig[getAppEnv()]
 }
+
+export const UPLOAD_LIMIT_MB = 5;

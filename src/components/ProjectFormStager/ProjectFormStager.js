@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import TrashIcon from 'components/Icon/TrashIcon';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import FeatureDragDropLabel from 'components/FeatureDragDropLabel/FeatureDragDropLabel';
 import { useEffect, useState } from 'react';
 import StageFeaturePlaceholder from 'components/StageFeaturePlaceholder/StageFeaturePlaceholder'
+import TrashButton from 'components/TrashButton/TrashButton'
 
 import styles from './ProjectFormStager.module.scss';
 
@@ -85,9 +85,7 @@ const ProjectFormStager = ({ className, onStages, stages = [], activeStage = nul
                 {stage ? <FeatureDragDropLabel onClick={() => onStageSelect(stage)} className={styles['project-form-stager-item-feature']} feature={stage} context='stager' /> : null}
               </StageFeaturePlaceholder>
               <div className={styles['project-form-stager-item-control']}>
-                <button type="button" onClick={(ev) => handleStageDelete(stage, index, ev)} className={styles['project-form-stager-item-control-button']}>
-                  <TrashIcon className={styles['project-form-stager-item-control-button-icon']} />
-                </button>
+                <TrashButton onClick={(ev) => handleStageDelete(stage, index, ev)} className={styles['project-form-stager-item-control-button']} />
               </div>
             </div>
           </li>

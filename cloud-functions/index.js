@@ -15,14 +15,18 @@ const defaultUser = {
   type: 'admin' // admin|hr
 }
 
-const updateFirebaseUserFromProfile = async (uid, platformUser) => {
+const updateFirebaseUserClaimsFromProfile = (uid, platformUser) => {
   const claims = {
     superadmin: !!platformUser.superadmin,
     companyId: platformUser.companyId,
     type: platformUser.type
   }
 
-  await getAuth().setCustomUserClaims(uid, claims)
+  return getAuth().setCustomUserClaims(uid, claims)
+}
+
+const updateFirebaseUserFromProfile = async (uid, platformUser) => {
+  await updateFirebaseUserClaimsFromProfile(uid, platformUser)
 
   const { images, profile } = platformUser;
 
@@ -49,6 +53,7 @@ exports.platformAccountCreate = functions.firestore.document('users/{docId}')
         user = await updateFirebaseUserFromProfile(snap.id, platformUser)
       } else {
         user = await getAuth().getUser(snap.id)
+        await updateFirebaseUserClaimsFromProfile(snap.id, platformUser)
       }
 
       return snap.ref.set({

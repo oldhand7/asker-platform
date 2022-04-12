@@ -1,0 +1,36 @@
+@import 'styles/vars';
+
+.autocomplete {
+  position: relative;
+
+  &-search {
+    width: 100%;
+  }
+
+  &-options {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    box-shadow: -3px 5px 33px rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+    background: white;
+    transform: translateY(10rem);
+    z-index: 1;
+    padding: 0;
+    max-height: 240rem;
+    overflow-y: auto;
+    min-width: 240rem;
+    width: 100%;
+    margin: 0;
+
+    &-item {
+      padding: 0 20rem;
+      line-height: 40rem;
+
+      &-active,
+      &:hover {
+        font-weight: bold;
+      }
+    }
+  }
+}

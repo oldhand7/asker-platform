@@ -38,7 +38,8 @@ handler.post(async (req, res) => {
       const db = getFirestore(getApp())
 
       req.session.user = {
-        uid: claims.uid
+        uid: claims.uid,
+        companyId: claims.companyId
       }
 
       await req.session.save()

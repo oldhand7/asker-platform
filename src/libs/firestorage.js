@@ -5,7 +5,7 @@ import { trim } from 'libs/helper';
 export const uploadCompanyFile = (companyId, file, type = '') => {
   return getUser()
     .then(async (user) => {
-      const storage = await getStorage(getApp());
+      const storage = await getStorage();
 
       const storageRef = ref(
         storage,
@@ -20,7 +20,7 @@ export const uploadCompanyFile = (companyId, file, type = '') => {
 export const uploadUserFile = (file, type = '') => {
   return getUser()
     .then(async (user) => {
-      const storage = await getStorage(getApp());
+      const storage = await getStorage();
 
       const storageRef = ref(
         storage,

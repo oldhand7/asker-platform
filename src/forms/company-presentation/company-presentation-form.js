@@ -4,12 +4,13 @@ import FileDropInputField from 'components/FileDropInputField/FileDropInputField
 import useForm from 'libs/use-form';
 import { useState, useEffect } from 'react';
 import classNames from 'classnames';
+import FileManager from 'components/FileManager/FileManager';
 
 import styles from './company-presentation-form.module.scss';
 
 const defaultValues = {
   notes: '',
-  files: null
+  files: []
 }
 
 const rules = {
@@ -21,30 +22,38 @@ const messages = {
   required: '* - required field'
 }
 
-const CompanyPresentationForm = ({ className, onValues, onError }) => {
-  const [values, errors, control] = useForm({
-    values: defaultValues,
+const CompanyPresentationForm = ({ values, className, onValues, onError }) => {
+  const [formValues, errors, control] = useForm({
+    values: values ? values : defaultValues,
     rules,
     messages,
     pristine: false
   })
 
-  const handleFiles = (files) => {
-    //@TODO
+  const handleFiles = (newFiles) => {
+    control.set('files', [
+      ...values.files,
+      ...newFiles
+    ])
   }
 
   useEffect(() => {
     if (!errors) {
-      onValues(values)
+      onValues(formValues)
     } else {
       onError(new Error("Form invalid"))
     }
-  }, [errors, values])
+  }, [errors, formValues])
 
   return <div className={classNames(className, styles['company-presentation-form'])}>
     <TextareaInputField error={errors && errors['notes']} className={classNames(styles['company-presentation-form-field'], styles['company-presentation-form-notes'])} name="notes" onChange={control.input('notes')} placeholder="Enter your introductory text" />
     <Separator className={styles['company-presentation-separator']} text="Or" />
-    <FileDropInputField error={errors && errors['files']} onChange label="Upload file" onChange={handleFiles} className={styles['company-presentation-form-field']} />
+    {
+      formValues.files.length ?
+      <FileManager className={styles['company-presentation-file-manager']} files={formValues.files} onChange={control.input('files', false)} /> :
+      null
+    }
+    <FileDropInputField error={errors && errors['files']} label="Upload file" onFiles={handleFiles} className={styles['company-presentation-form-field']} />
   </div>
 }
 
