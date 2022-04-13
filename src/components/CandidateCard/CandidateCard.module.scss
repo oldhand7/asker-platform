@@ -1,0 +1,26 @@
+@import 'styles/vars';
+
+.candidate-card {
+  font-size: 16rem;
+  display: block;
+
+  &-initials {
+    display: inline-block;
+    line-height: 40rem;
+    height: 40rem;
+    width: 40rem;
+    border-radius: 50%;
+    overflow: hidden;
+    text-align: center;
+    background: $brandish-forest-green;
+    text-transform: uppercase;
+    margin-right: 5rem;
+    vertical-align: middle;
+    color: white;
+  }
+
+  &-name {
+    font-size: 16rem;
+    display: inline-block;
+  }
+}

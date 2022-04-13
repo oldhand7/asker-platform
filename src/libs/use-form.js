@@ -31,7 +31,10 @@ const useForm = (options = {}) => {
        cb(values, ev)
      } else {
        setErrors(errors)
-       onError(errors, ev)
+
+      if (onError) {
+        onError(errors, ev)
+      }
      }
    }
   }
