@@ -14,6 +14,7 @@ import Pagination from 'components/Pagination/Pagination';
 import Preloader from 'components/Preloader/Preloader';
 import { useUser } from 'libs/user';
 import { useDebounce } from 'libs/debounce';
+import PlusIcon from 'components/Icon/PlusIcon';
 
 import styles from 'styles/pages/projects.module.scss';
 
@@ -72,12 +73,12 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
       </Head>
       <div className={styles['projects-page-nav']}>
           <LiveSearchWidget onQuery={q => setFiler({ q })} />
-          <Button href='/projects/create/'>Create new project</Button>
+          <Button href='/projects/create/'><PlusIcon /> Create new project</Button>
       </div>
 
       {success ? <Alert type="success">{success}</Alert> : null}
 
-      <ProjectTabe data={filteredProjects.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE)} className={styles['projects-page-table']} />
+      <ProjectTabe emptyText="No projects to show." data={filteredProjects.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE)} className={styles['projects-page-table']} />
 
       <Pagination forcePage={page} className={styles['projects-page-pagination']} onPageChange={({ selected }) => setPage(selected)}  pageCount={Math.ceil(filteredProjects.length / PER_PAGE)} renderOnZeroPageCount={false} />
   </div>
@@ -85,7 +86,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
 
 export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
   const projects = await getCompanyProjectsAdmin(req.session.user.companyId)
-  
+
   return {
     props: {
       config: await getSettings(),

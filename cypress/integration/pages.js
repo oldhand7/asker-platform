@@ -10,6 +10,6 @@ describe('Pages', () => {
 
   it('has Create Project accessable', () => {
     cy.visit('/projects/create/')
-    cy.title().should('include', 'Create Project')
+    cy.title().should('include', 'Create project')
   })
 })

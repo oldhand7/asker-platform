@@ -106,6 +106,7 @@ module.exports = (on, config) => {
   on('before:run', async (details) => {
       await removeAllFirebaseUsers()
       await deleteCollection(db, 'companies');
+      await deleteCollection(db, 'projects');
       await createUser('John Powers', 'admin@askertech.com', 'test123', '', 'admin', true)
       const companyId = await createCompany('Doe Paper Company')
       await createUser('Joe Doe', 'joe.doe@example.com', 'test123', companyId, 'admin', false)

@@ -37,7 +37,7 @@ const columns = [
     }
   },
   {
-    title: "Status",
+    title: "Interview status",
     render: (candidates, project) => {
       return <ProjectTableStatCell project={project} />
     }
@@ -46,7 +46,7 @@ const columns = [
 
 import demoProjects from 'data/demo/projects.json';
 
-const ProjectTable = ({ className, data = demoProjects }) => {
+const ProjectTable = ({ className, data = demoProjects, ...props }) => {
   const router = useRouter()
 
   const rowHandler = record => {
@@ -60,7 +60,7 @@ const ProjectTable = ({ className, data = demoProjects }) => {
   return <Table onRow={rowHandler} rowKey={row => row.id} className={classNames(
     styles['project-table'],
     className
-  )} columns={columns} data={data} />
+  )} columns={columns} data={data} {...props} />
 }
 
 export default ProjectTable;

@@ -23,18 +23,18 @@ const ProjectTableStatCell = ({ project = demoProjects[0], className }) => {
 
   return <div className={classNames(styles['project-table-stat-cell'], className)}>
     <div>
-      <span className={styles['project-table-stat-cell-count']}>{candidates.length }</span>
-       Number of Candidates
+      <span className={styles['project-table-stat-cell-count']}>{candidates.length} </span>
+       Number of candidates
     </div>
     <div className={styles['project-table-stat-cell-status']}>
-      <span className={styles['project-table-stat-cell-count']}>{awaiting.length}</span>
+      <span className={styles['project-table-stat-cell-count']}>{awaiting.length} </span>
       <StatusLabel className={styles['project-table-stat-cell-status-label']}>Awaiting</StatusLabel>
     </div>
     <div className={classNames(
       styles['project-table-stat-cell-status'],
       styles['project-table-stat-cell-status-green']
     )}>
-      <span className={styles['project-table-stat-cell-count']}>{completed.length}</span>
+      <span className={styles['project-table-stat-cell-count']}>{completed.length} </span>
       <StatusLabel on={true} className={styles['project-table-stat-cell-status-label']}>Completed</StatusLabel>
     </div>
   </div>

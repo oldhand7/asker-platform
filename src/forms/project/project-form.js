@@ -50,7 +50,8 @@ const defaultValues = {
       text: ''
     }
   },
-  template: null
+  template: null,
+  candidates: []
 }
 
 const rules = {
@@ -109,7 +110,13 @@ const ProjectForm = ({ project, className }) => {
 
     saveProject(values)
       .then(() => {
-        addFlash('Project saved.', 'success')
+
+        if (project) {
+          addFlash('Project saved', 'success')
+        } else {
+          addFlash('Project created', 'success')
+        }
+
         router.push('/projects/')
       })
       .catch(setError)
@@ -168,7 +175,7 @@ const ProjectForm = ({ project, className }) => {
     }
   }
 
-  return  <form onSubmit={control.submit(handleSubmit, handleSubmitFailure)} className={classNames(styles['project-form'], className)}>
+  return  <form data-test-id="project-form" onSubmit={control.submit(handleSubmit, handleSubmitFailure)} className={classNames(styles['project-form'], className)}>
     <ProjectFormSidebar />
 
     <div className={styles['project-form-details']}>
