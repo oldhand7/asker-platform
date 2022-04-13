@@ -49,19 +49,19 @@ const ProjectFormInterviewers = ({ className, interviewers = [], onChange }) => 
     ])
   }
 
-  return <div className={classNames(styles["project-form-interviewers"], className)}>
+  return <div data-test-id="interviewers" className={classNames(styles["project-form-interviewers"], className)}>
     <Autocomplete
       onSearch={handleSearch}
       onQuery={handleQuery}
       className={styles['project-form-interviewers-autocomplete']}
     />
 
-    <div className={styles['project-form-interviewers-list']}>
-      {interviewers.map(interviewer => <div key={`interviewer-${interviewer.id || interviewer.name}`} className={styles['project-form-interviewers-list-item']}>
+    <ul data-test-id="interviewers-list" className={styles['project-form-interviewers-list']}>
+      {interviewers.map(interviewer => <li key={`interviewer-${interviewer.id || interviewer.name}`} className={styles['project-form-interviewers-list-item']}>
         <span className={styles['project-form-interviewers-list-item-name']}>{interviewer.name}</span>
         <TrashButton onClick={() => handleDeleteInterviewer(interviewer)} className={styles['project-form-interviewers-list-item-button']} />
-      </div>)}
-    </div>
+      </li>)}
+    </ul>
   </div>
 }
 

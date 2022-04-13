@@ -20,7 +20,7 @@ const ProjectsCreatePage = () => {
 
   return <div className={styles['projects-create-page']}>
       <Head>
-        <title>Create Project - Asker</title>
+        <title>Create project - Asker</title>
       </Head>
       <ProjectForm className={styles['projects-create-page-form']} />
   </div>

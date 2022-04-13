@@ -65,11 +65,12 @@ const ProjectFormStager = ({ className, onStages, stages = [], activeStage = nul
   return isBrowser ? <DragDropContext onDragEnd={onDragEnd}>
     <Droppable droppableId='stager'>
     {(provided) => (
-    <ul ref={provided.innerRef} {...provided.droppableProps} className={classNames(styles['project-form-stager'], className)}>
+    <ul data-test-id="stager" ref={provided.innerRef} {...provided.droppableProps} className={classNames(styles['project-form-stager'], className)}>
     {stages.map((stage, index) => (
       <Draggable key={stage ? `${stage.id}-${index}` : `null-${index}`}  data-test-id={`stage-${index}`} draggableId={stage ? stage.id : `null-${index}`} index={index}>
         {(provided) => (
           <li
+          data-test-id={`stage-${index+1}`}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
