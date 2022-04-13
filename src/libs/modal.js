@@ -21,7 +21,7 @@ export const withModal = (WrappedComponent) => {
   return withModal;
 };
 
-export const useModal = (ModalComponent) => {
+export const useModal = (ModalComponent, size = 'medium') => {
   const [open, close] = useContext(ModalContext)
 
   return (onResult)=>{
@@ -35,6 +35,6 @@ export const useModal = (ModalComponent) => {
       }
     }
 
-    open(<ModalComponent onResult={handleResult} onClose={close} />)
+    open(<ModalComponent onResult={handleResult} onClose={close} size={size} />)
   }
 }

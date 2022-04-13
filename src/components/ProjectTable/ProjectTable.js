@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import Stager from 'components/Stager/Stager';
 import ProjectTableStatCell from 'components/ProjectTableStatCell/ProjectTableStatCell';
 import { useRouter } from 'next/router';
+import NODATA from 'components/NODATA/NODATA';
 
 import styles from './ProjectTable.module.scss';
 
@@ -16,7 +17,7 @@ const columns = [
     title: 'Template name',
     dataIndex: 'template',
     key: 'template',
-    render: (template) => template || '-'
+    render: (template) => template || <NODATA />
   },
   {
     title: 'Interviewer name',
@@ -52,7 +53,7 @@ const ProjectTable = ({ className, data = demoProjects, ...props }) => {
   const rowHandler = record => {
     return {
       onClick: () => {
-        router.push(`/projects/${record.id}`)
+        router.push(`/projects/${record.id}/`)
       }
     }
   }

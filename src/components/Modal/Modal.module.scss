@@ -1,3 +1,5 @@
+@import 'styles/vars';
+
 .modal {
   position: fixed;
   top: 0;
@@ -30,5 +32,18 @@
   &-large &-content {
     width: 80%;
 
+  }
+
+  &-close {
+    position: absolute;
+    right: 20rem;;
+    top: 20rem;
+    background: 0;
+    border: 0;
+    cursor: pointer;
+
+    &-icon {
+      fill: $brandish-grey;
+    }
   }
 }

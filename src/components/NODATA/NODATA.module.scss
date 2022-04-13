@@ -1,0 +1,8 @@
+@import 'styles/vars';
+
+.nodata {
+  height: 1px;
+  width: 2em;
+  display: inline-block;
+  background: $brandish-tar;
+}

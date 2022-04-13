@@ -42,6 +42,20 @@ const updateFirebaseUserFromProfile = async (uid, platformUser) => {
   return getAuth().updateUser(uid, data);
 }
 
+exports.stampCollections = functions.firestore.document('{collectionName}/{docId}')
+  .onCreate(async (snap, context) => {
+    const data = snap.data();
+
+    if (!data.id) {
+      return snap.ref.set({
+        ...data,
+        id: snap.id
+      })
+    }
+
+    return null
+});
+
 exports.platformAccountCreate = functions.firestore.document('users/{docId}')
   .onCreate(async (snap, context) => {
     const platformUser = snap.data();

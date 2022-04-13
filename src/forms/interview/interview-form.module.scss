@@ -1,0 +1,13 @@
+.interview-form {
+
+  &-stage {
+    text-align: left;
+  }
+
+  &-submit {
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

@@ -70,3 +70,23 @@ export const getCompanyProject = (companyId, projectId) => {
     .then(snap2data)
     .then(res => res[0])
 }
+
+
+export const getCompanyInterview = (companyId, interviewId) => {
+  return db
+    .collection('interviews')
+    .where('companyId', '==', companyId)
+    .where(FieldPath.documentId(), '==', interviewId)
+    .get()
+    .then(snap2data)
+    .then(res => res[0])
+}
+
+export const getProjectInterviews = (projectId) => {
+  return db
+    .collection('interviews')
+    .where('projectId', '==', projectId)
+    .orderBy('createdAt', 'DESC')
+    .get()
+    .then(snap2data)
+}
