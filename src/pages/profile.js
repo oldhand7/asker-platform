@@ -1,6 +1,4 @@
 import { login } from 'libs/user';
-import { useRouter } from 'next/router';
-import LoginForm from 'forms/login/login-form';
 import { getSettings } from 'libs/firestore-admin';
 import { useUser } from 'libs/user';
 import { useEffect, useState } from 'react';
@@ -14,14 +12,7 @@ import styles from 'styles/pages/profile.module.scss';
 
 const ProfilePage = () => {
   const [user] = useUser()
-  const router = useRouter();
   const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    if (!user) {
-      router.push('/login')
-    }
-  }, [user])
 
   useEffect(() => {
     setLoading(false);

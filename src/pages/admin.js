@@ -11,15 +11,6 @@ const ReactAdminApp = dynamic(() => import("admin/index.js"), { ssr: false })
 const AdminPage = () => {
   const router = useRouter();
 
-  useEffect(() => {
-    getUser()
-      .then(user => {
-        if (!user) {
-          router.push('/admin/#/login')
-        }
-      })
-  }, [])
-
   return <div className={styles['react-admin']}>
      <ReactAdminApp />
    </div>

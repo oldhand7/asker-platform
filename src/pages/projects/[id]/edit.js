@@ -1,7 +1,4 @@
-import { useRouter } from 'next/router';
 import { getSettings } from 'libs/firestore-admin';
-import { useUser } from 'libs/user';
-import { useEffect, useState } from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import ProjectForm from 'forms/project/project-form';
 import Head from 'next/head';
@@ -10,15 +7,6 @@ import { getCompanyProject } from 'libs/firestore-admin'
 import styles from 'styles/pages/projects-edit.module.scss';
 
 const ProjectsEditPage = ({ project }) => {
-  const [user] = useUser()
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!user) {
-      router.push('/login')
-    }
-  }, [user])
-
   return <div className={styles['projects-edit-page']}>
       <Head>
         <title>{project.name} - Edit Project - Asker</title>

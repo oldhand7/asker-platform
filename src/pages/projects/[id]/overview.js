@@ -1,5 +1,4 @@
 import { getSettings } from 'libs/firestore-admin';
-import { useUser } from 'libs/user';
 import { useEffect, useState } from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import ProjectForm from 'forms/project/project-form';
@@ -20,19 +19,12 @@ import { useFlash } from 'libs/flash'
 import styles from 'styles/pages/project-overview.module.scss';
 
 const ProjectOverviewPage = ({ project, interviews = [] }) => {
-  const [user] = useUser()
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const openCandidateModal = useModal(CandidateModal, 'large');
   const [_interviews, setInterviews] = useState(interviews);
   const [error, setError] = useState(null);
   const success = useFlash('success');
-
-  useEffect(() => {
-    if (!user) {
-      router.push('/login')
-    }
-  }, [user])
 
   const handleCandidate = (values) => {
     if (!values) return;

@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { getSettings } from 'libs/firestore-admin';
 import { useEffect, useState} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
@@ -12,7 +11,6 @@ import { getCompanyProjects as getCompanyProjectsAdmin } from 'libs/firestore-ad
 import ReactPaginate from 'react-paginate';
 import Pagination from 'components/Pagination/Pagination';
 import Preloader from 'components/Preloader/Preloader';
-import { useUser } from 'libs/user';
 import { useDebounce } from 'libs/debounce';
 import PlusIcon from 'components/Icon/PlusIcon';
 
@@ -21,23 +19,14 @@ import styles from 'styles/pages/projects.module.scss';
 const PER_PAGE = 15;
 
 const ProjectsPage = ({ projects = [], total = 0 }) => {
-  const router = useRouter();
   const success  =  useFlash('success')
-  const [user] = useUser();
   const [filter, setFiler] = useState({ q: ''})
   const [page, setPage] = useState(0);
   const [filteredProjects, setProjects] = useState(projects);
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login')
-    }
-  }, [user])
-
-  useEffect(() => {
     setPage(0)
   }, [filter.q])
-
 
   const handleQuery = q => {
     const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
@@ -72,7 +61,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
         <title>Projects - Asker</title>
       </Head>
       <div className={styles['projects-page-nav']}>
-          <LiveSearchWidget onQuery={q => setFiler({ q })} />
+          <LiveSearchWidget q={filter.q} onQuery={q => setFiler({ q })} />
           <Button href='/projects/create/'><PlusIcon /> Create new project</Button>
       </div>
 
@@ -86,7 +75,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
 
 export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
   const projects = await getCompanyProjectsAdmin(req.session.user.companyId)
-  
+
   return {
     props: {
       config: await getSettings(),
