@@ -15,11 +15,7 @@ import styles from './QuestionsTable.module.scss';
 
 const getColumns = ({ handleCompactMenuChoice }) => ([
   {
-<<<<<<< HEAD
     title: 'Type of question',
-=======
-    title: 'Type of Question',
->>>>>>> 84350423ed35c9ba876385fff90c6981a8c737eb
     dataIndex: 'criteria',
     key: 'criteria',
     render: (criteria, row) => {

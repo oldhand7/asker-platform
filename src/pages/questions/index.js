@@ -97,11 +97,7 @@ const QuestionPage = ({ questions = [] }) => {
 
   return <div className={styles['questions-page']}>
       <Head>
-<<<<<<< HEAD
         <title>Questions listing - Asker</title>
-=======
-        <title>Projects - Asker</title>
->>>>>>> 84350423ed35c9ba876385fff90c6981a8c737eb
       </Head>
 
       <div className={styles['questions-page-filter']}>
