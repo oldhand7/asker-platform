@@ -49,8 +49,8 @@ const ProjectDashboardPage = ({ project, interviews = [] }) => {
       interview.id = interviewId
 
       setInterviews([
-        ..._interviews,
-        interview
+        interview,
+        ..._interviews
       ])
 
       setLoading(false);
@@ -64,7 +64,7 @@ const ProjectDashboardPage = ({ project, interviews = [] }) => {
 
   return <div className={styles['project-dashboard-page']}>
       <Head>
-        <title>{project.name} - Project dashboard - Asker</title>
+        <title>{project.name} - Project overview - Asker</title>
       </Head>
 
       <div className={styles['project-dashboard-page-overview']}>
@@ -74,7 +74,7 @@ const ProjectDashboardPage = ({ project, interviews = [] }) => {
 
         {/*<ProjectEvaluationCriteria className={styles['project-dashboard-page-evaluation-criteria']} />*/}
 
-        <div className={styles['project-dashboard-page-interviewers']}>
+        <div data-test-id="interviewers" className={styles['project-dashboard-page-interviewers']}>
           <h2 className={styles['project-dashboard-page-interviewers-title']}>Assigned Interviewer</h2>
           <ul className={styles['project-dashboard-page-interviewers-list']}>
             {project.interviewers.map(interviewer => <li className={styles['project-dashboard-page-interviewers-list-item']} key={interviewer.id}>{interviewer.name}</li>)}

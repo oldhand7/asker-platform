@@ -29,10 +29,10 @@ const CandidateForm = ({ className, onValues }) => {
     onValues(values)
   }
 
-  return <form method="POST" noValidate className={classNames(styles['candidate-form'], className)} onSubmit={control.submit(handleSubmit)}>
+  return <form data-test-id="candidate-form" method="POST" noValidate className={classNames(styles['candidate-form'], className)} onSubmit={control.submit(handleSubmit)}>
     <TextInputField value={values.name} placeholder={t('Candidate name')} error={errors ? t(errors.name) : null} onChange={control.input('name')} autoComplete='off' name="name" className={styles['candidate-form-field']} />
     <TextInputField value={values.email} placeholder={t('Email address')} error={errors ? t(errors.email) : null} onChange={control.input('email')} autoComplete='off' name='email' className={styles['candidate-form-field']} />
-    <PlatformButton className={styles['candidate-form-submit']}><PlusIcon /> Add candidate</PlatformButton>
+    <PlatformButton type="submit" className={styles['candidate-form-submit']}><PlusIcon /> Add candidate</PlatformButton>
   </form>
 }
 

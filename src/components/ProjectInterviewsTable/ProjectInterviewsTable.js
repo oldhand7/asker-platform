@@ -17,11 +17,11 @@ const columns = [
     render: (_, row) => row.candidate.name
   },
   {
-    title: 'Total Interview Score',
+    title: 'Total interview score',
     dataIndex: 'score',
     key: 'score',
     render: (score) => {
-      return typeof score !== 'undefined' ? <InterviewScore score={5} /> : <NODATA />;
+      return typeof score !== 'undefined' ? <InterviewScore score={score} /> : <NODATA />;
     }
   },
   {

@@ -9,21 +9,21 @@ import demoProjects from 'data/demo/projects.json';
 const ProjectTableStatCell = ({ project = demoProjects[0], className }) => {
   const [awaiting, setAwaiting] = useState([])
   const [completed, setCompleted] = useState([])
-  const [candidates, setCandidates] = useState(project.candidates || []);
+  const [interviews, setInterviews] = useState(project.interviews || []);
 
   useEffect(() => {
     setAwaiting([
-      ...candidates.filter(c => c.status == 'awaiting')
+      ...interviews.filter(c => c.status == 'awaiting')
     ])
 
     setCompleted([
-      ...candidates.filter(c => c.status == 'completed')
+      ...interviews.filter(c => c.status == 'completed')
     ])
-  }, [candidates])
+  }, [interviews])
 
   return <div className={classNames(styles['project-table-stat-cell'], className)}>
     <div>
-      <span className={styles['project-table-stat-cell-count']}>{candidates.length} </span>
+      <span className={styles['project-table-stat-cell-count']}>{interviews.length} </span>
        Number of candidates
     </div>
     <div className={styles['project-table-stat-cell-status']}>

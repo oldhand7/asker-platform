@@ -17,7 +17,7 @@ const columns = [
     title: 'Template name',
     dataIndex: 'template',
     key: 'template',
-    render: (template) => template || <NODATA />
+    render: (template) => (template && template.name) || <NODATA />
   },
   {
     title: 'Interviewer name',
@@ -53,7 +53,7 @@ const ProjectTable = ({ className, data = demoProjects, ...props }) => {
   const rowHandler = record => {
     return {
       onClick: () => {
-        router.push(`/projects/${record.id}/`)
+        router.push(`/projects/${record.id}/overview/`)
       }
     }
   }
