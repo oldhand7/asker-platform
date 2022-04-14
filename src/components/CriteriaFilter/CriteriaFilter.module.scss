@@ -1,0 +1,29 @@
+@import 'styles/vars';
+
+.criteria-filter {
+  padding: 0;
+  margin: 0;
+  display: block;
+  font-size: 14rem;
+  list-style: none;
+
+  &-item {
+    color: $brandish-grey;
+    border: 1px solid $brandish-grey;
+    line-height: 42rem;
+    padding: 0 20rem;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: 6px;
+    margin-right: 10rem;
+    margin-bottom: 10rem;
+    display: inline-block;
+
+    &-active,
+    &:hover {
+      border: 1px solid $brandish-dark-green;
+      background: rgba($brandish-dark-green, 0.1);
+      color: $brandish-dark-green;
+    }
+  }
+}

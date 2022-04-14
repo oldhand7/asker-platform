@@ -1,3 +1,5 @@
+@import 'styles/vars';
+
 .button {
   color: white;
   background: black;
@@ -21,5 +23,54 @@
     display: inline-block;
     vertical-align: middle;
     margin: 0 2rem;
+  }
+
+
+  &-filter {
+    color: white;
+    cursor: pointer;
+    line-height: 51rem;
+    border: 2px solid $brandish-tar;
+    border-radius: 5px;
+    padding: 0 15rem;
+    line-height: 51rem;
+    background: 0;
+    color: $brandish-tar;
+    font-weight: 500;
+
+    &[data-state="on"] {
+      color: white !important;
+      background: $brandish-tar;
+    }
+
+    &-green {
+      color: $brandish-green;
+      border: 2px solid $brandish-green;
+
+      &:hover {
+        background: rgba($brandish-green, 0.1);
+      }
+    }
+
+    &-green[data-state="on"] {
+      color: white;
+      background: $brandish-green;
+      border: 2px solid $brandish-green;
+    }
+
+    &-grape {
+      color: $brandish-grape;
+      border: 2px solid $brandish-grape;
+
+      &:hover {
+        background: rgba($brandish-grape, 0.1);
+      }
+    }
+
+    &-grape[data-state="on"] {
+      color: white;
+      background: $brandish-grape;
+      border: 2px solid $brandish-grape;
+    }
   }
 }
