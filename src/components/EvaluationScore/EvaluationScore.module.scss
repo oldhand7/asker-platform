@@ -1,0 +1,17 @@
+@import 'styles/vars';
+
+.evaluation-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &-title {
+    display: block;
+    color: $brandish-grey;
+  }
+
+  &-stars {
+
+  }
+}

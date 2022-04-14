@@ -1,0 +1,51 @@
+@import 'styles/vars';
+
+.project-evaluation-criteria {
+  border-radius: 9px;
+  background: white;
+  padding: 20rem;
+  text-align: center;
+  
+  &-title {
+    font-weight: 500;
+    font-size: 24rem;
+    line-height: 36px;
+  }
+
+  svg {
+    max-width: 100%;
+  }
+
+  &-chart {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+
+  &-legend {
+    display: flex;
+    justify-content: space-around;
+    font-size: 14rem;
+    flex-wrap: wrap;
+    line-height: 20rem;
+
+    &-item {
+
+      &::before {
+          content: '';
+          width: 1em;
+          height: 1em;
+          display: inline-block;
+          border-radius: 50%;
+          background: currentColor;
+          vertical-align: middle;
+          margin-right: 10rem;
+      }
+
+      &-label {
+        color: $brandish-tar;
+        font-weight: 500;
+      }
+    }
+  }
+}
