@@ -1,3 +1,32 @@
 .questions-page {
-  padding: 20rem 0;
+  padding: 40rem 0;
+
+  &-filter {
+    &-company{
+      margin-bottom: 25rem;
+
+      &-button {
+        margin-right: 5rem;
+      }
+    }
+
+    &-criteria {
+      margin: 5rem 0;
+    }
+  }
+
+  &-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 38rem 0;
+
+    & > {
+      flex: 0;
+    }
+  }
+
+  &-table {
+
+  }
 }
