@@ -12,13 +12,14 @@ import CandidateModal from 'modals/candidate/candidate-modal';
 import { useModal } from 'libs/modal';
 import PlusIcon from 'components/Icon/PlusIcon';
 import { useRouter } from 'next/router';
-import styles from 'styles/pages/project-dashboard.module.scss';
 import Alert from 'components/Alert/Alert';
 import { saveInterview } from 'libs/firestore'
 import Link from 'next/link';
 import { useFlash } from 'libs/flash'
 
-const ProjectDashboardPage = ({ project, interviews = [] }) => {
+import styles from 'styles/pages/project-overview.module.scss';
+
+const ProjectOverviewPage = ({ project, interviews = [] }) => {
   const [user] = useUser()
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -49,8 +50,8 @@ const ProjectDashboardPage = ({ project, interviews = [] }) => {
       interview.id = interviewId
 
       setInterviews([
-        ..._interviews,
-        interview
+        interview,
+        ..._interviews
       ])
 
       setLoading(false);
@@ -62,31 +63,31 @@ const ProjectDashboardPage = ({ project, interviews = [] }) => {
     setLoading(false);
   }, [error])
 
-  return <div className={styles['project-dashboard-page']}>
+  return <div className={styles['project-overview-page']}>
       <Head>
-        <title>{project.name} - Project dashboard - Asker</title>
+        <title>{project.name} - Project overview - Asker</title>
       </Head>
 
-      <div className={styles['project-dashboard-page-overview']}>
-        <h1 className={styles['project-dashboard-page-title']}>{project.name} <Link href={`/projects/${project.id}/edit`}><a className={styles['project-dashboard-page-title-edit-link']}>edit</a></Link></h1>
+      <div className={styles['project-overview-page-overview']}>
+        <h1 className={styles['project-overview-page-title']}>{project.name} <Link href={`/projects/${project.id}/edit`}><a className={styles['project-overview-page-title-edit-link']}>edit</a></Link></h1>
 
         {success ? <Alert type="success">{success}</Alert> : null}
 
-        {/*<ProjectEvaluationCriteria className={styles['project-dashboard-page-evaluation-criteria']} />*/}
+        {/*<ProjectEvaluationCriteria className={styles['project-overview-page-evaluation-criteria']} />*/}
 
-        <div className={styles['project-dashboard-page-interviewers']}>
-          <h2 className={styles['project-dashboard-page-interviewers-title']}>Assigned Interviewer</h2>
-          <ul className={styles['project-dashboard-page-interviewers-list']}>
-            {project.interviewers.map(interviewer => <li className={styles['project-dashboard-page-interviewers-list-item']} key={interviewer.id}>{interviewer.name}</li>)}
+        <div data-test-id="interviewers" className={styles['project-overview-page-interviewers']}>
+          <h2 className={styles['project-overview-page-interviewers-title']}>Assigned Interviewer</h2>
+          <ul className={styles['project-overview-page-interviewers-list']}>
+            {project.interviewers.map(interviewer => <li className={styles['project-overview-page-interviewers-list-item']} key={interviewer.id}>{interviewer.name}</li>)}
           </ul>
         </div>
       </div>
 
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <div className={styles['project-dashboard-page-interviews']}>
-        <PlatformButton onClick={() => openCandidateModal(handleCandidate)} className={styles['project-dashboard-page-interviews-add-candidate']}><PlusIcon /> Add candidate</PlatformButton>
-        <ProjectInterviewsTable className={styles['project-dashboard-page-interviews-table']} data={_interviews} />
+      <div className={styles['project-overview-page-interviews']}>
+        <PlatformButton onClick={() => openCandidateModal(handleCandidate)} className={styles['project-overview-page-interviews-add-candidate']}><PlusIcon /> Add candidate</PlatformButton>
+        <ProjectInterviewsTable className={styles['project-overview-page-interviews-table']} data={_interviews} />
       </div>
       {loading ? <Preloader /> : null}
   </div>
@@ -112,4 +113,4 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
   }
 })
 
-export default ProjectDashboardPage;
+export default ProjectOverviewPage;
