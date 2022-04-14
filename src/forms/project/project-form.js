@@ -1,7 +1,6 @@
 import FeatureList from 'components/FeatureList/FeatureList';
 import classNames from 'classnames';
 import useForm from 'libs/use-form';
-import SearchWidget from 'components/SearchWidget/SearchWidget';
 import Button from 'components/Button/PlatformButton';
 import TextInputField from 'components/TextInputField/TextInputField'
 import {useSite} from 'libs/site';

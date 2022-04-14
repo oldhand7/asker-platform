@@ -1,6 +1,5 @@
 import classNames from 'classnames';
-import SearchWidget from 'components/SearchWidget/SearchWidget'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Autocomplete from 'components/Autocomplete/Autocomplete';
 import { getCompanyEmployees } from 'libs/firestore';
 import { useUser } from 'libs/user';
@@ -41,18 +40,10 @@ const ProjectFormInterviewers = ({ className, interviewers = [], onChange }) => 
     ])
   }
 
-  const handleQuery = q => {
-    const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
-
-    return Promise.resolve([
-      ...autoCompleteOptions.filter(aco => regex.test(aco.name.toLowerCase()) && !interviewers.find(i => i.id == aco.id))
-    ])
-  }
-
   return <div data-test-id="interviewers" className={classNames(styles["project-form-interviewers"], className)}>
     <Autocomplete
       onSearch={handleSearch}
-      onQuery={handleQuery}
+      options={autoCompleteOptions.filter(o => !interviewers.find(i => i.id == o.id))}
       className={styles['project-form-interviewers-autocomplete']}
     />
 

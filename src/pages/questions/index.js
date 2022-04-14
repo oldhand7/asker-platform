@@ -113,7 +113,7 @@ const QuestionPage = ({ questions = [] }) => {
       </div>
 
       <div className={styles['questions-page-nav']}>
-          <LiveSearchWidget onQuery={q => setFiler({ ...filter, q })} />
+          <LiveSearchWidget q={filter.q} onQuery={q => setFiler({ ...filter, q })} />
           <DropDownButton onChoice={c => router.push(`/questions/create/${c.id}/`)} options={criteriaTypes}>
             <PlusIcon />Create new question
           </DropDownButton>

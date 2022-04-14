@@ -1,22 +1,44 @@
 import { useState, useEffect } from 'react';
-import SearchWidget from 'components/SearchWidget/SearchWidget';
 import classNames from 'classnames';
+import { useRef } from 'react';
+import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget';
 
 import styles from './Autocomplete.module.scss';
 
-//@TODO: should open selections on focus
-const Autocomplete = ({ onQuery, onSearch, className }) => {
-  const [options, setOptions] = useState([])
-  const [focusIndex, setFocusIndex] = useState(0);
-  const [q, setQuery] = useState('');
+const AutocompleteOptions = ({ options, index, className, onChoice }) => {
+  const optionProps = (option, optionIndex) => {
+    const className = classNames(
+      styles['autocomplete-options-item'],
+      optionIndex === index ? styles['autocomplete-options-item-active'] : ''
+    )
 
-  const handleQuery = q => {
-    setQuery(q);
-    onQuery(q).then(setOptions)
+    return {
+      onClick: () => onChoice && onChoice(option),
+      key: option.id,
+      className
+    }
   }
 
+  return <ul className={styles['autocomplete-options']}>
+  {
+    options.length ?
+    options.map((option, index) => <li {...optionProps(option, index)}>{option.name}</li>) :
+    <li key="no-options-warn" className={classNames(styles['autocomplete-options-item'], styles['autocomplete-options-item-warning'])}>No results.</li>
+  }
+  </ul>
+}
+
+//@TODO: should open selections on focus
+const Autocomplete = ({ onSearch, className, options = [] }) => {
+  const [filteredOptions, setOptions] = useState(options)
+  const [focusIndex, setFocusIndex] = useState(0);
+  const [q, setQuery] = useState('');
+  const [open, setOpen] = useState(false);
+
+  const ref = useRef();
+
   useEffect(() => {
-    if (options.length) {
+    if (filteredOptions.length) {
       const keyboardHandler = (ev) => {
         if (ev.key == 'ArrowUp' || ev.key == 'Up' ) {
           ev.preventDefault();
@@ -29,7 +51,7 @@ const Autocomplete = ({ onQuery, onSearch, className }) => {
         if (ev.key == 'ArrowDown' || ev.key == 'Down' ) {
           ev.preventDefault();
 
-            if (focusIndex + 1 < options.length) {
+            if (focusIndex + 1 < filteredOptions.length) {
               setFocusIndex(focusIndex + 1)
             }
         }
@@ -40,8 +62,8 @@ const Autocomplete = ({ onQuery, onSearch, className }) => {
           ev.preventDefault();
 
           handleChoice(
-            options[focusIndex] ?
-            options[focusIndex] :
+            filteredOptions[focusIndex] ?
+            filteredOptions[focusIndex] :
             null
           )
         }
@@ -55,24 +77,56 @@ const Autocomplete = ({ onQuery, onSearch, className }) => {
         document.removeEventListener('keydown', enterHandler);
       }
     }
-  }, [focusIndex, options])
+  }, [focusIndex, filteredOptions])
 
   const handleChoice = option => {
-    onSearch(option, q)
-    setOptions([])
     setQuery('');
+    setOpen(false);
+    onSearch(option)
   }
 
-  return <div className={classNames(styles['autocomplete'], className)}>
-      <SearchWidget value={q} onQueryValue={handleQuery} className={styles['autocomplete-search']} />
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
 
-      {q ? <ul className={styles['autocomplete-options']}>
-        {
-          options.length ?
-          options.map((option, index) => <li onClick={() => handleChoice(option)} key={option.id} className={classNames(styles['autocomplete-options-item'], focusIndex === index ? styles['autocomplete-options-item-active'] : '')}>{option.name}</li>) :
-          <li key="no-options-warn" className={classNames(styles['autocomplete-options-item'], styles['autocomplete-options-item-warning'])}>No results.</li>
-        }
-      </ul> : null}
+    const handleOffClick = ev => {
+      if (ev.target != ref.current && !ref.current.contains(ev.target)) {
+        setQuery('');
+        setOpen(false)
+      }
+    }
+
+    document.body.addEventListener('click', handleOffClick)
+
+    return () => {
+      document.body.removeEventListener('click', handleOffClick)
+    }
+  }, [open])
+
+  const fiterOptions = q => {
+    const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
+
+    return options.filter(o => regex.test(o.name.toLowerCase()))
+  }
+
+  const getOptions = q => {
+    const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
+
+    return options.filter(o => regex.test(o.name.toLowerCase()))
+  }
+
+  useEffect(() => {
+    const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
+
+    setOptions(
+      options.filter(o => regex.test(o.name.toLowerCase()))
+    )
+  }, [q, options])
+
+  return <div ref={ref} className={classNames(styles['autocomplete'], className)}>
+      <LiveSearchWidget onFocus={() => setOpen(true)} q={q} onQuery={setQuery} className={styles['autocomplete-search']} />
+      {open ? <AutocompleteOptions onChoice={handleChoice} index={focusIndex} options={filteredOptions} /> : null}
   </div>
 }
 
