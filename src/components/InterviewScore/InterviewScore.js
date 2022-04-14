@@ -30,7 +30,7 @@ const CandidateScore = ({ className, score = 0 }) => {
             <Cell key={`cell-score`} fill={getColor(score)} />
           </Pie>
         </PieChart>
-        <span className={styles['interview-score-value']}>{score} %</span>
+        <span className={styles['interview-score-value']}>{score}%</span>
   </div>
 }
 

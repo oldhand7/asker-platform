@@ -86,7 +86,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
 
 export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
   const projects = await getCompanyProjectsAdmin(req.session.user.companyId)
-
+  
   return {
     props: {
       config: await getSettings(),

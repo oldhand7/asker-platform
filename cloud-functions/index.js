@@ -56,6 +56,59 @@ exports.stampCollections = functions.firestore.document('{collectionName}/{docId
     return null
 });
 
+exports.interviewCreate = functions.firestore.document('interviews/{docId}')
+  .onCreate(async (snap, context) => {
+    const interview = snap.data();
+
+    try {
+      await admin.firestore()
+        .collection('projects')
+        .doc(interview.projectId)
+        .update({
+          interviews: admin.firestore.FieldValue.arrayUnion({
+            id: snap.id,
+            candidate: interview.candidate,
+            status: interview.status
+          })
+        })
+    } catch (error) {
+      console.log(error)
+
+      return null;
+    }
+});
+
+exports.updateInterview = functions.firestore.document('interviews/{docId}')
+  .onUpdate(async (change, context) => {
+    const interview = change.after.data();
+
+    try {
+      const interviews = await admin.firestore()
+        .collection('interviews')
+        .select('id', 'candidate', 'status')
+        .where('projectId', '==', interview.projectId)
+        .get()
+        .then(snap => {
+          const interviews = []
+
+          snap.forEach((interview) => {
+            interviews.push(interview.data())
+          });
+
+          return interviews;
+        })
+
+      await admin.firestore()
+        .collection('projects')
+        .doc(interview.projectId)
+        .update({ interviews })
+    } catch (error) {
+      console.log(error)
+
+      return null;
+    }
+});
+
 exports.platformAccountCreate = functions.firestore.document('users/{docId}')
   .onCreate(async (snap, context) => {
     const platformUser = snap.data();
