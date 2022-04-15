@@ -20,3 +20,4 @@ steps:
   args: ['run', 'deploy', 'nextjs-app-platform', '--image', 'gcr.io/$PROJECT_ID/nextjs-app-platform:latest', '--platform', 'managed', '--allow-unauthenticated', '--region', 'europe-west3']
 images:
 - gcr.io/$PROJECT_ID/nextjs-app-platform
+timeout: 720s
