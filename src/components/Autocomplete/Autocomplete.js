@@ -14,7 +14,6 @@ const AutocompleteOptions = ({ options, index, className, onChoice }) => {
 
     return {
       onClick: () => onChoice && onChoice(option),
-      key: option.id,
       className
     }
   }
@@ -22,13 +21,12 @@ const AutocompleteOptions = ({ options, index, className, onChoice }) => {
   return <ul className={styles['autocomplete-options']}>
   {
     options.length ?
-    options.map((option, index) => <li {...optionProps(option, index)}>{option.name}</li>) :
+    options.map((option, index) => <li key={index} {...optionProps(option, index)}>{option.name}</li>) :
     <li key="no-options-warn" className={classNames(styles['autocomplete-options-item'], styles['autocomplete-options-item-warning'])}>No results.</li>
   }
   </ul>
 }
 
-//@TODO: should open selections on focus
 const Autocomplete = ({ onSearch, className, options = [] }) => {
   const [filteredOptions, setOptions] = useState(options)
   const [focusIndex, setFocusIndex] = useState(0);
@@ -91,7 +89,7 @@ const Autocomplete = ({ onSearch, className, options = [] }) => {
     }
 
     const handleOffClick = ev => {
-      if (ev.target != ref.current && !ref.current.contains(ev.target)) {
+      if (ref && ref.current && ev.target != ref.current && !ref.current.contains(ev.target)) {
         setQuery('');
         setOpen(false)
       }

@@ -1,0 +1,26 @@
+.question-score-input-field {
+  &-label {
+    font-size: 16rem;
+    font-weight: 500;
+    line-height: 24rem;
+    margin-bottom: 15rem;
+    display: block;
+  }
+
+  &-rules {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin: 0 -10rem;
+
+    &-item {
+      flex: 1;
+      margin: 0 10rem;
+    }
+
+    &-input {
+      //
+    }
+  }
+}

@@ -45,8 +45,8 @@ const getColumns = ({ handleCompactMenuChoice }) => ([
     title: 'Follow up questions',
     dataIndex: 'followup',
     key: 'followup',
-    render: (questions) => questions && questions.length ? <ul>
-      {questions.map((q, index) => <li key={`q${index}`}>{q}</li>)}
+    render: (questions) => questions && questions.length ? <ul className={styles['questions-table-followup-questions']}>
+      {questions.map((q, index) => <li className={styles['questions-table-followup-questions-question']} key={`q${index}`}>{q}</li>)}
     </ul> : <NODATA />
   },
   {

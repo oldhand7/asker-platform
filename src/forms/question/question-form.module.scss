@@ -1,0 +1,21 @@
+.question-form {
+  &-wrapper {
+    max-width: 520px;
+  }
+
+
+  &-title {
+    font-size: 24rem;
+    line-height: 36rem;
+    font-weight: 500;
+    margin-bottom: 5rem;
+  }
+
+  &-input-field {
+    margin: 20rem 0;
+  }
+
+  &-submit {
+    cursor: pointer;
+  }
+}

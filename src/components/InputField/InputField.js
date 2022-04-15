@@ -11,7 +11,7 @@ const InputField = ({ label = '', name = '', icon = null, children, error = null
 
     <div className={styles['input-field-wrapper']}>
       {IconComponent ? <IconComponent className={styles['input-field-icon']} /> : null}
-      {InputComponent ? <InputComponent className={classNames(styles['input-field-input'], className)} {...props} name={name} /> : children}
+      {InputComponent ? <InputComponent className={styles['input-field-input']} {...props} name={name} /> : children}
     </div>
 
     {error ? <p className={classNames(styles['input-field-error'], 'form-error')}>{error}</p> : null}

@@ -1,0 +1,19 @@
+@import 'styles/vars';
+
+.followup-question-field {
+  &-label {
+    display: block;
+    font-weight: 500;
+
+    small {
+      float: right;
+      font-size: 14rem;
+      color: $brandish-grey;
+    }
+  }
+
+  &-list {
+    list-style-type: square;
+
+  }
+}

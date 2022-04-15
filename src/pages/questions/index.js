@@ -18,6 +18,7 @@ import CriteriaFilter from 'components/CriteriaFilter/CriteriaFilter'
 import FilterButton from 'components/Button/FilterButton';
 import DropDownButton from 'components/DropDownButton/DropDownButton';
 import {criteriaTypes} from 'libs/criteria';
+import {getQuestions} from 'libs/firestore-admin';
 
 import styles from 'styles/pages/questions.module.scss';
 
@@ -25,24 +26,17 @@ import dummyQuestions from 'data/demo/questions.json'
 
 const PER_PAGE = 5;
 
-const QuestionPage = ({ questions = [] }) => {
+const QuestionPage = ({ questions = [], companyId }) => {
   const router = useRouter();
   const success  =  useFlash('success')
   const [user] = useUser();
-  const [filter, setFiler] = useState({ q: '', company: ['asker'], criteria: [] })
+  const [filter, setFiler] = useState({ q: '', company: ['asker', companyId], criteria: [] })
   const [page, setPage] = useState(0);
   const [filteredQuestions, setQuestions] = useState(questions);
 
   useEffect(() => {
-    if (user) {
-      toggleCompany(user.companyId)
-    }
-  }, [user])
-
-  useEffect(() => {
     setPage(0)
   }, [filter])
-
 
   const handleQuery = q => {
     const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
@@ -103,7 +97,7 @@ const QuestionPage = ({ questions = [] }) => {
       <div className={styles['questions-page-filter']}>
         <div className={styles['questions-page-filter-company']}>
           <FilterButton className={styles['questions-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker questions</FilterButton>
-          <FilterButton className={styles['questions-page-filter-company-button']} theme="grape" active={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your Questions</FilterButton>
+          <FilterButton className={styles['questions-page-filter-company-button']} theme="grape" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your Questions</FilterButton>
         </div>
         <CriteriaFilter className={styles['questions-page-filter-criteria']} selected={filter.criteria} onFilter={handleCriteria} />
       </div>
@@ -124,12 +118,12 @@ const QuestionPage = ({ questions = [] }) => {
 }
 
 export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
-   //@TODO
-  const questions = dummyQuestions;
+  const questions = await getQuestions(req.session.user.companyId);
 
   return {
     props: {
       config: await getSettings(),
+      companyId: req.session.user.companyId,
       questions
     }
   }
