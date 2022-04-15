@@ -1,0 +1,33 @@
+@import 'styles/vars';
+
+.criteria-option-form {
+  border-radius: 36px;
+  background: white;
+  color: black;
+  position: relative;
+
+  &-alert {
+    margin-bottom: 10rem;
+  }
+
+  &-title {
+    font-size: 16rem;
+    font-weight: 500rem;
+    margin-bottom: 20rem;
+  }
+
+  &-field {
+    margin: 20rem 0;
+    text-align: left;
+
+    input {
+      background: #EDEDED;
+      border: 0;
+    }
+  }
+
+  &-submit {
+    width: 100%;
+    cursor: pointer;
+  }
+}

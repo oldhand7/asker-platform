@@ -19,7 +19,9 @@ describe('Project overview', () => {
           .should('contain', '1 Completed')
       })
       .click()
-      .wait(2000)
+
+    cy.title().should('include', 'Philips Demo Project')
+    cy.title().should('include', 'Project overview')
 
     cy.location().then(loc => {
       let match = Cypress.minimatch(loc.pathname , '/projects/*/overview/', {
@@ -28,9 +30,6 @@ describe('Project overview', () => {
 
       expect(match).to.be.true
     })
-
-    cy.title().should('include', 'Philips Demo Project')
-    cy.title().should('include', 'Project overview')
 
     cy.get('h1').should('contain', 'Philips Demo Project')
   })

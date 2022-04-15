@@ -21,7 +21,7 @@ import styles from 'styles/pages/project-overview.module.scss';
 const ProjectOverviewPage = ({ project, interviews = [] }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const openCandidateModal = useModal(CandidateModal, 'large');
+  const openCandidateModal = useModal(CandidateModal, { size: 'large' });
   const [_interviews, setInterviews] = useState(interviews);
   const [error, setError] = useState(null);
   const success = useFlash('success');

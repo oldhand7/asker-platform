@@ -1,0 +1,36 @@
+@import 'styles/vars';
+
+.criteria-option-input-field {
+  &-label {
+    font-weight: 500;
+    margin-bottom: 5rem;
+    line-height: 24rem;
+    font-size: 16rem;
+    display: block;
+  }
+
+  &-autocomplete {
+    margin: 10rem 0;
+
+    input {
+      width: 100%;
+    }
+  }
+
+  &-button {
+
+  }
+
+  &-card {
+    padding: 10rem;
+    border: 2px dashed $brandish-grey;
+    text-align: center;
+    text-transform: uppercase;
+
+    &-label {
+      color: $brandish-green;
+      font-size: 1.5em;
+    }
+
+  }
+}

@@ -61,6 +61,11 @@ const useForm = (options = {}) => {
     })
   }
 
+  const reset = () => {
+    setPristine(true);
+    setValues(typeof options.values !== 'undefined' ? options.values : {})
+  }
+
   return [
     values,
     errors,
@@ -69,7 +74,8 @@ const useForm = (options = {}) => {
       submit: handleSubmit,
       toggle: handleToggle,
       set: handleSet,
-      setValues
+      setValues,
+      reset
     }
   ]
 }

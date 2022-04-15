@@ -165,3 +165,11 @@ export const humanFileSize = (bytes, si=false, dp=1) => {
 
   return bytes.toFixed(dp) + ' ' + units[u];
 }
+
+export const ctxError = (message, error) => {
+  if (process.env.NODE_ENV === 'production') {
+    return new Error(message);
+  }
+
+  return error;
+}

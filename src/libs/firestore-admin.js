@@ -91,3 +91,22 @@ export const getProjectInterviews = (projectId) => {
     .get()
     .then(snap2data)
 }
+
+export const getQuestions = (companyId) => {
+  return db
+    .collection('questions')
+    .where('companyId', 'in', [companyId, 'asker'])
+    .orderBy('createdAt', 'DESC')
+    .get()
+    .then(snap2data)
+}
+
+export const getSingleDocument = (col, filter = []) => {
+  let query = db.collection(col)
+
+  for (let i = 0; i < filter.length; i++) {
+    query = query.where(...filter[i])
+  }
+
+  return query.get().then(snap2data).then(res => res[0])
+}

@@ -53,3 +53,34 @@ export const saveInterview = (values) => {
       return d.id;
     })
 }
+
+export const getManyFromCollection = (col, filter = []) => {
+  return getUser()
+    .then(() => {
+      const c = collection(db, col);
+      const q = query(c, ...filter.map(f => where(...f)))
+
+      return getDocs(q).then(snap2data)
+    })
+}
+
+export const saveCollectionDocument = (col, values = {})  => {
+  return getUser()
+    .then(async () => {
+      let d;
+
+      if (!values.id) {
+        d = doc(collection(db, col));
+        values.createdAt = Timestamp.now()
+        values.updatedAt = Timestamp.now()
+      } else {
+        d = doc(db, col, values.id);
+        values.updatedAt = Timestamp.now()
+        delete values.createdAt
+      }
+
+      await setDoc(d, values, { merge: true })
+
+      return d.id;
+    })
+}

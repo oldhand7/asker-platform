@@ -73,4 +73,34 @@
       border: 2px solid $brandish-grape;
     }
   }
+
+  &-outline {
+    cursor: pointer;
+    line-height: 51rem;
+    border: 1px solid $brandish-tar;
+    border-radius: 5px;
+    padding: 0 15rem;
+    line-height: 51rem;
+    background: 0;
+    color: $brandish-tar;
+    font-weight: 500;
+
+    &-green {
+      color: $brandish-green;
+      border: 1px solid $brandish-green;
+
+      &:hover {
+        background: rgba($brandish-green, 0.1);
+      }
+    }
+
+    &-grape {
+      color: $brandish-grape;
+      border: 1px solid $brandish-grape;
+
+      &:hover {
+        background: rgba($brandish-grape, 0.1);
+      }
+    }
+  }
 }

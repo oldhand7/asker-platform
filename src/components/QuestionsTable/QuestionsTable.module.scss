@@ -2,6 +2,12 @@
 
 .questions-table {
 
+  &-followup-questions {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
   &-criteria {
     &::before {
       content: '';
