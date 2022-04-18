@@ -32,12 +32,12 @@ const DropDownButton = ({ options = [], onChoice, children, className }) => {
     onChoice(o)
   }
 
-  return <div ref={ref} className={classNames(styles['drop-down-button'], className)}>
+  return <div data-test-id="dropdown-button" ref={ref} className={classNames(styles['drop-down-button'], className)}>
     <PlatformButton className={styles['drop-down-button-button']} onClick={() => setOpen(!open)}>{children}</PlatformButton>
     {
       open ?
-      <ul className={styles['drop-down-button-options']}>
-        {options.map(o => <li onClick={() => handleChoice(o)} className={styles['drop-down-button-options-item']} key={o.id}>{o.name}</li>)}
+      <ul data-test-id="dropdown-button-options" className={styles['drop-down-button-options']}>
+        {options.map(o => <li onClick={() => handleChoice(o)} className={styles['drop-down-button-options-item']} key={o.id}>{o.altName || o.name}</li>)}
       </ul> :
       null
     }

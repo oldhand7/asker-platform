@@ -77,6 +77,24 @@ const Autocomplete = ({ onSearch, className, options = [] }) => {
     }
   }, [focusIndex, filteredOptions])
 
+
+  useEffect(() => {
+    const keyboardHandler = (ev) => {
+      if (ev.code == "Escape") {
+        ev.preventDefault();
+
+        setOpen(false)
+        setQuery('');
+      }
+    }
+
+    document.addEventListener('keyup', keyboardHandler);
+
+    return () => {
+      document.removeEventListener('keyup', keyboardHandler);
+    }
+  }, [])
+
   const handleChoice = option => {
     setQuery('');
     setOpen(false);

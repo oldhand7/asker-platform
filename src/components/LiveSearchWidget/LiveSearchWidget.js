@@ -8,7 +8,7 @@ import styles from './LiveSearchWidget.module.scss';
 
 const LiveSearchWidget = ({ q = '', className, onQuery, ...props }) => {
   return <div className={classNames(styles['live-search-widget'], className)}>
-    <input value={q} onChange={e => onQuery(e.target.value)} className={styles['live-search-widget-input']} name="q" placeholder="Search" {...props} />
+    <input autoComplete="off" value={q} onChange={e => onQuery(e.target.value)} className={styles['live-search-widget-input']} name="q" placeholder="Search" {...props} />
     {
       q ?
       <ResetIcon onClick={() => onQuery('')} className={classNames(styles['live-search-widget-icon'], styles['live-search-widget-icon-close'])} /> :

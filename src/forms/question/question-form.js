@@ -91,12 +91,12 @@ const QuestionForm = ({ className, question, criteria}) => {
     })
   }
 
-  return <form onSubmit={control.submit(handleSubmit, handleSubmitFailure)} className={classNames(styles['question-form'], className)}>
+  return <form data-test-id="question-form" onSubmit={control.submit(handleSubmit, handleSubmitFailure)} className={classNames(styles['question-form'], className)}>
     {error ? <Alert type="error">{error.message}</Alert> : null}
 
     <div className={styles['question-form-wrapper']}>
-      <h2 className={styles['question-form-title']}>{criteria.cta}</h2>
-      <p className={styles['question-form-desc']}>{criteria.desc}</p>
+      <h2 className={styles['question-form-title']}>{question ? 'Edit question' : criteria.cta}</h2>
+      {!question ? <p className={styles['question-form-desc']}>{criteria.desc}</p> : null}
       <CriteriaOptionInputField error={errors && errors['criteria']} value={values.criteria} criteria={criteria} onChange={control.input('criteria', false)} className={styles['question-form-input-field']} />
       <TextInputField value={values.name}  error={errors && errors['name']} autoComplete="off" name="name" onChange={control.input('name')} label="Question" placeholder="Write your question here" className={styles['question-form-input-field']} />
       <TextareaInputField value={values.desc}  error={errors && errors['desc']} name="desc" onChange={control.input('desc')} label="Definition" placeholder="Write your definition here" className={styles['question-form-input-field']} />
@@ -106,7 +106,7 @@ const QuestionForm = ({ className, question, criteria}) => {
     <QuestionScoreInputField  className={styles['question-form-input-field']} rules={values.rules} onChange={control.input('rules', false)}  />
 
     <PlatformButton disabled={loading} className={styles['question-form-submit']} type="submit">
-      {!loading ?  'Save question' : 'Loading...'}
+      {!loading ?  (question ? 'Save question' : 'Add question') : 'Loading...'}
     </PlatformButton>
     {loading ? <Preloader /> : null}
   </form>

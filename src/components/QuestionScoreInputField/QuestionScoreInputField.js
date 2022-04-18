@@ -16,7 +16,7 @@ const QuestionScoreInputField = ({ className='', rules = [], onChange }) => {
     ])
   }
 
-  return <div className={classNames(styles['question-score-input-field'], className)}>
+  return <div data-test-id="question-score-input-field" className={classNames(styles['question-score-input-field'], className)}>
     <span className={styles['question-score-input-field-label']}>Score</span>
 
     <ul className={styles['question-score-input-field-rules']}>

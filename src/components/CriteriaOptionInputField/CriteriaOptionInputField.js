@@ -23,7 +23,7 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, criteria 
     ]
 
     getManyFromCollection('criteriaOptions', filter).then(setCriteriaOptions)
-  }, [criteria, user])
+  }, [criteria, user, value])
 
   const handleCriteriaOption = option => {
     if (!option) {
@@ -41,7 +41,7 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, criteria 
     onChange(null)
   }
 
-  return <div className={classNames(styles['criteria-option-input-field'], className)}>
+  return <div data-test-id="criteria-option-input-field" className={classNames(styles['criteria-option-input-field'], className)}>
     <span className={styles['criteria-option-input-field-label']}>{criteria.name}:</span>
 
     {

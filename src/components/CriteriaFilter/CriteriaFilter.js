@@ -14,7 +14,7 @@ const CriteriaFilter = ({ className, selected = [], onFilter }) => {
     ])
   }
 
-  return <ul className={classNames(styles['criteria-filter'], className)}>
+  return <ul data-test-id="criteria-filter" className={classNames(styles['criteria-filter'], className)}>
     {criteriaTypes.map(c => <li onClick={() => toggleCriteria(c)} key={c.id} className={classNames(
       styles['criteria-filter-item'],
       selected.indexOf(c) > -1 ? styles['criteria-filter-item-active'] : '',
