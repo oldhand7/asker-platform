@@ -14,7 +14,7 @@ import styles from './CriteriaOptionInputField.module.scss';
 const CriteriaOptionInputField = ({ error, className, value, onChange, criteria }) => {
   const [criteriaOptions, setCriteriaOptions] = useState([]);
   const openCriteriaOptionModal = useModal(CriteriaOptionModal, { criteria })
-  const [user] = useUser();
+  const { user } = useUser();
 
   useEffect(() => {
     const filter = [

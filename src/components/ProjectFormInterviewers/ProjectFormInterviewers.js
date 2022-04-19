@@ -8,19 +8,25 @@ import TrashButton from 'components/TrashButton/TrashButton'
 import styles from './ProjectFormInterviewers.module.scss';
 
 const employee2interviewer = e => ({
-  id: e.profile.uid,
-  name: e.profile.displayName
+  id: e.id,
+  name: e.name
 })
 
 const ProjectFormInterviewers = ({ className, interviewers = [], onChange }) => {
   const [autoCompleteOptions, setAutocompleteOptions] = useState([])
 
-  const [user] = useUser();
+  const { user } = useUser();
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
+
     if (user.companyId) {
       getCompanyEmployees(user.companyId)
-        .then(employees => setAutocompleteOptions(employees.map(employee2interviewer)))
+        .then(employees => {
+          setAutocompleteOptions(employees.map(employee2interviewer))
+        })
     } else {
       setAutocompleteOptions([employee2interviewer(user)])
     }

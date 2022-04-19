@@ -11,7 +11,7 @@ const CustomDataProvider = (config, options) => {
 
       //To keep passwords safe dedicating user creation for backend-api.
       if (resource == 'users') {
-        return createFirebaseUser(params.data.profile.email, params.data.password)
+        return createFirebaseUser(params.data.email, params.data.password)
                   .then(({ uid }) => {
                     delete params.data.password
 
@@ -24,10 +24,11 @@ const CustomDataProvider = (config, options) => {
       return dataProvider.create(resource, params)
     },
     update: (resource, params) => {
+      console.log(params);
 
       //To keep passwords safe dedicating password reset for backend-api.
-      if (resource == 'users' && params.data.password) {
-        return updateFirebaseUserEmailAndPassword(params.data.id, params.data.profile.email, params.data.password)
+      if (resource == 'users' && params.data.password || (params.previousData.email != params.data.email)) {
+        return updateFirebaseUserEmailAndPassword(params.data.id, params.data.email, params.data.password)
           .then(() => {
             delete params.data.password
 

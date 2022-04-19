@@ -17,5 +17,6 @@ const AdminPage = () => {
 }
 
 AdminPage.layout = AdminLayout;
+AdminPage.noAuth = true;
 
 export default AdminPage;

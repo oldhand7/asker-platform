@@ -4,12 +4,11 @@ import { useUser, logout } from 'libs/user';
 import UserCard from 'components/UserCard/UserCard';
 import Link from 'next/link';
 import CarretDown from 'components/Icon/CarretDown';
-
 import styles from './UserMenu.module.scss';
 
 const UserMenu = ({ className }) => {
   const [open, setOpen] = useState(false);
-  const [user] = useUser();
+  const { user, getAvatar } = useUser();
   const menuRef = useRef();
 
   const getClassNames = () => {
@@ -41,7 +40,7 @@ const UserMenu = ({ className }) => {
 
   return <div ref={menuRef} onClick={() => setOpen(!open)} className={getClassNames()}>
     <div className={styles['usermenu-head']}>
-      <UserCard avatar={user && user.profile.photoURL} title={user && user.profile.displayName} className={styles['usermenu-head-card']}  />
+      <UserCard avatar={getAvatar()} title={user && user.name} className={styles['usermenu-head-card']}  />
       <CarretDown className={styles['usermenu-head-carret']} />
     </div>
     <ul className={styles['usermenu-submenu']}>

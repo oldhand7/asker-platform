@@ -60,7 +60,7 @@ describe('Project overview', () => {
         cy.get('tr').should('have.length', 2)
 
         cy.get('tr')
-          .eq(0)
+          .eq(1)
           .within(() => {
             cy.get('td').eq(0).should('contain', 'Candidate A')
             cy.get('td').eq(1).should('contain', '40%')
@@ -68,7 +68,7 @@ describe('Project overview', () => {
           })
 
         cy.get('tr')
-          .eq(1)
+          .eq(0)
           .within(() => {
             cy.get('td').eq(0).should('contain', 'Candidate B')
             cy.get('td').eq(1).should('not.contain', '%')

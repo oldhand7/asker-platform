@@ -32,6 +32,7 @@ handler.post(async (req, res) => {
     const user = await getAuth(app)
       .createUser({
         email: body.email,
+        displayName: body.email, //this will help avoid update loops later
         password: body.password
       })
 

@@ -67,7 +67,7 @@ const ProjectForm = ({ project, className }) => {
   const [stage, setStage] = useState(null);
   const [stageErrors, setStageErrors] = useState([]);
   const [error, setError] =  useState(null);
-  const [user] = useUser();
+  const { user } = useUser();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
@@ -102,7 +102,7 @@ const ProjectForm = ({ project, className }) => {
       return;
     }
 
-    values.userId = user.profile.uid;
+    values.userId = user.id;
     values.companyId = user.companyId;
 
     setLoading(true)

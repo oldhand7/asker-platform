@@ -1,4 +1,3 @@
-import { login, destroySession } from 'libs/user';
 import { useRouter } from 'next/router';
 import LoginForm from 'forms/login/login-form';
 import { getSettings } from 'libs/firestore-admin';
@@ -9,7 +8,7 @@ import styles from 'styles/pages/login.module.scss';
 
 const LoginPage = () => {
   const router = useRouter();
-  const [user, userApi] = useUser()
+  const { user, login} = useUser()
 
   useEffect(() => {
     if (user) {
@@ -18,7 +17,7 @@ const LoginPage = () => {
   }, [user])
 
   return <div className={styles['login-page']}>
-    <LoginForm className={styles['login-page-form']} authFunction={login} onSuccess={userApi.refresh} />
+    <LoginForm className={styles['login-page-form']} authFunction={login} />
   </div>
 }
 
@@ -29,5 +28,7 @@ export const getServerSideProps = async ({ req, res}) => {
     }
   }
 }
+
+LoginPage.noAuth = true;
 
 export default LoginPage;
