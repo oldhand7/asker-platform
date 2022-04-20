@@ -3,7 +3,8 @@ import dynamic from 'next/dynamic'
 
 const featureForms = {
   'introduction': dynamic(() => import('forms/introduction/introduction-form')),
-  'company-presentation': dynamic(() => import('forms/company-presentation/company-presentation-form'))
+  'company-presentation': dynamic(() => import('forms/company-presentation/company-presentation-form')),
+  'competency-questions': dynamic(() => import('forms/evaluation-question/evaluation-question-form')),
 }
 
 const FeatureForm = ({ feature, ...props }) => {
@@ -15,7 +16,7 @@ const FeatureForm = ({ feature, ...props }) => {
     }
   }, [feature])
 
-  return FormComponent ? <div data-test-id="feature-form"><FormComponent {...props} /></div> : null;
+  return FormComponent ? <div data-test-id="feature-form"><FormComponent feature={feature} {...props} /></div> : null;
 }
 
 export default FeatureForm;

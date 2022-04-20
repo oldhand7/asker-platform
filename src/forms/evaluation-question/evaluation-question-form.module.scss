@@ -1,0 +1,21 @@
+.evaluation-question-form {
+
+
+  &-questions {
+
+    &-list {
+
+      &-item {
+        display: flex;
+
+        &-name {
+          flex: 1;
+        }
+
+        &-remove {
+          flex: 0;
+        }
+      }
+    }
+  }
+}

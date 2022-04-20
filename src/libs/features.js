@@ -9,7 +9,7 @@ export const features = [
   { id: 'company-presentation', name: 'Company presentation', type: 'attraction' },
   // { id: 'salary', name: 'Salary', type: 'attraction' },
   // { id: 'candidate-questions', name: 'Candidate questions', type: 'attraction' },
-  // { id: 'competency-questions', name: 'Competency based questions', type: 'evaluation' },
+  { id: 'competency-questions', name: 'Competency based questions', type: 'evaluation', metadata: { criteria: 'competency' }},
   // { id: 'motivation-questions', name: 'Motivation based questions', type: 'evaluation' },
   // { id: 'screening-questions', name: 'Screening questions', type: 'evaluation' },
   // { id: 'experience-questions', name: 'Experience based questions', type: 'evaluation' },
