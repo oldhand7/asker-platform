@@ -27,7 +27,7 @@ const getColumns = ({ onQuestion, criteria }) => ([
 ]);
 
 const EvaluationQuestionsTable = ({ className, data = [], onQuestion, criteria, ...props }) => {
-  return <Table rowKey={row => row.id} className={classNames(
+  return <Table emptyText="No questions found." rowKey={row => row.id} className={classNames(
     styles['evaluation-questions-table'],
     className
   )} columns={getColumns({ onQuestion, criteria })} data={data} {...props} />

@@ -18,7 +18,7 @@ const rules = {
 const messages = {}
 
 //@TODO: rename to criteria
-const EvaluationQuestionForm = ({ className, values, onValues, feature }) => {
+const EvaluationQuestionForm = ({ className, values, onValues, feature, onError }) => {
   const [formValues, errors, control] = useForm({
     values: values ? values : defaultValues,
     rules,
@@ -27,8 +27,18 @@ const EvaluationQuestionForm = ({ className, values, onValues, feature }) => {
   })
 
   const handleQuestionRemove = question => {
-    control.set('questions', [...formValues.questions.filter(q => q != question)])
+    if (confirm('Are you sure?')) {
+      control.set('questions', [...formValues.questions.filter(q => q != question)])
+    }
   }
+
+  useEffect(() => {
+    if (!errors) {
+      onValues && onValues(formValues)
+    } else {
+      onError(new Error("Form invalid"))
+    }
+  }, [formValues, errors])
 
   return <div className={classNames(styles['evaluation-question-from'], className)}>
     <EvaluationQuestionExplorer questions={formValues.questions} onQuestions={control.input('questions', false)} criteria={getCriteriaById(feature && feature.metadata.criteria)} />

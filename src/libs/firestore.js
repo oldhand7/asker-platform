@@ -1,5 +1,6 @@
 import { getApp, getUser } from 'libs/firebase';
-import { getFirestore, collection, query, where, getDocs, setDoc, doc, Timestamp } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs, setDoc, doc, Timestamp,
+orderBy, limit } from 'firebase/firestore';
 import { snap2data } from 'libs/helper';
 
 
@@ -59,14 +60,18 @@ export const saveInterview = (values) => {
     })
 }
 
-export const getManyFromCollection = (col, filter = []) => {
+export const getManyFromCollection = (col, filter = [], order = [], max) => {
   const db = getFirestore(getApp());
-
 
   return getUser()
     .then(() => {
       const c = collection(db, col);
-      const q = query(c, ...filter.map(f => where(...f)))
+
+      const q = query(c, ...[
+        ...filter.map(f => where(...f)),
+        ...order.map(o => orderBy(...o)),
+        ...(max ? [limit(max)] : [])
+      ])
 
       return getDocs(q).then(snap2data)
     })
@@ -74,7 +79,7 @@ export const getManyFromCollection = (col, filter = []) => {
 
 export const saveCollectionDocument = (col, values = {})  => {
   const db = getFirestore(getApp());
-  
+
   return getUser()
     .then(async () => {
       let d;

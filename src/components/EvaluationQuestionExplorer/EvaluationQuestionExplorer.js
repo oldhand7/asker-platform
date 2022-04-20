@@ -29,15 +29,10 @@ const EvaluationQuestionExplorer = ({ className, criteria, questions, onQuestion
 
   useEffect(() => {
     if (user) {
-      console.log( [
-        ['companyId', 'in', ['asker', user.companyId]],
-        ['criteria.type', '==', criteria.id]
-      ])
-
       getManyFromCollection('questions', [
         ['companyId', 'in', ['asker', user.companyId]],
         ['criteria.type', '==', criteria.id]
-      ]).then(setAvailableQuestions)
+      ], [['criteria.name', 'asc'], ['name', 'asc']]).then(setAvailableQuestions)
     }
   }, [user, criteria])
 
@@ -61,7 +56,7 @@ const EvaluationQuestionExplorer = ({ className, criteria, questions, onQuestion
 
       filteredQuestions = filteredQuestions.filter(q => {
         const nameQ = regex.test(q.name.toLowerCase());
-        const criteriaQ = regex.test(q.name.toLowerCase());
+        const criteriaQ = regex.test(q.criteria.name.toLowerCase());
 
         return nameQ || criteriaQ;
       })
