@@ -33,17 +33,14 @@ import ImageField from 'admin/fields/image/image-field';
 import AlarmOnIcon from '@material-ui/icons/AlarmOn';
 import AlarmOffIcon from '@material-ui/icons/AlarmOff';
 
-
 import { makeStyles } from '@material-ui/core/styles';
 
 const validateForm = values => {
   const rules = {
-    profile: {
-      displayName: 'required',
-      email: 'required|email',
-      type: 'in:admin,hr',
-      phoneNumber: 'phone_e164'
-    },
+    name: 'required',
+    email: 'required|email',
+    type: 'in:admin,hr',
+    phone: 'phone_e164',
     password: values.id ? 'min:6' : 'required|min:6',
   }
 
@@ -61,12 +58,12 @@ const useStyles = makeStyles({
   })
 
 export const UsersList = props => (
-    <List {...props}>
+    <List {...props} sort={{ field: 'createdate', order: 'asc' }} perPage={25}>
         <Datagrid rowClick="edit">
             <ImageField alwaysSingle={true} source="images" src="src" title="title" />
 
-            <TextField source="profile.displayName" label="Name" />
-            <TextField source="profile.email" label="Email" />
+            <TextField source="name" label="Name" />
+            <TextField source="email" label="Email" />
             <ReferenceField label="Company" source="companyId" reference="companies">
               <TextField source="name" />
             </ReferenceField>
@@ -74,7 +71,7 @@ export const UsersList = props => (
                { id: 'admin', name: 'Admin' },
                { id: 'hr', name: 'HR' },
             ]} />
-            <BooleanField source="profile.emailVerified" label="Verified" />
+            <BooleanField source="verified" label="Verified" />
             <BooleanField source="superadmin" label="Superadmin" />
         </Datagrid>
     </List>
@@ -93,17 +90,16 @@ export const UsersEdit = props => {
             <ImageField source="src" title="title" />
           </ImageInput>
 
-          <TextInput source="profile.displayName" label="Name"  />
-          <TextInput source="profile.email" label="Email"  />
-          <TextInput source="profile.phoneNumber" label="Phone"  />
+          <TextInput source="name" label="Name"  />
+          <TextInput source="email" label="Email"  />
+          <TextInput source="phone" label="Phone"  />
 
           <ReferenceInput label="Company" source="companyId" reference="companies">
             <SelectInput optionText="name" />
            </ReferenceInput>
 
-          <BooleanInput source="profile.emailVerified" label="Verified"  />
-          <BooleanInput source="profile.disabled" label="Disabled"  />
-
+          <BooleanInput source="verified" label="Verified"  />
+          <BooleanInput source="disabled" label="Disabled"  />
           <BooleanInput source="superadmin" label="Superadmin"  />
 
           <SelectInput source="type" choices={[
@@ -125,15 +121,15 @@ export const UsersAdd = props => {
             <ImageField source="src" title="title" />
           </ImageInput>
 
-          <TextInput source="profile.displayName" label="Name"  />
-          <TextInput source="profile.email" label="Email"  />
-          <TextInput source="profile.phoneNumber" label="Phone"  />
+          <TextInput source="name" label="Name"  />
+          <TextInput source="email" label="Email"  />
+          <TextInput source="phone" label="Phone"  />
 
           <ReferenceInput label="Company" source="companyId" reference="companies">
             <SelectInput optionText="name" />
            </ReferenceInput>
 
-          <BooleanInput source="profile.emailVerified" label="Verified"  />
+          <BooleanInput source="verified" label="Verified"  />
 
           <SelectInput defaultValue='admin' source="type" choices={[
              { id: 'admin', name: 'Admin' },

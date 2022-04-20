@@ -11,7 +11,11 @@ admin.firestore().settings({
 });
 
 const defaultUser = {
+  name: '',
+  email: '',
+  phone: '',
   superadmin: false,
+  companyId: '',
   type: 'admin' // admin|hr
 }
 
@@ -23,23 +27,6 @@ const updateFirebaseUserClaimsFromProfile = (uid, platformUser) => {
   }
 
   return getAuth().setCustomUserClaims(uid, claims)
-}
-
-const updateFirebaseUserFromProfile = async (uid, platformUser) => {
-  await updateFirebaseUserClaimsFromProfile(uid, platformUser)
-
-  const { images, profile } = platformUser;
-
-  const data = {
-    email: profile.email,
-    emailVerified: !!profile.emailVerified,
-    phoneNumber: profile.phoneNumber ? profile.phoneNumber : undefined,
-    displayName: profile.displayName,
-    photoURL: images && images.length ? images[0].src : undefined,
-    disabled: !!profile.disabled
-  }
-
-  return getAuth().updateUser(uid, data);
 }
 
 exports.stampCollections = functions.firestore.document('{collectionName}/{docId}')
@@ -54,6 +41,25 @@ exports.stampCollections = functions.firestore.document('{collectionName}/{docId
     }
 
     return null
+});
+
+exports.firebaseAccountCreate = functions.auth.user().onCreate(async (user) => {
+  const snap = await admin.firestore()
+    .collection('users')
+    .doc(user.uid)
+    .get()
+
+    //Platform users are created with displayName=email
+   if (user.displayName !== user.email) {
+     await admin.firestore()
+       .collection('users')
+       .doc(user.uid)
+       .create({
+         ...defaultUser,
+         email: user.email,
+         name: user.email
+       })
+   }
 });
 
 exports.interviewCreate = functions.firestore.document('interviews/{docId}')
@@ -114,21 +120,7 @@ exports.platformAccountCreate = functions.firestore.document('users/{docId}')
     const platformUser = snap.data();
 
     try {
-      let user;
-
-      if (platformUser.profile) {
-        user = await updateFirebaseUserFromProfile(snap.id, platformUser)
-      } else {
-        user = await getAuth().getUser(snap.id)
-        await updateFirebaseUserClaimsFromProfile(snap.id, platformUser)
-      }
-
-      return snap.ref.set({
-        ...defaultUser,
-        ...platformUser,
-        lastTouch: 'platformAccountCreate',
-        profile: JSON.parse(JSON.stringify(user))
-      })
+      await updateFirebaseUserClaimsFromProfile(snap.id, platformUser)
     } catch (error) {
       console.log(error)
 
@@ -139,58 +131,16 @@ exports.platformAccountCreate = functions.firestore.document('users/{docId}')
 exports.platformAccountUpdate = functions.firestore
   .document('users/{docId}')
   .onUpdate(async (change, context) => {
-    const platformUserBefore = change.before.data();
-
-    if (platformUserBefore.lastTouch == 'platformAccountCreate') {
-      return null;
-    }
-
     const platformUser = change.after.data();
 
-    if (platformUser.lastTouch == 'platformAccountCreate') {
-      return change.after.ref.set({
-        lastTouch: 'platformAccountUpdate'
-      }, {
-        merge: true
-      });
-    }
-
     try {
-      let user;
-
-      if (platformUser.profile) {
-        user = await updateFirebaseUserFromProfile(change.after.id, platformUser)
-      } else {
-        user = await getAuth().getUser(change.after.id)
-      }
-
-      return change.after.ref.set({
-        ...platformUser,
-        lastTouch: 'platformAccountUpdate',
-        profile: JSON.parse(JSON.stringify(user))
-      }, {
-        merge: true
-      });
+      await updateFirebaseUserClaimsFromProfile(platformUser.id, platformUser)
     } catch (error) {
       console.log(error)
 
       return null;
     }
   });
-
-exports.firebaseAccountDelete = functions.auth.user().onDelete(async (user) => {
-  const snap = await admin.firestore()
-    .collection('users')
-    .doc(user.uid)
-    .get()
-
-  if (snap.exists) {
-    await admin.firestore()
-      .collection('users')
-      .doc(user.uid)
-      .delete()
-  }
-});
 
 exports.platformAccountDelete = functions.firestore
   .document('users/{docId}')
@@ -205,4 +155,18 @@ exports.platformAccountDelete = functions.firestore
     } catch (error) {}
 
     return snap
+  });
+
+exports.firebaseAccountDelete = functions.auth.user().onDelete(async (user) => {
+    const snap = await admin.firestore()
+      .collection('users')
+      .doc(user.uid)
+      .get()
+
+    if (snap.exists) {
+      await admin.firestore()
+        .collection('users')
+        .doc(user.uid)
+        .delete()
+    }
   });

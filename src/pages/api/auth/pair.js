@@ -35,16 +35,30 @@ handler.post(async (req, res) => {
     }
 
     try {
-      const db = getFirestore(getApp())
+      const user = await getUser(claims.uid);
+
+      if (!user) {
+        res.status(404).json({
+            message: "User not found."
+        });
+
+        return;
+      }
 
       req.session.user = {
-        uid: claims.uid,
-        companyId: claims.companyId
+        id: claims.uid,
+        companyId: claims.companyId,
+        superadmin: claims.superadmin,
+        type: claims.type
       }
 
       await req.session.save()
 
-      res.status(200).end()
+      delete user.updatedBy
+
+      res.status(200).json(
+        JSON.parse(JSON.stringify(user))
+      )
     } catch (error) {
         res.status(404).json({
             message: "User does not exist or password invalid.",

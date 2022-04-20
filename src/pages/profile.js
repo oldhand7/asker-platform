@@ -11,7 +11,7 @@ import 'react-tabs/style/react-tabs.css';
 import styles from 'styles/pages/profile.module.scss';
 
 const ProfilePage = () => {
-  const [user] = useUser()
+  const { user } = useUser()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

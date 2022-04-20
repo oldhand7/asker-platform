@@ -37,7 +37,7 @@ const QuestionForm = ({ className, question, criteria}) => {
     values: question ? question : { ...defaultValues, rules: criteria.rules },
     rules: validationRules
   })
-  const [user] = useUser();
+  const {user} = useUser();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter()
@@ -52,7 +52,7 @@ const QuestionForm = ({ className, question, criteria}) => {
     }
 
     values.companyId = user.companyId
-    values.userId = user.profile.uid;
+    values.userId = user.id;
 
     saveCollectionDocument('questions', values)
       .then(() => {

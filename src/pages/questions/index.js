@@ -29,7 +29,7 @@ const PER_PAGE = 5;
 const QuestionPage = ({ questions = [], companyId }) => {
   const router = useRouter();
   const success  =  useFlash('success')
-  const [user] = useUser();
+  const { user } = useUser();
   const [filter, setFiler] = useState({ q: '', company: ['asker', companyId], criteria: [] })
   const [page, setPage] = useState(0);
   const [filteredQuestions, setQuestions] = useState(questions);

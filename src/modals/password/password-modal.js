@@ -6,7 +6,7 @@ import { useSite } from 'libs/site';
 import styles from './password-modal.module.scss';
 
 const PasswordModal = ({ onResult }) => {
-  return <Modal className={`${styles['modal']}`} onClose={() => onResult(null, true)}>
+  return <Modal id="password-modal" className={`${styles['modal']}`} onClose={() => onResult(null, true)}>
     <PasswordForm onSuccess={val => onResult(val, true)} />
   </Modal>
 }

@@ -48,16 +48,18 @@ const createCompany = async (name) => {
   return docRef.id;
 }
 
-const createUser = async (displayName, email, password, companyId = null, type = 'admin', superadmin = false) => {
+const createUser = async (name, email, password, companyId = null, type = 'admin', superadmin = false) => {
   const user = await getAuth().createUser({
     email,
-    password,
-    displayName
+    displayName: email, //avoid loop in functions
+    password
   })
 
   const docRef = db.collection('users').doc(user.uid)
 
    await docRef.set({
+    name,
+    email,
     superadmin,
     type,
     companyId
@@ -173,7 +175,7 @@ const beforeRun = async () => {
     score: 40,
     status: 'completed',
     evaluations: [], //@TODO
-    createdAt: 0,
+    createdAt: 1,
     updatedAt: 0
   })
 
@@ -184,7 +186,7 @@ const beforeRun = async () => {
     candidate: { id: 'cb', name: 'Candidate B' },
     status: 'awaiting',
     evaluations: [], //@TODO
-    createdAt: 0,
+    createdAt: 2,
     updatedAt: 0,
   })
 }

@@ -34,7 +34,7 @@ const CriteriaOptionForm = ({ className, onValues, criteria }) => {
   const [config, t] = useSite()
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [user] = useUser();
+  const { user } = useUser();
 
   const handleSubmit = async () => {
     setLoading(true);

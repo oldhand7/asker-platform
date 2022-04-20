@@ -167,7 +167,7 @@ export const humanFileSize = (bytes, si=false, dp=1) => {
 }
 
 export const ctxError = (message, error) => {
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NEXT_PUBLIC_APP_ENV !== 'development') {
     return new Error(message);
   }
 

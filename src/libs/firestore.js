@@ -2,9 +2,10 @@ import { getApp, getUser } from 'libs/firebase';
 import { getFirestore, collection, query, where, getDocs, setDoc, doc, Timestamp } from 'firebase/firestore';
 import { snap2data } from 'libs/helper';
 
-const db = getFirestore(getApp());
 
 export const getCompanyEmployees = (companyId) => {
+  const db = getFirestore(getApp());
+
   const c = collection(db, 'users');
   const w = where('companyId', '==', companyId);
   const q = query(c, w)
@@ -13,6 +14,8 @@ export const getCompanyEmployees = (companyId) => {
 }
 
 export const saveProject = (values) => {
+  const db = getFirestore(getApp());
+
   return getUser()
     .then(async () => {
       let d;
@@ -34,6 +37,8 @@ export const saveProject = (values) => {
 }
 
 export const saveInterview = (values) => {
+  const db = getFirestore(getApp());
+
   return getUser()
     .then(async () => {
       let d;
@@ -55,6 +60,9 @@ export const saveInterview = (values) => {
 }
 
 export const getManyFromCollection = (col, filter = []) => {
+  const db = getFirestore(getApp());
+
+
   return getUser()
     .then(() => {
       const c = collection(db, col);
@@ -65,6 +73,8 @@ export const getManyFromCollection = (col, filter = []) => {
 }
 
 export const saveCollectionDocument = (col, values = {})  => {
+  const db = getFirestore(getApp());
+  
   return getUser()
     .then(async () => {
       let d;

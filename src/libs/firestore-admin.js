@@ -4,7 +4,6 @@ import { snap2data } from 'libs/helper';
 
 const db = getFirestore(getApp());
 
-
 //fyi https://googleapis.dev/nodejs/firestore/latest/
 export const getSettings = () => {
     return db.collection('settings').select('id', 'value', 'images').get().then(snap => {
@@ -41,7 +40,7 @@ export const getConfig = async (db) => {
   }
 }
 
-export const getUser = (db, uid) => {
+export const getUser = (uid) => {
   return db
     .collection('users')
     .doc(uid)

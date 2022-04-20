@@ -7,8 +7,7 @@ import Button from 'components/Button/Button';
 import { useSite } from 'libs/site';
 import Avatar from 'components/Avatar/Avatar';
 import { uploadCompanyFile, uploadUserFile } from 'libs/firestorage';
-import { changePassword as firebseChangePassword, changeEmail as frebaseChangeEmail  } from 'libs/firebase';
-import { setUserProfile, useUser } from 'libs/user';
+import { useUser } from 'libs/user';
 import { useModal } from 'libs/modal'
 import PasswordModal from 'modals/password/password-modal'
 import Uploader from 'components/Uploader/Uploader'
@@ -16,21 +15,23 @@ import PasswordInputField from 'components/PasswordInputField/PasswordInputField
 import TelephoneIcon from 'components/Icon/TelephoneIcon';
 import EmailIcon from 'components/Icon/EmailIcon';
 import UserIcon from 'components/Icon/UserIcon';
+import { ctxError } from 'libs/helper';
+import Preloader from 'components/Preloader/Preloader';
 
 import styles from './admin-profile-form.module.scss';
 
 const defaultValues = {
-  displayName: '',
+  name: '',
   email: '',
-  phoneNumber: '',
-  photoURL: ''
+  phone: '',
+  avatar: ''
 }
 
 const validationRules = {
-  displayName: 'required',
+  name: 'required',
   email: 'required|email',
-  phoneNumber: 'phone_e164',
-  photoURL: 'url'
+  phone: 'phone_e164',
+  avatar: 'url'
 }
 
 const messages = {
@@ -44,13 +45,13 @@ const AdminProfileForm = ({ className }) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
   const [config, t] = useSite()
-  const [user, userControl] = useUser()
-  const [changePassword, setChangePassword] = useState(false);
+  const { user, updateProfile, getAvatar, changePassword, changeEmail } = useUser()
+  const [isChangingPassword, setChangePassword] = useState(false);
 
   const openPasswordModal  = useModal(PasswordModal)
 
   useEffect(() => {
-    if (changePassword) {
+    if (isChangingPassword) {
       setRules({
         ...rules,
         password: 'required|min:6|confirmed',
@@ -59,12 +60,13 @@ const AdminProfileForm = ({ className }) => {
     } else {
 
     }
-  }, [changePassword])
+  }, [isChangingPassword])
 
   useEffect(() => {
     if (user) {
       control.setValues({
-        ...user.profile
+        ...user,
+        avatar: getAvatar()
       })
     }
   }, [user])
@@ -75,8 +77,7 @@ const AdminProfileForm = ({ className }) => {
     window.scrollTo(0, 0)
 
     try {
-      if ((values.email != user.profile.email) || changePassword) {
-
+      if ((values.email != user.email) || isChangingPassword) {
         const password = await new Promise((resolve, reject) => {
           openPasswordModal(resolve)
         })
@@ -87,11 +88,10 @@ const AdminProfileForm = ({ className }) => {
           return;
         }
 
-        await frebaseChangeEmail(password, values.email)
+        await changeEmail(values.email, password)
 
-
-        if (changePassword) {
-          await firebseChangePassword(password, values.password)
+        if (isChangingPassword) {
+          await changePassword(values.password, password)
 
           setChangePassword(false);
         }
@@ -100,11 +100,18 @@ const AdminProfileForm = ({ className }) => {
       delete values.password;
       delete values.password_confirmation;
 
-      await userControl.updateProfile(values)
+      const { avatar, ...profile } = values;
 
-      setSuccess(t('Your profile was updated!'));
+      await updateProfile({
+        ...profile,
+        images: values.avatar ? [
+          { src: values.avatar, title: '' }
+        ] : []
+      })
+
+      setSuccess(t('Your profile was updated!!'));
     } catch (error) {
-      setError(new Error(`Updating user profile faied: ${error.message}`))
+      setError(ctxError('Updating user profile faied!', error))
     }
 
     setLoading(false);
@@ -123,10 +130,9 @@ const AdminProfileForm = ({ className }) => {
           photoURL = await uploadUserFile(file, 'images')
         }
 
-        control.set('photoURL', photoURL);
+        control.set('avatar', photoURL);
       } catch (error) {
-        //@TODO
-        setError(new Error(`Uploading photo failed: ${error.message}`))
+        setError(ctxError('Uploading photo failed.', error))
       }
 
       setLoading(false);
@@ -156,17 +162,17 @@ const AdminProfileForm = ({ className }) => {
     {success ? <Alert close={false} className={styles['admin-profile-form-alert']}  type="success">{success}</Alert> : null}
     <div className={styles['admin-profile-form-uploader-area']}>
       <Uploader className={styles['admin-profile-form-uploader']} {...uploadProps}>
-        <Avatar className={styles['admin-profile-form-avatar']} src={values.photoURL} />
+        <Avatar className={styles['admin-profile-form-avatar']} src={values.avatar} />
       </Uploader>
     </div>
 
-    <TextInputField placeholder={t('Name')} value={values.displayName}  label={t('Name')} icon={UserIcon} error={errors ? t(errors.displayName) : null} onChange={control.input('displayName')} autoComplete='off' name='displayName' type='text' className={styles['admin-profile-form-field']} />
+    <TextInputField placeholder={t('Name')} value={values.name}  label={t('Name')} icon={UserIcon} error={errors ? t(errors.name) : null} onChange={control.input('name')} autoComplete='off' name='name' type='text' className={styles['admin-profile-form-field']} />
     <TextInputField placeholder={t('Mail')} value={values.email} label={t('Mail')} icon={EmailIcon} error={errors ? t(errors.email) : null} onChange={control.input('email')} name='email' type='email' className={styles['admin-profile-form-field']} />
-    <TextInputField placeholder={t('Phone')} value={values.phoneNumber}  label={t('Phone')} icon={TelephoneIcon} error={errors ? t(errors.phoneNumber) : null} onChange={control.input('phoneNumber')} name='phoneNumber' type='text' className={styles['admin-profile-form-field']} />
+    <TextInputField placeholder={t('Phone')} value={values.phone}  label={t('Phone')} icon={TelephoneIcon} error={errors ? t(errors.phone) : null} onChange={control.input('phone')} name='phone' type='text' className={styles['admin-profile-form-field']} />
 
     <div style={{ marginBottom: '10rem' }}>
     {
-      changePassword ?
+      isChangingPassword ?
       <>
         <PasswordInputField placeholder={t('New password')} value={values.password}  label={t('New password')} error={errors ? t(errors.password) : null} onChange={control.input('password')} name='password' className={styles['admin-profile-form-field']} />
         <PasswordInputField placeholder={t('New password (confirm)')} value={values.password_confirmation}  label={t('New password (confirm)')} error={errors ? t(errors.password_confirmation) : null} onChange={control.input('password_confirmation')} name='password_confirmation' className={styles['admin-profile-form-field']} />
@@ -178,6 +184,8 @@ const AdminProfileForm = ({ className }) => {
     <br />
 
     <button className={styles['admin-profile-form-submit']} type="submit" disabled={loading}>{!loading ? t('Save') : t('Loading...')}</button>
+
+    {loading ? <Preloader /> : null}
   </form>
 }
 

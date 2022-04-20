@@ -10,14 +10,14 @@ import { useRouter } from 'next/router';
 import 'styles/globals.scss'
 
 function App({ Component, pageProps }) {
-  const [user] = useUser();
+  const { user, loading } = useUser();
   const router = useRouter()
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login/')
+    if (!user && !loading && !Component.noAuth) {
+      router.push('/logout/')
     }
-  }, [user])
+  }, [user, loading, Component])
 
   const Layout = Component.layout ? Component.layout : DefaultLayout;
 

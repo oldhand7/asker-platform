@@ -23,7 +23,7 @@ const FileDropInputField = ({ files = [], className, onFiles, ...props }) => {
       //@TODO
     }, [])
 
-    const [user] = useUser();
+    const { user } = useUser();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false)
 
