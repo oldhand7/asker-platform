@@ -149,3 +149,7 @@ export const criteriaTypes = [{
     name: 'Other'
   }
 ]
+
+export const getCriteriaById = id => {
+  return criteriaTypes.find(ct => ct.id == id);
+}

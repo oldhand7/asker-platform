@@ -76,6 +76,14 @@ const createProject = async (details) => {
   return docRef.id
 }
 
+const createQuestion = async (details) => {
+  const docRef = db.collection('questions').doc()
+
+   await docRef.set(details)
+
+  return docRef.id
+}
+
 const createInterview = async (details) => {
   const docRef = db.collection('interviews').doc()
 
@@ -122,6 +130,7 @@ const beforeRun = async () => {
   await deleteCollection(db, 'companies');
   await deleteCollection(db, 'projects');
   await deleteCollection(db, 'interviews');
+  await deleteCollection(db, 'questions');
 
   //Creates superadmin
   await createUser('John Powers', 'admin@askertech.com', 'test123', '', 'admin', true)
@@ -137,6 +146,33 @@ const beforeRun = async () => {
 
   const userId2Joe  = await createUser('Joe Philips', 'joe.philips@example.com', 'test123', companyId2, 'admin', false)
   const userId2Jane = await createUser('Jane Philips', 'jane.philips@example.com', 'test123', companyId2, 'hr', false)
+
+  await createQuestion({
+    name: 'CQ1',
+    companyId: companyId2,
+    criteria: {
+      name: 'CA',
+      type: 'competency'
+    }
+  })
+
+  await createQuestion({
+    name: 'CQ2',
+    companyId: companyId2,
+    criteria: {
+      name: 'CB',
+      type: 'competency'
+    }
+  })
+
+  await createQuestion({
+    name: 'CQ3',
+    companyId: companyId2,
+    criteria: {
+      name: 'CC',
+      type: 'competency'
+    }
+  })
 
   //allow some time to pass for propagation of claims
   await new Promise((resolve) => setTimeout(resolve, 5000))

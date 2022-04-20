@@ -191,7 +191,7 @@ const ProjectForm = ({ project, className }) => {
           {values.stages.length < 12 ? <button type="button" className={styles['project-form-add-stage']}onClick={addStage}>Add stage +</button> : null}
         </div>
 
-        {stage ? <FeatureForm values={values.config[stage.id]} onError={onStageError} onValues={handleStageValues}  feature={stage} /> : null}
+        {stage ? <FeatureForm values={values.config[stage.id]} onError={onStageError} onValues={handleStageValues} feature={stage} /> : null}
 
         <div className={classNames(styles['project-form-field'], styles['project-form-field-interviewers'])}>
           <h3 className={styles['project-form-field-title']}>Assign interviewer</h3>
@@ -205,7 +205,7 @@ const ProjectForm = ({ project, className }) => {
 
         {
           stageErrors.length ?
-          <div>
+          <div className="form-error">
             <p>You can't save form, becouse some stages are invalid.</p>
             <ul>
               {stageErrors.map(({ stage, error}) => <li key={stage.id}>{stage.name}: {error.message}</li>)}

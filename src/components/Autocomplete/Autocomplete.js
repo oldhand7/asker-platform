@@ -36,6 +36,10 @@ const Autocomplete = ({ onSearch, className, options = [] }) => {
   const ref = useRef();
 
   useEffect(() => {
+    if (!open) {
+      return;
+    }
+
     if (filteredOptions.length) {
       const keyboardHandler = (ev) => {
         if (ev.key == 'ArrowUp' || ev.key == 'Up' ) {
@@ -75,7 +79,7 @@ const Autocomplete = ({ onSearch, className, options = [] }) => {
         document.removeEventListener('keydown', enterHandler);
       }
     }
-  }, [focusIndex, filteredOptions])
+  }, [open, focusIndex, filteredOptions])
 
 
   useEffect(() => {
