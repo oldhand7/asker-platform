@@ -2,11 +2,7 @@ import classNames from 'classnames';
 import styles from './Modal.module.scss';
 import CloseIcon from 'components/Icon/ResetIcon';
 
-<<<<<<< HEAD
-const Modal = ({ onClose, className, size = 'medium', id, children }) => {
-=======
 const Modal = ({ onClose, className, size = 'medium', children, id }) => {
->>>>>>> feature/user-refactor
   return <div id={id} className={classNames(styles['modal'], className, styles[`modal-${size}`])} onClick={onClose}>
     <div onClick={e=> e.stopPropagation()} className={styles['modal-content']}>
       {children}
