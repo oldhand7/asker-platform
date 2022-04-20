@@ -24,7 +24,7 @@ const FollowupQuestionField = ({ className, questions, onChange }) => {
     ])
   }
 
-  return <div className={classNames(styles['followup-question-field'], className)}>
+  return <div data-test-id="followup-question-field" className={classNames(styles['followup-question-field'], className)}>
     <span className={styles['followup-question-field-label']}>
       Follow-up questions
       <small>Optional</small>

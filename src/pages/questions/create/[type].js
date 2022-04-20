@@ -12,7 +12,7 @@ const QuestionCreatePage = ({ criteria }) => {
 
   return <div className={styles['question-create-page']}>
     <Head>
-      <title>Create {criteria.name.toLowerCase()} question - Asker</title>
+      <title>Create a new {(criteria.altName || criteria.name).toLowerCase()} question  - Asker</title>
     </Head>
     <QuestionForm className={styles['question-create-page-form']} criteria={criteria} />
   </div>

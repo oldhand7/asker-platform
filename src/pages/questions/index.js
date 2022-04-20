@@ -95,9 +95,9 @@ const QuestionPage = ({ questions = [], companyId }) => {
       </Head>
 
       <div className={styles['questions-page-filter']}>
-        <div className={styles['questions-page-filter-company']}>
+        <div data-test-id="company-filter" className={styles['questions-page-filter-company']}>
           <FilterButton className={styles['questions-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker questions</FilterButton>
-          <FilterButton className={styles['questions-page-filter-company-button']} theme="grape" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your Questions</FilterButton>
+          <FilterButton className={styles['questions-page-filter-company-button']} theme="grape" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your questions</FilterButton>
         </div>
         <CriteriaFilter className={styles['questions-page-filter-criteria']} selected={filter.criteria} onFilter={handleCriteria} />
       </div>
@@ -105,7 +105,7 @@ const QuestionPage = ({ questions = [], companyId }) => {
       <div className={styles['questions-page-nav']}>
           <LiveSearchWidget q={filter.q} onQuery={q => setFiler({ ...filter, q })} />
           <DropDownButton onChoice={c => router.push(`/questions/create/${c.id}/`)} options={criteriaTypes}>
-            <PlusIcon />Create new question
+            <PlusIcon /> Create new question
           </DropDownButton>
       </div>
 
