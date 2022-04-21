@@ -99,8 +99,32 @@
       border: 1px solid $brandish-grape;
 
       &:hover {
-        background: rgba($brandish-grape, 0.1);
+        background: rgba($brandish-grape, 0.25);
+        box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.25);
       }
     }
+  }
+
+  &-next {
+    background: rgba($brandish-grey, 0.25);
+    border-radius: 5px;
+    width: 100%;
+    display: block;
+    color: $brandish-dark-green;
+    cursor: pointer;
+
+    &-icon {
+      fill: currentColor;
+      stroke: currentColor;
+    }
+
+    &:hover {
+      background: rgba($brandish-grey, 0.15);
+    }
+  }
+
+  &-brandish {
+    background: $brandish-dark-green;
+    border-radius: 5px;
   }
 }

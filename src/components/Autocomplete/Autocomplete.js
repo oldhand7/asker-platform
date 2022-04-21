@@ -144,8 +144,13 @@ const Autocomplete = ({ onSearch, className, options = [] }) => {
     )
   }, [q, options])
 
+  const handleQuery = (q) => {
+    setQuery(q)
+    setOpen(true)
+  }
+
   return <div ref={ref} className={classNames(styles['autocomplete'], className)}>
-      <LiveSearchWidget onFocus={() => setOpen(true)} q={q} onQuery={setQuery} className={styles['autocomplete-search']} />
+      <LiveSearchWidget onFocus={() => setOpen(true)} q={q} onQuery={handleQuery} className={styles['autocomplete-search']} />
       {open ? <AutocompleteOptions onChoice={handleChoice} index={focusIndex} options={filteredOptions} /> : null}
   </div>
 }

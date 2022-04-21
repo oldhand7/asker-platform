@@ -33,6 +33,7 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, criteria 
     onChange({
       id: option.id,
       name: option.name,
+      desc: option.desc,
       type: criteria.id
     })
   }

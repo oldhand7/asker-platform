@@ -76,7 +76,6 @@ export const getCompanyInterview = (companyId, interviewId) => {
     .collection('interviews')
     .where('companyId', '==', companyId)
     .where(FieldPath.documentId(), '==', interviewId)
-    .orderBy('createdAt', 'desc')
     .get()
     .then(snap2data)
     .then(res => res[0])

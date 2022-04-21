@@ -7,6 +7,7 @@ import NODATA from 'components/NODATA/NODATA';
 import InterviewScore from 'components/InterviewScore/InterviewScore';
 import PlatformButton from 'components/Button/PlatformButton';
 import PlayIcon from 'components/Icon/PlayIcon';
+import EvaluationScore from 'components/EvaluationScore/EvaluationScore';
 
 import styles from './ProjectInterviewsTable.module.scss';
 
@@ -26,16 +27,39 @@ const columns = [
   },
   {
     title: 'Evaluations scores',
-    dataIndex: 'evaluation-scores',
+    dataIndex: 'evaluations',
     key: 'evaluations',
-    render: (evaluations, interview) => {
+    render: (stages, interview) => {
       if (typeof interview.score === 'undefined') {
         return <PlatformButton href={`/interviews/${interview.id}/conduct`}>
           <PlayIcon /> Start interview</PlatformButton>
       }
 
-      return <div className={styles['project-candidate-table-evaluations']}>
-          <NODATA />{/* @TODO */}
+
+      if (!stages) {
+        return <NODATA />
+      }
+
+      const scoredEvaluations = Object.values(stages).map(stage => Object.values(stage).filter(eva => eva.score))
+
+      let evas = [];
+
+      for (let i = 0; i < scoredEvaluations.length; i++) {
+        evas = [
+          ...evas,
+          ...scoredEvaluations[i]
+        ]
+      }
+
+      evas.sort(function(a, b) {
+        if (a.score < a.score) return -1;
+        if (a.score > a.score) return 1;
+
+        return 0;
+      });
+
+      return <div className={styles['project-interviews-table-evaluations']}>
+          {evas.slice(0, 3).map((e, index) => <EvaluationScore key={index} evaluation={e} className={styles['project-interviews-table-evaluations-evaluation']} />)}
       </div>
     }
   }

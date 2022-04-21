@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useEffect } from 'react';
 import useForm from 'libs/use-form';
 import EvaluationQuestionExplorer from 'components/EvaluationQuestionExplorer/EvaluationQuestionExplorer';
-import { getCriteriaById } from 'libs/criteria';
+import { getCriteriaTypeById } from 'libs/criteria';
 import TrashButton from 'components/TrashButton/TrashButton';
 
 import styles from './evaluation-question-form.module.scss';
@@ -17,7 +17,6 @@ const rules = {
 
 const messages = {}
 
-//@TODO: rename to criteria
 const EvaluationQuestionForm = ({ className, values, onValues, feature, onError }) => {
   const [formValues, errors, control] = useForm({
     values: values ? values : defaultValues,
@@ -41,7 +40,7 @@ const EvaluationQuestionForm = ({ className, values, onValues, feature, onError 
   }, [formValues, errors])
 
   return <div className={classNames(styles['evaluation-question-from'], className)}>
-    <EvaluationQuestionExplorer questions={formValues.questions} onQuestions={control.input('questions', false)} criteria={getCriteriaById(feature && feature.metadata.criteria)} />
+    <EvaluationQuestionExplorer questions={formValues.questions} onQuestions={control.input('questions', false)} criteria={getCriteriaTypeById(feature && feature.metadata.criteria)} />
     <div className={styles['evaluation-question-form-questions']}>
       <h3>Selected questions</h3>
 
