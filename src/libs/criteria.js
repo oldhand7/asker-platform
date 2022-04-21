@@ -150,6 +150,6 @@ export const criteriaTypes = [{
   }
 ]
 
-export const getCriteriaById = id => {
+export const getCriteriaTypeById = id => {
   return criteriaTypes.find(ct => ct.id == id);
 }

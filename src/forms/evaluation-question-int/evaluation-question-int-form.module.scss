@@ -1,0 +1,84 @@
+@import 'styles/vars';
+
+.evaluation-question-int-form {
+  display: flex;
+  flex-wrap: wrap;
+  font-weight: 500;
+  color: $brandish-tar;
+
+  &-block {
+    flex: 1 1 50%;
+  }
+
+  &-sb {
+    flex: 1 1 100%;
+    margin-top: 50rem;
+  }
+
+  &-title {
+    color: $brandish-grey;
+    font-size: 20rem;
+    line-height: 30rem;
+    font-weight: 500;
+  }
+
+  &-criteria {
+    font-weight: 500;
+    margin-bottom: 10rem;
+
+    &-name {
+      font-size: 20rem;
+      line-height: 30rem;
+      font-weight: 500;
+    }
+
+    &-desc {
+      font-size: 14rem;
+      line-height: 21rem;
+    }
+  }
+
+  &-question {
+    &-title {
+      font-size: 20rem;
+      line-height: 30rem;
+      font-weight: 500;
+      margin-bottom: 10rem;
+    }
+
+    &-name {
+      color: $brandish-dark-green;
+      font-size: 18rem;
+      line-height: 27rem;
+      font-weight: 500;
+    }
+
+    //Followup question list
+    &-questions {
+      font-size: 16rem;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      margin-top: 15rem;
+
+      &-question {
+        padding-left: 1.5em;
+        position: relative;
+        line-height: 2em;
+
+        &::before {
+          content: '';
+          display: block;
+          width: 0.6em;
+          height: 0.6em;
+          border-radius: 50%;
+          background: $brandish-grey;
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+    }
+  }
+}

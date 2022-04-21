@@ -10,11 +10,13 @@ import Alert from 'components/Alert/Alert';
 import { useState, useEffect } from 'react';
 import { ctxError } from 'libs/helper';
 import { useUser } from 'libs/user';
+import TextareaInputField from 'components/TextareaInputField/TextareaInputField';
 
 import styles from './criteria-option-form.module.scss';
 
 const defaultValues = {
-  name: ''
+  name: '',
+  desc: ''
 }
 
 const rules = {
@@ -61,6 +63,7 @@ const CriteriaOptionForm = ({ className, onValues, criteria }) => {
     <h2 className={styles['criteria-option-form-title']}>{criteria.name} option</h2>
     {error ? <Alert type="error">{error.message}</Alert> : null}
     <TextInputField value={values.name} placeholder={t('Name')} error={errors ? t(errors.name) : null} onChange={control.input('name')} autoComplete='off' name="name" className={styles['criteria-option-form-field']} />
+    <TextareaInputField value={values.desc} placeholder={t('Definition (optional)')} error={errors ? t(errors.desc) : null} onChange={control.input('desc')} name="desc" className={styles['criteria-option-form-field']} />
     <PlatformButton disabled={loading} type="submit" className={styles['criteria-option-form-submit']}>
       {!loading ?
       <><PlusIcon /> Add option</> :

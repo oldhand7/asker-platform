@@ -86,7 +86,7 @@ const EvaluationQuestionExplorer = ({ className, criteria, questions, onQuestion
       </div>
 
       <div className={styles['evaluation-question-explorer-widget-body']}>
-        <EvaluationQuestionsTable criteria={criteria} className={styles['evaluation-question-explorer-options-table']}  className={styles['evaluation-question-explorer-widget-table']} onQuestion={handleQuestionAdd} data={filteredQuestions} />
+        <EvaluationQuestionsTable criteria={criteria} className={styles['evaluation-question-explorer-widget-table']} onQuestion={handleQuestionAdd} data={filteredQuestions} />
       </div>
     </div>
   </div>

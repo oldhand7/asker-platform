@@ -1,0 +1,51 @@
+@import 'styles/vars';
+
+.question-score-board-vertical {
+  display: flex;
+  flex-direction: column;
+
+  &-head {
+    margin-bottom: 20rem;
+    border-radius: 6px;
+    background: white;
+    text-align: center;
+    padding: 10rem;
+
+    &-title {
+      font-size: 30rem;
+      line-height: 45rem;
+      font-weight: 600;
+    }
+
+    &-name {
+      display: block;
+      font-size: 16rem;
+      line-height: 24rem;
+    }
+  }
+
+  &-active &-head {
+    background: $brandish-green;
+    color: white;
+  }
+
+  &-steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &-step {
+      margin-bottom: 20rem;
+      padding: 20rem;
+      background: white;
+      border-radius: 5px;
+
+      &:hover,
+      &-active {
+        cursor: pointer;
+        background: $brandish-green;
+        color: white;
+      }
+    }
+  }
+}

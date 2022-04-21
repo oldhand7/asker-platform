@@ -1,4 +1,12 @@
 .project-interviews-table {
+  &-evaluations {
+      display: flex;
+      justify-content: center;
+
+      &-evaluation {
+        margin: 0 40rem;
+      }
+  }
 
   table {
     width: 100% ;

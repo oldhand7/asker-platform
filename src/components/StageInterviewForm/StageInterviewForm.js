@@ -1,0 +1,32 @@
+import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic'
+
+const stageForms = {
+  'introduction': dynamic(() => import('forms/introduction-int/introduction-int-form')),
+  // 'company-presentation': dynamic(() => import('forms/company-presentation/company-presentation-form')),
+  'competency-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form')),
+  'experience-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form')),
+  'motivation-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form')),
+  'hard-skill-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form')),
+  'culture-fit-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form'))
+}
+
+const StageInterviewForm = (props) => {
+  const [FormComponent, setFormComponent] = useState(null);
+  const [formComponentProps, setProps] = useState({});
+
+  useEffect(() => {
+    const { stage } = props;
+
+    if (stage && stageForms[stage.id]) {
+      setFormComponent(stageForms[stage.id]);
+      setProps({ ...props });
+    }
+  }, [props])
+
+  return FormComponent ? <div data-test-id="feature-form">
+    <FormComponent {...formComponentProps} />
+  </div> : null;
+}
+
+export default StageInterviewForm;

@@ -83,14 +83,6 @@ const QuestionForm = ({ className, question, criteria}) => {
     }, 0)
   }
 
-  const handleCriteriaOption = option => {
-    control.set('criteria', {
-      id: option.id,
-      name: option.name,
-      type: criteria.id
-    })
-  }
-
   return <form data-test-id="question-form" onSubmit={control.submit(handleSubmit, handleSubmitFailure)} className={classNames(styles['question-form'], className)}>
     {error ? <Alert type="error">{error.message}</Alert> : null}
 

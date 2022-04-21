@@ -1,0 +1,12 @@
+.question-score-board {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin: 0 -10rem;
+
+  &-column {
+    flex: 1;
+    margin: 0 10rem;
+  }
+}
