@@ -52,14 +52,17 @@ const columns = [
       }
 
       evas.sort(function(a, b) {
-        if (a.score < a.score) return -1;
-        if (a.score > a.score) return 1;
+        const sa = a.score / a.maxScore;
+        const sb = b.score / b.maxScore;
+
+        if (sa < sb) return -1;
+        if (sa > sb) return 1;
 
         return 0;
       });
 
       return <div className={styles['project-interviews-table-evaluations']}>
-          {evas.slice(0, 3).map((e, index) => <EvaluationScore key={index} evaluation={e} className={styles['project-interviews-table-evaluations-evaluation']} />)}
+          {evas.reverse().slice(0, 3).map((e, index) => <EvaluationScore key={index} evaluation={e} className={styles['project-interviews-table-evaluations-evaluation']} />)}
       </div>
     }
   }

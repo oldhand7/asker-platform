@@ -15,6 +15,7 @@ import Alert from 'components/Alert/Alert';
 import { saveInterview } from 'libs/firestore'
 import Link from 'next/link';
 import { useFlash } from 'libs/flash'
+import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
 
 import styles from 'styles/pages/project-overview.module.scss';
 
@@ -65,7 +66,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
 
         {success ? <Alert type="success">{success}</Alert> : null}
 
-        {/*<ProjectEvaluationCriteria className={styles['project-overview-page-evaluation-criteria']} />*/}
+        <ProjectEvaluationCriteria className={styles['project-overview-page-evaluation-criteria']} project={project} />
 
         <div data-test-id="interviewers" className={styles['project-overview-page-interviewers']}>
           <h2 className={styles['project-overview-page-interviewers-title']}>Assigned Interviewer</h2>

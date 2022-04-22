@@ -19,7 +19,7 @@ const rules = {}
 
 const InterviewForm = ({ className, interview, project }) => {
   const [values, errors, control] = useForm({
-    values: interview.evaluations ? interview.evaluations : defaultValues,
+    values: interview.evaluations,
     rules
   });
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ const InterviewForm = ({ className, interview, project }) => {
   const router = useRouter();
 
   const handleSubmit = (values) => {
-    // setLoading(true);
+    setLoading(true);
 
     interview.evaluations = values;
     interview.status = 'complete'
@@ -58,8 +58,6 @@ const InterviewForm = ({ className, interview, project }) => {
 
     interview.score = Math.round(score * 100 / total);
 
-    console.log(interview);
-
     saveInterview(interview)
       .then(() => {
         addFlash('Interview complete')
@@ -68,6 +66,10 @@ const InterviewForm = ({ className, interview, project }) => {
       })
       .catch(setError)
   }
+
+  useEffect(() => {
+    setLoading(false);
+  }, [error])
 
   return <form className={classNames(styles['interview-form'], className)} onSubmit={control.submit(handleSubmit)}>
     <h2 className={styles['interview-form-title']}>Interview with</h2>
@@ -78,10 +80,9 @@ const InterviewForm = ({ className, interview, project }) => {
 
     <div className={styles['interview-form-stages']}>
       {project.stages.map((stage, index) => (
-        //onError
         stage && <StageInterviewForm
           onValues={control.input(stage.id, false)}
-          value={values[stage.id]}
+          values={values[stage.id]}
           className={styles['interview-form-stage']}
           key={stage.id}
           stage={stage}

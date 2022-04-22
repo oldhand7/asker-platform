@@ -8,6 +8,7 @@
 
   &-block {
     flex: 1 1 50%;
+    position: relative;
   }
 
   &-sb {
@@ -80,5 +81,11 @@
         }
       }
     }
+  }
+
+  &-notes {
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 }

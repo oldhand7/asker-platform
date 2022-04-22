@@ -15,7 +15,7 @@ const messages = {}
 
 const EvaluationQuestionsMultipleForm = ({ index = 0, className, stage, project, values, onValues, onError }) => {
   const [formValues, errors, control] = useForm({
-    values: values ? { ...values } : defaultValues,
+    values,
     rules,
     messages
   })

@@ -24,8 +24,6 @@ const CustomDataProvider = (config, options) => {
       return dataProvider.create(resource, params)
     },
     update: (resource, params) => {
-      console.log(params);
-
       //To keep passwords safe dedicating password reset for backend-api.
       if (resource == 'users' && params.data.password || (params.previousData.email != params.data.email)) {
         return updateFirebaseUserEmailAndPassword(params.data.id, params.data.email, params.data.password)

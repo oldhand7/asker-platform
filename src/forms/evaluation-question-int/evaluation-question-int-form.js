@@ -4,10 +4,12 @@ import QuestionScoreBoard from 'components/QuestionScoreBoard/QuestionScoreBoard
 import { useEffect, useState } from 'react';
 import useForm from 'libs/use-form';
 import { calcScore } from 'libs/helper';
+import InterviewNotes from 'components/InterviewNotes/InterviewNotes';
 
 import styles from './evaluation-question-int-form.module.scss';
 
 const defaultValues = {
+  notes: '',
   criteria: null,
   score: 0,
   maxScore: 0,
@@ -18,7 +20,7 @@ const messages = {}
 
 const EvaluationQuestionIntForm = ({ className, question, stage, project, values, onValues, onError }) => {
   const [formValues, errors, control] = useForm({
-    values: values ? { ...values } : defaultValues,
+    values: values ? values : defaultValues,
     rules,
     messages
   })
@@ -80,7 +82,10 @@ const EvaluationQuestionIntForm = ({ className, question, stage, project, values
         ))}
       </ul>
     </div>
-    {/*@TODO: notes */}
+    <div className={styles['evaluation-question-int-form-block']}>
+
+      <InterviewNotes className={styles['evaluation-question-int-form-notes']} value={formValues.notes} onChange={control.input('notes', false)} />
+    </div>
     <QuestionScoreBoard score={formValues.score} votes={formValues.votes} onVotes={handleVotes} className={styles['evaluation-question-int-form-sb']} rules={question.rules} />
   </div> : null
 }

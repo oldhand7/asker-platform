@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { validate } from 'libs/validator';
 
 const useForm = (options = {}) => {
-  const [values, setValues] = useState(typeof options.values !== 'undefined' ? options.values : {});
+  const [values, setValues] = useState(typeof options.values !== 'undefined' ? JSON.parse(JSON.stringify(options.values)) : {});
   const [pristine, setPristine] = useState(typeof options.pristine !== 'undefined' ? options.pristine : true)
   const [errors, setErrors] = useState(null);
 
@@ -63,7 +63,7 @@ const useForm = (options = {}) => {
 
   const reset = () => {
     setPristine(true);
-    setValues(typeof options.values !== 'undefined' ? options.values : {})
+    setValues(typeof options.values !== 'undefined' ? JSON.parse(JSON.stringify(options.values)) : {})
   }
 
   return [
