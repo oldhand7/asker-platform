@@ -6,40 +6,134 @@ import CloudUploadIcon from 'components/Icon/CloudUploadIcon';
 import Uploader from 'rc-upload';
 import { useUser } from 'libs/user';
 import { uploadCompanyFile } from 'libs/firestorage';
-import { UPLOAD_LIMIT_MB } from 'libs/config';
+import { UPLOAD_LIMIT_MB, BUNDLE_UPLOAD_LIMIT_MB, BUNDLE_MAX_FILES } from 'libs/config';
 import { useState, useEffect } from 'react';
 import Preloader from 'components/Preloader/Preloader';
+import { humanFileSize, ctxError, calcFileBundleSizeBytes, inExtension } from 'libs/helper';
 
 import styles from './FileDropInputField.module.scss';
 
-const allowed = {
-  'pdf': ['application/pdf']
+const defaultAllowed = {
+  'pdf': ['application/pdf'],
+  'jpg': ['image/jpeg'],
+  'png': ['image/png'],
+  'jpeg': ['image/jpeg'],
+  'gif': ['image/gif']
 }
 
-const MAX_UPLOAD_COUNT = 4;
+const MAX_UPLOAD_COUNT = 10;
 
-const FileDropInputField = ({ files = [], className, onFiles, ...props }) => {
-    const onDrop = useCallback(acceptedFiles => {
-      //@TODO
-    }, [])
-
+const FileDropInputField = ({ maxFiles = MAX_UPLOAD_COUNT, bundleReminingBytes = 0, className, onFiles, allowed = defaultAllowed, ...props }) => {
     const { user } = useUser();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false)
+    const [success, setSuccess] = useState(null);
 
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+    const validateFiles = files => {
+      const allowedExtensions =  Object.keys(allowed);
+
+      const fileExtensionsValid = files.every(file => {
+        return inExtension(file.name, allowedExtensions)
+      })
+
+      if (!fileExtensionsValid) {
+        setError(new Error('Your uploads have files that are not allowed.'))
+        setSuccess(null);
+
+        return;
+      }
+
+      if (files.length > maxFiles) {
+        setError(new Error(`You are trying to upload ${files.length} files, but you can only upload ${maxFiles}!`))
+        setSuccess(null);
+
+        return;
+      }
+
+      if (calcFileBundleSizeBytes(files) > bundleReminingBytes) {
+        setError(new Error('Total size of exceeds allowed remining size - ' + humanFileSize(bundleReminingBytes)))
+      }
+
+      const filesValid = files.every(file => {
+        if (file.size > UPLOAD_LIMIT_MB * 1000000) {
+          return false;
+        }
+
+        return true;
+      })
+
+      if (!filesValid) {
+        setError(new Error(`Some files exceed maximum allowed file size - ${UPLOAD_LIMIT_MB}MB.`))
+
+        return;
+      }
+
+      return true;
+    }
+
+    const onDrop = files => {
+      if (!files.length) {
+        setError(new Error('File format not accepted.'))
+      }
+
+      if (!validateFiles(files)) {
+        return;
+      }
+
+      setLoading(true);
+
+      uploadManyFiles(files)
+      .then(filesUploaded => {
+        if (filesUploaded.length) {
+          onFiles(filesUploaded)
+        }
+
+        if (filesUploaded.length != files.length) {
+          alert("Some files were not uploaded")
+        }
+
+        setSuccess('Upload success.')
+
+        setLoading(false);
+      })
+      .catch(error => {
+          setLoading(false);
+          setError(ctxError("File upload failed", error))
+      })
+    }
+
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({
+      onDrop,
+      accept: Object.values(allowed).map(mime => mime).join(', '),
+      noClick: true
+    })
+
+    const uploadManyFiles = (files = []) => {
+      return Promise.allSettled(files.map(f => uploadCompanyFile(user.companyId, f, 'docs')))
+        .then(result => {
+          const filesUploaded = [];
+
+          for (let i = 0; i < result.length; i++) {
+            if (result[i]['status'] == 'fulfilled') {
+              filesUploaded.push({
+                name: files[i].name,
+                size: files[i].size,
+                url: result[i].value,
+                type: files[i].type
+              })
+            }
+          }
+
+          return filesUploaded;;
+        })
+    }
 
   const uploadProps = () => {
     let files = [];
 
     return {
       beforeUpload: async (file) => {
-        if (file.size > UPLOAD_LIMIT_MB * 1000000) {
-          return Promise.reject();
-        }
-
         files.push(file);
-
         return Promise.resolve(file)
       },
       onError: setError,
@@ -48,42 +142,34 @@ const FileDropInputField = ({ files = [], className, onFiles, ...props }) => {
       accept: Object.values(allowed).map(mime => mime).join(', '),
       customRequest: async ({ file, onError, onSuccess }) => {
         if (files.indexOf(file) === files.length -1) {
-          if (files.length > MAX_UPLOAD_COUNT) {
-            onError(new Error(`Uploading more than ${MAX_UPLOAD_COUNT} files not allowed.`))
-            setLoading(false);
-
+          if (!validateFiles(files)) {
             return;
           }
 
           setLoading(true);
 
-          Promise.allSettled(files.map(f => uploadCompanyFile(user.companyId, f, 'docs')))
-            .then(result => {
-              const filesUploaded = [];
-
-              for (let i = 0; i < result.length; i++) {
-                if (result[i]['status'] == 'fulfilled') {
-                  filesUploaded.push({
-                    name: files[i].name,
-                    size: files[i].size,
-                    url: result[i].value,
-                    type: files[i].type
-                  })
-                }
-              }
-
+          uploadManyFiles(files)
+            .then(filesUploaded => {
               if (filesUploaded.length) {
                 onSuccess(filesUploaded)
               }
 
               if (filesUploaded.length != files.length) {
-                onError(new Error("Some files were not uploaded"))
+                alert("Some files were not uploaded")
               }
+
+              setSuccess('Upload success.')
+
 
               setLoading(false);
             })
+            .catch(error => {
+                setLoading(false);
+                onError(ctxError("File upload failed", error))
+            })
         }
-      }
+      },
+      ...props
     }
   }
 
@@ -91,18 +177,23 @@ const FileDropInputField = ({ files = [], className, onFiles, ...props }) => {
     setError(null);
   }, [loading])
 
-  return <InputField className={classNames(styles['file-drop-input-field'], className)} {...props} >
-      <div className={styles['file-drop-input-field-filearea']}>
-        <p>
-          <CloudUploadIcon className={styles['file-drop-input-field-icon']} />
-        </p>
-        <p>Drag and Drop files here</p>
-        <Uploader {...uploadProps()}><button disabled={loading} type="button" className={styles['file-drop-input-field-filearea-button']}>Choose file</button></Uploader>
-        <p>Maximum file size {UPLOAD_LIMIT_MB}MB</p>
-        <p>Allowed formats: {Object.keys(allowed).map(ext => `.${ext}`).join(', ')}</p>
+  return <InputField className={classNames(styles['file-drop-input-field'], className)} >
+      <div data-test-id="file-upload-area" {...getRootProps()} >
+        <div className={styles['file-drop-input-field-filearea']}>
+          <p>
+            <CloudUploadIcon className={styles['file-drop-input-field-icon']} />
+          </p>
+          <p>Drag and Drop files here</p>
+          <Uploader {...uploadProps()}><button disabled={loading} type="button" className={styles['file-drop-input-field-filearea-button']}>Choose file</button></Uploader>
+          <p>Maximum file size: {UPLOAD_LIMIT_MB}MB</p>
+          <p>Max files per upload: {BUNDLE_MAX_FILES}</p>
+          <p>Allowed formats: {Object.keys(allowed).map(ext => `.${ext}`).join(', ')}</p>
+          <input  {...getInputProps()}  />
+        </div>
+        {error ? <p className="form-error">{error.message}</p> : null}
+        {success ? <p className="form-success">{success}</p> : null}
+        {loading ? <Preloader /> : null}
       </div>
-      {error ? <p className="form-error">{error.message}</p> : null}
-      {loading ? <Preloader /> : null}
     </InputField>
 }
 

@@ -16,4 +16,11 @@
       color: $brandish-tar;
       text-decoration: underline;
   }
+
+   &-thumb {
+     width: 32px;
+     height: 32px;
+     object-fit: cover;
+     object-position: center center;
+   }
 }

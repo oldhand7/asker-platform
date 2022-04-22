@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 
 const stageForms = {
   'introduction': dynamic(() => import('forms/introduction-int/introduction-int-form')),
-  // 'company-presentation': dynamic(() => import('forms/company-presentation/company-presentation-form')),
+  'company-presentation': dynamic(() => import('forms/company-presentation-int/company-presentation-int-form')),
   'competency-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form')),
   'experience-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form')),
   'motivation-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form')),

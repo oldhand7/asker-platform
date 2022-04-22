@@ -3,11 +3,23 @@ import TrashIcon from 'components/Icon/TrashIcon';
 import classNames from 'classnames';
 import Link from 'next/link';
 import TrashButton from 'components/TrashButton/TrashButton'
-import { humanFileSize} from 'libs/helper';
+import { humanFileSize, isImage, } from 'libs/helper';
+import NODATA from 'components/NODATA/NODATA';
 
 import styles from './FileManager.module.scss';
 
 const getColumns = ({ handleDelete }) => ([
+  {
+    title: 'Preview',
+    key: 'preview',
+    render: (_, file) => {
+      if (isImage(file.name)) {
+        return <img width="2em" height="2em" className={styles['file-manager-thumb']} src={file.url} />
+      } else {
+        return <NODATA />;
+      }
+    }
+  },
   {
     title: 'Name',
     dataIndex: 'name',
@@ -23,13 +35,7 @@ const getColumns = ({ handleDelete }) => ([
     render: (size) => humanFileSize(size)
   },
   {
-    title: "Type",
-    render: () => {
-      return 'media'
-    }
-  },
-  {
-    title: "Status",
+    title: "#",
     render: (_, file) => {
       return <TrashButton type="button" onClick={() => handleDelete(file)} />
     }

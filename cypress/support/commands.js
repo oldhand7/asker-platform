@@ -1,4 +1,6 @@
 require('@4tw/cypress-drag-drop')
+require('cypress-file-upload')
+require('./projects')
 
 Cypress.Commands.add('login', (username, password, delay = 1000) => {
   cy.session([username, password], () => {

@@ -210,3 +210,22 @@ export const calcScore = (votes = []) => {
 
   return Math.round(maxAvg * 0.5 + avg * 0.5);
 }
+
+export const isImage = (file) => {
+  return inExtension(file, ['jpg', 'png', 'gif', 'jpeg']);
+}
+
+export const inExtension = (file, list = []) => {
+  const fe = ext(file).toLowerCase()
+
+  return list.map(e => trim(e, '.').toLowerCase()).indexOf(fe) > -1
+}
+
+export const ext = (s) => {
+  const result = /(?!^)\.([^./\\]+)$/.exec(s)
+  return result ? result[1] : ''
+}
+
+export const calcFileBundleSizeBytes = (files = []) => {
+  return files.reduce((sum, file) => sum + file.size, 0)
+}

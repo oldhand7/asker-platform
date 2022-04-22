@@ -7,7 +7,7 @@ describe('Project overview', () => {
     cy.visit('/projects/')
 
     cy.get('table tbody tr')
-      .first()
+      .last() //created first should be last
       .within(() => {
         cy.get('td').eq(0).should('contain', 'Philips Demo Project')
         cy.get('td').eq(1).should('contain', 'Philips Engineer')
@@ -38,7 +38,7 @@ describe('Project overview', () => {
     cy.visit('/projects/')
 
     cy.get('table tbody tr')
-      .first()
+      .last()
       .click()
 
     cy.get('h1').should('contain', 'Philips Demo Project')
@@ -83,7 +83,7 @@ describe('Project overview', () => {
     cy.visit('/projects/')
 
     cy.get('table tbody tr')
-      .first()
+      .last()
       .click()
 
     cy.contains('Add candidate')
@@ -114,7 +114,7 @@ describe('Project overview', () => {
     cy.visit('/projects/')
 
     cy.get('table tbody tr')
-      .first()
+      .last()
       .within(() => {
         cy.get('td').eq(4)
           .should('contain', '3 Number of candidates')
