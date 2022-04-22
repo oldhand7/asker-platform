@@ -22,7 +22,7 @@ const columns = [
     dataIndex: 'score',
     key: 'score',
     render: (score) => {
-      return typeof score !== 'undefined' ? <InterviewScore score={score} /> : <NODATA />;
+      return typeof score !== 'undefined' ? <InterviewScore score={score || 0} /> : <NODATA />;
     }
   },
   {
@@ -75,7 +75,7 @@ const ProjectInterviewsTable = ({ className, data = [], ...props }) => {
 
     return {
       onClick: () => {
-        router.push(`/projects/interview/${record.id}`)
+        router.push(`/interviews/${record.id}/conduct/`)
       }
     }
   }
