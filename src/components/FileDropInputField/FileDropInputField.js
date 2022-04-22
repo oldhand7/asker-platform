@@ -9,7 +9,7 @@ import { uploadCompanyFile } from 'libs/firestorage';
 import { UPLOAD_LIMIT_MB, BUNDLE_UPLOAD_LIMIT_MB, BUNDLE_MAX_FILES } from 'libs/config';
 import { useState, useEffect } from 'react';
 import Preloader from 'components/Preloader/Preloader';
-import { humanFileSize, ctxError, calcFileBundleSizeBytes } from 'libs/helper';
+import { humanFileSize, ctxError, calcFileBundleSizeBytes, inExtension } from 'libs/helper';
 
 import styles from './FileDropInputField.module.scss';
 
@@ -23,20 +23,35 @@ const defaultAllowed = {
 
 const MAX_UPLOAD_COUNT = 10;
 
-const FileDropInputField = ({ bundleReminingBytes = 0, className, onFiles, allowed = defaultAllowed, ...props }) => {
+const FileDropInputField = ({ maxFiles = MAX_UPLOAD_COUNT, bundleReminingBytes = 0, className, onFiles, allowed = defaultAllowed, ...props }) => {
     const { user } = useUser();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false)
+    const [success, setSuccess] = useState(null);
 
     const validateFiles = files => {
-      if (files.length > BUNDLE_MAX_FILES) {
-        alert(`Max ${BUNDLE_MAX_FILES} files!`)
+      const allowedExtensions =  Object.keys(allowed);
+
+      const fileExtensionsValid = files.every(file => {
+        return inExtension(file.name, allowedExtensions)
+      })
+
+      if (!fileExtensionsValid) {
+        setError(new Error('Your uploads have files that are not allowed.'))
+        setSuccess(null);
+
+        return;
+      }
+
+      if (files.length > maxFiles) {
+        setError(new Error(`You are trying to upload ${files.length} files, but you can only upload ${maxFiles}!`))
+        setSuccess(null);
 
         return;
       }
 
       if (calcFileBundleSizeBytes(files) > bundleReminingBytes) {
-        alert('Total size of exceeds allowed remining size - ' + humanFileSize(bundleReminingBytes))
+        setError(new Error('Total size of exceeds allowed remining size - ' + humanFileSize(bundleReminingBytes)))
       }
 
       const filesValid = files.every(file => {
@@ -48,7 +63,7 @@ const FileDropInputField = ({ bundleReminingBytes = 0, className, onFiles, allow
       })
 
       if (!filesValid) {
-        alert('Files not accepted. Some files are larger than ' + humanFileSize(UPLOAD_LIMIT_MB * 1000000))
+        setError(new Error(`Some files exceed maximum allowed file size - ${UPLOAD_LIMIT_MB}MB.`))
 
         return;
       }
@@ -58,7 +73,7 @@ const FileDropInputField = ({ bundleReminingBytes = 0, className, onFiles, allow
 
     const onDrop = files => {
       if (!files.length) {
-        alert('File format not accepted.')
+        setError(new Error('File format not accepted.'))
       }
 
       if (!validateFiles(files)) {
@@ -74,8 +89,10 @@ const FileDropInputField = ({ bundleReminingBytes = 0, className, onFiles, allow
         }
 
         if (filesUploaded.length != files.length) {
-          setError(new Error("Some files were not uploaded"))
+          alert("Some files were not uploaded")
         }
+
+        setSuccess('Upload success.')
 
         setLoading(false);
       })
@@ -138,8 +155,11 @@ const FileDropInputField = ({ bundleReminingBytes = 0, className, onFiles, allow
               }
 
               if (filesUploaded.length != files.length) {
-                onError(new Error("Some files were not uploaded"))
+                alert("Some files were not uploaded")
               }
+
+              setSuccess('Upload success.')
+
 
               setLoading(false);
             })
@@ -158,19 +178,22 @@ const FileDropInputField = ({ bundleReminingBytes = 0, className, onFiles, allow
   }, [loading])
 
   return <InputField className={classNames(styles['file-drop-input-field'], className)} >
-      <div className={styles['file-drop-input-field-filearea']} {...getRootProps()}>
-        <p>
-          <CloudUploadIcon className={styles['file-drop-input-field-icon']} />
-        </p>
-        <p>Drag and Drop files here</p>
-        <Uploader {...uploadProps()}><button disabled={loading} type="button" className={styles['file-drop-input-field-filearea-button']}>Choose file</button></Uploader>
-        <p>Maximum file size: {UPLOAD_LIMIT_MB}MB</p>
-        <p>Max upload files: {BUNDLE_MAX_FILES}</p>
-        <p>Allowed formats: {Object.keys(allowed).map(ext => `.${ext}`).join(', ')}</p>
-        <input  {...getInputProps()} style={{ display: 'none'}} />
+      <div data-test-id="file-upload-area" {...getRootProps()} >
+        <div className={styles['file-drop-input-field-filearea']}>
+          <p>
+            <CloudUploadIcon className={styles['file-drop-input-field-icon']} />
+          </p>
+          <p>Drag and Drop files here</p>
+          <Uploader {...uploadProps()}><button disabled={loading} type="button" className={styles['file-drop-input-field-filearea-button']}>Choose file</button></Uploader>
+          <p>Maximum file size: {UPLOAD_LIMIT_MB}MB</p>
+          <p>Max files per upload: {BUNDLE_MAX_FILES}</p>
+          <p>Allowed formats: {Object.keys(allowed).map(ext => `.${ext}`).join(', ')}</p>
+          <input  {...getInputProps()}  />
+        </div>
+        {error ? <p className="form-error">{error.message}</p> : null}
+        {success ? <p className="form-success">{success}</p> : null}
+        {loading ? <Preloader /> : null}
       </div>
-      {error ? <p className="form-error">{error.message}</p> : null}
-      {loading ? <Preloader /> : null}
     </InputField>
 }
 

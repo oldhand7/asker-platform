@@ -53,9 +53,9 @@ const CompanyPresentationForm = ({ values, className, onValues, onError }) => {
 
 
   useEffect(() => {
-    const bundleSize = calcFileBundleSizeBytes(values.files);
+    const bundleSize = calcFileBundleSizeBytes(formValues.files);
     setBundleReminingBytes(BUNDLE_UPLOAD_LIMIT_MB * 1000000 - bundleSize)
-  }, [values])
+  }, [formValues])
 
   return <div className={classNames(className, styles['company-presentation-form'])}>
     <TextareaInputField error={errors && errors['notes']} className={classNames(styles['company-presentation-form-field'], styles['company-presentation-form-notes'])} name="notes" onChange={control.input('notes')} placeholder="Enter your introductory text" />
@@ -68,9 +68,9 @@ const CompanyPresentationForm = ({ values, className, onValues, onError }) => {
 
     {
       bundleReminingBytes > 0 && formValues.files.length < BUNDLE_MAX_FILES ?
-      <FileDropInputField bundleReminingBytes={bundleReminingBytes} error={errors && errors['files']} label="Upload file" onFiles={handleFiles} multiple={false} className={styles['company-presentation-form-field']} /> :
+      <FileDropInputField maxFiles={Math.max(BUNDLE_MAX_FILES - formValues.files.length, 0)} bundleReminingBytes={bundleReminingBytes} error={errors && errors['files']} label="Upload file" onFiles={handleFiles} multiple={false} className={styles['company-presentation-form-field']} /> :
       <p className={styles['company-presentation-form-warning']}>
-        <small>You have reached file upload limit. Delete files to continue.</small>
+        <small>You have reached file upload limit.</small>
       </p>
     }
   </div>

@@ -35,6 +35,6 @@ export const getFirebaseConfig = () => {
   return firebaseConfig[getAppEnv()]
 }
 
-export const UPLOAD_LIMIT_MB = 5;
-export const BUNDLE_UPLOAD_LIMIT_MB = UPLOAD_LIMIT_MB * 2;
-export const BUNDLE_MAX_FILES = 3;
+export const UPLOAD_LIMIT_MB = getAppEnv() === 'testing' ? 1 : 5;
+export const BUNDLE_UPLOAD_LIMIT_MB = getAppEnv() === 'testing' ? 2 : UPLOAD_LIMIT_MB * 2;
+export const BUNDLE_MAX_FILES = getAppEnv() === 'testing' ? 3 : 10;
