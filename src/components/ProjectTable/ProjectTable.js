@@ -34,7 +34,7 @@ const columns = [
     dataIndex: 'stages',
     key: 'stages',
     render: (stages) => {
-      return <Stager stages={stages} />
+      return <Stager className={styles['project-table-stager']} stages={stages} />
     }
   },
   {

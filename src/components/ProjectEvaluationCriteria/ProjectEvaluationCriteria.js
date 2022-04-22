@@ -58,7 +58,7 @@ const ProjectEvaluationCriteria = ({ className, project }) => {
     });
 
     setCriteria(criterias2.reverse().slice(0, 3).map(c => (
-      { ...c, p: Math.round(c.count * 100 / Mat.max(3, criterias2.length)) }
+      { ...c, p: Math.round(c.count * 100 / Math.min(3, criterias2.length)) }
     )))
   }, [project])
 
@@ -70,8 +70,9 @@ const ProjectEvaluationCriteria = ({ className, project }) => {
            innerRadius={70}
            outerRadius={100}
            fill="#8884d8"
-           paddingAngle={1}
+           paddingAngle={0}
            dataKey="p"
+           stroke=''
          >
            {criteria.map((c, index) => (
              <Cell key={`cell-${c.id}`} fill={COLORS[index % COLORS.length]} />
