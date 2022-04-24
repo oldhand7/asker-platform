@@ -148,9 +148,7 @@ const ProjectForm = ({ project, className }) => {
     })
 
     if (newStage) {
-      setTimeout(() => {
-        setStage(newStage)
-      }, 0)
+      setStage(newStage)
     }
   }
 
@@ -162,8 +160,10 @@ const ProjectForm = ({ project, className }) => {
   }
 
   useEffect(() => {
-    setStage(null)
-  }, [values.stages])
+    if (stage && values.stages.indexOf(stage) === -1) {
+      setStage(null)
+    }
+  }, [stage, values.stages])
 
   const handleSubmitFailure = () => {
     if (errors) {
@@ -207,10 +207,7 @@ const ProjectForm = ({ project, className }) => {
 
   const handleAddDropStage = (stage) => {
     addStage(stage)
-
-    setTimeout(() => {
-      setStage(stage)
-    }, 0)
+    setStage(stage)
   }
 
   return  <form data-test-id="project-form" onSubmit={control.submit(handleSubmit, handleSubmitFailure)} className={classNames(styles['project-form'], className)}>
