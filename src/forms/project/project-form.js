@@ -15,6 +15,7 @@ import { useUser } from 'libs/user';
 import { saveProject } from 'libs/firestore'
 import { useRouter } from 'next/router';
 import Preloader from 'components/Preloader/Preloader'
+import NewStageDroppable from 'components/NewStageDroppable/NewStageDroppable'
 
 import styles from './project-form.module.scss';
 
@@ -125,7 +126,7 @@ const ProjectForm = ({ project, className }) => {
     setLoading(false)
   }, [error])
 
-  const handleStages = stages => {
+  const handleStages = (stages, newStage = null) => {
     const stageValuesCopy = {
       ...values.config
     }
@@ -145,12 +146,18 @@ const ProjectForm = ({ project, className }) => {
       stages,
       config: stageValuesCopy
     })
+
+    if (newStage) {
+      setTimeout(() => {
+        setStage(newStage)
+      }, 0)
+    }
   }
 
-  const addStage = () => {
+  const addStage = (stage = null) => {
     control.set('stages', [
       ...values.stages,
-      null
+      stage
     ])
   }
 
@@ -174,6 +181,38 @@ const ProjectForm = ({ project, className }) => {
     }
   }
 
+  const scrollFeatureFormIntoView = () => {
+    const featureFormEl = document.querySelector('#feature-form')
+
+    if (featureFormEl) {
+      featureFormEl.scrollIntoView({
+        behavior: 'smooth'
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (stage) {
+      scrollFeatureFormIntoView()
+    }
+  }, [stage])
+
+  const handleStageSelect = (st) => {
+    setStage(st);
+
+    if (st == stage) {
+      scrollFeatureFormIntoView();
+    }
+  }
+
+  const handleAddDropStage = (stage) => {
+    addStage(stage)
+
+    setTimeout(() => {
+      setStage(stage)
+    }, 0)
+  }
+
   return  <form data-test-id="project-form" onSubmit={control.submit(handleSubmit, handleSubmitFailure)} className={classNames(styles['project-form'], className)}>
     <ProjectFormSidebar />
 
@@ -186,12 +225,18 @@ const ProjectForm = ({ project, className }) => {
         <div className={classNames(styles['project-form-field'], styles['project-form-field-stages'])}>
           <h3 className={styles['project-form-field-title']}>Interview Stages</h3>
 
-          <ProjectFormStager onStages={handleStages} activeStage={stage} onStageSelect={setStage} stages={values.stages} className={styles['project-form-stages']}  />
+          <ProjectFormStager onStages={handleStages} activeStage={stage} onStageSelect={handleStageSelect} stages={values.stages} className={styles['project-form-stages']}  />
 
-          {values.stages.length < 12 ? <button type="button" className={styles['project-form-add-stage']}onClick={addStage}>Add stage +</button> : null}
+          <NewStageDroppable onStage={handleAddDropStage}>
+          <div style={{ padding: '15rem 0'}}>
+          {values.stages.length < 12 ? <button type="button" className={styles['project-form-add-stage']}onClick={() => addStage()}>Add stage +</button> : null}
+          </div>
+          </NewStageDroppable>
         </div>
 
+        <div id="feature-form" data-test-id="feature-form">
         {stage ? <FeatureForm values={values.config[stage.id]} onError={onStageError} onValues={handleStageValues} feature={stage} /> : null}
+        </div>
 
         <div className={classNames(styles['project-form-field'], styles['project-form-field-interviewers'])}>
           <h3 className={styles['project-form-field-title']}>Assign interviewer</h3>

@@ -24,9 +24,7 @@ const FeatureForm = (props) => {
     }
   }, [props])
 
-  return FormComponent ? <div data-test-id="feature-form">
-    <FormComponent {...formComponentProps} />
-  </div> : null;
+  return FormComponent ? <FormComponent {...formComponentProps} /> : null;
 }
 
 export default FeatureForm;

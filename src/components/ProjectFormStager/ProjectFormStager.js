@@ -55,9 +55,13 @@ const ProjectFormStager = ({ className, onStages, stages = [], activeStage = nul
       ...stages
     ]
 
+    if (stagesCopy[index] && !confirm('Are you sure?')) {
+      return;
+    }
+
     stagesCopy[index] = feature;
 
-    onStages(stagesCopy)
+    onStages(stagesCopy, feature)
 
     return;
   }
@@ -82,7 +86,7 @@ const ProjectFormStager = ({ className, onStages, stages = [], activeStage = nul
             <h6 className={styles['project-form-stager-item-title']}>Stage {index + 1}</h6>
 
             <div className={styles['project-form-stager-item-body']}>
-              <StageFeaturePlaceholder onDrop={(item) => handleFeatureDrop(item, index)} className={styles['project-form-stager-item-placeholder']}>
+              <StageFeaturePlaceholder onDrop={(item) => handleFeatureDrop(item, index, stage)} className={styles['project-form-stager-item-placeholder']}>
                 {stage ? <FeatureDragDropLabel onClick={() => onStageSelect(stage)} className={styles['project-form-stager-item-feature']} feature={stage} context='stager' /> : null}
               </StageFeaturePlaceholder>
               <div className={styles['project-form-stager-item-control']}>
