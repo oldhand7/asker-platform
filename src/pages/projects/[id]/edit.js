@@ -16,6 +16,12 @@ const ProjectsEditPage = ({ project }) => {
 }
 
 export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
+  if (!req.session.user.companyId) {
+    return {
+      notFound: true
+    }
+  }
+  
   const project = await getCompanyProject(req.session.user.companyId, query.id);
 
   if (!project) {

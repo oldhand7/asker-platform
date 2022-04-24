@@ -74,6 +74,12 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
 }
 
 export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
+  if (!req.session.user.companyId) {
+    return {
+      notFound: true
+    }
+  }
+  
   const projects = await getCompanyProjectsAdmin(req.session.user.companyId)
 
   return {

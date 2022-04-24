@@ -17,6 +17,12 @@ const InterviewConductPage = ({ interview, project }) => {
 }
 
 export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
+  if (!req.session.user.companyId) {
+    return {
+      notFound: true
+    }
+  }
+  
   const interview = await getCompanyInterview(req.session.user.companyId, query.id);
 
   if (!interview) {

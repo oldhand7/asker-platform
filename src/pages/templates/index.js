@@ -10,6 +10,12 @@ const TemplatesPage = () => {
 }
 
 export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
+  if (!req.session.user.companyId) {
+    return {
+      notFound: true
+    }
+  }
+
   return {
     props: {
       config: await getSettings()

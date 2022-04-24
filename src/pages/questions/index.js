@@ -118,6 +118,12 @@ const QuestionPage = ({ questions = [], companyId }) => {
 }
 
 export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
+  if (!req.session.user.companyId) {
+    return {
+      notFound: true
+    }
+  }
+  
   const questions = await getQuestions(req.session.user.companyId);
 
   return {

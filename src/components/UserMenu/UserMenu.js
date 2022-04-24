@@ -40,7 +40,7 @@ const UserMenu = ({ className }) => {
 
   return <div ref={menuRef} onClick={() => setOpen(!open)} className={getClassNames()}>
     <div className={styles['usermenu-head']}>
-      <UserCard avatar={getAvatar()} title={user && user.name} className={styles['usermenu-head-card']}  />
+      <UserCard avatar={getAvatar()} title={user && (user.name || user.email)} className={styles['usermenu-head-card']}  />
       <CarretDown className={styles['usermenu-head-carret']} />
     </div>
     <ul className={styles['usermenu-submenu']}>
