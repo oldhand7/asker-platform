@@ -22,31 +22,37 @@ const featureForms = {
   'text': dynamic(() => import('forms/text-question/text-question-form'))
 }
 
+export const getScreeningQuestionLabelBySubtype = (subtype) => {
+  if (subtype == 'range') {
+    return <IconicLabel Icon={BoxesIcon}>Range</IconicLabel>;
+  }
+
+  if (subtype == 'text') {
+    return <IconicLabel Icon={TextIcon}>Text</IconicLabel>;
+  }
+
+  return subtype == 'choice' ?
+    <IconicLabel Icon={DoubleCheckIcon}>Yes/No</IconicLabel> :
+    <IconicLabel Icon={MultichoiceIcon}>Multiple choice</IconicLabel>;
+}
+
+
 const ScreeningQuestionForm = ({ className, question }) => {
-  const [type, setType] = useState(null);
+  const [subtype, setSubtype] = useState(null);
   const [FormComponent, setFormComponent] = useState(null)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter()
   const { user } = useUser();
 
-  const getScreeningQuestionLabelByType = (type) => {
-    if (type == 'range') {
-      return <IconicLabel Icon={BoxesIcon}>Range</IconicLabel>;
-    }
-
-    if (type == 'text') {
-      return <IconicLabel Icon={TextIcon}>Text</IconicLabel>;
-    }
-
-    return type == 'choice' ?
-      <IconicLabel Icon={DoubleCheckIcon}>Yes/No</IconicLabel> :
-      <IconicLabel Icon={MultichoiceIcon}>Multiple choice</IconicLabel>;
-  }
-
   const handleQuestion = (values) => {
-    if (!values.type) {
-      values.type = type;
+    values.type = 'screening';
+
+    //Returning type may differ
+    const subT = values.id ? values.subtype : subtype;
+
+    if (subT == 'choice' || subT == 'multichoice') {
+      values.subtype = values.multichoice ? 'multichoice' : 'choice';
     }
 
     setLoading(true)
@@ -74,33 +80,33 @@ const ScreeningQuestionForm = ({ className, question }) => {
   }
 
   useEffect(() => {
-    if (!question && type && featureForms[type]) {
-      setFormComponent(featureForms[type])
-    } else if (question && featureForms[type]) {
-      setFormComponent(featureForms[question.type])
+    if (!question && subtype && featureForms[subtype]) {
+      setFormComponent(featureForms[subtype])
+    } else if (question && featureForms[question.subtype]) {
+      setFormComponent(featureForms[question.subtype])
     } else {
       setFormComponent(null)
     }
-  }, [question, type])
+  }, [question, subtype])
 
   useEffect(() => {
     setLoading(false);
   }, [error])
 
-  return <div className={classNames(styles['screening-question-form'], className)}>
+  return <div data-test-id="screening-question-form" className={classNames(styles['screening-question-form'], className)}>
     {
       !question ?
-      <h1 className={styles['screening-question-form-title']}>Create a screening question {type ? <span>({getScreeningQuestionLabelByType(type)})</span> : null}</h1> :
-      <h1 className={styles['screening-question-form-title']}>Edit a screening question <span>({getScreeningQuestionLabelByType(question.type)})</span></h1>
+      <h1 className={styles['screening-question-form-title']}>Create a screening question {subtype ? <small>({getScreeningQuestionLabelBySubtype(subtype)})</small> : null}</h1> :
+      <h1 className={styles['screening-question-form-title']}>Edit screening question <small>({getScreeningQuestionLabelBySubtype(question.subtype)})</small></h1>
     }
 
     {
-      !question && !type ?
-      <ul className={styles['screening-question-form-options']}>
-        <li onClick={() => setType('choice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelByType('choice')}</li>
-        <li onClick={() => setType('multichoice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelByType('multichoice')}</li>
-        <li onClick={() => setType('range')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelByType('range')}</li>
-        <li onClick={() => setType('text')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelByType('text')}</li>
+      !question && !subtype ?
+      <ul  data-test-id="screening-question-options" className={styles['screening-question-form-options']}>
+        <li onClick={() => setSubtype('choice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('choice')}</li>
+        <li onClick={() => setSubtype('multichoice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('multichoice')}</li>
+        <li onClick={() => setSubtype('range')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('range')}</li>
+        <li onClick={() => setSubtype('text')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('text')}</li>
       </ul> :
       null
     }
@@ -113,9 +119,9 @@ const ScreeningQuestionForm = ({ className, question }) => {
         className={styles['screening-question-form-subform']}
         onValues={handleQuestion}
         values={question || {}}
-        onCancel={() => !question && setType(null)}
+        onCancel={() => !question && setSubtype(null)}
         loading={loading}
-        type={type}
+        multichoice={subtype == 'multichoice'}
         /> :
       null
     }

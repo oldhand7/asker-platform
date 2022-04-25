@@ -5,7 +5,7 @@ import styles from './Alert.module.scss';
 const Alert = ({ type = 'danger' , children, className, close = true }) => {
   const [open, setOpen] = useState(true);
 
-  return open ? <div className={classNames(styles['alert'], className, styles[`alert-${type}`])}>
+  return open ? <div data-test-id={`alert-${type}`} className={classNames(styles['alert'], className, styles[`alert-${type}`])}>
     <div className={styles['alert-message']}>{children}</div>
 
     {

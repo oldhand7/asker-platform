@@ -28,10 +28,10 @@ const messages = {
 
 }
 
-const CriteriaOptionForm = ({ className, onValues, criteria }) => {
+const CriteriaOptionForm = ({ className, onValues, type }) => {
   const [values, errors, control] = useForm({ values: {
     ...defaultValues,
-    type: criteria.id
+    type: type.id
   }, rules, messages })
   const [config, t] = useSite()
   const [loading, setLoading] = useState(false);
@@ -60,7 +60,7 @@ const CriteriaOptionForm = ({ className, onValues, criteria }) => {
   }, [error])
 
   return <form data-test-id="criteria-option-form" method="POST" noValidate className={classNames(styles['criteria-option-form'], className)} onSubmit={control.submit(handleSubmit)}>
-    <h2 className={styles['criteria-option-form-title']}>{criteria.name} option</h2>
+    <h2 className={styles['criteria-option-form-title']}>{type.name} option</h2>
     {error ? <Alert type="error">{error.message}</Alert> : null}
     <TextInputField value={values.name} placeholder={t('Name')} error={errors ? t(errors.name) : null} onChange={control.input('name')} autoComplete='off' name="name" className={styles['criteria-option-form-field']} />
     <TextareaInputField value={values.desc} placeholder={t('Definition (optional)')} error={errors ? t(errors.desc) : null} onChange={control.input('desc')} name="desc" className={styles['criteria-option-form-field']} />

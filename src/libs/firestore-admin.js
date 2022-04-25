@@ -108,3 +108,19 @@ export const getSingleDocument = (col, filter = []) => {
 
   return query.get().then(snap2data).then(res => res[0])
 }
+
+export const getManyFromCollection = col => {
+  let query = db.collection(col)
+
+  return query.get().then(snap2data)
+}
+
+export const saveCollectionDocument = (col, doc) => {
+  let query = db.collection(col)
+
+  if (doc.id) {
+    return query.doc(doc.id).update(doc)
+  } else {
+    return query.add(doc)
+  }
+}

@@ -11,19 +11,19 @@ import TrashButton from 'components/TrashButton/TrashButton';
 
 import styles from './CriteriaOptionInputField.module.scss';
 
-const CriteriaOptionInputField = ({ error, className, value, onChange, criteria }) => {
+const CriteriaOptionInputField = ({ error, className, value, onChange, type }) => {
   const [criteriaOptions, setCriteriaOptions] = useState([]);
-  const openCriteriaOptionModal = useModal(CriteriaOptionModal, { criteria })
+  const openCriteriaOptionModal = useModal(CriteriaOptionModal, { type })
   const { user } = useUser();
 
   useEffect(() => {
     const filter = [
       ['companyId', '==', user.companyId],
-      ['type', '==', criteria.id]
+      ['type', '==', type.id]
     ]
 
     getManyFromCollection('criteriaOptions', filter).then(setCriteriaOptions)
-  }, [criteria, user, value])
+  }, [type, user, value])
 
   const handleCriteriaOption = option => {
     if (!option) {
@@ -33,8 +33,8 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, criteria 
     onChange({
       id: option.id,
       name: option.name,
-      desc: option.desc,
-      type: criteria.id
+      desc: option.desc || '',
+      type: type.id
     })
   }
 
@@ -43,7 +43,7 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, criteria 
   }
 
   return <div data-test-id="criteria-option-input-field" className={classNames(styles['criteria-option-input-field'], className)}>
-    <span className={styles['criteria-option-input-field-label']}>{criteria.name}:</span>
+    <span className={styles['criteria-option-input-field-label']}>{type.name}:</span>
 
     {
       !value ?

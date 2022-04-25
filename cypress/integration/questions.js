@@ -23,7 +23,7 @@ describe('Questions', () => {
           .click()
       })
 
-    cy.get('[data-test-id="criteria-filter"]')
+    cy.get('[data-test-id="question-filter"]')
       .children()
       .should('have.length', 7)
       .parent()
@@ -79,7 +79,7 @@ describe('Questions', () => {
 
     cy.title().should('include', 'Create a new competency based question')
 
-    cy.get('form[data-test-id="question-form"]')
+    cy.get('form[data-test-id="evaluation-question-form"]')
       .should('contain', 'Create a new competency based question')
       .within(() => {
         cy.get('input[name="name"]').first().type('Sample question')

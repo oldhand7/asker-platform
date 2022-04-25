@@ -16,27 +16,21 @@ const rules =  {
   answers: 'required|min:1'
 }
 
-const ChoiceQuestionForm = ({ values, className, onValues, onCancel, loading, type }) => {
+const ChoiceQuestionForm = ({ values, className, onValues, onCancel, loading, multichoice = false }) => {
   const [formValues, errors, control] = useForm({
     values,
     rules
   })
 
   const toggleQuestionType = () => {
-    if (formValues.type == 'multichoice') {
-      control.set('type', 'choice')
-    } else {
-      control.set('type', 'multichoice')
-    }
+    control.set('multichoice', !formValues.multichoice)
   }
 
   useEffect(() => {
-    if (!formValues.type && type) {
-      control.set('type', type)
-    }
-  }, [formValues, type])
+    control.set('multichoice', multichoice)
+  }, [multichoice])
 
-  return <form onSubmit={control.submit(onValues)} className={classNames(styles['choice-question-form'], className)}>
+  return <form data-test-id="choice-question-form" onSubmit={control.submit(onValues)} className={classNames(styles['choice-question-form'], className)}>
     <TextInputField error={errors && errors.name} className={styles['choice-question-form-field']} onChange={control.input('name')} value={formValues.name} label="Title" name='name' placeholder="ex: do you have a driver’s licence?" />
     <TextareaInputField error={errors && errors.desc} className={styles['choice-question-form-field']} onChange={control.input('desc')} value={formValues.desc} label="Description" name='desc' placeholder="Description" />
 
@@ -45,7 +39,7 @@ const ChoiceQuestionForm = ({ values, className, onValues, onCancel, loading, ty
       {errors && errors.answers ? <p className="form-error">{errors.answers}</p> : null}
     </div>
 
-    <CheckboxInputField className={styles['choice-question-form-field']} value={formValues.type == 'multichoice'} label="Allow multiple answers?" name="multichoice" onChange={toggleQuestionType}  />
+    <CheckboxInputField className={styles['choice-question-form-field']} value={formValues.multichoice} label="Allow multiple answers?" name="multichoice" onChange={toggleQuestionType}  />
 
     <div className={styles['choice-question-form-buttons']}>
     {

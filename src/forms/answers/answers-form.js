@@ -50,7 +50,7 @@ const AnswersForm = ({ values = [], className, onValues, title = '' }) => {
     if (liEl && liEl.nextSibling) {
       const inputEl = liEl.nextSibling.querySelector('input')
 
-      inputEl.select()
+      inputEl.focus()
     }
 
     if (liEl && !liEl.nextSibling) {
@@ -65,6 +65,10 @@ const AnswersForm = ({ values = [], className, onValues, title = '' }) => {
   }
 
   const handleAnswerDelete = (index) => {
+    if (!confirm('Are you sure?')) {
+      return;
+    }
+
     if ((values || []).length == 2) {
         handleAnswerChange(index, '')
 
@@ -77,12 +81,12 @@ const AnswersForm = ({ values = [], className, onValues, title = '' }) => {
     ])
   }
 
-  return <div className={classNames(styles['answers-form'], className)}>
+  return <div data-test-id="answers-form" className={classNames(styles['answers-form'], className)}>
     <h3>{title ? title : 'Answers'}</h3>
 
     <ul className={styles['answers-form-list']}>
       {(values || []).map((answer, index) => (<li key={index} className={styles['answers-form-list-item']}>
-        <TextInputField value={answer} onEnter={handleFocusNext} className={styles['answers-form-list-item-input']} name="answer" autoComplete="off" onChange={(ev) => handleAnswerChange(index, ev.target.value)} placeholder={`Answer ${index + 1}`} />
+        <TextInputField value={answer} onEnter={handleFocusNext} className={styles['answers-form-list-item-input']} name="answers[]" autoComplete="off" onChange={(ev) => handleAnswerChange(index, ev.target.value)} placeholder={`Answer ${index + 1}`} />
         <TrashButton type="button" onClick={() => handleAnswerDelete(index)} className={styles['answers-form-list-item-button']} />
       </li>))}
     </ul>
