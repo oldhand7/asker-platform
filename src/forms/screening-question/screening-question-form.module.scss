@@ -1,0 +1,42 @@
+@import 'styles/vars';
+
+.screening-question-form {
+  position: relative;
+
+  &-title {
+    margin-bottom: 30rem;
+  }
+
+  &-subform {
+    max-width: 768rem;
+  }
+
+  &-options {
+    padding: 0;
+    list-style: none;
+    background: white;
+    padding: 20rem;
+    border-radius: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 500rem;
+    box-sizing: border-box;
+
+    &-option {
+      flex: 1 1 calc(50% - 20rem);
+      margin: 10rem;
+      white-space: nowrap;
+      text-align: center;
+      color: $brandish-dark-green;
+      border: 1px solid $brandish-dark-green;
+      border-radius: 10px;
+      font-size: 14rem;
+      line-height: 3em;
+      cursor: pointer;
+
+      &:hover {
+        background: rgba($brandish-dark-green, 0.1);
+      }
+    }
+  }
+}

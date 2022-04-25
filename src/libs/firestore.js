@@ -1,6 +1,6 @@
 import { getApp, getUser } from 'libs/firebase';
 import { getFirestore, collection, query, where, getDocs, setDoc, doc, Timestamp,
-orderBy, limit } from 'firebase/firestore';
+orderBy, limit, deleteDoc } from 'firebase/firestore';
 import { snap2data } from 'libs/helper';
 
 
@@ -98,4 +98,9 @@ export const saveCollectionDocument = (col, values = {})  => {
 
       return d.id;
     })
+}
+
+export const deleteSingle = (col, id) => {
+  const db = getFirestore(getApp());
+  return deleteDoc(doc(db, col, id));
 }

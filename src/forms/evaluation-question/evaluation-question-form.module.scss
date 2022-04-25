@@ -1,21 +1,21 @@
 .evaluation-question-form {
+  &-wrapper {
+    max-width: 520px;
+  }
 
 
-  &-questions {
+  &-title {
+    font-size: 24rem;
+    line-height: 36rem;
+    font-weight: 500;
+    margin-bottom: 5rem;
+  }
 
-    &-list {
+  &-input-field {
+    margin: 20rem 0;
+  }
 
-      &-item {
-        display: flex;
-
-        &-name {
-          flex: 1;
-        }
-
-        &-remove {
-          flex: 0;
-        }
-      }
-    }
+  &-submit {
+    cursor: pointer;
   }
 }

@@ -1,0 +1,15 @@
+.answers-form {
+  &-list {
+    padding: 0;
+    list-style: none;
+
+    &-item {
+      display: flex;
+      margin-bottom: 10rem;
+
+      &-input {
+        margin-right: 10rem;
+      }
+    }
+  }
+}

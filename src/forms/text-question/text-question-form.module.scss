@@ -1,0 +1,14 @@
+.text-question-form {
+  &-field {
+    margin-bottom: 20rem;
+  }
+
+  &-buttons {
+    margin-top: 30rem;
+
+    &-button {
+      margin-right: 5rem;
+      cursor: pointer;
+    }
+  }
+}

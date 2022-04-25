@@ -17,7 +17,7 @@ const Menu = ({ className, onClick, items = [] }) => {
 
   return <ul className={classNames(styles['menu'], className)}>
     {items.map((menuItem, index) => {
-      return <li onClick={onClick} key={menuItem.id} className={classNames(styles['menu-item'], router.asPath == menuItem.href ? styles['active'] : '')}>
+      return <li onClick={onClick} key={menuItem.id} className={classNames(styles['menu-item'], router.asPath.indexOf(menuItem.href) == 0 ? styles['active'] : '')}>
             <Link href={menuItem.href}><a className={styles['menu-link']}>{menuItem.title}</a></Link>
           </li>
     })}

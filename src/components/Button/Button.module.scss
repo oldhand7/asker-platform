@@ -127,4 +127,14 @@
     background: $brandish-dark-green;
     border-radius: 5px;
   }
+
+  &-text {
+    color: currentColor;
+    background: 0;
+
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
