@@ -16,24 +16,39 @@ import styles from './QuestionsTable.module.scss';
 const getColumns = ({ handleCompactMenuChoice }) => ([
   {
     title: 'Type of question',
-    dataIndex: 'criteria',
-    key: 'criteria',
-    render: (criteria, row) => {
-      const ct = criteriaTypes.find(c => c.id == criteria.type)
+    key: 'type',
+    render: (_, row) => {
 
-      if (!ct) {
-        return <NODATA />
+      if (row.criteria) {
+        const ct = criteriaTypes.find(c => c.id == row.criteria.type)
+
+        if (!ct) {
+          return <NODATA />
+        }
+
+        return <span className={classNames(styles['questions-table-criteria'], styles[`questions-table-criteria-${row.companyId}`])}>{ct.name}</span>
       }
 
-      return <span className={classNames(styles['questions-table-criteria'], styles[`questions-table-criteria-${row.companyId}`])}>{ct.name}</span>
+      if (!row.criteria && row.type != 'other') {
+        return <span className={classNames(styles['questions-table-criteria'], styles[`questions-table-criteria-${row.companyId}`])}>
+          Screening
+        </span>
+      }
+
+      if (!row.criteria && row.type == 'other') {
+        return <span className={classNames(styles['questions-table-criteria'], styles[`questions-table-criteria-${row.companyId}`])}>
+          Other
+        </span>
+      }
+
+      return <NODATA />
     }
   },
   {
     title: 'Criterion',
-    dataIndex: 'criteria',
     key: 'criteria',
-    render: (criteria) => {
-      return criteria.name;
+    render: (_, { criteria }) => {
+      return criteria ? criteria.name : <NODATA />
     }
   },
   {

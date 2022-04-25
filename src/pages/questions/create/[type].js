@@ -2,8 +2,10 @@ import { criteriaTypes } from 'libs/criteria';
 import { withUserGuardSsr } from 'libs/iron-session';
 import { getSettings } from 'libs/firestore-admin';
 import { useRouter } from 'next/router';
-import QuestionForm from 'forms/question/question-form';
 import Head from 'next/head'
+import ScreeningQuestionForm from 'forms/screening-question/screening-question-form';
+import OtherQuestionForm from 'forms/other-question/other-question-form';
+import EvaluationQuestionForm from 'forms/question/question-form';
 
 import styles from 'styles/pages/question-create.module.scss';
 
@@ -14,7 +16,10 @@ const QuestionCreatePage = ({ criteria }) => {
     <Head>
       <title>Create a new {(criteria.altName || criteria.name).toLowerCase()} question  - Asker</title>
     </Head>
-    <QuestionForm className={styles['question-create-page-form']} criteria={criteria} />
+
+    { criteria.id == 'screening' ? <ScreeningQuestionForm className={styles['question-create-page-form']} /> : null}
+    { criteria.id == 'other' ? <OtherQuestionForm className={styles['question-create-page-form']} /> : null}
+    { criteria.id == 'evaluation' ? <EvaluationQuestionForm className={styles['question-create-page-form']} criteria={criteria} /> : null}
   </div>
 }
 

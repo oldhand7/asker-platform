@@ -1,0 +1,14 @@
+.iconic-label {
+  display: inline-block;;
+
+  &-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5rem;
+  }
+
+  &-text {
+    vertical-align: middle;
+    display: inline-block;
+  }
+}
