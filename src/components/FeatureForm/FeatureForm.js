@@ -10,7 +10,8 @@ const featureForms = {
   'experience-questions': dynamic(() => import('forms/evaluation-question1/evaluation-question-form')),
   'hard-skill-questions': dynamic(() => import('forms/evaluation-question1/evaluation-question-form')),
   'culture-fit-questions': dynamic(() => import('forms/evaluation-question1/evaluation-question-form')),
-  'salary': dynamic(() => import('forms/salary/salary-form'))
+  'salary': dynamic(() => import('forms/salary/salary-form')),
+  'candidate-questions': dynamic(() => import('forms/candidate-questions/candidate-questions-form'))
 }
 
 const FeatureForm = (props) => {
