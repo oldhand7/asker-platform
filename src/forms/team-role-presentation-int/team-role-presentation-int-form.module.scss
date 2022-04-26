@@ -1,0 +1,28 @@
+.team-role-presentation-int-form {
+  &-title {
+    font-weight: 500;
+    font-size: 24rem;
+    line-height: 36rem;
+  }
+
+  &-slideshow {
+    margin: 15rem 0;
+  }
+
+  &-docs {
+    &-title {
+      font-weight: 500;
+      font-size: 16rem;
+      line-height: 36rem;
+    }
+
+    &-list {
+
+      &-file {}
+
+      &-file-link {
+        text-decoration: underline;
+      }
+    }
+  }
+}
