@@ -9,7 +9,8 @@ const stageForms = {
   'experience-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form')),
   'motivation-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form')),
   'hard-skill-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form')),
-  'culture-fit-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form'))
+  'culture-fit-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form')),
+  'salary': dynamic(() => import('forms/salary-int/salary-int-form'))
 }
 
 const StageInterviewForm = (props) => {
@@ -26,7 +27,7 @@ const StageInterviewForm = (props) => {
   }, [props])
 
   return FormComponent ? <div data-test-id="feature-form">
-    <FormComponent {...formComponentProps} />
+    <FormComponent config={props.project.config[props.stage.id]} {...formComponentProps} />
   </div> : null;
 }
 
