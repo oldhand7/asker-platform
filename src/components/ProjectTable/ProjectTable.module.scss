@@ -22,6 +22,7 @@
         font-weight: 500;
         line-height: 64rem;
         padding: 0 20rem 0 40rem;
+        white-space: nowrap;
       }
     }
 
@@ -29,7 +30,6 @@
       margin-bottom: 20rem;
       background: white;
       border-radius: 5px;
-      cursor: pointer;
       transition: transform 0.250s 0s;
 
       &:hover {

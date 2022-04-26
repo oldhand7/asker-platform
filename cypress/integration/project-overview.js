@@ -39,7 +39,9 @@ describe('Project overview', () => {
 
     cy.get('table tbody tr')
       .last()
-      .click()
+      .find('td').last()
+      .find('button').click().parent()
+      .contains('Edit').click()
 
     cy.get('h1').should('contain', 'Philips Demo Project')
 
@@ -84,17 +86,12 @@ describe('Project overview', () => {
 
     cy.get('table tbody tr')
       .last()
-      .click()
+      .find('td').last()
+      .find('button').click().parent()
+      .contains('Edit').click()
 
-    cy.contains('Add candidate')
-      .click()
-
-    cy.get('[data-test-id="candidate-form"]').within(() => {
-      cy.get('input[name="name"]').type("Dread Roberts")
-      cy.get('input[name="email"]').type("dread.roberts@gmail.com")
-      cy.get('button[type="submit"]').click()
-    })
-    .wait(2000)
+    cy.addProjectCandidate('Dread Roberts', 'dread.roberts@gmail.com')
+      .wait(2000)
 
     cy.get('table tbody')
       .within(() => {

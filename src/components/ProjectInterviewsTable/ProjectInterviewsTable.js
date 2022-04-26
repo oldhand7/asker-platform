@@ -8,10 +8,12 @@ import InterviewScore from 'components/InterviewScore/InterviewScore';
 import PlatformButton from 'components/Button/PlatformButton';
 import PlayIcon from 'components/Icon/PlayIcon';
 import EvaluationScore from 'components/EvaluationScore/EvaluationScore';
+import FilterIcon from 'components/Icon/FilterIcon';
+import CompactMenu from 'components/CompactMenu/CompactMenu';
 
 import styles from './ProjectInterviewsTable.module.scss';
 
-const columns = [
+const getColumns = ({ handleCompactMenuChoice }) => ([
   {
     title: 'Name',
     dataIndex: 'name',
@@ -65,28 +67,30 @@ const columns = [
           {evas.reverse().slice(0, 3).map((e, index) => <EvaluationScore key={index} evaluation={e} className={styles['project-interviews-table-evaluations-evaluation']} />)}
       </div>
     }
+  },
+  {
+    title: <FilterIcon />,
+    render: (_, row) => <CompactMenu options={[
+      typeof row.score === 'undefined' ?
+      { id: 'start', name: 'Start interview' } :
+      { id: 'edit', name: 'Edit response' }
+    ]} onChoice={c => handleCompactMenuChoice(c, row)} />
   }
-];
+]);
 
 const ProjectInterviewsTable = ({ className, data = [], ...props }) => {
   const router = useRouter()
 
-  const rowHandler = record => {
-    if (typeof record.score === "undefined") {
-      return;
-    }
-
-    return {
-      onClick: () => {
-        router.push(`/interviews/${record.id}/conduct/`)
-      }
+  const handleCompactMenuChoice = (c, rec) => {
+    if (c.id == 'edit' || c.id == 'start') {
+      router.push(`/interviews/${rec.id}/conduct/`)
     }
   }
 
-  return <Table onRow={rowHandler} rowKey={row => row.id} className={classNames(
+  return <Table rowKey={row => row.id} className={classNames(
     styles['project-interviews-table'],
     className
-  )} columns={columns} data={data} {...props} />
+  )} columns={getColumns({ handleCompactMenuChoice })} data={data} {...props} />
 }
 
 export default ProjectInterviewsTable;

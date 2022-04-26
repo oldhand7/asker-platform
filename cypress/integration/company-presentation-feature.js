@@ -11,8 +11,11 @@ describe('Company presentation feature', () => {
 
     cy.createDummyProject('Sales manager').wait(2000)
 
-    cy.get('table tbody tr').first().click()
-    cy.contains('Edit', { matchCase: false }).click()
+    cy.get('table tbody tr')
+      .first()
+      .find('td').last()
+      .find('button').click().parent()
+      .contains('Edit').click()
 
     cy.get('[data-test-id="feature-company-presentation"]').drag('[data-test-id="stage-2"] .Droppable')
 

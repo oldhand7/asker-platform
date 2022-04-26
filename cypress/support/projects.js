@@ -13,3 +13,14 @@ Cypress.Commands.add('createDummyProject', (name = 'Demo ABC') => {
     cy.get('button').contains('Create project').click()
   })
 })
+
+Cypress.Commands.add('addProjectCandidate', (name, email) => {
+  cy.contains('Add candidate')
+    .click()
+
+  cy.get('[data-test-id="candidate-form"]').within(() => {
+    cy.get('input[name="name"]').type(name)
+    cy.get('input[name="email"]').type(email)
+    cy.get('button[type="submit"]').click()
+  })
+})

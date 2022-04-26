@@ -4,10 +4,12 @@ import Stager from 'components/Stager/Stager';
 import ProjectTableStatCell from 'components/ProjectTableStatCell/ProjectTableStatCell';
 import { useRouter } from 'next/router';
 import NODATA from 'components/NODATA/NODATA';
+import FilterIcon from 'components/Icon/FilterIcon';
+import CompactMenu from 'components/CompactMenu/CompactMenu';
 
 import styles from './ProjectTable.module.scss';
 
-const columns = [
+const getColumns = ({ handleCompactMenuChoice }) => ([
   {
     title: 'Project name',
     dataIndex: 'name',
@@ -42,26 +44,35 @@ const columns = [
     render: (candidates, project) => {
       return <ProjectTableStatCell project={project} />
     }
+  },
+  {
+    title: <FilterIcon />,
+    render: (_, row) => <CompactMenu options={[
+      { id: 'overview', name: 'Interviews' },
+      { id: 'edit', name: 'Edit' }
+    ]} onChoice={c => handleCompactMenuChoice(c, row)} />
   }
-];
+]);
 
 import demoProjects from 'data/demo/projects.json';
 
 const ProjectTable = ({ className, data = demoProjects, ...props }) => {
   const router = useRouter()
 
-  const rowHandler = record => {
-    return {
-      onClick: () => {
-        router.push(`/projects/${record.id}/overview/`)
-      }
+  const handleCompactMenuChoice = (c, row) => {
+    if (c.id == 'edit') {
+      router.push(`/projects/${row.id}/edit/`)
+    }
+
+    if (c.id == 'overview') {
+      router.push(`/projects/${row.id}/overview/`)
     }
   }
 
-  return <Table onRow={rowHandler} rowKey={row => row.id} className={classNames(
+  return <Table rowKey={row => row.id} className={classNames(
     styles['project-table'],
     className
-  )} columns={columns} data={data} {...props} />
+  )} columns={getColumns({ handleCompactMenuChoice })} data={data} {...props} />
 }
 
 export default ProjectTable;
