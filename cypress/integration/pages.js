@@ -1,6 +1,6 @@
 describe('Pages', () => {
   beforeEach(() => {
-    cy.login('joe.doe@example.com', 'test123', 2000)
+    cy.login('joe.doe@example.com', 'test123', 'pages')
   })
 
   it('has Project List accessable', () => {

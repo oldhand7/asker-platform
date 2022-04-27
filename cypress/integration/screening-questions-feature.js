@@ -1,7 +1,6 @@
 describe('Screening question feature', () => {
   beforeEach(() => {
-    //@NOTE: this could conflict
-    cy.login('jane.philips@example.com', 'test123')
+    cy.login('jane.philips@example.com', 'test123', 'screening-questions-feature')
   })
 
   it('allows creating choice/multichoice questions', () => {

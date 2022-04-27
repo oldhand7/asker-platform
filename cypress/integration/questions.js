@@ -1,6 +1,6 @@
 describe('Questions', () => {
   beforeEach(() => {
-    cy.login('joe.doe@example.com', 'test123')
+    cy.login('joe.doe@example.com', 'test123', 'questions')
   })
 
   it('listing page should have questions table and filtering', () => {

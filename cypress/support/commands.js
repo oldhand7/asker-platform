@@ -1,9 +1,10 @@
 require('@4tw/cypress-drag-drop')
 require('cypress-file-upload')
 require('./projects')
+require('./navigation')
 
-Cypress.Commands.add('login', (username, password, delay = 1000) => {
-  cy.session([username, password], () => {
+Cypress.Commands.add('login', (username, password, key = '') => {
+  cy.session([username, password, key], () => {
     cy.visit('/login/')
 
     cy.get('form[data-test-id="login-form"]').within(() => {

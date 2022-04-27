@@ -1,6 +1,6 @@
 describe('Salary feature', () => {
   beforeEach(() => {
-    cy.login('joe.smith@example.com', 'test123')
+    cy.login('joe.smith@example.com', 'test123', 'salary-feature')
   })
 
   it('should create a project with salary feature and allow selection of min/max salary values during interview', () => {

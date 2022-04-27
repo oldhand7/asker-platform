@@ -1,0 +1,11 @@
+@import 'styles/vars';
+
+.company-presentation-stage-form {
+  &-field {
+    margin: 20rem 0;
+  }
+
+  &-warning {
+    color: $brandish-grey;
+  }
+}

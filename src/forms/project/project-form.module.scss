@@ -29,7 +29,11 @@
   }
 
   &-details-inner {
-    max-width: 500px;
+    max-width: 600rem;
+
+    @media (max-width: 1024px) {
+      max-width: 100%;
+    }
   }
 
   &-title {

@@ -1,0 +1,20 @@
+@import 'styles/vars';
+
+.other-questions-int-form {
+  display: flex;
+  flex-wrap: wrap;
+
+  &-question {
+    flex: 0 1 33.33333%;
+    margin-bottom: 25rem;
+    padding-right: 20rem;
+    box-sizing: border-box;
+
+    &-title {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 30px;
+      color: $brandish-grey;
+    }
+  }
+}

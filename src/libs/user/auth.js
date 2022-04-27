@@ -1,6 +1,7 @@
 import { getApp } from 'libs/firebase';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
-updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider, browserLocalPersistence,
+setPersistence } from "firebase/auth";
 import { useState, useEffect, useLayoutEffect } from 'react';
 import { saveCollectionDocument } from 'libs/firestore';
 import { createPairSession, logoutUser } from 'libs/api';
@@ -76,17 +77,20 @@ export const useAuth = () => {
 
     const auth = getAuth(getApp());
 
-    return signInWithEmailAndPassword(auth, email, password)
-      .then(async ({ user }) => {
-        try {
-          const idToken = await user.getIdToken()
-          const metauser = await createPairSession(user.uid, idToken)
-          setLocalMetauser(metauser)
-          userBoot(user);
-          setWait(false);
-        } catch (error) {
-          throw new Error("Pair session failed.")
-        }
+    return setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        return signInWithEmailAndPassword(auth, email, password)
+        .then(async ({ user }) => {
+          try {
+            const idToken = await user.getIdToken()
+            const metauser = await createPairSession(user.uid, idToken)
+            setLocalMetauser(metauser)
+            userBoot(user);
+            setWait(false);
+          } catch (error) {
+            throw new Error("Pair session failed.")
+          }
+        })
       })
       .catch(error => {
         throw new ctxError('Email or password invalid.', error)

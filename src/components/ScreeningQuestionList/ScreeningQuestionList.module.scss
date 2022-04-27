@@ -1,0 +1,36 @@
+@import 'styles/vars';
+
+.screening-question-list {
+  &-title {
+    margin-bottom: 20rem;
+  }
+
+  &-questions {
+    padding: 0;
+    list-style: 0;
+    margin: 0;
+    font-size: 14rem;
+
+    &-question {
+      display: flex;
+      line-height: 2em;
+      padding: 0 20rem;
+      background: rgba($brandish-grey, 0.15);
+      border-radius: 12px;
+      margin-bottom: 6rem;
+
+      &-name {
+        flex: 1 1 50%;
+      }
+
+      &-control {
+        flex: 1 1 50rem;
+        text-align: right;
+      }
+    }
+  }
+
+  &-warning {
+    color: $brandish-grey;
+  }
+}

@@ -1,0 +1,20 @@
+.other-question-stage-form {
+
+  &-questions {
+
+    &-list {
+
+      &-item {
+        display: flex;
+
+        &-name {
+          flex: 1;
+        }
+
+        &-remove {
+          flex: 0;
+        }
+      }
+    }
+  }
+}

@@ -27,8 +27,10 @@ const ChoiceQuestionForm = ({ values, className, onValues, onCancel, loading, mu
   }
 
   useEffect(() => {
-    control.set('multichoice', multichoice)
-  }, [multichoice])
+    if (typeof formValues.multichoice === 'undefined') {
+      control.set('multichoice', multichoice)
+    }
+  }, [formValues, multichoice])
 
   return <form data-test-id="choice-question-form" onSubmit={control.submit(onValues)} className={classNames(styles['choice-question-form'], className)}>
     <TextInputField error={errors && errors.name} className={styles['choice-question-form-field']} onChange={control.input('name')} value={formValues.name} label="Title" name='name' placeholder="ex: do you have a driver’s licence?" />
@@ -39,7 +41,7 @@ const ChoiceQuestionForm = ({ values, className, onValues, onCancel, loading, mu
       {errors && errors.answers ? <p className="form-error">{errors.answers}</p> : null}
     </div>
 
-    <CheckboxInputField className={styles['choice-question-form-field']} value={formValues.multichoice} label="Allow multiple answers?" name="multichoice" onChange={toggleQuestionType}  />
+    <CheckboxInputField className={styles['choice-question-form-field']} checked={formValues.multichoice} label="Allow multiple answers?" name="multichoice" onChange={toggleQuestionType}  />
 
     <div className={styles['choice-question-form-buttons']}>
     {

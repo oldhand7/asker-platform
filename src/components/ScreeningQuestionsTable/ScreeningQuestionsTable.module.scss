@@ -1,0 +1,31 @@
+@import 'styles/vars';
+
+.screening-questions-table {
+  table {
+      width: 100% ;
+      border-spacing:0px;
+      border-collapse:separate;
+      text-align: left;
+  }
+
+  thead th {
+    font-size: 12rem;
+    color: $brandish-grey;
+    font-weight: 500;
+  }
+
+  tbody tr[data-company-id] td:first-child {
+    color: $brandish-grape;
+    font-weight: 500;
+  }
+
+  tbody tr[data-company-id="asker"] td:first-child {
+    color: $brandish-green;
+  }
+
+  &-add {
+    border: 0;
+    background: 0;
+    cursor: pointer;
+  }
+}

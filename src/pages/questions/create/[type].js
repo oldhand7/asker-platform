@@ -4,7 +4,6 @@ import { getSettings } from 'libs/firestore-admin';
 import { useRouter } from 'next/router';
 import Head from 'next/head'
 import ScreeningQuestionForm from 'forms/screening-question/screening-question-form';
-import OtherQuestionForm from 'forms/other-question/other-question-form';
 import EvaluationQuestionForm from 'forms/evaluation-question/evaluation-question-form';
 
 import styles from 'styles/pages/question-create.module.scss';
@@ -18,7 +17,7 @@ const QuestionCreatePage = ({ questionType, questionSubtype }) => {
     </Head>
 
     { questionType.id == 'screening' ? <ScreeningQuestionForm className={styles['question-create-page-form']} /> : null}
-    { questionType.id == 'other' ? <OtherQuestionForm className={styles['question-create-page-form']} /> : null}
+    { questionType.id == 'other' ? <ScreeningQuestionForm type='other' className={styles['question-create-page-form']} /> : null}
     { questionType.id == 'evaluation' ? <EvaluationQuestionForm className={styles['question-create-page-form']} subtype={questionSubtype || questionType.subtypes[0]} /> : null}
   </div>
 }
