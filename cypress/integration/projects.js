@@ -1,6 +1,6 @@
 describe('Projects', () => {
   beforeEach(() => {
-    cy.login('joe.doe@example.com', 'test123')
+    cy.login('joe.doe@example.com', 'test123', 'projects')
   })
 
   it('should show a no projects message', () => {

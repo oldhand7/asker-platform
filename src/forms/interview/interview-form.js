@@ -25,6 +25,7 @@ const InterviewForm = ({ className, interview, project }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const router = useRouter();
+  const [stages, setStages] = useState([]);
 
   const handleSubmit = (values) => {
     setLoading(true);
@@ -71,6 +72,10 @@ const InterviewForm = ({ className, interview, project }) => {
     setLoading(false);
   }, [error])
 
+  useEffect(() => {
+    setStages(project.stages.filter(s => s))
+  }, [project])
+
   return <form className={classNames(styles['interview-form'], className)} onSubmit={control.submit(handleSubmit)}>
     <h2 className={styles['interview-form-title']}>Interview with</h2>
 
@@ -79,20 +84,20 @@ const InterviewForm = ({ className, interview, project }) => {
     {error ? <Alert type="error">{error.message}</Alert> : null}
 
     <div className={styles['interview-form-stages']}>
-      {project.stages.map((stage, index) => (
-        stage && <StageInterviewForm
+      {stages.map((stage, index) => (
+        <StageInterviewForm
           onValues={control.input(stage.id, false)}
           values={values[stage.id]}
           className={styles['interview-form-stage']}
           key={stage.id}
           stage={stage}
           index={index}
+          last={index == stages.length - 1}
           project={project} />
       ))}
     </div>
-
     <p style={{textAlign: 'center'}}>
-      <BrandishButton className={styles['interview-form-submit']}>{!loading ? 'Complete Interview' : 'Loading...'}</BrandishButton>
+      <BrandishButton className={styles['interview-form-submit']}>{!loading ? 'Complete interview' : 'Loading...'}</BrandishButton>
     </p>
 
     {loading ? <Preloader /> : null}

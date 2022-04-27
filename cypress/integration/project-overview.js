@@ -1,6 +1,6 @@
 describe('Project overview', () => {
   beforeEach(() => {
-    cy.login('joe.philips@example.com', 'test123')
+    cy.login('joe.philips@example.com', 'test123', 'project-overview')
   })
 
   it('cliking on project list project redirects to verview page', () => {
@@ -18,7 +18,12 @@ describe('Project overview', () => {
           .should('contain', '1 Awaiting')
           .should('contain', '1 Completed')
       })
-      .click()
+
+    cy.get('table tbody tr')
+      .last()
+      .find('td').last()
+      .find('button').click().parent()
+      .contains('Interviews').click()
 
     cy.title().should('include', 'Philips Demo Project')
     cy.title().should('include', 'Project overview')
@@ -41,7 +46,7 @@ describe('Project overview', () => {
       .last()
       .find('td').last()
       .find('button').click().parent()
-      .contains('Edit').click()
+      .contains('Interviews').click()
 
     cy.get('h1').should('contain', 'Philips Demo Project')
 
@@ -88,7 +93,7 @@ describe('Project overview', () => {
       .last()
       .find('td').last()
       .find('button').click().parent()
-      .contains('Edit').click()
+      .contains('Interviews').click()
 
     cy.addProjectCandidate('Dread Roberts', 'dread.roberts@gmail.com')
       .wait(2000)

@@ -37,7 +37,7 @@ export const getScreeningQuestionLabelBySubtype = (subtype) => {
 }
 
 
-const ScreeningQuestionForm = ({ className, question }) => {
+const ScreeningQuestionForm = ({ className, question, type = 'screening' }) => {
   const [subtype, setSubtype] = useState(null);
   const [FormComponent, setFormComponent] = useState(null)
   const [loading, setLoading] = useState(false);
@@ -46,13 +46,15 @@ const ScreeningQuestionForm = ({ className, question }) => {
   const { user } = useUser();
 
   const handleQuestion = (values) => {
-    values.type = 'screening';
+    values.type = type;
 
     //Returning type may differ
     const subT = values.id ? values.subtype : subtype;
 
     if (subT == 'choice' || subT == 'multichoice') {
       values.subtype = values.multichoice ? 'multichoice' : 'choice';
+    } else {
+      values.subtype = subT
     }
 
     setLoading(true)
@@ -93,16 +95,21 @@ const ScreeningQuestionForm = ({ className, question }) => {
     setLoading(false);
   }, [error])
 
-  return <div data-test-id="screening-question-form" className={classNames(styles['screening-question-form'], className)}>
+  return <div data-test-id={`${type}-question-form`} className={classNames(styles['screening-question-form'], className)}>
     {
       !question ?
-      <h1 className={styles['screening-question-form-title']}>Create a screening question {subtype ? <small>({getScreeningQuestionLabelBySubtype(subtype)})</small> : null}</h1> :
-      <h1 className={styles['screening-question-form-title']}>Edit screening question <small>({getScreeningQuestionLabelBySubtype(question.subtype)})</small></h1>
+      <h1 className={styles['screening-question-form-title']}>
+        {type == 'screening' ? 'Create a screening question' : 'Create other question'}
+        {subtype ? <small>({getScreeningQuestionLabelBySubtype(subtype)})</small> : null}</h1> :
+      <h1 className={styles['screening-question-form-title']}>
+        {type == 'screening' ? 'Edit screening question' : 'Edit other question'}
+        <small>({getScreeningQuestionLabelBySubtype(question.subtype)})</small>
+      </h1>
     }
 
     {
       !question && !subtype ?
-      <ul  data-test-id="screening-question-options" className={styles['screening-question-form-options']}>
+      <ul  data-test-id={`${type}-question-options`} className={styles['screening-question-form-options']}>
         <li onClick={() => setSubtype('choice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('choice')}</li>
         <li onClick={() => setSubtype('multichoice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('multichoice')}</li>
         <li onClick={() => setSubtype('range')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('range')}</li>

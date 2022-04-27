@@ -1,7 +1,6 @@
 describe('Company presentation feature', () => {
   beforeEach(() => {
-    //@NOTE: this could conflict
-    cy.login('jane.philips@example.com', 'test123')
+    cy.login('jane.philips@example.com', 'test123', 'company-presentation-feature')
   })
 
   it('protects against abusive file uploads and allows uploading of image and document files', () => {

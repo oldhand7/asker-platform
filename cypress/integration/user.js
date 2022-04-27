@@ -1,6 +1,6 @@
 describe('User Joe', () => {
   beforeEach(() => {
-    cy.login('joe.doe@example.com', 'test123', 2000)
+    cy.login('joe.doe@example.com', 'test123', 'user-joe')
   })
 
   it('should be identified as user that is logged in', () => {
@@ -61,18 +61,11 @@ describe('User Joe', () => {
 
     cy.get('[data-test-id=user-card]').contains('Joe')
   })
-
-  //This should be last, becouse cypress session caches username+password
-  it('should logout', () => {
-    cy.visit('/logout/')
-    cy.location('pathname').should('eq', '/login/')
-    cy.get('#navbar').should('contain', 'Login')
-  })
 })
 
 describe('User Jane', () => {
   beforeEach(() => {
-    cy.login('jane.doe@example.com', 'test123', 2000)
+    cy.login('jane.doe@example.com', 'test123', 'user-jane')
   })
 
   it('should be abble to change password', () => {

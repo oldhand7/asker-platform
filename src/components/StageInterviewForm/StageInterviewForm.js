@@ -11,7 +11,10 @@ const stageForms = {
   'hard-skill-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form')),
   'culture-fit-questions': dynamic(() => import('forms/evaluation-questions-multiple/evaluation-questions-multiple-form')),
   'salary': dynamic(() => import('forms/salary-int/salary-int-form')),
-  'candidate-questions': dynamic(() => import('forms/candidate-questions-int/candidate-questions-int-form'))
+  'candidate-questions': dynamic(() => import('forms/candidate-questions-int/candidate-questions-int-form')),
+  'screening-questions': dynamic(() => import('forms/screening-questions-int/screening-questions-int-form')),
+  'other-questions': dynamic(() => import('forms/other-questions-int/other-questions-int-form')),
+  'summary': dynamic(() => import('forms/summary-int/summary-int-form'))
 }
 
 const StageInterviewForm = (props) => {

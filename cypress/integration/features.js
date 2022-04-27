@@ -1,6 +1,6 @@
 describe('Competency feature', () => {
   beforeEach(() => {
-    cy.login('jane.philips@example.com', 'test123')
+    cy.login('jane.philips@example.com', 'test123', 'features')
   })
 
   it('form should allow filtering and selecting competency questions', () => {

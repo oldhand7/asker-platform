@@ -1,6 +1,6 @@
 describe('User RA', () => {
   beforeEach(() => {
-    cy.login('admin@askertech.com', 'test123')
+    cy.login('admin@askertech.com', 'test123', 'user-ra')
   })
 
   it('superadmin creates user', () => {

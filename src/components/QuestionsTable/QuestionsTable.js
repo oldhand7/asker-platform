@@ -26,20 +26,19 @@ const getColumns = ({ handleCompactMenuChoice }) => ([
           return <NODATA />
         }
 
-        return <span className={classNames(styles['questions-table-criteria'], styles[`questions-table-criteria-${row.companyId}`])}>{ct.name}</span>
+        return ct.name
       }
 
       if (row.type == 'screening') {
-        return <span className={classNames(styles['questions-table-criteria'], styles[`questions-table-criteria-${row.companyId}`])}>
-          Screening<br/>
-          <small>{getScreeningQuestionLabelBySubtype(row.subtype)}</small>
-        </span>
+        const subtype = getScreeningQuestionLabelBySubtype(row.subtype);
+
+        return <>Screening<br/><small>{subtype}</small></>
       }
 
       if (row.type == 'other') {
-        return <span className={classNames(styles['questions-table-criteria'], styles[`questions-table-criteria-${row.companyId}`])}>
-          Other
-        </span>
+        const subtype = getScreeningQuestionLabelBySubtype(row.subtype);
+
+        return <>Other<br/><small>{subtype}</small></>
       }
 
       return <NODATA />
@@ -89,7 +88,13 @@ const QuestionsTable = ({ className, data = [], onDelete, ...props }) => {
     }
   }
 
-  return <Table rowKey={row => row.id} className={classNames(
+  const tagRow = (rec) => {
+    return {
+      'data-company-id': rec.companyId
+    }
+  }
+
+  return <Table onRow={tagRow} rowKey={row => row.id} className={classNames(
     styles['questions-table'],
     className
   )} columns={getColumns({ handleCompactMenuChoice })} data={data} {...props} />

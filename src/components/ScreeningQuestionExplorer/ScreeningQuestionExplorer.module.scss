@@ -1,0 +1,56 @@
+@import 'styles/vars';
+
+.screening-question-explorer {
+  &-title {
+
+  }
+
+  &-widget {
+    margin: 15rem 0;
+
+    &-header {
+      margin: 15rem 0;
+    }
+
+    &-body {
+      border-radius: 10px;
+      border: 1px solid $brandish-grey;
+      padding: 20rem;
+      max-height: 450rem;
+      overflow-y: scroll;
+    }
+  }
+
+  &-controls {
+    font-size: 14rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10rem;
+  }
+
+  &-company-filter {
+    &-button {
+      margin-right: 5rem;
+    }
+  }
+
+  &-type-filter {
+    font-size: 14rem;
+    margin-bottom: 10rem;
+
+    &-button {
+      margin-right: 5rem;
+      line-height: 2;
+    }
+  }
+
+  &-live-search {
+    width: 100%;
+  }
+
+  &-table {
+    table {
+      width: 100%;
+    }
+  }
+}

@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import { getSingleDocument } from 'libs/firestore-admin';
 import Head from 'next/head';
 import ScreeningQuestionForm from 'forms/screening-question/screening-question-form';
-import OtherQuestionForm from 'forms/other-question/other-question-form';
 import EvaluationQuestionForm from 'forms/evaluation-question/evaluation-question-form';
 
 import styles from 'styles/pages/question-edit.module.scss';
@@ -18,7 +17,7 @@ const QuestionEditPage = ({ question }) => {
       <title>{question.name} - {question.companyId === 'asker' ? 'Clone' : 'Edit'} question - Asker</title>
     </Head>
 
-    {question.type == 'other' ? <OtherQuestionForm question={question} className={styles['question-edit-page-form']} /> : null}
+    {question.type == 'other' ? <ScreeningQuestionForm type='other' question={question} className={styles['question-edit-page-form']} /> : null}
     {question.type == 'screening' ? <ScreeningQuestionForm question={question} className={styles['question-edit-page-form']} /> : null}
     {question.type == 'evaluation' ? <EvaluationQuestionForm question={question} className={styles['question-edit-page-form']} subtype={criteriaTypes.find(c => c.id == question.subtype)}  /> : null}
   </div>

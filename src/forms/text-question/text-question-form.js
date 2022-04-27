@@ -19,7 +19,7 @@ const TextQuestionForm = ({ values, className, onValues, onCancel, loading }) =>
     rules
   })
 
-  return <form onSubmit={control.submit(onValues)} className={classNames(styles['text-question-form'], className)}>
+  return <form data-test-id="text-question-form" onSubmit={control.submit(onValues)} className={classNames(styles['text-question-form'], className)}>
     <TextInputField error={errors && errors.name} className={styles['text-question-form-field']} onChange={control.input('name')} value={formValues.name} label="Title" name='name' placeholder="ex: do you have a driver’s licence?" />
     <TextareaInputField error={errors && errors.desc} className={styles['text-question-form-field']} onChange={control.input('desc')} value={formValues.desc} label="Description" name='desc' placeholder="Description" />
 

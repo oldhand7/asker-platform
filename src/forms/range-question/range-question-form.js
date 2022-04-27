@@ -18,13 +18,22 @@ const rules =  {
   step: 'required|numeric'
 }
 
+const defaultVaues = {
+  name: '',
+  desc: '',
+  min: '',
+  max: '',
+  unit: '',
+  step: 1
+}
+
 const RangeQuestionForm = ({ values, className, onValues, onCancel, loading }) => {
   const [formValues, errors, control] = useForm({
-    values,
+    values: values ? { ...defaultVaues, ...values } : defaultVaues,
     rules
   })
 
-  return <form onSubmit={control.submit(onValues)} className={classNames(styles['range-question-form'], className)}>
+  return <form data-test-id="range-question-form" onSubmit={control.submit(onValues)} className={classNames(styles['range-question-form'], className)}>
     <TextInputField error={errors && errors.name} className={styles['range-question-form-field']} onChange={control.input('name')} value={formValues.name} label="Title" name='name' placeholder="ex: do you have a driver’s licence?" />
     <TextareaInputField error={errors && errors.desc} className={styles['range-question-form-field']} onChange={control.input('desc')} value={formValues.desc} label="Description" name='desc' placeholder="Description" />
 
@@ -35,7 +44,7 @@ const RangeQuestionForm = ({ values, className, onValues, onCancel, loading }) =
 
     <FlexRow>
       <TextInputField error={errors && errors.unit} className={styles['range-question-form-field']} onChange={control.input('unit')} value={formValues.unit} label="Unit value" name='unit' placeholder="years" />
-      <TextInputField error={errors && errors.step} className={styles['range-question-form-field']} onChange={control.input('step')} value={formValues.step || 1} label="Step" name='unit' placeholder="1" />
+      <TextInputField error={errors && errors.step} className={styles['range-question-form-field']} onChange={control.input('step')} value={formValues.step} label="Step" name='step' placeholder="1" />
     </FlexRow>
 
     <div className={styles['range-question-form-buttons']}>

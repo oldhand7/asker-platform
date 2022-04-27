@@ -14,7 +14,12 @@
     font-weight: 500;
   }
 
-  tbody tr td:first-child {
+  tbody tr[data-company-id] td:first-child {
+    color: $brandish-grape;
+    font-weight: 500;
+  }
+
+  tbody tr[data-company-id="asker"] td:first-child {
     color: $brandish-green;
   }
 

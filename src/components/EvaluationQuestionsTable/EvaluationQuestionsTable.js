@@ -9,7 +9,7 @@ const getColumns = ({ onQuestion, criteria }) => ([
   {
     title: 'Questions',
     dataIndex: 'name',
-    key: 'name',
+    key: 'name'
   },
   {
     title: criteria.name || 'Criteria',
@@ -26,8 +26,16 @@ const getColumns = ({ onQuestion, criteria }) => ([
   }
 ]);
 
+const tagRow = (rec) => {
+  if (!rec || !rec.id) return;
+
+  return {
+      'data-company-id': rec.companyId
+  }
+}
+
 const EvaluationQuestionsTable = ({ className, data = [], onQuestion, criteria, ...props }) => {
-  return <Table emptyText="No questions found." rowKey={row => row.id} className={classNames(
+  return <Table onRow={tagRow} emptyText="No questions found." rowKey={row => row.id} className={classNames(
     styles['evaluation-questions-table'],
     className
   )} columns={getColumns({ onQuestion, criteria })} data={data} {...props} />
