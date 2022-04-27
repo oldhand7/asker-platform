@@ -1,6 +1,6 @@
 @import 'styles/vars';
 
-.project-form {
+.template-form {
   display: flex;
   position: relative;
 
@@ -76,8 +76,7 @@
     font-size: 14rem;
   }
 
-  &-template {
-    font-size: 14rem;
-    color: $brandish-grey;
+  &-feature-form {
+    margin-bottom: 30rem;
   }
 }

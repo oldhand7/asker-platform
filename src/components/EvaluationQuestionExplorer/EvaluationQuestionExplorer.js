@@ -76,8 +76,8 @@ const EvaluationQuestionExplorer = ({ className, criteria, questions, onQuestion
       <div className={styles['evaluation-question-explorer-widget-header']}>
         <div className={styles['evaluation-question-explorer-controls']}>
           <div className={styles['evaluation-question-explorer-company-filter']}>
-            <FilterButton className={styles['evaluation-question-explorer-company-filter-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker questions</FilterButton>
-            <FilterButton className={styles['evaluation-question-explorer-company-filter-button']} active={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user && user.companyId)}>Your questions</FilterButton>
+            <FilterButton theme='green' className={styles['evaluation-question-explorer-company-filter-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker questions</FilterButton>
+            <FilterButton theme='grape' className={styles['evaluation-question-explorer-company-filter-button']} active={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user && user.companyId)}>Your questions</FilterButton>
           </div>
           {/* @TODO */}
           <OutlineButton className={styles['evaluation-question-explorer-add-question']} onClick={() => {}}><PlusIcon /> Create new question</OutlineButton>

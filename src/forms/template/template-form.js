@@ -5,23 +5,21 @@ import Button from 'components/Button/PlatformButton';
 import TextInputField from 'components/TextInputField/TextInputField'
 import {useSite} from 'libs/site';
 import ProjectFormStager from 'components/ProjectFormStager/ProjectFormStager';
-import ProjectFormInterviewers from 'components/ProjectFormInterviewers/ProjectFormInterviewers';
 import FeatureForm from 'components/FeatureForm/FeatureForm';
 import { useState, useEffect } from 'react';
 import { features, featureTypes } from 'libs/features';
 import { addFlash } from 'libs/flash';
 import Alert from 'components/Alert/Alert';
 import { useUser } from 'libs/user';
-import { saveProject, saveCollectionDocument } from 'libs/firestore'
+import { saveCollectionDocument } from 'libs/firestore'
 import { useRouter } from 'next/router';
 import Preloader from 'components/Preloader/Preloader'
 import NewStageDroppable from 'components/NewStageDroppable/NewStageDroppable'
-import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField';
 
-import styles from './project-form.module.scss';
+import styles from './template-form.module.scss';
 
-const ProjectFormSidebar = () => {
-  return <div className={styles['project-form-sidebar']}>
+const TemplateFormSidebar = () => {
+  return <div className={styles['template-form-sidebar']}>
       {featureTypes.map((featureType) => {
         const targetFeatures = features.filter(f => f.type == featureType.id)
 
@@ -29,9 +27,9 @@ const ProjectFormSidebar = () => {
           return null;
         }
 
-        return <div key={`feature-list-widget-${featureType.id}`} className={styles['project-form-sidebar-widget']}>
-          <h3 className={styles['project-form-sidebar-widget-title']}>{featureType.name}</h3>
-          <FeatureList className={styles['project-form-sidebar-features']} features={targetFeatures} />
+        return <div key={`feature-list-widget-${featureType.id}`} className={styles['template-form-sidebar-widget']}>
+          <h3 className={styles['template-form-sidebar-widget-title']}>{featureType.name}</h3>
+          <FeatureList className={styles['template-form-sidebar-features']} features={targetFeatures} />
         </div>
       })}
     </div>
@@ -39,33 +37,29 @@ const ProjectFormSidebar = () => {
 
 const defaultValues = {
   name: '',
-  interviewers: [],
+  templateName: '',
   stages: [
     { id: 'introduction', name: 'Introduction', type: 'other' },
     null,
     null
   ],
   userId: null,
+  companyId: null,
   config: {
     introduction: {
       text: ''
     }
-  },
-  template: null,
-  candidates: [],
-  saveAsTemplate: false
+  }
 }
 
 const rules = {
-  name: 'required',
-  interviewers: 'array|min:1'
+  templateName: 'required'
 }
 
 const messages = {
-  'min.interviewers': 'At least one interviewer is required.'
 }
 
-const ProjectForm = ({ project, className }) => {
+const TemplateForm = ({ template, className }) => {
   const [config, t] = useSite();
   const [stage, setStage] = useState(null);
   const [stageErrors, setStageErrors] = useState([]);
@@ -75,7 +69,7 @@ const ProjectForm = ({ project, className }) => {
   const [loading, setLoading] = useState(true);
 
   const [values, errors, control] = useForm({
-    values: project ? { ...defaultValues, ...project} : defaultValues,
+    values: template ? template : defaultValues,
     rules,
     messages
   })
@@ -112,43 +106,22 @@ const ProjectForm = ({ project, className }) => {
     values.userId = user.id;
     values.companyId = user.companyId;
 
-    const tasks = []
-
-    if (values.saveAsTemplate) {
-      delete values.saveAsTemplate;
-
-      const copy = JSON.parse(JSON.stringify(values));
-
-      delete copy.candidates;
-      delete copy.interviewers;
-
-      copy.templateName = copy.name;
-      copy.name = '';
-
-      copy.user = {
-        id: user.id,
-        name: user.name,
-      }
-
-      tasks.push(saveCollectionDocument('templates', copy))
-      tasks.push(saveProject(values))
-    } else {
-      delete values.saveAsTemplate;
-
-      tasks.push(saveProject(values))
+    values.user = {
+      id: user.id,
+      name: user.name
     }
 
     setLoading(true)
 
-    Promise.all(tasks)
+    saveCollectionDocument('templates', values)
       .then(() => {
-        if (project) {
-          addFlash('Project saved', 'success')
+        if (template) {
+          addFlash('Template saved', 'success')
         } else {
-          addFlash('Project created', 'success')
+          addFlash('Template created', 'success')
         }
 
-        router.push('/projects/')
+        router.push('/templates/')
       })
       .catch(setError)
   }
@@ -241,41 +214,29 @@ const ProjectForm = ({ project, className }) => {
     setStage(stage)
   }
 
-  return  <form data-test-id="project-form" onSubmit={control.submit(handleSubmit, handleSubmitFailure)} className={classNames(styles['project-form'], className)}>
-    <ProjectFormSidebar />
+  return  <form data-test-id="template-form" onSubmit={control.submit(handleSubmit, handleSubmitFailure)} className={classNames(styles['template-form'], className)}>
+    <TemplateFormSidebar />
 
-    <div className={styles['project-form-details']}>
-      <div className={styles['project-form-details-inner']}>
-        <h2 className={styles['project-form-title']}>Create a new project</h2>
+    <div className={styles['template-form-details']}>
+      <div className={styles['template-form-details-inner']}>
+        <h2 className={styles['template-form-title']}>Create a new template</h2>
 
-        { project && !project.id && project.template ?
-        <h2 className={styles['project-form-template']}>Template: {project.template.name}</h2>
-        : null}
+        <TextInputField value={values.templateName} placeholder={t('Name')} error={errors ? t(errors.name) : null} onChange={control.input('templateName')} autoComplete='off' name='templateName' type='text' className={classNames(styles['template-form-field'], styles['template-form-field-name'])} />
 
-        <TextInputField value={values.name} placeholder={t('Name')} error={errors ? t(errors.name) : null} onChange={control.input('name')} autoComplete='off' name='name' type='text' className={classNames(styles['project-form-field'], styles['project-form-field-name'])} />
+        <div className={classNames(styles['template-form-field'], styles['template-form-field-stages'])}>
+          <h3 className={styles['template-form-field-title']}>Interview Stages</h3>
 
-        <div className={classNames(styles['project-form-field'], styles['project-form-field-stages'])}>
-          <h3 className={styles['project-form-field-title']}>Interview Stages</h3>
-
-          <ProjectFormStager onStages={handleStages} activeStage={stage} onStageSelect={handleStageSelect} stages={values.stages} className={styles['project-form-stages']}  />
+          <ProjectFormStager onStages={handleStages} activeStage={stage} onStageSelect={handleStageSelect} stages={values.stages} className={styles['template-form-stages']}  />
 
           <NewStageDroppable onStage={handleAddDropStage}>
           <div style={{ padding: '15rem 0'}}>
-          {values.stages.length < 12 ? <button type="button" className={styles['project-form-add-stage']}onClick={() => addStage()}>Add stage +</button> : null}
+          {values.stages.length < 12 ? <button type="button" className={styles['template-form-add-stage']}onClick={() => addStage()}>Add stage +</button> : null}
           </div>
           </NewStageDroppable>
         </div>
 
-        <div id="feature-form" data-test-id="feature-form">
+        <div className={styles['template-form-feature-form']} id="feature-form" data-test-id="feature-form">
         {stage ? <FeatureForm values={values.config[stage.id]} onError={onStageError} onValues={handleStageValues} feature={stage} /> : null}
-        </div>
-
-        <div className={classNames(styles['project-form-field'], styles['project-form-field-interviewers'])}>
-          <h3 className={styles['project-form-field-title']}>Assign interviewer</h3>
-
-          <ProjectFormInterviewers className={styles['project-form-interviewers']} interviewers={values.interviewers} onChange={control.input('interviewers', false)} />
-
-          {errors && errors['interviewers'] ? <p className="form-error">{errors['interviewers']}</p> : null}
         </div>
 
         {error ? <Alert type="error">{error.message}</Alert> : null}
@@ -290,17 +251,11 @@ const ProjectForm = ({ project, className }) => {
           </div> : null
         }
 
-        {
-        !values.template ?
-        <CheckboxInputField checked={values.saveAsTemplate} className={styles['project-form-field']} onChange={control.toggle('saveAsTemplate')} label='Also save project as template' /> :
-        null
-        }
-
-        <Button disabled={loading || errors || stageErrors.length} type="submit" className={styles['project-form-submit']}>{!loading ? (project ? 'Save project' : 'Create project') : 'Loading...'}</Button>
+        <Button disabled={loading || errors || stageErrors.length} type="submit" className={styles['template-form-submit']}>{!loading ? (template ? 'Save template' : 'Create template') : 'Loading...'}</Button>
       </div>
     </div>
     {loading ? <Preloader /> : null}
   </form>
 }
 
-export default ProjectForm;
+export default TemplateForm;

@@ -229,3 +229,13 @@ export const ext = (s) => {
 export const calcFileBundleSizeBytes = (files = []) => {
   return files.reduce((sum, file) => sum + file.size, 0)
 }
+
+export const dateFromTs = ts => {
+  const date = new Date(ts * 1000);
+
+  const year = date.getFullYear();
+  const month = date.toLocaleString('en-us',{ month:'short' })
+  const day = `0${date.getDate()}`.slice(-2)
+
+  return `${day} ${month} ${year}`
+}

@@ -3,26 +3,35 @@ import { useEffect, useState} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import ProjectTabe from 'components/ProjectTable/ProjectTable';
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget'
-import Button from 'components/Button/PlatformButton';
+import Button from 'components/Button/BrandishButton';
 import Head from 'next/head';
 import Alert from 'components/Alert/Alert';
 import { useFlash } from 'libs/flash';
 import { getCompanyProjects as getCompanyProjectsAdmin } from 'libs/firestore-admin'
 import ReactPaginate from 'react-paginate';
 import Pagination from 'components/Pagination/Pagination';
-import Preloader from 'components/Preloader/Preloader';
 import { useDebounce } from 'libs/debounce';
 import PlusIcon from 'components/Icon/PlusIcon';
-
+import { useRouter } from 'next/router';
+import DropDownButton from 'components/DropDownButton/DropDownButton';
 import styles from 'styles/pages/projects.module.scss';
+import ProjectTemplateModal from 'modals/project-template/project-template-modal';
+import { useModal } from 'libs/modal';
+import Preloader from 'components/Preloader/Preloader';
 
 const PER_PAGE = 15;
 
 const ProjectsPage = ({ projects = [], total = 0 }) => {
-  const success  =  useFlash('success')
+  const flashSuccess  =  useFlash('success')
   const [filter, setFiler] = useState({ q: ''})
   const [page, setPage] = useState(0);
   const [filteredProjects, setProjects] = useState(projects);
+  const router = useRouter();
+  const openTemplateModal = useModal(ProjectTemplateModal, { size: 'large' })
+  const [deletedProjects, setDeletedProjects] = useState([])
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(null);
 
   useEffect(() => {
     setPage(0)
@@ -43,18 +52,67 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
   useDebounce(() => {
     const { q } = filter;
 
+    const filteredProjects = projects.filter(p => deletedProjects.indexOf(p.id) == -1);
+
     if (!q) {
-      setProjects(projects);
+      setProjects(filteredProjects);
 
       return;
     }
 
     const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
 
-    const filteredProjects = projects.filter(data => regex.test(data.name.toLowerCase()))
+    filteredProjects = filteredProjects.filter(data => regex.test(data.name.toLowerCase()))
 
     setProjects(filteredProjects)
-  }, 500, [page, filter, projects])
+  }, 500, [page, filter, projects, deletedProjects])
+
+  const handleProjectCreate = c => {
+    if (c.id == 'blank-project') {
+      router.push('/projects/create/')
+    }
+
+    if (c.id == 'template-project') {
+      openTemplateModal();
+    }
+  }
+
+  const deleteProject = (p) => {
+    if (!confirm('Are you sure?')) {
+      return;
+    }
+
+    setLoading(true);
+
+    deleteSingle('projects', p.id)
+      .then(() => {
+        setDeletedProjects([
+          ...deletedProjects,
+          p.id
+        ])
+
+        setLoading(false);
+
+        setSuccess('Project deleted')
+      })
+      .catch(setError)
+  }
+
+  useEffect(() => {
+    if (error) {
+      setLoading(false)
+    }
+  }, [error])
+
+  useEffect(() => {
+    if (success) {
+      setError(null)
+    }
+  }, [success])
+
+  useEffect(() => {
+    setSuccess(flashSuccess)
+  }, [flashSuccess])
 
   return <div className={styles['projects-page']}>
       <Head>
@@ -62,14 +120,19 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
       </Head>
       <div className={styles['projects-page-nav']}>
           <LiveSearchWidget q={filter.q} onQuery={q => setFiler({ q })} />
-          <Button href='/projects/create/'><PlusIcon /> Create new project</Button>
+          <DropDownButton onChoice={handleProjectCreate} options={[
+            { id: 'blank-project', name: 'Blank project' },
+            { id: 'template-project', name: 'Use template' }
+          ]}><PlusIcon /> Create new project</DropDownButton>
       </div>
 
       {success ? <Alert type="success">{success}</Alert> : null}
+      {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <ProjectTabe emptyText="No projects to show." data={filteredProjects.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE)} className={styles['projects-page-table']} />
-
+      <ProjectTabe onDelete={deleteProject} emptyText="No projects to show." data={filteredProjects.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE)} className={styles['projects-page-table']} />
       <Pagination forcePage={page} className={styles['projects-page-pagination']} onPageChange={({ selected }) => setPage(selected)}  pageCount={Math.ceil(filteredProjects.length / PER_PAGE)} renderOnZeroPageCount={false} />
+
+      {loading ? <Preloader /> : null}
   </div>
 }
 
@@ -79,7 +142,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
       notFound: true
     }
   }
-  
+
   const projects = await getCompanyProjectsAdmin(req.session.user.companyId)
 
   return {

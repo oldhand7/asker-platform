@@ -1,30 +1,49 @@
 import { getSettings } from 'libs/firestore-admin';
-import { useEffect} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import ProjectForm from 'forms/project/project-form';
 import Head from 'next/head';
+import { getCompanyTemplate } from 'libs/firestore-admin'
 
 import styles from 'styles/pages/projects-create.module.scss';
 
-const ProjectsCreatePage = () => {
+const ProjectsCreatePage = ({ template }) => {
   return <div className={styles['projects-create-page']}>
       <Head>
         <title>Create project - Asker</title>
       </Head>
-      <ProjectForm className={styles['projects-create-page-form']} />
+      <ProjectForm project={template} className={styles['projects-create-page-form']} />
   </div>
 }
 
-export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
+export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
   if (!req.session.user.companyId) {
     return {
       notFound: true
     }
   }
-  
+
+  let template = null;
+
+  if (query.template) {
+    template = await getCompanyTemplate(req.session.user.companyId, query.template);
+
+    if (template) {
+      delete template.user;
+
+      template.template = {
+        id: template.id,
+        name: template.templateName
+      }
+
+      delete template.id;
+      delete template.templateName;
+    }
+  }
+
   return {
     props: {
-      config: await getSettings()
+      config: await getSettings(),
+      template
     }
   }
 })

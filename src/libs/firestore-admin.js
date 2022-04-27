@@ -124,3 +124,25 @@ export const saveCollectionDocument = (col, doc) => {
     return query.add(doc)
   }
 }
+
+export const getCompanyTemplates = (companyId, sort = 'createdAt', order = 'DESC') => {
+  if (!companyId) {
+    return Promise.resolve([])
+  }
+
+  return db.collection('templates')
+    .where('companyId', '==', companyId)
+    .orderBy(sort, order)
+    .get()
+    .then(snap2data)
+}
+
+export const getCompanyTemplate = (companyId, templateIdId) => {
+  return db
+    .collection('templates')
+    .where('companyId', '==', companyId)
+    .where(FieldPath.documentId(), '==', templateIdId)
+    .get()
+    .then(snap2data)
+    .then(res => res[0])
+}

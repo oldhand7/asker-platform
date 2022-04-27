@@ -137,4 +137,12 @@
       text-decoration: underline;
     }
   }
+
+  &-try {
+    color: white;
+    background: $brandish-tar !important;
+    line-height: 2em;
+    min-width: 50rem;
+    padding: 0 20rem;
+  }
 }

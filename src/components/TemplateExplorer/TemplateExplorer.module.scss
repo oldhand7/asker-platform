@@ -1,0 +1,45 @@
+@import 'styles/vars';
+
+.template-explorer {
+  &-title {
+
+  }
+
+  &-widget {
+    margin: 15rem 0;
+
+    &-header {
+      margin: 15rem 0;
+    }
+
+    &-body {
+      border-radius: 10px;
+      border: 1px solid $brandish-grey;
+      padding: 20rem;
+      overflow-y: scroll;
+      height: 260rem;
+    }
+  }
+
+  &-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10rem;
+  }
+
+  &-company-filter {
+    &-button {
+      margin-right: 5rem;
+    }
+  }
+
+  &-live-search {
+    width: 100%;
+  }
+
+  &-table {
+    table {
+      width: 100%;
+    }
+  }
+}

@@ -101,6 +101,8 @@ const QuestionPage = ({ questions = [], companyId }) => {
       return;
     }
 
+    setLoading(true);
+
     deleteSingle('questions', q.id)
       .then(() => {
         setDeletedQuestions([

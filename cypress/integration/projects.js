@@ -21,7 +21,13 @@ describe('Projects', () => {
 
   it('should create a 1 step project with introduction', () => {
     cy.visit('/projects/')
-    cy.contains('Create new project').click()
+
+    cy.contains('Create new project')
+      .click()
+      .parent()
+      .contains('Blank project')
+      .click();
+
     cy.location('pathname').should('eq', '/projects/create/')
     cy.title().should('include', 'Create project')
 
