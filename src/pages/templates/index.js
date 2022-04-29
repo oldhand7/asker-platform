@@ -69,7 +69,7 @@ const TemplatesPage = ({ templates = [], perPage = PER_PAGE, currentPage = 1 }) 
 
     const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
 
-    filteredTemplates = filteredTemplates.filter(data => regex.test(data.name.toLowerCase()))
+    filteredTemplates = filteredTemplates.filter(data => regex.test(data.templateName.toLowerCase()))
 
     setTemplates(filteredTemplates)
   }, 500, [filter, templates, deletedTemplates])

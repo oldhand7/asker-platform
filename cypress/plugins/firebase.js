@@ -26,7 +26,7 @@ const db = getFirestore(app)
 
 const removeAllFirebaseUsers = () => {
   return getAuth()
-    .listUsers(10)
+    .listUsers(20)
     .then(async ({ users }) => {
       const tasks = []
 
@@ -158,6 +158,12 @@ const beforeRun = async () => {
 
   const userId4Joe  = await createUser('Joe Brown', 'joe.brown@example.com', 'test123', companyId4, 'admin', false)
   const userId4Jane = await createUser('Jane Brown', 'jane.brown@example.com', 'test123', companyId4, 'hr', false)
+
+  //User 4
+  const companyId5 = await createCompany('Davis & Co')
+
+  const userId5Joe  = await createUser('Joe Davis', 'joe.davis@example.com', 'test123', companyId5, 'admin', false)
+  const userId5Jane = await createUser('Jane Davis', 'jane.davis@example.com', 'test123', companyId5, 'hr', false)
 
   await createQuestion({
     name: 'CQ1',
