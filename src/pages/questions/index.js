@@ -34,14 +34,14 @@ const QuestionPage = ({ questions = [], companyId }) => {
   const [success, setSuccess]  = useState(flashSuccess)
   const { user } = useUser();
   const [filter, setFiler] = useState({ q: '', company: ['asker', companyId], criteria: [] })
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [filteredQuestions, setQuestions] = useState(questions);
   const [deletedQuestions, setDeletedQuestions] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setPage(0)
+    setPage(1)
   }, [filter])
 
   const handleQuery = q => {
@@ -76,7 +76,7 @@ const QuestionPage = ({ questions = [], companyId }) => {
     }
 
     setQuestions(filteredQuestions)
-  }, 500, [page, filter, questions, deletedQuestions])
+  }, 500, [filter, questions, deletedQuestions])
 
   const toggleCompany = (companyId) => {
     const existsAlready = filter.company.find(c => c == companyId);
@@ -160,8 +160,8 @@ const QuestionPage = ({ questions = [], companyId }) => {
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <QuestionsTable onDelete={deleteQuestion} emptyText="No questions to show." data={filteredQuestions.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE)} className={styles['questions-page-table']} />
-      <Pagination forcePage={page} className={styles['questions-page-pagination']} onPageChange={({ selected }) => setPage(selected)}  pageCount={Math.ceil(filteredQuestions.length / PER_PAGE)} renderOnZeroPageCount={false} />
+      <QuestionsTable onDelete={deleteQuestion} emptyText="No questions to show." data={filteredQuestions.slice((page-1) * PER_PAGE, (page-1) * PER_PAGE + PER_PAGE)} className={styles['questions-page-table']} />
+      <Pagination page={page} className={styles['questions-page-pagination']} onChange={setPage} total={filteredQuestions.length} perPage={PER_PAGE} />
 
       {loading ? <Preloader /> : null}
   </div>

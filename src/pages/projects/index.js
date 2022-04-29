@@ -24,7 +24,7 @@ const PER_PAGE = 15;
 const ProjectsPage = ({ projects = [], total = 0 }) => {
   const flashSuccess  =  useFlash('success')
   const [filter, setFiler] = useState({ q: ''})
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [filteredProjects, setProjects] = useState(projects);
   const router = useRouter();
   const openTemplateModal = useModal(ProjectTemplateModal, { size: 'large' })
@@ -34,7 +34,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
   const [success, setSuccess] = useState(null);
 
   useEffect(() => {
-    setPage(0)
+    setPage(1)
   }, [filter.q])
 
   const handleQuery = q => {
@@ -65,7 +65,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
     filteredProjects = filteredProjects.filter(data => regex.test(data.name.toLowerCase()))
 
     setProjects(filteredProjects)
-  }, 500, [page, filter, projects, deletedProjects])
+  }, 500, [filter, projects, deletedProjects])
 
   const handleProjectCreate = c => {
     if (c.id == 'blank-project') {
@@ -129,8 +129,9 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <ProjectTabe onDelete={deleteProject} emptyText="No projects to show." data={filteredProjects.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE)} className={styles['projects-page-table']} />
-      <Pagination forcePage={page} className={styles['projects-page-pagination']} onPageChange={({ selected }) => setPage(selected)}  pageCount={Math.ceil(filteredProjects.length / PER_PAGE)} renderOnZeroPageCount={false} />
+      <ProjectTabe onDelete={deleteProject} emptyText="No projects to show." data={filteredProjects.slice((page - 1) * PER_PAGE, (page - 1) * PER_PAGE + PER_PAGE)} className={styles['projects-page-table']} />
+
+      <Pagination page={page} className={styles['projects-page-pagination']} onChange={setPage} total={filteredProjects.length} perPage={PER_PAGE} />
 
       {loading ? <Preloader /> : null}
   </div>

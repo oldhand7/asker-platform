@@ -25,7 +25,7 @@ const PER_PAGE = 15;
 const TemplatesPage = ({ templates = [], total = 0 }) => {
   const flashSuccess  =  useFlash('success')
   const [filter, setFiler] = useState({ q: ''})
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [filteredTemplates, setTemplates] = useState(templates);
   const router = useRouter();
   const [error, setError] = useState(null);
@@ -40,7 +40,7 @@ const TemplatesPage = ({ templates = [], total = 0 }) => {
   }, [flashSuccess])
 
   useEffect(() => {
-    setPage(0)
+    setPage(1)
   }, [filter.q])
 
   const handleQuery = q => {
@@ -71,7 +71,7 @@ const TemplatesPage = ({ templates = [], total = 0 }) => {
     filteredTemplates = filteredTemplates.filter(data => regex.test(data.name.toLowerCase()))
 
     setTemplates(filteredTemplates)
-  }, 500, [page, filter, templates, deletedTemplates])
+  }, 500, [filter, templates, deletedTemplates])
 
   const deleteTemplate = (t) => {
     if (!confirm('Are you sure?')) {
@@ -117,9 +117,9 @@ const TemplatesPage = ({ templates = [], total = 0 }) => {
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <TemplateTable onDelete={deleteTemplate} emptyText="No templates to show." data={filteredTemplates.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE)} className={styles['templates-page-table']} />
+      <TemplateTable onDelete={deleteTemplate} emptyText="No templates to show." data={filteredTemplates.slice((page - 1) * PER_PAGE, (page - 1) * PER_PAGE + PER_PAGE)} className={styles['templates-page-table']} />
 
-      <Pagination forcePage={page} className={styles['templates-page-pagination']} onPageChange={({ selected }) => setPage(selected)}  pageCount={Math.ceil(filteredTemplates.length / PER_PAGE)} renderOnZeroPageCount={false} />
+      <Pagination page={page} className={styles['templates-page-pagination']} onChange={setPage} total={filteredTemplates.length} perPage={PER_PAGE} />
 
       {loading ? <Preloader/> : null}
   </div>

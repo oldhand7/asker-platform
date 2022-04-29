@@ -7,7 +7,7 @@
   margin: 0;
   padding: 0;
 
-  li {
+  &-item {
     display: inline-block;
     padding: 5rem 10rem;
     border: 1px solid $brandish-grey;
@@ -15,24 +15,29 @@
     border-radius: 3px;
     cursor: pointer;
 
-    &[class="selected"],
+    &-active,
     &:hover {
       background: $brandish-dark-green;
       color: white;
     }
 
-    &[class="previous disabled"],
-    &[class="next disabled"] {
+    &-disabled {
       opacity: 0.5;
 
       &:hover {
         background: none;
-        color: inherit;
+        color: currentColor;
       }
     }
 
-    &[class="next disabled"] {
-      opacity: 0.5;
+    &.rc-pagination-prev,
+    &.rc-pagination-next {
+      & > * {
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        top: -1px;
+      }
     }
   }
 }
