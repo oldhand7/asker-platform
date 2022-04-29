@@ -1,7 +1,16 @@
 @import 'styles/vars';
 
 .stager {
+  max-width: 360rem;
+  overflow-y: hidden;
+  overflow-x: auto;
   display: flex;
+  align-items: flex-end;
+  margin-bottom: 1.5em;
+
+  &-inner {
+      display: flex;
+  }
 
   &-item {
     display: flex;
@@ -10,8 +19,10 @@
     align-items: center;
     text-align: center;
     position: relative;
-    min-width: 100rem;
+    min-width: 90rem;
     color: $brandish-grey;
+    min-height: 0;
+    margin-top: 4em;
 
     &-mustard::after,
     &-attraction::after  {
@@ -53,8 +64,8 @@
       top: 0%;
       transform: translateY(-100%);
       font-weight: 500;
-      font-size: 12px;
-      line-height: 14px;
+      font-size: 12rem;
+      line-height: 14rem;
       color: $brandish-dark-green;
       line-height: 1.5;
     }

@@ -12,10 +12,12 @@ const dummyStages = [
 const Stager = ({ className, stages = dummyStages }) => {
 
   return <div className={classNames(styles['stager'], className)}>
-    {stages.filter(s => s).map((stage, index) => <div data-test-id="stage" key={`stage${index}`} className={classNames(styles['stager-item'], styles[`stager-item-${stage.type}`])}>
-      <span className={styles['stager-item-label']}>{stage.name}</span>
-      <span className={styles['stager-item-number']}>{index+1}</span>
-    </div>)}
+    <div className={styles['stager-inner']}>
+      {stages.filter(s => s).map((stage, index) => <div data-test-id="stage" key={`stage${index}`} className={classNames(styles['stager-item'], styles[`stager-item-${stage.type}`])}>
+        <span className={styles['stager-item-label']}>{stage.shortName || stage.name}</span>
+        <span className={styles['stager-item-number']}>{index+1}</span>
+      </div>)}
+    </div>
   </div>
 }
 
