@@ -2,6 +2,9 @@ require('@4tw/cypress-drag-drop')
 require('cypress-file-upload')
 require('./projects')
 require('./navigation')
+require('./templates')
+require('./questions')
+
 
 Cypress.Commands.add('login', (username, password, key = '') => {
   cy.session([username, password, key], () => {

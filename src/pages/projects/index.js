@@ -20,10 +20,10 @@ import Preloader from 'components/Preloader/Preloader';
 
 const PER_PAGE = 15;
 
-const ProjectsPage = ({ projects = [], total = 0 }) => {
+const ProjectsPage = ({ projects = [], perPage = PER_PAGE, currentPage = 1 }) => {
   const flashSuccess  =  useFlash('success')
   const [filter, setFiler] = useState({ q: ''})
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(currentPage);
   const [filteredProjects, setProjects] = useState(projects);
   const router = useRouter();
   const openTemplateModal = useModal(ProjectTemplateModal, { size: 'large' })
@@ -33,7 +33,9 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
   const [success, setSuccess] = useState(null);
 
   useEffect(() => {
-    setPage(1)
+    if (filter.q) {
+      setPage(1)
+    }
   }, [filter.q])
 
   const handleQuery = q => {
@@ -51,7 +53,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
   useDebounce(() => {
     const { q } = filter;
 
-    const filteredProjects = projects.filter(p => deletedProjects.indexOf(p.id) == -1);
+    let filteredProjects = projects.filter(p => deletedProjects.indexOf(p.id) == -1);
 
     if (!q) {
       setProjects(filteredProjects);
@@ -128,15 +130,15 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <ProjectTabe onDelete={deleteProject} emptyText="No projects to show." data={filteredProjects.slice((page - 1) * PER_PAGE, (page - 1) * PER_PAGE + PER_PAGE)} className={styles['projects-page-table']} />
+      <ProjectTabe onDelete={deleteProject} emptyText="No projects to show." data={filteredProjects.slice((page - 1) * perPage, (page - 1) * perPage + perPage)} className={styles['projects-page-table']} />
 
-      <Pagination page={page} className={styles['projects-page-pagination']} onChange={setPage} total={filteredProjects.length} perPage={PER_PAGE} />
+      <Pagination page={page} className={styles['projects-page-pagination']} onChange={setPage} total={filteredProjects.length} perPage={perPage} />
 
       {loading ? <Preloader /> : null}
   </div>
 }
 
-export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
+export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
   if (!req.session.user.companyId) {
     return {
       notFound: true
@@ -148,7 +150,9 @@ export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
   return {
     props: {
       config: await getSettings(),
-      projects
+      projects,
+      perPage: Number.parseInt(query.perPage || PER_PAGE),
+      currentPage: Number.parseInt(query.page || 1)
     }
   }
 })

@@ -25,23 +25,25 @@ import styles from 'styles/pages/questions.module.scss';
 
 import dummyQuestions from 'data/demo/questions.json'
 
-const PER_PAGE = 5;
+const PER_PAGE = 15;
 
-const QuestionPage = ({ questions = [], companyId }) => {
+const QuestionPage = ({ questions = [], companyId, perPage = PER_PAGE, currentPage = 1 }) => {
   const router = useRouter();
   const flashSuccess = useFlash('success');
   const [success, setSuccess]  = useState(flashSuccess)
   const { user } = useUser();
   const [filter, setFiler] = useState({ q: '', company: ['asker', companyId], criteria: [] })
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(currentPage);
   const [filteredQuestions, setQuestions] = useState(questions);
   const [deletedQuestions, setDeletedQuestions] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setPage(1)
-  }, [filter])
+    if (filter.q) {
+      setPage(1)
+    }
+  }, [filter.q])
 
   const handleQuery = q => {
     const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
@@ -86,6 +88,8 @@ const QuestionPage = ({ questions = [], companyId }) => {
         filter.company.filter(c => c != companyId) :
         [...filter.company, companyId]
     })
+
+    setPage(1)
   }
 
   const handleQuestionFilterOptions = options => {
@@ -93,6 +97,8 @@ const QuestionPage = ({ questions = [], companyId }) => {
       ...filter,
       criteria: options
     })
+
+    setPage(1)
   }
 
   const deleteQuestion = (q) => {
@@ -159,14 +165,14 @@ const QuestionPage = ({ questions = [], companyId }) => {
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <QuestionsTable onDelete={deleteQuestion} emptyText="No questions to show." data={filteredQuestions.slice((page-1) * PER_PAGE, (page-1) * PER_PAGE + PER_PAGE)} className={styles['questions-page-table']} />
-      <Pagination page={page} className={styles['questions-page-pagination']} onChange={setPage} total={filteredQuestions.length} perPage={PER_PAGE} />
+      <QuestionsTable onDelete={deleteQuestion} emptyText="No questions to show." data={filteredQuestions.slice((page-1) * perPage, (page-1) * perPage + perPage)} className={styles['questions-page-table']} />
+      <Pagination page={page} className={styles['questions-page-pagination']} onChange={setPage} total={filteredQuestions.length} perPage={perPage} />
 
       {loading ? <Preloader /> : null}
   </div>
 }
 
-export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
+export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
   if (!req.session.user.companyId) {
     return {
       notFound: true
@@ -179,7 +185,9 @@ export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
     props: {
       config: await getSettings(),
       companyId: req.session.user.companyId,
-      questions
+      questions,
+      perPage: Number.parseInt(query.perPage || PER_PAGE),
+      currentPage: Number.parseInt(query.page || 1)
     }
   }
 })

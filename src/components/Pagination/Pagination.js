@@ -4,7 +4,7 @@ import PaginationComp from "react-js-pagination";
 import styles from './Pagination.module.scss';
 
 const Pagination = ({ className, page = 1, perPage = 10, total = 0, ...props }) => {
-  return  <PaginationComp
+  return  <div data-test-id="pagination"><PaginationComp
     activePage={page}
     itemsCountPerPage={perPage}
     totalItemsCount={total}
@@ -14,7 +14,7 @@ const Pagination = ({ className, page = 1, perPage = 10, total = 0, ...props }) 
     disabledClass={styles['pagination-item-disabled']}
     activeClass={styles['pagination-item-active']}
     {...props}
-    />
+    /></div>
 }
 
 export default Pagination;

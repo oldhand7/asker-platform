@@ -12,6 +12,19 @@ Cypress.Commands.add('createDummyProject', (name = 'Demo ABC') => {
 
     cy.get('button').contains('Create project').click()
   })
+
+  cy.get('[data-test-id="alert-success"]').should('contain', 'Project created')
+})
+
+Cypress.Commands.add('createDummyTemplate', (name = 'Demo ABC') => {
+  cy.visit('/templates/create/')
+
+  cy.get('form[data-test-id="project-form"]').within(() => {
+    cy.get('input[name="templateName"]').type(name)
+    cy.get('button').contains('Create project').click()
+  })
+
+  cy.get('[data-test-id="alert-success"]').should('contain', 'Template created')
 })
 
 Cypress.Commands.add('addProjectCandidate', (name, email) => {

@@ -21,10 +21,10 @@ import styles from 'styles/pages/templates.module.scss';
 
 const PER_PAGE = 15;
 
-const TemplatesPage = ({ templates = [], total = 0 }) => {
+const TemplatesPage = ({ templates = [], perPage = PER_PAGE, currentPage = 1 }) => {
   const flashSuccess  =  useFlash('success')
   const [filter, setFiler] = useState({ q: ''})
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(currentPage);
   const [filteredTemplates, setTemplates] = useState(templates);
   const router = useRouter();
   const [error, setError] = useState(null);
@@ -39,7 +39,9 @@ const TemplatesPage = ({ templates = [], total = 0 }) => {
   }, [flashSuccess])
 
   useEffect(() => {
-    setPage(1)
+    if (filter.q) {
+      setPage(1)
+    }
   }, [filter.q])
 
   const handleQuery = q => {
@@ -116,15 +118,15 @@ const TemplatesPage = ({ templates = [], total = 0 }) => {
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <TemplateTable onDelete={deleteTemplate} emptyText="No templates to show." data={filteredTemplates.slice((page - 1) * PER_PAGE, (page - 1) * PER_PAGE + PER_PAGE)} className={styles['templates-page-table']} />
+      <TemplateTable onDelete={deleteTemplate} emptyText="No templates to show." data={filteredTemplates.slice((page - 1) * perPage, (page - 1) * perPage + perPage)} className={styles['templates-page-table']} />
 
-      <Pagination page={page} className={styles['templates-page-pagination']} onChange={setPage} total={filteredTemplates.length} perPage={PER_PAGE} />
+      <Pagination page={page} className={styles['templates-page-pagination']} onChange={setPage} total={filteredTemplates.length} perPage={perPage} />
 
       {loading ? <Preloader/> : null}
   </div>
 }
 
-export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
+export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
   if (!req.session.user.companyId) {
     return {
       notFound: true
@@ -136,7 +138,9 @@ export const getServerSideProps = withUserGuardSsr(async ({ req, res}) => {
   return {
     props: {
       config: await getSettings(),
-      templates
+      templates,
+      perPage: Number.parseInt(query.perPage || PER_PAGE),
+      currentPage: Number.parseInt(query.page || 1)
     }
   }
 })

@@ -3,5 +3,6 @@
   "experimentalInteractiveRunEvents": true,
   "defaultCommandTimeout": 15000,
   "experimentalSessionSupport": true,
+  "experimentalSessionAndOrigin": true,
   "video": false
 }
