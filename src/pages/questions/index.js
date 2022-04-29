@@ -8,7 +8,6 @@ import Button from 'components/Button/PlatformButton';
 import Head from 'next/head';
 import Alert from 'components/Alert/Alert';
 import { useFlash } from 'libs/flash';
-import ReactPaginate from 'react-paginate';
 import Pagination from 'components/Pagination/Pagination';
 import Preloader from 'components/Preloader/Preloader';
 import { useUser } from 'libs/user';

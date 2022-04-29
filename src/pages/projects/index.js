@@ -8,7 +8,6 @@ import Head from 'next/head';
 import Alert from 'components/Alert/Alert';
 import { useFlash } from 'libs/flash';
 import { getCompanyProjects as getCompanyProjectsAdmin } from 'libs/firestore-admin'
-import ReactPaginate from 'react-paginate';
 import Pagination from 'components/Pagination/Pagination';
 import { useDebounce } from 'libs/debounce';
 import PlusIcon from 'components/Icon/PlusIcon';

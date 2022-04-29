@@ -8,7 +8,6 @@ import Head from 'next/head';
 import Alert from 'components/Alert/Alert';
 import { useFlash } from 'libs/flash';
 import { getCompanyTemplates as getCompanyTemplatesAdmin } from 'libs/firestore-admin'
-import ReactPaginate from 'react-paginate';
 import Pagination from 'components/Pagination/Pagination';
 import Preloader from 'components/Preloader/Preloader';
 import { useDebounce } from 'libs/debounce';
