@@ -5,7 +5,6 @@ import Button from 'components/Button/PlatformButton';
 import TextInputField from 'components/TextInputField/TextInputField'
 import {useSite} from 'libs/site';
 import ProjectFormStager from 'components/ProjectFormStager/ProjectFormStager';
-import FeatureForm from 'components/FeatureForm/FeatureForm';
 import { useState, useEffect } from 'react';
 import { features, featureTypes } from 'libs/features';
 import { addFlash } from 'libs/flash';
@@ -185,28 +184,8 @@ const TemplateForm = ({ template, className }) => {
     }
   }
 
-  const scrollFeatureFormIntoView = () => {
-    const featureFormEl = document.querySelector('#feature-form')
-
-    if (featureFormEl) {
-      featureFormEl.scrollIntoView({
-        behavior: 'smooth'
-      })
-    }
-  }
-
-  useEffect(() => {
-    if (stage) {
-      scrollFeatureFormIntoView()
-    }
-  }, [stage])
-
   const handleStageSelect = (st) => {
     setStage(st);
-
-    if (st == stage) {
-      scrollFeatureFormIntoView();
-    }
   }
 
   const handleAddDropStage = (stage) => {
@@ -221,22 +200,18 @@ const TemplateForm = ({ template, className }) => {
       <div className={styles['template-form-details-inner']}>
         <h2 className={styles['template-form-title']}>Create a new template</h2>
 
-        <TextInputField value={values.templateName} placeholder={t('Name')} error={errors ? t(errors.name) : null} onChange={control.input('templateName')} autoComplete='off' name='templateName' type='text' className={classNames(styles['template-form-field'], styles['template-form-field-name'])} />
+        <TextInputField value={values.templateName} placeholder={t('Name')} error={errors ? t(errors.templateName) : null} onChange={control.input('templateName')} autoComplete='off' name='templateName' type='text' className={classNames(styles['template-form-field'], styles['template-form-field-name'])} />
 
         <div className={classNames(styles['template-form-field'], styles['template-form-field-stages'])}>
           <h3 className={styles['template-form-field-title']}>Interview Stages</h3>
 
-          <ProjectFormStager onStages={handleStages} activeStage={stage} onStageSelect={handleStageSelect} stages={values.stages} className={styles['template-form-stages']}  />
+          <ProjectFormStager featureValues={stage && values.config[stage.id]} featureOnError={onStageError} featureOnValues={handleStageValues} feature={stage} onStages={handleStages} activeStage={stage} onStageSelect={handleStageSelect} stages={values.stages} className={styles['template-form-stages']}  />
 
           <NewStageDroppable onStage={handleAddDropStage}>
           <div style={{ padding: '15rem 0'}}>
           {values.stages.length < 12 ? <button type="button" className={styles['template-form-add-stage']}onClick={() => addStage()}>Add stage +</button> : null}
           </div>
           </NewStageDroppable>
-        </div>
-
-        <div className={styles['template-form-feature-form']} id="feature-form" data-test-id="feature-form">
-        {stage ? <FeatureForm values={values.config[stage.id]} onError={onStageError} onValues={handleStageValues} feature={stage} /> : null}
         </div>
 
         {error ? <Alert type="error">{error.message}</Alert> : null}

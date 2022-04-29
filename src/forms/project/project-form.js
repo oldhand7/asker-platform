@@ -6,7 +6,6 @@ import TextInputField from 'components/TextInputField/TextInputField'
 import {useSite} from 'libs/site';
 import ProjectFormStager from 'components/ProjectFormStager/ProjectFormStager';
 import ProjectFormInterviewers from 'components/ProjectFormInterviewers/ProjectFormInterviewers';
-import FeatureForm from 'components/FeatureForm/FeatureForm';
 import { useState, useEffect } from 'react';
 import { features, featureTypes } from 'libs/features';
 import { addFlash } from 'libs/flash';
@@ -212,28 +211,8 @@ const ProjectForm = ({ project, className }) => {
     }
   }
 
-  const scrollFeatureFormIntoView = () => {
-    const featureFormEl = document.querySelector('#feature-form')
-
-    if (featureFormEl) {
-      featureFormEl.scrollIntoView({
-        behavior: 'smooth'
-      })
-    }
-  }
-
-  useEffect(() => {
-    if (stage) {
-      scrollFeatureFormIntoView()
-    }
-  }, [stage])
-
   const handleStageSelect = (st) => {
     setStage(st);
-
-    if (st == stage) {
-      scrollFeatureFormIntoView();
-    }
   }
 
   const handleAddDropStage = (stage) => {
@@ -257,17 +236,13 @@ const ProjectForm = ({ project, className }) => {
         <div className={classNames(styles['project-form-field'], styles['project-form-field-stages'])}>
           <h3 className={styles['project-form-field-title']}>Interview Stages</h3>
 
-          <ProjectFormStager onStages={handleStages} activeStage={stage} onStageSelect={handleStageSelect} stages={values.stages} className={styles['project-form-stages']}  />
+          <ProjectFormStager featureValues={stage && values.config[stage.id]} featureOnError={onStageError} featureOnValues={handleStageValues} feature={stage} onStages={handleStages} activeStage={stage} onStageSelect={handleStageSelect} stages={values.stages} className={styles['project-form-stages']}  />
 
           <NewStageDroppable onStage={handleAddDropStage}>
           <div style={{ padding: '15rem 0'}}>
           {values.stages.length < 12 ? <button type="button" className={styles['project-form-add-stage']}onClick={() => addStage()}>Add stage +</button> : null}
           </div>
           </NewStageDroppable>
-        </div>
-
-        <div id="feature-form" data-test-id="feature-form">
-        {stage ? <FeatureForm values={values.config[stage.id]} onError={onStageError} onValues={handleStageValues} feature={stage} /> : null}
         </div>
 
         <div className={classNames(styles['project-form-field'], styles['project-form-field-interviewers'])}>
