@@ -13,19 +13,23 @@
     min-width: 100rem;
     color: $brandish-grey;
 
-    &-mustard::after {
+    &-mustard::after,
+    &-attraction::after  {
       background: $brandish-mustard  !important;
     }
 
-    &-mustard &-number {
+    &-mustard &-number,
+    &-attraction &-number {
       background: $brandish-mustard  !important;
     }
 
-    &-green::after {
+    &-green::after,
+    &-evaluation::after {
       background: $brandish-dark-green !important;
     }
 
-    &-green &-number {
+    &-green &-number,
+    &-evaluation &-number {
       background: $brandish-dark-green;
     }
 
