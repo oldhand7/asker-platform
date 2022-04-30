@@ -58,7 +58,7 @@ const useStyles = makeStyles({
   })
 
 export const UsersList = props => (
-    <List {...props} sort={{ field: 'createdate', order: 'asc' }} perPage={25}>
+    <List {...props} sort={{ field: 'createdAt', order: 'desc' }} perPage={25}>
         <Datagrid rowClick="edit">
             <ImageField alwaysSingle={true} source="images" src="src" title="title" />
 

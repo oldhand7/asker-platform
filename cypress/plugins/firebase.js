@@ -133,6 +133,8 @@ const beforeRun = async () => {
   await deleteCollection(db, 'projects');
   await deleteCollection(db, 'interviews');
   await deleteCollection(db, 'questions');
+  await deleteCollection(db, 'templates');
+  await deleteCollection(db, 'criteriaOptions');
 
   //Creates superadmin
   await createUser('John Powers', 'admin@askertech.com', 'test123', '', 'admin', true)
