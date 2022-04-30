@@ -31,7 +31,14 @@ const theme = createTheme({
 
 const firebaseConfig = getFirebaseConfig();
 
-const dataProvider = CustomDataProvider(firebaseConfig);
+const dataProvider = CustomDataProvider(firebaseConfig, {
+  renameMetaFields: {
+     created_at: 'createdAt',
+     created_by: 'createdBy',
+     updated_at: 'updatedAt',
+     updated_by: 'updatedBy'
+   }
+});
 const authProvider = CustomAuthProvider(firebaseConfig);
 
 const AdminApp = () => {

@@ -1,0 +1,13 @@
+.profile-user-toolbar {
+  display: flex;
+  justify-content: space-between;
+
+  &-buttons {
+    & > * {
+      margin-right: 10px !important;
+      display: none;
+    }
+
+
+  }
+}

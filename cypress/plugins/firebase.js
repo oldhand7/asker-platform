@@ -26,7 +26,7 @@ const db = getFirestore(app)
 
 const removeAllFirebaseUsers = () => {
   return getAuth()
-    .listUsers(20)
+    .listUsers(30)
     .then(async ({ users }) => {
       const tasks = []
 
@@ -62,7 +62,9 @@ const createUser = async (name, email, password, companyId = null, type = 'admin
     email,
     superadmin,
     type,
-    companyId
+    companyId,
+    createdAt: 0,
+    updatedAt: 0
   })
 
   return docRef.id
@@ -131,6 +133,8 @@ const beforeRun = async () => {
   await deleteCollection(db, 'projects');
   await deleteCollection(db, 'interviews');
   await deleteCollection(db, 'questions');
+  await deleteCollection(db, 'templates');
+  await deleteCollection(db, 'criteriaOptions');
 
   //Creates superadmin
   await createUser('John Powers', 'admin@askertech.com', 'test123', '', 'admin', true)
@@ -159,11 +163,17 @@ const beforeRun = async () => {
   const userId4Joe  = await createUser('Joe Brown', 'joe.brown@example.com', 'test123', companyId4, 'admin', false)
   const userId4Jane = await createUser('Jane Brown', 'jane.brown@example.com', 'test123', companyId4, 'hr', false)
 
-  //User 4
+  //User 5
   const companyId5 = await createCompany('Davis & Co')
 
   const userId5Joe  = await createUser('Joe Davis', 'joe.davis@example.com', 'test123', companyId5, 'admin', false)
   const userId5Jane = await createUser('Jane Davis', 'jane.davis@example.com', 'test123', companyId5, 'hr', false)
+
+  //User 6
+  const companyId6 = await createCompany('Miller & Co')
+
+  const userId6Joe  = await createUser('Joe Miller', 'joe.miller@example.com', 'test123', companyId6, 'admin', false)
+  const userId6Jane = await createUser('Jane Miller', 'jane.miller@example.com', 'test123', companyId6, 'hr', false)
 
   await createQuestion({
     name: 'CQ1',

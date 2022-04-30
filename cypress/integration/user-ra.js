@@ -24,9 +24,11 @@ describe('User RA', () => {
       cy.get('#companyId').click()
       cy.contains('Dakota Holding').click()
       cy.get('input#password').type('test456')
-      cy.get('button[type="submit"]').click().wait(4000)
+      cy.get('button[type="submit"]').click().wait(2000)
 
       cy.hash().should('eq', '#/users')
+
+      cy.contains('Rows per page').should('exist')
 
       cy.get('table tbody tr')
         .first()

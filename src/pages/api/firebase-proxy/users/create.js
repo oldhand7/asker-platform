@@ -57,4 +57,4 @@ handler.put((req, res) => {
   createResource(req, res);
 })
 
-export default withIronSessionApiRoute(withUserGuard(handler, true), sessionOptions);
+export default withIronSessionApiRoute(withUserGuard(handler, false), sessionOptions);
