@@ -29,6 +29,17 @@ handler.put(async (req, res) => {
     return;
   }
 
+  const user = await getAuth(app)
+    .getUser(body.uid)
+
+  const companyAdmin = user.customClaims['companyId'] == req.session.user.companyId && req.session.user.type == 'admin';
+
+  if (!companyAdmin && !req.session.user.superadmin) {
+    res.status(403).json({
+      message: "You have no permission for this action"
+    })
+  }
+
   try {
     const user = await getAuth(app)
       .updateUser(body.uid, {
@@ -45,4 +56,4 @@ handler.put(async (req, res) => {
   }
 })
 
-export default withIronSessionApiRoute(withUserGuard(handler, true), sessionOptions);
+export default withIronSessionApiRoute(withUserGuard(handler, false), sessionOptions);

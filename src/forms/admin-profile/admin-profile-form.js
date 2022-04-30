@@ -111,7 +111,7 @@ const AdminProfileForm = ({ className }) => {
 
       setSuccess(t('Your profile was updated!!'));
     } catch (error) {
-      setError(ctxError('Updating user profile faied!', error))
+      setError(ctxError('Updating user profile failed!', error))
     }
 
     setLoading(false);

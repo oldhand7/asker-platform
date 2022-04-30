@@ -1,7 +1,9 @@
 .profile-page {
   padding: 20rem 0;
 
-  &-tabs {}
+  &-tabs {
+    padding-top: 40rem;
+  }
 
   &-tab-list {
     margin: 0;
@@ -13,7 +15,6 @@
   &-tab-panel {
     margin: 0;
     background: white;
-    padding: 40rem;
     border-left:  1px solid #aaa;
   }
 
@@ -21,5 +22,16 @@
     max-width: 420rem;
     margin-left: auto;
     margin-right: auto;
+    padding: 40rem 0;
+
+    &-ra {
+      position: relative;
+      max-width: 100%;
+      font-size: 12px;
+      padding: 0;
+      margin-left: 0rem;
+      margin-right: 0rem;
+      height: 550rem;
+    }
   }
 }

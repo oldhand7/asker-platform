@@ -35,13 +35,6 @@ const CompanyProfileForm = ({ className }) => {
   const [company, updateCompany] = useCompany(user && user.companyId)
   const [values, errors, control] = useForm({ values: company ? company : defaultValues, rules, messages })
 
-
-  useEffect(() => {
-    if (user) {
-      updateCompany(user.companyId)
-    }
-  }, [user])
-
   useEffect(() => {
     if (company) {
       control.setValues({ ...company })
