@@ -23,7 +23,7 @@ const getSortArrowIcon = (name, sort, order) => {
 const getColumns = ({ handleCompactMenuChoice, onSort, sort, order }) => ([
   {
     title: <Link href={getSortLink('name', sort, order)}>
-      <a>Project title {getSortArrowIcon('name', sort, order)}</a>
+      <a>Project name {getSortArrowIcon('name', sort, order)}</a>
     </Link>,
     dataIndex: 'name',
     key: 'name'
