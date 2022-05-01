@@ -75,7 +75,8 @@ exports.interviewCreate = functions.firestore.document('interviews/{docId}')
             id: snap.id,
             candidate: interview.candidate,
             status: interview.status
-          })
+          }),
+          interviewsAwaitingCount: admin.firestore.FieldValue.increment(1)
         })
     } catch (error) {
       console.log(error)
@@ -107,7 +108,10 @@ exports.updateInterview = functions.firestore.document('interviews/{docId}')
       await admin.firestore()
         .collection('projects')
         .doc(interview.projectId)
-        .update({ interviews })
+        .update({
+          interviews,
+          interviewsAwaitingCount: interviews.filter(i => i.status != 'complete').length
+        })
     } catch (error) {
       console.log(error)
 

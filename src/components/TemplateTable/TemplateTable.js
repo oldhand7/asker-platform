@@ -7,23 +7,40 @@ import FilterIcon from 'components/Icon/FilterIcon';
 import CompactMenu from 'components/CompactMenu/CompactMenu';
 import { dateFromTs, ctxError } from 'libs/helper';
 import UserCard from 'components/UserCard/UserCard';
+import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
+import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
+import Link from 'next/link';
 
 import styles from './TemplateTable.module.scss';
 
-const getColumns = ({ handleCompactMenuChoice }) => ([
+const getSortLink = (name, sort, order) => {
+  return `?sort=${name}&order=${sort == name ? (order == 'asc' ? 'desc' : 'asc') : 'asc'}`
+}
+
+const getSortArrowIcon = (name, sort, order) => {
+  return name == sort ? (order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
+}
+
+const getColumns = ({ handleCompactMenuChoice, sort, order }) => ([
   {
-    title: 'Template name',
+    title: <Link href={getSortLink('templateName', sort, order)}>
+      <a>Template name {getSortArrowIcon('templateName', sort, order)}</a>
+    </Link>,
     dataIndex: 'templateName',
     key: 'name',
   },
   {
-    title: 'Created by',
+    title: <Link href={getSortLink('user.name', sort, order)}>
+      <a>Created by {getSortArrowIcon('user.name', sort, order)}</a>
+    </Link>,
     dataIndex: 'user',
     key: 'user',
     render: (user) => (user && <UserCard title={user.name} />) || <NODATA />
   },
   {
-    title: 'Date created',
+    title: <Link href={getSortLink('createdAt', sort, order)}>
+      <a>Date created {getSortArrowIcon('createdAt', sort, order)}</a>
+    </Link>,
     dataIndex: 'createdAt',
     key: 'createdAt',
     render: createdAt => {
@@ -31,7 +48,9 @@ const getColumns = ({ handleCompactMenuChoice }) => ([
     }
   },
   {
-    title: 'Interview stages',
+    title: <Link href={getSortLink('stagesCount', sort, order)}>
+      <a>Interview stages {getSortArrowIcon('stagesCount', sort, order)}</a>
+    </Link>,
     dataIndex: 'stages',
     key: 'stages',
     render: (stages) => {
@@ -39,7 +58,7 @@ const getColumns = ({ handleCompactMenuChoice }) => ([
     }
   },
   {
-    title: <FilterIcon />,
+    title: <Link href="?sort=createdAt&order=desc"><a><FilterIcon /></a></Link>,
     render: (_, row) => {
       const options = [
         { id: 'edit', name: 'Edit' },
@@ -79,7 +98,11 @@ const TemplateTable = ({ className, data = demoProjects, onDelete, ...props }) =
   return <Table rowKey={row => row.id} className={classNames(
     styles['template-table'],
     className
-  )} columns={getColumns({ handleCompactMenuChoice })} data={data} {...props} />
+  )} columns={getColumns({
+    handleCompactMenuChoice,
+    sort: router.query.sort || 'createdAt',
+    order: router.query.order || 'desc'
+  })} data={data} {...props} />
 }
 
 export default TemplateTable;

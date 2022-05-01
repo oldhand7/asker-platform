@@ -69,7 +69,7 @@ export const CompanyUsersList = props => (
             <SelectField source="type" title="Type" choices={[
                { id: 'admin', name: 'Admin' },
                { id: 'hr', name: 'HR' },
-            ]} />
+            ]} sortable={false} />
         </Datagrid>
     </List>
 );

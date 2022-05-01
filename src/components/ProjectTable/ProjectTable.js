@@ -6,33 +6,52 @@ import { useRouter } from 'next/router';
 import NODATA from 'components/NODATA/NODATA';
 import FilterIcon from 'components/Icon/FilterIcon';
 import CompactMenu from 'components/CompactMenu/CompactMenu';
+import Link from 'next/link';
+import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
+import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
 
 import styles from './ProjectTable.module.scss';
 
-const getColumns = ({ handleCompactMenuChoice }) => ([
+const getSortLink = (name, sort, order) => {
+  return `?sort=${name}&order=${sort == name ? (order == 'asc' ? 'desc' : 'asc') : 'asc'}`
+}
+
+const getSortArrowIcon = (name, sort, order) => {
+  return name == sort ? (order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
+}
+
+const getColumns = ({ handleCompactMenuChoice, onSort, sort, order }) => ([
   {
-    title: 'Project name',
+    title: <Link href={getSortLink('name', sort, order)}>
+      <a>Project title {getSortArrowIcon('name', sort, order)}</a>
+    </Link>,
     dataIndex: 'name',
-    key: 'name',
+    key: 'name'
   },
   {
-    title: 'Template name',
+    title: <Link href={getSortLink('template.name', sort, order)}>
+      <a>Template name {getSortArrowIcon('template.name', sort, order)}</a>
+    </Link>,
     dataIndex: 'template',
     key: 'template',
     render: (template) => (template && template.name) || <NODATA />
   },
   {
-    title: 'Interviewer name',
+    title: <Link href={getSortLink('interviewersCount', sort, order)}>
+      <a>Interviewer name {getSortArrowIcon('interviewersCount', sort, order)}</a>
+    </Link>,
     dataIndex: 'interviewers',
     key: 'interviewers',
     render: (interviewers) => {
-      return <div>
+      return interviewers ? <div>
         {interviewers.map(i => <p key={i.id}>{i.name}</p>)}
-      </div>
+      </div> : <NODATA />
     }
   },
   {
-    title: 'Interview stages',
+    title: <Link href={getSortLink('stagesCount', sort, order)}>
+      <a>Interview stages {getSortArrowIcon('stagesCount', sort, order)}</a>
+    </Link>,
     dataIndex: 'stages',
     key: 'stages',
     render: (stages) => {
@@ -40,13 +59,15 @@ const getColumns = ({ handleCompactMenuChoice }) => ([
     }
   },
   {
-    title: "Interview status",
+    title: <Link href={getSortLink('interviewsAwaitingCount', sort, order)}>
+      <a>Interview status {getSortArrowIcon('interviewsAwaitingCount', sort, order)}</a>
+    </Link>,
     render: (candidates, project) => {
       return <ProjectTableStatCell project={project} />
     }
   },
   {
-    title: <FilterIcon />,
+    title: <Link href="?sort=createdAt&order=desc"><a><FilterIcon /></a></Link>,
     render: (_, row) => {
       const options = [
         { id: 'overview', name: 'Interviews' },
@@ -87,7 +108,7 @@ const ProjectTable = ({ className, data = demoProjects, onDelete, ...props }) =>
   return <Table rowKey={row => row.id} className={classNames(
     styles['project-table'],
     className
-  )} columns={getColumns({ handleCompactMenuChoice })} data={data} {...props} />
+  )} columns={getColumns({ handleCompactMenuChoice, sort: router.query.sort || 'createdAt', order: router.query.order || 'desc' })} data={data} {...props} />
 }
 
 export default ProjectTable;

@@ -39,11 +39,13 @@ const ProjectFormSidebar = () => {
 const defaultValues = {
   name: '',
   interviewers: [],
+  interviewersCount: 0,
   stages: [
     { id: 'introduction', name: 'Introduction', type: 'other' },
     null,
     null
   ],
+  stagesCount: 0,
   userId: null,
   config: {
     introduction: {
@@ -51,7 +53,8 @@ const defaultValues = {
     }
   },
   template: null,
-  candidates: [],
+  interviews: [],
+  interviewsAwaitingCount: 0,
   saveAsTemplate: false
 }
 
@@ -110,6 +113,8 @@ const ProjectForm = ({ project, className }) => {
 
     values.userId = user.id;
     values.companyId = user.companyId;
+    values.stagesCount = values.stages.filter(s => s).length;
+    values.interviewersCount = values.interviewers.length;
 
     const tasks = []
 
@@ -118,7 +123,6 @@ const ProjectForm = ({ project, className }) => {
 
       const copy = JSON.parse(JSON.stringify(values));
 
-      delete copy.candidates;
       delete copy.interviewers;
 
       copy.templateName = copy.name;

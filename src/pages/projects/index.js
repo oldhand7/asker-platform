@@ -131,7 +131,6 @@ const ProjectsPage = ({ projects = [], perPage = PER_PAGE, currentPage = 1 }) =>
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
       <ProjectTabe onDelete={deleteProject} emptyText="No projects to show." data={filteredProjects.slice((page - 1) * perPage, (page - 1) * perPage + perPage)} className={styles['projects-page-table']} />
-
       <Pagination page={page} className={styles['projects-page-pagination']} onChange={setPage} total={filteredProjects.length} perPage={perPage} />
 
       {loading ? <Preloader /> : null}
@@ -145,7 +144,11 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
-  const projects = await getCompanyProjectsAdmin(req.session.user.companyId)
+  const projects = await getCompanyProjectsAdmin(
+    req.session.user.companyId,
+    query.sort || 'createdAt',
+    query.order || (!query.sort ? 'desc' : 'asc'),
+  )
 
   return {
     props: {
