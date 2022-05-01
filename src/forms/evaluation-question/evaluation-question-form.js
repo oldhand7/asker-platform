@@ -24,6 +24,7 @@ const defaultValues = {
   type: 'evaluation',
   subtype: '',
   followup: [],
+  followupCount: 0,
   rules: []
 }
 
@@ -55,6 +56,7 @@ const EvaluationQuestionForm = ({ className, question, subtype }) => {
 
     values.companyId = user.companyId
     values.userId = user.id;
+    values.followupCount = values.followup.length
 
     if (!values.subtype) {
       values.subtype = subtype.id

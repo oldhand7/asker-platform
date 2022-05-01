@@ -42,6 +42,7 @@ const defaultValues = {
     null,
     null
   ],
+  stagesCount: 0,
   userId: null,
   companyId: null,
   config: {
@@ -104,6 +105,7 @@ const TemplateForm = ({ template, className }) => {
 
     values.userId = user.id;
     values.companyId = user.companyId;
+    values.stagesCount = values.stages.filter(s => s).length;
 
     values.user = {
       id: user.id,

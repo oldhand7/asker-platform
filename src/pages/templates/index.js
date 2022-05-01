@@ -133,7 +133,11 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
-  const templates = await getCompanyTemplatesAdmin(req.session.user.companyId)
+  const templates = await getCompanyTemplatesAdmin(
+    req.session.user.companyId,
+    query.sort || 'createdAt',
+    query.order || (!query.sort ? 'desc' : 'asc')
+  )
 
   return {
     props: {

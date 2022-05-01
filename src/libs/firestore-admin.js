@@ -90,13 +90,17 @@ export const getProjectInterviews = (projectId) => {
     .then(snap2data)
 }
 
-export const getQuestions = (companyId) => {
-  return db
+export const getQuestions = (companyId, sort = 'createdAt', order = 'desc') => {
+  let query = db
     .collection('questions')
     .where('companyId', 'in', [companyId, 'asker'])
-    .orderBy('createdAt', 'DESC')
-    .get()
-    .then(snap2data)
+    .orderBy(sort, order)
+
+  if (sort == 'type') {
+    query = query.orderBy('subtype', order)
+  }
+
+  return query.get().then(snap2data)
 }
 
 export const getSingleDocument = (col, filter = []) => {
@@ -125,7 +129,7 @@ export const saveCollectionDocument = (col, doc) => {
   }
 }
 
-export const getCompanyTemplates = (companyId, sort = 'createdAt', order = 'DESC') => {
+export const getCompanyTemplates = (companyId, sort = 'createdAt', order = 'desc') => {
   if (!companyId) {
     return Promise.resolve([])
   }

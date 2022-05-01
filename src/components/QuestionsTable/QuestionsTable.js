@@ -11,12 +11,25 @@ import { criteriaTypes } from 'libs/criteria';
 import CompactMenu from 'components/CompactMenu/CompactMenu';
 import FilterIcon from 'components/Icon/FilterIcon';
 import { getScreeningQuestionLabelBySubtype } from 'forms/screening-question/screening-question-form';
+import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
+import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
+import Link from 'next/link';
 
 import styles from './QuestionsTable.module.scss';
 
-const getColumns = ({ handleCompactMenuChoice }) => ([
+const getSortLink = (name, sort, order) => {
+  return `?sort=${name}&order=${sort == name ? (order == 'asc' ? 'desc' : 'asc') : 'asc'}`
+}
+
+const getSortArrowIcon = (name, sort, order) => {
+  return name == sort ? (order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
+}
+
+const getColumns = ({ handleCompactMenuChoice, sort, order }) => ([
   {
-    title: 'Type of question',
+    title: <Link href={getSortLink('type', sort, order)}>
+      <a>Type of question {getSortArrowIcon('type', sort, order)}</a>
+    </Link>,
     key: 'type',
     render: (_, row) => {
       if (row.type == 'evaluation') {
@@ -45,19 +58,25 @@ const getColumns = ({ handleCompactMenuChoice }) => ([
     }
   },
   {
-    title: 'Criterion',
+    title: <Link href={getSortLink('criteria.name', sort, order)}>
+      <a>Criterion {getSortArrowIcon('criteria.name', sort, order)}</a>
+    </Link>,
     key: 'criteria',
     render: (_, { criteria }) => {
       return criteria ? criteria.name : <NODATA />
     }
   },
   {
-    title: 'Question',
+    title: <Link href={getSortLink('name', sort, order)}>
+      <a>Question {getSortArrowIcon('name', sort, order)}</a>
+    </Link>,
     dataIndex: 'name',
     key: 'name'
   },
   {
-    title: 'Follow up questions',
+    title: <Link href={getSortLink('followupCount', sort, order)}>
+      <a>Follow up questions  {getSortArrowIcon('followupCount', sort, order)}</a>
+    </Link>,
     dataIndex: 'followup',
     key: 'followup',
     render: (questions) => questions && questions.length ? <ul className={styles['questions-table-followup-questions']}>
@@ -65,7 +84,7 @@ const getColumns = ({ handleCompactMenuChoice }) => ([
     </ul> : <NODATA />
   },
   {
-    title: <FilterIcon />,
+    title: <Link href="?sort=createdAt&order=desc"><a><FilterIcon /></a></Link>,
     key: 'action',
     render: (_, row) => <CompactMenu options={[
       ...(row.companyId === 'asker' ?
@@ -97,7 +116,11 @@ const QuestionsTable = ({ className, data = [], onDelete, ...props }) => {
   return <Table onRow={tagRow} rowKey={row => row.id} className={classNames(
     styles['questions-table'],
     className
-  )} columns={getColumns({ handleCompactMenuChoice })} data={data} {...props} />
+  )} columns={getColumns({
+    handleCompactMenuChoice,
+    sort: router.query.sort || 'createdAt',
+    order: router.query.order || 'desc'
+  })} data={data} {...props} />
 }
 
 export default QuestionsTable;

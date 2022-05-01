@@ -71,9 +71,10 @@ export const CompaniesAdd = props => {
     return <Create {...props}>
         <SimpleForm redirect='list' validate={validateForm}>
           <TextInput source="name" label="Name" />
-          <ImageInput source="images" multiple={true}>
+          <ImageInput source="images" label="Logo" multiple={true}>
             <ImageField source="src" title="title" />
           </ImageInput>
+          <TextInput source="id" label="Identifier" helperText="99% cases you would leave this empty" />
         </SimpleForm>
     </Create>
 }
