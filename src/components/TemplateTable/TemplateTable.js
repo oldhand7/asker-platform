@@ -10,6 +10,7 @@ import UserCard from 'components/UserCard/UserCard';
 import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
 import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
 import Link from 'next/link';
+import { useUser } from 'libs/user';
 
 import styles from './TemplateTable.module.scss';
 
@@ -21,7 +22,7 @@ const getSortArrowIcon = (name, sort, order) => {
   return name == sort ? (order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
 }
 
-const getColumns = ({ handleCompactMenuChoice, sort, order }) => ([
+const getColumns = ({ handleCompactMenuChoice, sort, order, user }) => ([
   {
     title: <Link href={getSortLink('templateName', sort, order)}>
       <a>Template name {getSortArrowIcon('templateName', sort, order)}</a>
@@ -61,11 +62,11 @@ const getColumns = ({ handleCompactMenuChoice, sort, order }) => ([
     title: <Link href="?sort=createdAt&order=desc"><a><FilterIcon /></a></Link>,
     render: (_, row) => {
       const options = [
-        { id: 'edit', name: 'Edit' },
+        { id: 'edit', name: user && user.companyId == row.companyId ? 'Edit' : 'Edit copy' },
         { id: 'create-project', name: 'Create project' }
       ]
 
-      if (row.companyId != 'asker') {
+      if (user && user.companyId == row.companyId) {
         options.push({
           id: 'delete',
           name: 'Delete'
@@ -81,6 +82,7 @@ import demoProjects from 'data/demo/projects.json';
 
 const TemplateTable = ({ className, data = demoProjects, onDelete, ...props }) => {
   const router = useRouter()
+  const {user} = useUser()
 
   const handleCompactMenuChoice = (c, row) => {
     if (c.id == 'edit') {
@@ -95,13 +97,20 @@ const TemplateTable = ({ className, data = demoProjects, onDelete, ...props }) =
     }
   }
 
-  return <Table rowKey={row => row.id} className={classNames(
+  const tagRow = (rec) => {
+    return {
+      'data-company-id': rec.companyId
+    }
+  }
+
+  return <Table onRow={tagRow} rowKey={row => row.id} className={classNames(
     styles['template-table'],
     className
   )} columns={getColumns({
     handleCompactMenuChoice,
     sort: router.query.sort || 'createdAt',
-    order: router.query.order || 'desc'
+    order: router.query.order || 'desc',
+    user
   })} data={data} {...props} />
 }
 

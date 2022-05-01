@@ -26,7 +26,7 @@ const QuestionEditPage = ({ question }) => {
 export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
   const filter = [
     ['id', '==', query.id],
-    ['companyId', '==', req.session.user.companyId]
+    ['companyId', 'in', ['asker', req.session.user.companyId]]
   ];
 
   const question = await getSingleDocument('questions', filter)

@@ -48,6 +48,16 @@ const createCompany = async (name) => {
   return docRef.id;
 }
 
+const createRootCompany = async () => {
+  const docRef = db.collection('companies').doc('asker')
+
+  await docRef.set({
+    name: 'Asker'
+  })
+
+  return docRef.id;
+}
+
 const createUser = async (name, email, password, companyId = null, type = 'admin', superadmin = false) => {
   const user = await getAuth().createUser({
     email,
@@ -137,7 +147,9 @@ const beforeRun = async () => {
   await deleteCollection(db, 'criteriaOptions');
 
   //Creates superadmin
-  await createUser('John Powers', 'admin@askertech.com', 'test123', '', 'admin', true)
+  await createRootCompany()
+
+  await createUser('John Powers', 'admin@askertech.com', 'test123', 'asker', 'admin', true)
 
   //User 1
   const companyId1 = await createCompany('Doe Paper Company')
@@ -180,6 +192,12 @@ const beforeRun = async () => {
 
   const userId7Joe  = await createUser('Joe Anderson', 'joe.anderson@example.com', 'test123', companyId7, 'admin', false)
   const userId7Jane = await createUser('Jane Anderson', 'jane.anderson@example.com', 'test123', companyId7, 'hr', false)
+
+  //User 8
+  const companyId8 = await createCompany('Spencer & Co')
+
+  const userId8Joe  = await createUser('Joe Spencer', 'joe.spencer@example.com', 'test123', companyId8, 'admin', false)
+  const userId8Jane = await createUser('Jane Spencer', 'jane.spencer@example.com', 'test123', companyId8, 'hr', false)
 
   await createQuestion({
     name: 'CQ1',

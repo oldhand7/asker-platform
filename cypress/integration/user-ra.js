@@ -42,8 +42,7 @@ describe('User RA', () => {
       cy.visit('/logout/')
       cy.location('pathname').should('eq', '/login/')
 
-      cy.simpleLogin('f.dakota@hotmail.net', 'test456')
-
-      cy.get('[data-test-id="user-card"]').contains('F. Dakota')
+      cy.simpleLogin('f.dakota@hotmail.net', 'test456', true)
+      cy.confirmLoggedInAs('F. Dakota')
   })
 })

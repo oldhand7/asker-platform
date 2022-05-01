@@ -7,7 +7,7 @@ import Button from 'components/Button/PlatformButton';
 import Head from 'next/head';
 import Alert from 'components/Alert/Alert';
 import { useFlash } from 'libs/flash';
-import { getCompanyTemplates as getCompanyTemplatesAdmin } from 'libs/firestore-admin'
+import { getTemplates } from 'libs/firestore-admin'
 import Pagination from 'components/Pagination/Pagination';
 import Preloader from 'components/Preloader/Preloader';
 import { useDebounce } from 'libs/debounce';
@@ -133,7 +133,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
-  const templates = await getCompanyTemplatesAdmin(
+  const templates = await getTemplates(
     req.session.user.companyId,
     query.sort || 'createdAt',
     query.order || (!query.sort ? 'desc' : 'asc')

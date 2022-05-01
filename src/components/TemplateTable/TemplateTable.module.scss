@@ -1,4 +1,50 @@
+@import 'styles/vars';
+
 .template-table {
+
+  table tbody tr[data-company-id] td:first-child {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 15rem;
+      height: 100%;
+      display: block;
+      top: 0;
+      left: 0;
+      background: $brandish-grape;
+      border-radius: 5px 0px 0px 5px;
+    }
+  }
+
+  td {
+    position: relative;
+  }
+
+  table tbody tr[data-company-id] td:nth-child(2) {
+    color: $brandish-grape;
+
+    img {
+      position: relative;
+      border: 3px solid $brandish-grape;
+    }
+  }
+
+  table tbody tr[data-company-id="asker"] td:first-child {
+    &::before {
+      background: $brandish-green;
+    }
+  }
+
+  table tbody tr[data-company-id="asker"] td:nth-child(2) {
+    color: $brandish-green;
+
+    img {
+      position: relative;
+      border: 3px solid $brandish-green;
+    }
+  }
 
   table {
     width: 100% ;
@@ -25,6 +71,8 @@
         white-space: nowrap;
       }
     }
+
+
 
     tbody tr {
       margin-bottom: 20rem;

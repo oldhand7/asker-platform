@@ -63,13 +63,11 @@ describe('Company employees', () => {
           })
           .wait(4000)
 
-        cy.visit('/logout/').wait(2000)
+        cy.logout()
 
-        cy.simpleLogin('bob.miller@example.com', 'bob123')
+        cy.simpleLogin('bob.miller@example.com', 'bob123', true)
 
-        cy.get('[data-test-id="user-card"]').contains('Bob Miller')
-
-        cy.visit('/logout/').wait(2000)
+        cy.logout()
 
         cy.simpleLogin('jane.miller@example.com', 'test123')
 

@@ -14,8 +14,11 @@ handler.put(async (req, res) => {
 
   const rules = {
     email: 'required|email',
-    password: 'required|min:6',
     uid: 'required'
+  }
+
+  if (body.password) {
+    rules.password =  'required|min:6'
   }
 
   const errors = validate(req.body, rules)
@@ -40,12 +43,17 @@ handler.put(async (req, res) => {
     })
   }
 
+  const newUser = {
+    email: body.email
+  }
+
+  if (body.password) {
+    newUser.password = body.password;
+  }
+
   try {
     const user = await getAuth(app)
-      .updateUser(body.uid, {
-        email: body.email,
-        password: body.password
-      })
+      .updateUser(body.uid, newUser)
 
     res.status(200).end()
   } catch (error) {

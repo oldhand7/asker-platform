@@ -46,7 +46,7 @@ describe('User Joe', () => {
 
     cy.contains('Your profile was updated!')
 
-    cy.visit('/logout/').wait(2000)
+    cy.logout()
 
     cy.get('form[data-test-id="login-form"]').within(() => {
       cy.get('input[type="text"][name="email"]').type('joe.doe@example.com')
@@ -55,11 +55,8 @@ describe('User Joe', () => {
 
     cy.contains('Email or password invalid')
 
-    cy.simpleLogin('j.doe@hotmail.net', 'test123', 2000)
-
-    cy.visit('/profile/')
-
-    cy.get('[data-test-id=user-card]').contains('Joe')
+    cy.simpleLogin('j.doe@hotmail.net', 'test123', true)
+    cy.confirmLoggedInAs('Joe')
   })
 })
 
@@ -83,21 +80,14 @@ describe('User Jane', () => {
       .submit()
 
     cy.contains('Your profile was updated!')
-    cy.visit('/logout/')
-    cy.location('pathname').should('eq', '/login/').wait(2000)
 
-    cy.get('form[data-test-id="login-form"]').within(() => {
-      cy.get('input[type="text"][name="email"]').type('jane.doe@example.com')
-      cy.get('input[type="password"][name="password"]').type('test123')
-    }).submit()
+    cy.logout()
+
+    cy.simpleLogin('jane.doe@example.com', 'test123')
 
     cy.contains('Email or password invalid')
 
-    cy.get('form[data-test-id="login-form"]').within(() => {
-      cy.get('input[type="text"][name="email"]').type('{selectAll}{backspace}jane.doe@example.com')
-      cy.get('input[type="password"][name="password"]').type('{selectAll}{backspace}foo123')
-    }).submit()
-
-    cy.get('[data-test-id=user-card]').contains('Jane')
+    cy.simpleLogin('jane.doe@example.com', 'foo123', true)
+    cy.confirmLoggedInAs('Jane')
   })
 })

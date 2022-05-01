@@ -11,19 +11,36 @@ Cypress.Commands.add('login', (username, password, key = '') => {
     cy.visit('/login/')
 
     cy.get('form[data-test-id="login-form"]').within(() => {
-      cy.get('input[type="text"][name="email"]').type(username)
-      cy.get('input[type="password"][name="password"]').type(password)
+      cy.get('input[type="text"][name="email"]')
+        .type(`{selectAll}{backspace}${username}`)
+      cy.get('input[type="password"][name="password"]')
+        .type(`{selectAll}{backspace}${password}`)
     }).submit()
 
     cy.location('pathname').should('eq', '/projects/')
   })
 })
 
-Cypress.Commands.add('simpleLogin', (username, password, delay = 1000) => {
+Cypress.Commands.add('simpleLogin', (username, password, confirm = false) => {
   cy.visit('/login/')
 
   cy.get('form[data-test-id="login-form"]').within(() => {
-    cy.get('input[type="text"][name="email"]').type(username)
-    cy.get('input[type="password"][name="password"]').type(password)
-  }).submit().wait(delay)
+    cy.get('input[type="text"][name="email"]')
+      .type(`{selectAll}{backspace}${username}`)
+    cy.get('input[type="password"][name="password"]')
+      .type(`{selectAll}{backspace}${password}`)
+  }).submit()
+
+  if (confirm) {
+    cy.location('pathname').should('eq', '/projects/')
+  }
+})
+
+Cypress.Commands.add('logout', () => {
+  cy.visit('/logout/')
+  cy.location('pathname').should('eq', '/login/')
+})
+
+Cypress.Commands.add('confirmLoggedInAs', (name) => {
+  cy.get('[data-test-id="user-card"]').contains(name)
 })

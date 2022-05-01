@@ -14,6 +14,7 @@ import { getScreeningQuestionLabelBySubtype } from 'forms/screening-question/scr
 import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
 import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
 import Link from 'next/link';
+import { useUser } from 'libs/user';
 
 import styles from './QuestionsTable.module.scss';
 
@@ -25,7 +26,7 @@ const getSortArrowIcon = (name, sort, order) => {
   return name == sort ? (order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
 }
 
-const getColumns = ({ handleCompactMenuChoice, sort, order }) => ([
+const getColumns = ({ handleCompactMenuChoice, sort, order, user }) => ([
   {
     title: <Link href={getSortLink('type', sort, order)}>
       <a>Type of question {getSortArrowIcon('type', sort, order)}</a>
@@ -86,19 +87,29 @@ const getColumns = ({ handleCompactMenuChoice, sort, order }) => ([
   {
     title: <Link href="?sort=createdAt&order=desc"><a><FilterIcon /></a></Link>,
     key: 'action',
-    render: (_, row) => <CompactMenu options={[
-      ...(row.companyId === 'asker' ?
-      [{ id: 'clone', name: 'Clone' }] :
-      [{ id: 'edit', name: 'Edit' }, { id: 'delete', name: 'Delete' }])
-    ]} onChoice={c => handleCompactMenuChoice(c, row)} />
+    render: (_, row) => {
+      const options = [
+        { id: 'edit', name: user && user.companyId == row.companyId ? 'Edit' : 'Edit copy' }
+      ]
+
+      if (user && user.companyId == row.companyId) {
+        options.push({
+          id: 'delete',
+          name: 'Delete'
+        })
+      }
+
+      return <CompactMenu options={options} onChoice={c => handleCompactMenuChoice(c, row)} />
+    }
   }
 ]);
 
 const QuestionsTable = ({ className, data = [], onDelete, ...props }) => {
   const router = useRouter()
+  const {user} = useUser()
 
   const handleCompactMenuChoice = (c, row) => {
-    if (c.id == 'clone' || c.id == 'edit') {
+    if (c.id == 'edit') {
       router.push(`/questions/${row.id}/edit/`)
     }
 
@@ -119,7 +130,8 @@ const QuestionsTable = ({ className, data = [], onDelete, ...props }) => {
   )} columns={getColumns({
     handleCompactMenuChoice,
     sort: router.query.sort || 'createdAt',
-    order: router.query.order || 'desc'
+    order: router.query.order || 'desc',
+    user
   })} data={data} {...props} />
 }
 
