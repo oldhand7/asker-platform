@@ -6,7 +6,7 @@ describe('User RA', () => {
   it('superadmin creates user', () => {
       cy.visit('/admin/')
 
-      cy.hash().should('eq', '#/pages')
+      cy.hash().should('eq', '#/users')
 
       cy.visit('/admin/#/companies/create')
       cy.get('input[id="name"]').type('Dakota Holding{enter}')
