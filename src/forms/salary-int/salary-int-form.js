@@ -3,6 +3,8 @@ import TextInputField from 'components/TextInputField/TextInputField';
 import useForm from 'libs/use-form'
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
+import { handleNext } from 'libs/helper';
+import NextButton from 'components/Button/NextButton';
 
 import styles from './salary-int-form.module.scss';
 
@@ -18,7 +20,7 @@ const rules = {
 
 }
 
-const SalaryIntForm = ({ className, values, onValues, config }) => {
+const SalaryIntForm = ({ last, nextId, className, values, onValues, config }) => {
   const [formValues, errors, control] = useForm({
     values: values ? values : { ...defaultValues, range: [config.range[0], config.range[1]]},
     rules,
@@ -74,6 +76,7 @@ const SalaryIntForm = ({ className, values, onValues, config }) => {
        }}
         />
     </div>
+    {!last ? <NextButton onClick={() => handleNext(nextId)} className={styles['salary-int-form-next-button']} /> : null}
   </div>
 }
 

@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import MultichoiceQuestionIntForm from 'forms/multichoice-question-int/multichoice-question-int-form';
 import RangeQuestionIntForm from 'forms/range-question-int/range-question-int-form';
 import TextQuestionIntForm from 'forms/text-question-int/text-question-int-form';
-
+import { handleNext } from 'libs/helper';
 import styles from './other-questions-int-form.module.scss';
 
 const questionForms = {
@@ -27,14 +27,6 @@ const OtherQuestionsIntForm = ({ last = false, nextId, className, values, onValu
   useEffect(() => {
     onValues(formValues)
   }, [formValues])
-
-  const handleNext = id => {
-    const nextEl = document.querySelector(`#${id}`)
-
-    if (nextEl) {
-      nextEl.scrollIntoView()
-    }
-  }
 
   return <div className={classNames(styles['other-questions-int-form'], className)}>
     {config.questions
