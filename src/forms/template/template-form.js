@@ -14,6 +14,7 @@ import { saveCollectionDocument } from 'libs/firestore'
 import { useRouter } from 'next/router';
 import Preloader from 'components/Preloader/Preloader'
 import NewStageDroppable from 'components/NewStageDroppable/NewStageDroppable'
+import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
 
 import styles from './template-form.module.scss';
 
@@ -200,6 +201,8 @@ const TemplateForm = ({ template, className }) => {
 
     <div className={styles['template-form-details']}>
       <div className={styles['template-form-details-inner']}>
+        <ProjectEvaluationCriteria project={values} className={styles['template-form-criteria']} />
+
         <h2 className={styles['template-form-title']}>Create a new template</h2>
 
         <TextInputField value={values.templateName} placeholder={t('Name')} error={errors ? t(errors.templateName) : null} onChange={control.input('templateName')} autoComplete='off' name='templateName' type='text' className={classNames(styles['template-form-field'], styles['template-form-field-name'])} />

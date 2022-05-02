@@ -16,6 +16,8 @@ import { useRouter } from 'next/router';
 import Preloader from 'components/Preloader/Preloader'
 import NewStageDroppable from 'components/NewStageDroppable/NewStageDroppable'
 import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField';
+import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
+import FlexRow from 'components/FlexRow/FlexRow';
 
 import styles from './project-form.module.scss';
 
@@ -229,6 +231,8 @@ const ProjectForm = ({ project, className }) => {
 
     <div className={styles['project-form-details']}>
       <div className={styles['project-form-details-inner']}>
+        <ProjectEvaluationCriteria project={values} className={styles['project-form-criteria']} />
+        
         <h2 className={styles['project-form-title']}>Create a new project</h2>
 
         { project && !project.id && project.template ?
