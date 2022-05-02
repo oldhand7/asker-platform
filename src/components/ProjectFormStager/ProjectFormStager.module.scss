@@ -68,4 +68,10 @@
   &-feature-form {
     margin: 20rem 0;
   }
+
+  &-sidebar {
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
 }

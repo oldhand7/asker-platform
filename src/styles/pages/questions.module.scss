@@ -1,7 +1,6 @@
 .questions-page {
   padding: 40rem 0;
-  position: relative;
-  
+
   &-filter {
     &-company{
       margin-bottom: 25rem;
@@ -9,10 +8,18 @@
       &-button {
         margin-right: 5rem;
       }
+
+      @media (max-width: 768px) {
+        text-align: center;
+      }
     }
 
     &-criteria {
       margin: 5rem 0;
+
+      @media (max-width: 768px) {
+        text-align: center;
+      }
     }
   }
 
@@ -22,12 +29,17 @@
     align-items: center;
     margin: 38rem 0;
 
-    & > {
-      flex: 0;
+    & > * {
+      margin-right: 10rem;
+    }
+
+    & > *:last-child {
+      margin-right: 00rem;
     }
   }
 
   &-table {
-
+    overflow-x: auto;
+    margin-bottom: 20rem;
   }
 }

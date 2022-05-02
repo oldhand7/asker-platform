@@ -21,8 +21,8 @@ import FlexRow from 'components/FlexRow/FlexRow';
 
 import styles from './project-form.module.scss';
 
-const ProjectFormSidebar = () => {
-  return <div className={styles['project-form-sidebar']}>
+const ProjectFormSidebar = ({ className }) => {
+  return <div className={classNames(styles['project-form-sidebar'], className)}>
       {featureTypes.map((featureType) => {
         const targetFeatures = features.filter(f => f.type == featureType.id)
 
@@ -227,12 +227,12 @@ const ProjectForm = ({ project, className }) => {
   }
 
   return  <form data-test-id="project-form" onSubmit={control.submit(handleSubmit, handleSubmitFailure)} className={classNames(styles['project-form'], className)}>
-    <ProjectFormSidebar />
+    <ProjectFormSidebar className={styles['project-form-sidebar']} />
 
     <div className={styles['project-form-details']}>
       <div className={styles['project-form-details-inner']}>
         <ProjectEvaluationCriteria project={values} className={styles['project-form-criteria']} />
-        
+
         <h2 className={styles['project-form-title']}>Create a new project</h2>
 
         { project && !project.id && project.template ?

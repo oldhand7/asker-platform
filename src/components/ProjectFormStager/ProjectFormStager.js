@@ -5,11 +5,15 @@ import { useEffect, useState } from 'react';
 import StageFeaturePlaceholder from 'components/StageFeaturePlaceholder/StageFeaturePlaceholder'
 import TrashButton from 'components/TrashButton/TrashButton'
 import FeatureForm from 'components/FeatureForm/FeatureForm';
+import { useModal } from 'libs/modal';
+import FeatureSelectModal from 'modals/feature-select/feature-select-modal';
+import LoadButton from 'components/LoadButton/LoadButton';
 
 import styles from './ProjectFormStager.module.scss';
 
 const ProjectFormStager = ({ feature, featureValues, featureOnError, featureOnValues, className, onStages, stages = [], activeStage = null, onStageSelect, onStageDelete }) => {
   const [isBrowser, setIsBrowser] = useState(false);
+  const openFeatureSelectorModal = useModal(FeatureSelectModal, { size: 'small'});
 
   useEffect(() => {
     setIsBrowser(process.browser);
@@ -52,6 +56,10 @@ const ProjectFormStager = ({ feature, featureValues, featureOnError, featureOnVa
   }
 
   const handleFeatureDrop = (feature = null, index) => {
+    if (!feature) {
+      return;
+    }
+    
     const stagesCopy = [
       ...stages
     ]
@@ -91,6 +99,7 @@ const ProjectFormStager = ({ feature, featureValues, featureOnError, featureOnVa
                 {stage ? <FeatureDragDropLabel onClick={() => onStageSelect(stage)} className={styles['project-form-stager-item-feature']} feature={stage} context='stager' /> : null}
               </StageFeaturePlaceholder>
               <div className={styles['project-form-stager-item-control']}>
+                <LoadButton onClick={(ev) => openFeatureSelectorModal(item => handleFeatureDrop(item, index, stage))}  />
                 <TrashButton onClick={(ev) => handleStageDelete(stage, index, ev)} className={styles['project-form-stager-item-control-button']} />
               </div>
             </div>

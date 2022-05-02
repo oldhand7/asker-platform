@@ -31,10 +31,31 @@ const menuItems = [
   }
 ]
 
+const menuItemsMobile = (user) => {
+  const mobile = [...menuItems]
+
+  if (user) {
+    mobile.push({
+      id: 'profile',
+      title: 'Profile',
+      href: '/profile/'
+    })
+
+    mobile.push({
+      id: 'logout',
+      title: 'Logout',
+      href: '/logout/'
+    })
+  }
+
+  return mobile
+}
+
 const Navbar = ({ className, menu = [] }) => {
   const [config, t] = useSite();
   const [mode, setMode] = useState('normal');
-  const { user } = useUser();
+  const { user, loading } = useUser();
+  const [open, setOpen] = useState(false);
 
   const {
     isScrollingUp,
@@ -60,52 +81,42 @@ const Navbar = ({ className, menu = [] }) => {
     }
   }, [isScrolling])
 
-  const [menuActive, setMenuActive] = useState(false);
 
   useEffect(() => {
-    if (menuActive) {
+    if (open) {
       document.body.style.overflowX = 'hidden';
     } else {
       document.body.style.overflowX = 'auto';
     }
-  }, [menuActive])
+  }, [open])
 
   const handleMobileToggle = () => {
-    setMenuActive(!menuActive)
+    setOpen(!open)
   }
 
-  const getClassNames = () => {
-    return classNames(
-      styles['navbar'],
-      className,
-      menuActive ? styles['mobile'] : '',
-      styles[`navbar-${mode}`]
-    )
-  }
 
-  return <div id="navbar" className={getClassNames()}>
+  return <div id="navbar" className={classNames(
+    styles['navbar'],
+    className,
+    open ? styles['mobile'] : '',
+    styles[`navbar-${mode}`]
+  )}>
     <div className={styles['navbar-inner']}>
-    <Logo darkMode={mode == 'fixed'} onClick={() => setMenuActive(false)} className={styles['navbar-logo']} />
-    <Menu items={menuItems} onClick={() => setMenuActive(false)} className={styles['navbar-menu']} />
-    {
-        user ? <UserMenu className={styles['navbar-session']} /> :
-        <>
-          <MenuToggle className={styles['navbar-open']} onClick={handleMobileToggle} active={false} />
-          <div className={styles['navbar-session-login']}><Link href="/login">Login</Link></div>
-          <div className={styles['navbar-mobile']}>
-            <Logo onClick={() => setMenuActive(false)} className={styles['navbar-logo']} />
-            <Menu items={[
-              {
-                id: 'login',
-                title: 'Login',
-                href: '/login'
-              }
-            ]} onClick={() => setMenuActive(false)} className={styles['navbar-menu']} />
-            <MenuToggle className={styles['navbar-close']} onClick={handleMobileToggle} active={true} />
-          </div>
-        </>
+      <Logo darkMode={mode == 'fixed'} onClick={() => setOpen(false)} className={styles['navbar-logo']} />
+
+      {
+        !open ?
+        <Menu items={menuItems} onClick={() => setOpen(false)} className={styles['navbar-menu']} /> :
+        <Menu items={menuItemsMobile(user)} onClick={() => setOpen(false)} className={styles['navbar-menu']} />
       }
-      </div>
+
+      {user && !loading ? <UserMenu className={styles['navbar-session']} /> : null}
+      {!user && !loading ? <Link href="/login/">
+        <a className={styles['navbar-login-link']}>Login</a></Link> : null}
+      {!user && loading ? <span></span> : null}
+
+      <MenuToggle className={styles['navbar-toggle']} onClick={handleMobileToggle} active={open} />
+    </div>
   </div>
 }
 

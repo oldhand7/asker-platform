@@ -2,10 +2,13 @@
   padding: 40rem;
 
   &-input-field {
-    margin-bottom: 10rem;
+    margin: 10rem 0;
   }
 
   &-submit {
     cursor: pointer;
+    width: 100%;
+    line-height: 4em;
+    margin-top: 20rem;
   }
 }

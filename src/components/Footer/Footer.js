@@ -29,7 +29,7 @@ const Footer = () => {
 
       <div className={styles['footer-contact-widget']}>
         <MessageUsButton onClick={openContactModal} className={styles['footer-quick-button']} />
-        <CallUsButton href={`tel:${config['company-email']}`} className={styles['footer-quick-button']} />
+        <CallUsButton href={`tel:${config && config['company-email']}`} className={styles['footer-quick-button']} />
       </div>
 
       <div className={styles['footer-footer']}>
