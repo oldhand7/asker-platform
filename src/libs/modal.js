@@ -6,14 +6,27 @@ export const ModalContext = createContext();
 export const withModal = (WrappedComponent) => {
   const withModal = (props) => {
     const { pageProps: { config } } = props;
-    const [modal, setModal] = useState(null)
+    const [modals, setModals] = useState([])
+
+    const addModal = modal => {
+      setModals([
+        ...modals,
+        modal
+      ])
+    }
+
+    const closeModal = () => {
+      setModals([
+        ...modals.slice(-1)
+      ])
+    }
 
     return (
-      <ModalContext.Provider value={[setModal, () => setModal(null)]}>
-      <WrappedComponent
-        {...props}
-      />
-      <>{modal}</>
+      <ModalContext.Provider value={[addModal, closeModal]}>
+      <WrappedComponent {...props} />
+      {
+        modals.reverse().map((m, index) => <div key={'modal'+index}>{m}</div>)
+      }
       </ModalContext.Provider>
     );
   };

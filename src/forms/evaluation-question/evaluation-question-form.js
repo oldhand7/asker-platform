@@ -35,7 +35,7 @@ const validationRules = {
   criteria: 'required'
 }
 
-const EvaluationQuestionForm = ({ className, question, subtype }) => {
+const EvaluationQuestionForm = ({ className, question, subtype, onValues }) => {
   const [values, errors, control] = useForm({
     values: question ? question : { ...defaultValues, rules: subtype.rules },
     rules: validationRules
@@ -63,14 +63,22 @@ const EvaluationQuestionForm = ({ className, question, subtype }) => {
     }
 
     saveCollectionDocument('questions', values)
-      .then(() => {
-        if (question && !clone) {
-          addFlash('Question saved', 'success')
+      .then(id => {
+        if (onValues) {
+          onValues({
+            ...values,
+            id
+          });
         } else {
-          addFlash('Question created', 'success')
-        }
 
-        router.push('/questions/')
+          if (question && !clone) {
+            addFlash('Question saved', 'success')
+          } else {
+            addFlash('Question created', 'success')
+          }
+
+          router.push('/questions/')
+        }
       })
       .catch(setError)
   }

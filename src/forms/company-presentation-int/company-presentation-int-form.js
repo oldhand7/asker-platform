@@ -1,12 +1,13 @@
 import classNames from 'classnames';
 import PhotoSlideshow from 'components/PhotoSlideshow/PhotoSlideshow';
 import { useState, useEffect } from 'react';
-import { isImage } from 'libs/helper';
+import { isImage, handleNext} from 'libs/helper';
 import Link from 'next/link';
+import NextButton from 'components/Button/NextButton';
 
 import styles from './company-presentation-int-form.module.scss';
 
-const CompanyPresentationForm = ({ className, stage, project }) => {
+const CompanyPresentationForm = ({ className, stage, project, last, nextId }) => {
   const [images, setImages] = useState([]);
   const [documents, setDocuments] = useState([]);
 
@@ -40,6 +41,8 @@ const CompanyPresentationForm = ({ className, stage, project }) => {
           </li>))}
       </ul>
     </div> : null}
+
+    {!last ? <NextButton onClick={() => handleNext(nextId)} className={styles['company-presentation-int-form-next-button']} /> : null}
   </div>
 }
 

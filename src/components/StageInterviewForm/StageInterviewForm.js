@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic'
+import classNames from 'classnames';
+
+import styles from './StageInterviewForm.module.scss';
 
 const stageForms = {
   'introduction': dynamic(() => import('forms/introduction-int/introduction-int-form')),
@@ -30,7 +33,10 @@ const StageInterviewForm = (props) => {
     }
   }, [props])
 
-  return FormComponent ? <div id={`feature-form-${props.stage.id}`} data-test-id="feature-form">
+  return FormComponent ? <div className={classNames(
+    styles['stage-interview-form'],
+    props.last ? styles['stage-interview-form-last'] : ''
+  )} id={`feature-form-${props.stage.id}`} data-test-id="feature-form">
     <FormComponent config={props.project.config[props.stage.id]} {...formComponentProps} />
   </div> : null;
 }

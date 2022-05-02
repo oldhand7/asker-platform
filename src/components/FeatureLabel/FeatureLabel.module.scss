@@ -1,11 +1,11 @@
 @import 'styles/vars';
 
-.feature-drag-drop-label {
+.feature-label {
   cursor: pointer;
   display: inline-block;
   line-height: 56rem;
   padding: 0 14rem;
-  min-width: 290rem;
+  min-width: 100%;
   font-weight: 500;
   font-size: 16rem;
   background: rgba($brandish-tar, 0.1);

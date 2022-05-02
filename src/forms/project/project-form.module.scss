@@ -19,6 +19,10 @@
         line-height: 30rem;
       }
     }
+
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
   &-details {
@@ -26,6 +30,7 @@
     background: white;
     border-radius: 13px;
     padding: 40rem;
+    position: relative;
   }
 
   &-details-inner {
@@ -79,5 +84,26 @@
   &-template {
     font-size: 14rem;
     color: $brandish-grey;
+  }
+
+  &-criteria {
+    width: calc(100% - 640rem);
+    position: absolute;
+    right: 0;
+    top: 0rem;
+    z-index: 1;
+
+    @media (max-width: 1600px) {
+      position: fixed;
+      top: 50%;
+      transform: scale(0.8) translate(20%, -50%);
+      right: 0;
+      width: 300rem;
+      box-shadow: -3px 5px 33px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 1200px) {
+      display: none;
+    }
   }
 }

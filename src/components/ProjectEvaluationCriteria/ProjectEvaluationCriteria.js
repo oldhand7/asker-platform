@@ -58,7 +58,7 @@ const ProjectEvaluationCriteria = ({ className, project }) => {
     });
 
     setCriteria(criterias2.reverse().slice(0, 3).map(c => (
-      { ...c, p: Math.round(c.count * 100 / Math.min(3, criterias2.length)) }
+      { ...c, p: Math.min(Math.round(c.count * 100 / Math.min(3, criterias2.length)), 100) }
     )))
   }, [project])
 

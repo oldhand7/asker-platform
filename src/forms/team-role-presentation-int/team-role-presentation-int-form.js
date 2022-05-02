@@ -1,12 +1,13 @@
 import classNames from 'classnames';
 import PhotoSlideshow from 'components/PhotoSlideshow/PhotoSlideshow';
 import { useState, useEffect } from 'react';
-import { isImage } from 'libs/helper';
+import { isImage, handleNext } from 'libs/helper';
 import Link from 'next/link';
+import NextButton from 'components/Button/NextButton';
 
 import styles from './team-role-presentation-int-form.module.scss';
 
-const TeamRolePresentationForm = ({ className, stage, project }) => {
+const TeamRolePresentationForm = ({ className, stage, project, last, nextId }) => {
   const [images, setImages] = useState([]);
   const [documents, setDocuments] = useState([]);
 
@@ -40,6 +41,7 @@ const TeamRolePresentationForm = ({ className, stage, project }) => {
           </li>))}
       </ul>
     </div> : null}
+    {!last ? <NextButton onClick={() => handleNext(nextId)} className={styles['team-role-int-form-next-button']} /> : null}
   </div>
 }
 

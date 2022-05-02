@@ -8,5 +8,9 @@
 
   &-option {
     cursor: grab;
+
+    &-clickable {
+      cursor: pointer;
+    }
   }
 }

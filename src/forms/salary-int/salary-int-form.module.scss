@@ -1,7 +1,7 @@
 @import 'styles/vars';
 
 .salary-int-form {
-  max-width: 500rem;
+
 
   &-title {
     margin-bottom: 30rem
@@ -14,6 +14,7 @@
   &-slider {
     margin: 100rem 0;
     position: relative;
+    max-width: 500rem;
 
     &-min,
     &-max {

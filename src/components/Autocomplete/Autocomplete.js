@@ -117,10 +117,10 @@ const Autocomplete = ({ onSearch, className, options = [] }) => {
       }
     }
 
-    document.body.addEventListener('click', handleOffClick)
+    document.body.addEventListener('click', handleOffClick, true)
 
     return () => {
-      document.body.removeEventListener('click', handleOffClick)
+      document.body.removeEventListener('click', handleOffClick, true)
     }
   }, [open])
 

@@ -1,5 +1,5 @@
 .projects-page {
-  padding: 20rem 0;
+  padding: 40rem 0;
 
   &-nav {
     display: flex;
@@ -7,12 +7,18 @@
     align-items: center;
     margin: 38rem 0;
 
-    & > {
-      flex: 0;
+    @media (max-width: 768px) {
+      flex-direction: column-reverse;
+      margin: 10rem 0;
+
+      & > * {
+        margin-bottom: 20rem;
+      }
     }
   }
 
   &-table {
-  
+    overflow-x: auto;
+    margin-bottom: 20rem;
   }
 }

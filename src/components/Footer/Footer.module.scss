@@ -1,10 +1,15 @@
 @import "styles/vars";
 
 .footer {
-  border-top: 1px solid #F2F2F2;
-  padding: 30rem 0 30rem;
-  background: white;
+  padding: 40rem 0 30rem;
   font-size: 0.9em;
+  background: white;
+  margin-top: 100rem;
+
+  &-quick-button {
+    float: left;
+    margin-left: 10rem;
+  }
 
   &-inner {
     width: var(--container-width);
@@ -23,33 +28,39 @@
   }
 
   &-company {
-    width: 400px;
+    width: 600rem;
     font-weight: 300;
     align-items: center;
     letter-spacing: 0.015em;
     max-width: 100%;
 
+    display: flex;
+
     &-logo {
       display: inline-block;
+
+      img {
+        object-position: center center;
+      }
     }
 
     &-text {
       margin: 15rem 0;
+
+      @media (max-width: 1024px) {
+        margin: 35rem 0;
+      }
     }
 
-    &-social {
-      &-title {
-        font-size: 1.2em;
-        font-weight: 500;
-        margin-bottom: 5rem;
-      }
+    @media (max-width: 1024px) {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
   }
 
   &-contact-widget {
     padding-right: 45rem;
-    margin-top: 50rem;
-
     @media (max-width: 1024px) {
       padding-right: 0;
     }
@@ -58,13 +69,14 @@
       font-weight: 400;
       font-size: 1.2em;
       line-height: 30px;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
   }
 
   &-links {
     display: flex;
     flex: 1;
+    justify-content: center;
 
     a {
       white-space: nowrap;
@@ -86,9 +98,11 @@
     opacity: 0.5;
   }
 
+
+
   &-footer {
     flex: 1 0 100%;
-    margin-top: 20px;
+    margin-top: 30px;
     margin-left: auto;
     margin-right: auto;
     display: flex;
@@ -97,7 +111,7 @@
     padding-bottom: 1em;
     line-height: 2em;
     font-size: 0.9em;
-    background: white;
+
 
     @media (max-width: 1024px) {
       flex-direction: column;

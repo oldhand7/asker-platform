@@ -6,6 +6,7 @@ import useForm from 'libs/use-form';
 import EvaluationQuestionIntForm from 'forms/evaluation-question-int/evaluation-question-int-form'
 import { uid } from 'uid';
 import NextButton from 'components/Button/NextButton';
+import { handleNext } from 'libs/helper';
 
 import styles from './evaluation-questions-multiple-form.module.scss';
 
@@ -28,13 +29,6 @@ const EvaluationQuestionsMultipleForm = ({ last = false, nextId = null, index = 
     }
   }, [formValues])
 
-  const handleNext = id => {
-    const nextEl = document.querySelector(`#${id}`)
-
-    if (nextEl) {
-      nextEl.scrollIntoView()
-    }
-  }
 
   return <div className={classNames(styles['evaluation-questions-multiples'], className)}>
     {project.config[stage.id].questions.map((q, _index) => (

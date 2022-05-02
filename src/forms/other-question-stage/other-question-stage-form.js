@@ -4,7 +4,7 @@ import useForm from 'libs/use-form';
 import ScreeningQuestionExplorer from 'components/ScreeningQuestionExplorer/ScreeningQuestionExplorer';
 import { getCriteriaTypeById } from 'libs/criteria';
 import TrashButton from 'components/TrashButton/TrashButton';
-import ScreeningQuestionList from 'components/ScreeningQuestionList/ScreeningQuestionList';
+import SelectedQuestionsList from 'components/SelectedQuestionsList/SelectedQuestionsList';
 
 import styles from './other-question-stage-form.module.scss';
 
@@ -42,7 +42,7 @@ const OtherQuestionStageForm = ({ className, values, onValues, feature, onError 
 
   return <div className={classNames(styles['other-question-stage-form'], className)}>
     <ScreeningQuestionExplorer label='Search other question' questions={formValues.questions} onQuestions={control.input('questions', false)} type='other' />
-    <ScreeningQuestionList questions={formValues.questions} onChange={control.input('questions', false)} />
+    <SelectedQuestionsList questions={formValues.questions} onChange={control.input('questions', false)} />
   </div>
 }
 

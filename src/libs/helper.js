@@ -239,3 +239,11 @@ export const dateFromTs = ts => {
 
   return `${day} ${month} ${year}`
 }
+
+export const handleNext = id => {
+  const nextEl = document.querySelector(`#${id}`)
+
+  if (nextEl) {
+    nextEl.scrollIntoView()
+  }
+}

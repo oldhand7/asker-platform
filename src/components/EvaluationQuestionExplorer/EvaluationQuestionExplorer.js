@@ -7,6 +7,8 @@ import { useUser } from 'libs/user';
 import EvaluationQuestionsTable from 'components/EvaluationQuestionsTable/EvaluationQuestionsTable';
 import PlusIcon from 'components/Icon/PlusIcon';
 import { getManyFromCollection } from 'libs/firestore';
+import EvaluationQuestionModal from 'modals/evaluation-question/evaluation-question-modal';
+import { useModal } from 'libs/modal';
 
 import styles from './EvaluationQuestionExplorer.module.scss';
 
@@ -14,7 +16,11 @@ const EvaluationQuestionExplorer = ({ className, criteria, questions, onQuestion
   const { user } = useUser();
   const [availableQuestions, setAvailableQuestions] = useState([]);
   const [filteredQuestions, setFilterdQuestions] = useState([])
-  const [filter, setFilter] = useState({ company: ['asker', user.companyId] })
+  const [filter, setFilter] = useState({ q: '', company: ['asker', user.companyId] })
+  const openEvaluationQuestionModal = useModal(
+    EvaluationQuestionModal,
+    { type: criteria, size: 'large' }
+  );
 
   const toggleCompany = (companyId) => {
     const existsAlready = filter.company.find(c => c == companyId);
@@ -65,6 +71,17 @@ const EvaluationQuestionExplorer = ({ className, criteria, questions, onQuestion
     setFilterdQuestions(filteredQuestions)
   }, [filter, availableQuestions, questions])
 
+  const handleNewQuestion = (question) => {
+    if (question && question.name) {
+      setAvailableQuestions([
+        ...availableQuestions,
+        question
+      ])
+
+      handleQuestionAdd(question);
+    }
+  }
+
   return <div className={classNames(styles['evaluation-question-explorer'], className)}>
     {
       label ?
@@ -79,8 +96,8 @@ const EvaluationQuestionExplorer = ({ className, criteria, questions, onQuestion
             <FilterButton theme='green' className={styles['evaluation-question-explorer-company-filter-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker questions</FilterButton>
             <FilterButton theme='grape' className={styles['evaluation-question-explorer-company-filter-button']} active={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user && user.companyId)}>Your questions</FilterButton>
           </div>
-          {/* @TODO */}
-          <OutlineButton className={styles['evaluation-question-explorer-add-question']} onClick={() => {}}><PlusIcon /> Create new question</OutlineButton>
+
+          <OutlineButton className={styles['evaluation-question-explorer-add-question']} onClick={() => openEvaluationQuestionModal(handleNewQuestion)}><PlusIcon /> Create new question</OutlineButton>
         </div>
         <LiveSearch className={styles['evaluation-question-explorer-live-search']} q={filter.q} onQuery={q => setFilter({ ...filter, q})} />
       </div>
