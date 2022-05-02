@@ -18,7 +18,7 @@ const questionForms = {
 
 const rules = {}
 
-const ScreeningQuestionsIntForm = ({ last = false, className, values, onValues, config }) => {
+const ScreeningQuestionsIntForm = ({nextId, last = false, className, values, onValues, config }) => {
   const [formValues, errors, control] = useForm({
     values,
     rules
@@ -27,6 +27,14 @@ const ScreeningQuestionsIntForm = ({ last = false, className, values, onValues, 
   useEffect(() => {
     onValues(formValues)
   }, [formValues])
+
+  const handleNext = id => {
+    const nextEl = document.querySelector(`#${id}`)
+
+    if (nextEl) {
+      nextEl.scrollIntoView()
+    }
+  }
 
   return <div className={classNames(styles['screening-questions-int-form'], className)}>
     {config.questions
@@ -44,7 +52,7 @@ const ScreeningQuestionsIntForm = ({ last = false, className, values, onValues, 
       })
     }
 
-    {!last ? <NextButton className={styles['screening-questions-int-form-submit']}  /> : null}
+    {!last ? <NextButton onClick={() => handleNext(nextId)} className={styles['screening-questions-int-form-submit']}  /> : null}
   </div>
 }
 

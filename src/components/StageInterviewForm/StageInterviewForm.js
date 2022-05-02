@@ -30,7 +30,7 @@ const StageInterviewForm = (props) => {
     }
   }, [props])
 
-  return FormComponent ? <div data-test-id="feature-form">
+  return FormComponent ? <div id={`feature-form-${props.stage.id}`} data-test-id="feature-form">
     <FormComponent config={props.project.config[props.stage.id]} {...formComponentProps} />
   </div> : null;
 }

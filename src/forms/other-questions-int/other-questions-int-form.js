@@ -18,7 +18,7 @@ const questionForms = {
 
 const rules = {}
 
-const OtherQuestionsIntForm = ({ last = false, className, values, onValues, config }) => {
+const OtherQuestionsIntForm = ({ last = false, nextId, className, values, onValues, config }) => {
   const [formValues, errors, control] = useForm({
     values,
     rules
@@ -27,6 +27,14 @@ const OtherQuestionsIntForm = ({ last = false, className, values, onValues, conf
   useEffect(() => {
     onValues(formValues)
   }, [formValues])
+
+  const handleNext = id => {
+    const nextEl = document.querySelector(`#${id}`)
+
+    if (nextEl) {
+      nextEl.scrollIntoView()
+    }
+  }
 
   return <div className={classNames(styles['other-questions-int-form'], className)}>
     {config.questions
@@ -44,7 +52,7 @@ const OtherQuestionsIntForm = ({ last = false, className, values, onValues, conf
       })
     }
 
-    {!last ? <NextButton className={styles['other-questions-int-form-submit']}  /> : null}
+    {!last ? <NextButton  onClick={() => handleNext(nextId)} className={styles['other-questions-int-form-submit']}  /> : null}
   </div>
 }
 

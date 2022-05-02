@@ -93,6 +93,7 @@ const InterviewForm = ({ className, interview, project }) => {
           stage={stage}
           index={index}
           last={index == stages.length - 1}
+          nextId={index < stages.length - 1 ? `feature-form-${stages[index+1].id}` : null}
           project={project} />
       ))}
     </div>
