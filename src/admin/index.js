@@ -9,6 +9,8 @@ import { TranslationsList, TranslationsEdit, TranslationsAdd } from 'admin/resou
 import { UsersList, UsersEdit, UsersAdd } from 'admin/resources/users/users-resource';
 import { CompaniesList, CompaniesEdit, CompaniesAdd } from 'admin/resources/companies/companies-resource';
 import { getFirebaseConfig } from 'libs/config';
+import { Layout } from 'admin/components/AdminLayout/AdminLayout';
+import SettingsSharpIcon from '@material-ui/icons/SettingsSharp';
 
 import CustomAuthProvider from 'admin/auth-providers/custom/custom-auth-provider';
 import CustomDataProvider from 'admin/data-providers/custom/custom-data-provider';
@@ -42,14 +44,14 @@ const dataProvider = CustomDataProvider(firebaseConfig, {
 const authProvider = CustomAuthProvider(firebaseConfig);
 
 const AdminApp = () => {
-    return <Admin theme={theme} authProvider={authProvider} dataProvider={dataProvider}>
-        <Resource name="pages" list={PagesList} edit={PagesEdit} create={PagesAdd} />
-        <Resource name="sections" list={SectionsList} edit={SectionsEdit} create={SectionsAdd} />
-        <Resource name="employees" list={EmployeesList} edit={EmployeesEdit} create={EmployeesAdd} />
-        <Resource name="companies" list={CompaniesList} edit={CompaniesEdit} create={CompaniesAdd} />
-        <Resource name="users" list={UsersList} edit={UsersEdit} create={UsersAdd} />
-        <Resource name="translations" list={TranslationsList} edit={TranslationsEdit} create={TranslationsAdd} />
-        <Resource name="settings" list={SettingsList} edit={SettingsEdit} create={SettingsAdd} />
+    return <Admin  layout={Layout} theme={theme} authProvider={authProvider} dataProvider={dataProvider}>
+        <Resource name="users" options={{domain: "platform", label: 'Users'}} list={UsersList} edit={UsersEdit} create={UsersAdd} />
+        <Resource name="pages" options={{domain: "landing", label: 'Pages'}} list={PagesList} edit={PagesEdit} create={PagesAdd} />
+        <Resource name="sections" options={{domain: "landing", label: 'Sections'}} list={SectionsList} edit={SectionsEdit} create={SectionsAdd} />
+        <Resource name="employees" options={{domain: "landing", label: 'Employees'}} list={EmployeesList} edit={EmployeesEdit} create={EmployeesAdd} />
+        <Resource name="companies" options={{domain: "platform", label: 'Companies'}} list={CompaniesList} edit={CompaniesEdit} create={CompaniesAdd} />
+        <Resource name="translations" options={{domain: "landing", label: 'Translations'}} list={TranslationsList} edit={TranslationsEdit} create={TranslationsAdd} />
+        <Resource name="settings" options={{domain: 0, label: 'Settings', Icon: SettingsSharpIcon }} list={SettingsList} edit={SettingsEdit} create={SettingsAdd} />
     </Admin>
 }
 
