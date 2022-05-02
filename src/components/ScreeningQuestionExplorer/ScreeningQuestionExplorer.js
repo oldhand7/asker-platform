@@ -8,6 +8,8 @@ import ScreeningQuestionsTable from 'components/ScreeningQuestionsTable/Screenin
 import PlusIcon from 'components/Icon/PlusIcon';
 import { getManyFromCollection } from 'libs/firestore';
 import { getScreeningQuestionLabelBySubtype } from 'forms/screening-question/screening-question-form';
+import ScreeningQuestionModal from 'modals/screening-question/screening-question-modal';
+import { useModal } from 'libs/modal';
 
 import styles from './ScreeningQuestionExplorer.module.scss';
 
@@ -16,7 +18,7 @@ const ScreeningQuestionExplorer = ({ className, criteria, questions, onQuestions
   const [availableQuestions, setAvailableQuestions] = useState([]);
   const [filteredQuestions, setFilterdQuestions] = useState([])
   const [filter, setFilter] = useState({ company: ['asker', user.companyId], type: [] })
-
+  const openScreeningQuestionModal = useModal(ScreeningQuestionModal, { type, size: 'medium'});
   const toggleCompany = (companyId) => {
     const existsAlready = filter.company.find(c => c == companyId);
 
@@ -79,6 +81,17 @@ const ScreeningQuestionExplorer = ({ className, criteria, questions, onQuestions
     setFilterdQuestions(filteredQuestions)
   }, [filter, availableQuestions, questions])
 
+  const handleNewQuestion = (question) => {
+    if (question && question.name) {
+      setAvailableQuestions([
+        ...availableQuestions,
+        question
+      ])
+
+      handleQuestionAdd(question)    
+    }
+  }
+
   return <div className={classNames(styles['screening-question-explorer'], className)}>
     {
       label ?
@@ -94,7 +107,7 @@ const ScreeningQuestionExplorer = ({ className, criteria, questions, onQuestions
             <FilterButton theme='grape' className={styles['screening-question-explorer-company-filter-button']} active={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user && user.companyId)}>Your questions</FilterButton>
           </div>
 
-          {/* @TODO: add new question */}
+          <OutlineButton className={styles['screening-question-explorer-add-question']} onClick={() => openScreeningQuestionModal(handleNewQuestion)}><PlusIcon /> Create new question</OutlineButton>
         </div>
 
         <div data-test-id="subtype-filter" className={styles['screening-question-explorer-type-filter']}>

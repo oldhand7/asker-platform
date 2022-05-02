@@ -1,0 +1,14 @@
+.modal {
+
+  & > div {
+    top: 50rem;
+    padding: 40rem;
+    width: 100%;
+    max-width: 1024px;
+    transform: translate(-50%, 0);
+
+    @media (max-width: 768px) {
+      border-radius: 20px;
+    }
+  }
+}

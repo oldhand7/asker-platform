@@ -37,7 +37,7 @@ export const getScreeningQuestionLabelBySubtype = (subtype) => {
 }
 
 
-const ScreeningQuestionForm = ({ className, question, type = 'screening' }) => {
+const ScreeningQuestionForm = ({ className, question, type = 'screening', onValues }) => {
   const [subtype, setSubtype] = useState(null);
   const [FormComponent, setFormComponent] = useState(null)
   const [loading, setLoading] = useState(false);
@@ -69,14 +69,21 @@ const ScreeningQuestionForm = ({ className, question, type = 'screening' }) => {
     values.userId = user.id;
 
     saveCollectionDocument('questions', values)
-      .then(() => {
-        if (question && !clone) {
-          addFlash('Question saved', 'success')
+      .then(id => {
+        if (onValues) {
+          onValues({
+            ...values,
+            id
+          })
         } else {
-          addFlash('Question created', 'success')
-        }
+          if (question && !clone) {
+            addFlash('Question saved', 'success')
+          } else {
+            addFlash('Question created', 'success')
+          }
 
-        router.push('/questions/')
+          router.push('/questions/')
+        }
       })
       .catch(setError)
   }
