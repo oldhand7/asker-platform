@@ -12,7 +12,7 @@ import { useModal } from 'libs/modal';
 import PlusIcon from 'components/Icon/PlusIcon';
 import { useRouter } from 'next/router';
 import Alert from 'components/Alert/Alert';
-import { saveInterview } from 'libs/firestore'
+import { saveInterview, deleteSingle } from 'libs/firestore'
 import Link from 'next/link';
 import { useFlash } from 'libs/flash'
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
@@ -25,7 +25,14 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
   const openCandidateModal = useModal(CandidateModal, { size: 'large' });
   const [_interviews, setInterviews] = useState(interviews);
   const [error, setError] = useState(null);
-  const success = useFlash('success');
+  const flashSuccess = useFlash('success');
+  const [success, setSuccess] = useState(null);
+
+  useEffect(() => {
+    if (flashSuccess) {
+      setSuccess(flashSuccess)
+    }
+  }, flashSuccess)
 
   const handleCandidate = (values) => {
     if (!values) return;
@@ -53,8 +60,26 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
   }
 
   useEffect(() => {
-    setLoading(false);
+    if (error) {
+      setLoading(false);
+    }
   }, [error])
+
+  const handleDeleteInterview = (interview) => {
+      if (!confirm('Are you sure?')) {
+        return;
+      }
+
+      setLoading(true);
+
+      deleteSingle('interviews', interview.id)
+        .then(() => {
+          setInterviews(_interviews.filter(i => i.id != interview.id))
+          setLoading(false);
+          setSuccess('Interview deleted')
+        })
+        .catch(setError)
+  }
 
   return <div className={styles['project-overview-page']}>
       <Head>
@@ -80,7 +105,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
 
       <div className={styles['project-overview-page-interviews']}>
         <PlatformButton onClick={() => openCandidateModal(handleCandidate)} className={styles['project-overview-page-interviews-add-candidate']}><PlusIcon /> Add candidate</PlatformButton>
-        <ProjectInterviewsTable className={styles['project-overview-page-interviews-table']} data={_interviews} />
+        <ProjectInterviewsTable onDelete={handleDeleteInterview} className={styles['project-overview-page-interviews-table']} data={_interviews} />
       </div>
       {loading ? <Preloader /> : null}
   </div>
@@ -92,7 +117,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
       notFound: true
     }
   }
-  
+
   const project = await getCompanyProject(req.session.user.companyId, query.id);
 
   if (!project) {

@@ -70,20 +70,34 @@ const getColumns = ({ handleCompactMenuChoice }) => ([
   },
   {
     title: <FilterIcon />,
-    render: (_, row) => <CompactMenu options={[
-      typeof row.score === 'undefined' ?
-      { id: 'start', name: 'Start interview' } :
-      { id: 'edit', name: 'Edit response' }
-    ]} onChoice={c => handleCompactMenuChoice(c, row)} />
+    render: (_, row) => {
+      const options = [
+        { id: 'start', name: 'Start interview' }
+      ]
+
+      if (typeof row.score !== "undefined") {
+        options.push({ id: 'edit', name: 'Edit response' })
+      }
+
+      options.push({ id: 'delete', name: 'Delete' })
+
+      return <CompactMenu
+        options={options}
+        onChoice={c => handleCompactMenuChoice(c, row)} />
+    }
   }
 ]);
 
-const ProjectInterviewsTable = ({ className, data = [], ...props }) => {
+const ProjectInterviewsTable = ({ className, data = [], onDelete, ...props }) => {
   const router = useRouter()
 
   const handleCompactMenuChoice = (c, rec) => {
     if (c.id == 'edit' || c.id == 'start') {
       router.push(`/interviews/${rec.id}/conduct/`)
+    }
+
+    if (c.id == 'delete') {
+      onDelete(rec)
     }
   }
 

@@ -119,6 +119,42 @@ exports.updateInterview = functions.firestore.document('interviews/{docId}')
     }
 });
 
+exports.interviewDelete = functions.firestore.document('interviews/{docId}')
+  .onDelete(async (snap, context) => {
+    const interview = snap.data();
+
+    try {
+      const interviews = await admin.firestore()
+        .collection('interviews')
+        .select('id', 'candidate', 'status')
+        .where('projectId', '==', interview.projectId)
+        .get()
+        .then(snap => {
+          const interviews = []
+
+          snap.forEach((interview) => {
+            interviews.push(interview.data())
+          });
+
+          return interviews;
+        })
+
+      const interviewsUpdated = interviews.filter(i => i.id != interview.id);
+
+      await admin.firestore()
+        .collection('projects')
+        .doc(interview.projectId)
+        .update({
+          interviews: interviewsUpdated,
+          interviewsAwaitingCount: interviewsUpdated.filter(i => i.status != 'complete').length
+        })
+    } catch (error) {
+      console.log(error)
+
+      return null;
+    }
+});
+
 exports.platformAccountCreate = functions.firestore.document('users/{docId}')
   .onCreate(async (snap, context) => {
     const platformUser = snap.data();
