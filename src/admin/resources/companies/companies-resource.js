@@ -41,10 +41,14 @@ const validateForm = values => {
   return dot2obj(errors)
 }
 
+const companyFilters = [
+    <TextInput label="Name" source="name" alwaysOn />
+];
+
 export const CompaniesList = props => {
     const locale = useLocale();
 
-    return <List {...props}>
+    return <List filters={companyFilters} {...props}>
         <Datagrid rowClick="edit">
             <TextField source="name" label="Name"  />
             <ImageField alwaysSingle={true} source="images" src="src" title="title" />
