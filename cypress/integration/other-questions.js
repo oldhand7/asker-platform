@@ -9,7 +9,7 @@ describe('Other questions', () => {
 
     cy.contains('Yes/No').click()
 
-    cy.get('h1')
+    cy.get('[data-test-id="title"]')
       .should('contain', 'Create other question')
       .should('contain', 'Yes/No')
 
@@ -43,7 +43,7 @@ describe('Other questions', () => {
 
       cy.contains('Multiple choice').click()
 
-      cy.get('h1')
+      cy.get('[data-test-id="title"]')
         .should('contain', 'Create other question')
         .should('contain', 'Multiple choice')
 
@@ -79,7 +79,7 @@ describe('Other questions', () => {
 
         cy.contains('Range').click()
 
-        cy.get('h1')
+        cy.get('[data-test-id="title"]')
           .should('contain', 'Create other question')
           .should('contain', 'Range')
 
@@ -107,7 +107,7 @@ describe('Other questions', () => {
 
         cy.contains('Text').click()
 
-        cy.get('h1')
+        cy.get('[data-test-id="title"]')
           .should('contain', 'Create other question')
           .should('contain', 'Text')
 

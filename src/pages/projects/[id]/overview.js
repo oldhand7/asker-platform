@@ -133,6 +133,8 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
 
   const interviews = await filterManyDocuments('interviews', [
     ['projectId', '==', project.id]
+  ], [
+    ['createdAt', 'desc']
   ]);
 
   return {

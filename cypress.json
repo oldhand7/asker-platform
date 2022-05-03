@@ -1,7 +1,7 @@
 {
   "baseUrl": "http://localhost:3000/",
   "experimentalInteractiveRunEvents": true,
-  "defaultCommandTimeout": 20000,
+  "defaultCommandTimeout": 25000,
   "experimentalSessionSupport": true,
   "experimentalSessionAndOrigin": true,
   "video": false

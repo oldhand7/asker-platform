@@ -4,7 +4,7 @@ import EvaluationQuestionForm from 'forms/evaluation-question/evaluation-questio
 import styles from './evaluation-question-modal.module.scss';
 
 const EvaluationQuestionModal = ({ onResult, type, ...props }) => {
-  return <Modal id="ealuation-question-modal" {...props} className={`${styles['modal']}`} onClose={() => onResult(null, true)}>
+  return <Modal id="evaluation-question-modal" {...props} className={`${styles['modal']}`} onClose={() => onResult(null, true)}>
     <EvaluationQuestionForm subtype={type} onValues={val => onResult(val, true)} />
   </Modal>
 }

@@ -9,7 +9,7 @@ describe('Screening questions', () => {
 
     cy.contains('Yes/No').click()
 
-    cy.get('h1')
+    cy.get('[data-test-id="title"]')
       .should('contain', 'Create a screening question')
       .should('contain', 'Yes/No')
 
@@ -43,7 +43,7 @@ describe('Screening questions', () => {
 
       cy.contains('Multiple choice').click()
 
-      cy.get('h1')
+      cy.get('[data-test-id="title"]')
         .should('contain', 'Create a screening question')
         .should('contain', 'Multiple choice')
 
@@ -79,7 +79,7 @@ describe('Screening questions', () => {
 
         cy.contains('Range').click()
 
-        cy.get('h1')
+        cy.get('[data-test-id="title"]')
           .should('contain', 'Create a screening question')
           .should('contain', 'Range')
 
@@ -107,7 +107,7 @@ describe('Screening questions', () => {
 
         cy.contains('Text').click()
 
-        cy.get('h1')
+        cy.get('[data-test-id="title"]')
           .should('contain', 'Create a screening question')
           .should('contain', 'Text')
 
@@ -216,7 +216,7 @@ describe('Screening questions', () => {
         cy.tableFirstRowNavigate('Interviews')
 
         cy.addProjectCandidate('Jimmy', 'jimmy.davis@yahoo.com')
-          .wait(1000)
+          .wait(2000)
 
         cy.tableFirstRowNavigate('Start interview')
 

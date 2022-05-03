@@ -172,8 +172,8 @@ const AdminProfileForm = ({ className }) => {
     {
       isChangingPassword ?
       <>
-        <PasswordInputField placeholder={'New password'} value={values.password}  label={'New password'} error={errors ? errors.password : null} onChange={control.input('password')} name='password' className={styles['admin-profile-form-field']} />
-        <PasswordInputField placeholder={'New password (confirm)'} value={values.password_confirmation}  label={'New password (confirm)'} error={errors ? errors.password_confirmation : null} onChange={control.input('password_confirmation')} name='password_confirmation' className={styles['admin-profile-form-field']} />
+        <PasswordInputField placeholder={'New password'} value={values.password || ''}  label={'New password'} error={errors ? errors.password : null} onChange={control.input('password')} name='password' className={styles['admin-profile-form-field']} />
+        <PasswordInputField placeholder={'New password (confirm)'} value={values.password_confirmation || ''}  label={'New password (confirm)'} error={errors ? errors.password_confirmation : null} onChange={control.input('password_confirmation')} name='password_confirmation' className={styles['admin-profile-form-field']} />
       </> :  <button type="button" onClick={() => setChangePassword(true)} style={{ textDecoration: 'underline', border: 0, background: 0, cursor: 'pointer', color: 'blue'}}>{'Change password'}</button>
     }
     </div>

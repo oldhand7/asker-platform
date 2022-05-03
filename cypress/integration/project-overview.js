@@ -19,11 +19,7 @@ describe('Project overview', () => {
           .should('contain', '1 Completed')
       })
 
-    cy.get('table tbody tr')
-      .last()
-      .find('td').last()
-      .find('button').click().parent()
-      .contains('Interviews').click()
+    cy.tableLastRowNavigate('Interviews');
 
     cy.title().should('include', 'Philips Demo Project')
     cy.title().should('include', 'Project overview')
@@ -42,11 +38,7 @@ describe('Project overview', () => {
   it('project overview page contains project details and interview statistics', () => {
     cy.visit('/projects/')
 
-    cy.get('table tbody tr')
-      .last()
-      .find('td').last()
-      .find('button').click().parent()
-      .contains('Interviews').click()
+    cy.tableLastRowNavigate('Interviews')
 
     cy.get('h1').should('contain', 'Philips Demo Project')
 
@@ -67,23 +59,21 @@ describe('Project overview', () => {
         cy.get('tr').should('have.length', 2)
 
         cy.get('tr')
-          .eq(1)
-          .within(() => {
-            cy.get('td').eq(0).should('contain', 'Candidate A')
-            cy.get('td').eq(1).should('contain', '40%')
-            cy.get('td').eq(2).should('not.contain', 'Start interview')
-          })
-
-        cy.get('tr')
           .eq(0)
           .within(() => {
             cy.get('td').eq(0).should('contain', 'Candidate B')
             cy.get('td').eq(1).should('not.contain', '%')
             cy.get('td').eq(2).should('contain', 'Start interview')
           })
-      })
 
-    //@TODO: evaluation criteria
+        cy.get('tr')
+          .eq(1)
+          .within(() => {
+            cy.get('td').eq(0).should('contain', 'Candidate A')
+            cy.get('td').eq(1).should('contain', '40%')
+            cy.get('td').eq(2).should('not.contain', 'Start interview')
+          })
+      })
   })
 
   it('project overview allows adding new candidates', () => {

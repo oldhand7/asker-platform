@@ -48,7 +48,7 @@ const companyFilters = [
 export const CompaniesList = props => {
     const locale = useLocale();
 
-    return <List filters={companyFilters} {...props}>
+    return <List filters={companyFilters} sort={{ field: 'createdAt', order: 'desc' }} {...props} perPage={25}>
         <Datagrid rowClick="edit">
             <TextField source="name" label="Name"  />
             <ImageField alwaysSingle={true} source="images" src="src" title="title" />

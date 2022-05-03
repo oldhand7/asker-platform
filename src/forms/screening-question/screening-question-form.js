@@ -108,13 +108,13 @@ const ScreeningQuestionForm = ({ className, question, type = 'screening', onValu
   return <div data-test-id={`${type}-question-form`} className={classNames(styles['screening-question-form'], className)}>
     {
       !question ?
-      <h1 className={styles['screening-question-form-title']}>
+      <h2 data-test-id="title" className={styles['screening-question-form-title']}>
         {type == 'screening' ? 'Create a screening question' : 'Create other question'}
-        {subtype ? <small>({getScreeningQuestionLabelBySubtype(subtype)})</small> : null}</h1> :
-      <h1 className={styles['screening-question-form-title']}>
+        {subtype ? <small>({getScreeningQuestionLabelBySubtype(subtype)})</small> : null}</h2> :
+      <h2 data-test-id="title" className={styles['screening-question-form-title']}>
         {type == 'screening' ? 'Edit screening question' : 'Edit other question'}
         <small>({getScreeningQuestionLabelBySubtype(question.subtype)})</small>
-      </h1>
+      </h2>
     }
 
     {
