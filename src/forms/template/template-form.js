@@ -16,6 +16,7 @@ import Preloader from 'components/Preloader/Preloader'
 import NewStageDroppable from 'components/NewStageDroppable/NewStageDroppable'
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
 import ErrorBox from 'components/ErrorBox/ErrorBox';
+import { ctxError } from 'libs/helper';
 
 import styles from './template-form.module.scss';
 
@@ -135,7 +136,9 @@ const TemplateForm = ({ template, className }) => {
 
         router.push('/templates/')
       })
-      .catch(setError)
+      .catch(error => {
+        setError(ctxError('Server error', error))
+      })
   }
 
   useEffect(() => {

@@ -9,7 +9,7 @@ describe('Screening question feature', () => {
 
     cy.visit('/questions/create/screening')
 
-    cy.get('h1').should('contain', 'Create a screening question')
+    cy.get('[data-test-id="title"]').should('contain', 'Create a screening question')
 
     cy.get('ul[data-test-id="screening-question-options"]')
       .children()
@@ -24,13 +24,13 @@ describe('Screening question feature', () => {
 
     cy.contains('Yes/No').click()
     cy.get('[data-test-id="screening-question-options"]').should('not.exist')
-    cy.get('h1').should('contain', 'Yes/No')
+    cy.get('[data-test-id="title"]').should('contain', 'Yes/No')
     cy.get('input[type="checkbox"]').should('not.be.checked')
     cy.contains('Cancel').click();
     cy.get('[data-test-id="screening-question-options"]').should('exist')
 
     cy.contains('Multiple choice').click();
-    cy.get('h1').should('contain', 'Multiple choice')
+    cy.get('[data-test-id="title"]').should('contain', 'Multiple choice')
 
     cy.get('[data-test-id="choice-question-form"]')
       .within(() => {
@@ -78,7 +78,7 @@ describe('Screening question feature', () => {
       })
 
     cy.title().should('include', 'Edit question')
-    cy.get('h1')
+    cy.get('[data-test-id="title"]')
       .should('contain', 'Edit screening question')
       .should('contain', 'Multiple choice')
 

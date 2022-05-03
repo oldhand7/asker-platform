@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import TextInputField from 'components/TextInputField/TextInputField';
 import PasswordInputField from 'components/PasswordInputField/PasswordInputField';
 import Button from 'components/Button/Button';
+import { ctxError } from 'libs/helper';
 
 import styles from './login-form.module.scss';
 
@@ -30,7 +31,7 @@ const LoginForm  = ({ className, authFunction, onSuccess }) => {
             .then(onSuccess)
             .catch(error => {
                 setLoading(false);
-                setError(error);
+                setError(ctxError('Email or password invalid.', error));
             })
     }
 

@@ -25,8 +25,13 @@ export const withModal = (WrappedComponent) => {
       <ModalContext.Provider value={[addModal, closeModal]}>
       <WrappedComponent {...props} />
       {
-        modals.reverse().map((m, index) => <div key={'modal'+index}>{m}</div>)
+        modals.map((m, index) => <div key={'modal'+index} className={index < modals.length - 1 ? 'modal-hide' : null}>{m}</div>)
       }
+      <style jsx>{`
+        .modal-hide {
+          display: none;
+        }
+     `}</style>
       </ModalContext.Provider>
     );
   };

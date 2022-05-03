@@ -15,6 +15,7 @@ import { saveCollectionDocument, deleteSingle } from 'libs/firestore'
 import Link from 'next/link';
 import { useFlash } from 'libs/flash'
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
+import { ctxError } from 'libs/helper';
 
 import styles from 'styles/pages/project-overview.module.scss';
 
@@ -56,7 +57,9 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
 
       setLoading(false);
     })
-    .catch(setError)
+    .catch(error => {
+      setError(ctxError('Server error', error))
+    })
   }
 
   useEffect(() => {
@@ -78,7 +81,9 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
           setLoading(false);
           setSuccess('Interview deleted')
         })
-        .catch(setError)
+        .catch(error => {
+          setError(ctxError('Server error', error))
+        })
   }
 
   return <div className={styles['project-overview-page']}>
@@ -128,6 +133,8 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
 
   const interviews = await filterManyDocuments('interviews', [
     ['projectId', '==', project.id]
+  ], [
+    ['createdAt', 'desc']
   ]);
 
   return {

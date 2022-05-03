@@ -8,6 +8,7 @@ import { useCompany } from 'libs/company'
 import Preloader from 'components/Preloader/Preloader'
 import Uploader from 'components/Uploader/Uploader';
 import { uploadCompanyFile } from 'libs/firestorage';
+import { ctxError } from 'libs/helper';
 
 import styles from './company-profile-form.module.scss';
 
@@ -51,7 +52,7 @@ const CompanyProfileForm = ({ className }) => {
         setSuccess('Company data updated!');
       })
       .catch(error => {
-        setError(new Error(`Company update failed: ${error.message}`))
+        setError(ctxError('Update failed', error))
       })
   }
 
@@ -79,8 +80,7 @@ const CompanyProfileForm = ({ className }) => {
           ]
         });
       } catch (error) {
-        //@TODO
-        setError(new Error(`Uploading photo failed: ${error.message}`))
+        setError(ctxError('Uploading photo failed.', error))
       }
 
       setLoading(false);
@@ -88,7 +88,7 @@ const CompanyProfileForm = ({ className }) => {
       return Promise.reject();
     },
     onError: (error) => {
-      setError(error)
+      setError(ctxError('Uploading photo failed.', error))
     },
     accept: "image/jpeg, image/png"
   }

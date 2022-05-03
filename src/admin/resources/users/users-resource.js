@@ -57,8 +57,21 @@ const useStyles = makeStyles({
     }
   })
 
+const userFilters = [
+    <TextInput label="Name" source="name" alwaysOn />,
+    <TextInput label="Email" source="email" alwaysOn />,
+    <ReferenceInput label="Company" source="companyId" reference="companies" alwaysOn>
+      <SelectInput optionText="name" />
+     </ReferenceInput>,
+     <SelectInput source="type" choices={[
+        { id: 'admin', name: 'Admin' },
+        { id: 'hr', name: 'HR' },
+     ]} alwaysOn />
+];
+
+
 export const UsersList = props => (
-    <List {...props} sort={{ field: 'createdAt', order: 'desc' }} perPage={25}>
+    <List {...props} filters={userFilters} sort={{ field: 'createdAt', order: 'desc' }} perPage={25}>
         <Datagrid rowClick="edit">
             <ImageField alwaysSingle={true} source="images" src="src" title="title" />
 

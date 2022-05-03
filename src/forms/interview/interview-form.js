@@ -10,6 +10,7 @@ import CandidateCard from 'components/CandidateCard/CandidateCard';
 import { addFlash} from 'libs/flash';
 import StageInterviewForm from 'components/StageInterviewForm/StageInterviewForm';
 import styles from './interview-form.module.scss';
+import { ctxError } from 'libs/helper';
 
 const rules = {}
 
@@ -61,7 +62,9 @@ const InterviewForm = ({ className, interview, project }) => {
 
         router.push(`/projects/${project.id}/overview`)
       })
-      .catch(setError)
+      .catch(error => {
+        setError(ctxError('Server error', error))
+      })
   }
 
   useEffect(() => {

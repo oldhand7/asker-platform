@@ -19,6 +19,7 @@ import {criteriaTypes} from 'libs/criteria';
 import {filterManyDocuments} from 'libs/firestore-admin';
 import { deleteSingle } from 'libs/firestore';
 import { questionTypes } from 'libs/questions';
+import { ctxError } from 'libs/helper';
 
 import styles from 'styles/pages/questions.module.scss';
 
@@ -103,7 +104,9 @@ const QuestionPage = ({ questions = [], companyId, perPage = PER_PAGE, currentPa
         setLoading(false);
         setSuccess('Question deleted')
       })
-      .catch(setError)
+      .catch(error => {
+        setError(ctxError('Server error', error))
+      })
   }
 
   useEffect(() => {

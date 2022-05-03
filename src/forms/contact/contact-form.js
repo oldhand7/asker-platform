@@ -5,6 +5,7 @@ import Alert from 'components/Alert/Alert';
 import { useState, useEffect } from 'react';
 import TextInputField from 'components/TextInputField/TextInputField';
 import TextareaInputField from 'components/TextareaInputField/TextareaInputField'
+import { ctxError } from 'libs/helper';
 
 import UserIcon from 'components/Icon/UserIcon';
 import MailIcon from 'components/Icon/MailIcon';
@@ -45,7 +46,9 @@ const ContactForm = ({ className }) => {
       .then(() => {
         setSuccess('Thank you!');
       })
-      .catch(setError)
+      .catch(error => {
+        setError(ctxError('Server error', error))
+      })
   }
 
   if (success) {

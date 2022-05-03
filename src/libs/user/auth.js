@@ -92,9 +92,6 @@ export const useAuth = () => {
           }
         })
       })
-      .catch(error => {
-        throw new ctxError('Email or password invalid.', error)
-      })
   }
 
   const logout = async () => {
@@ -112,31 +109,31 @@ export const useAuth = () => {
   }
 
   const changePassword = async (newPassword, password) => {
-    const cred = EmailAuthProvider.credential(firebaseUser.email, password)
+    const cred = EmailAuthProvider.credential(user.email + '', password)
 
     try {
-      await reauthenticateWithCredential(firebaseUser, cred)
+      const { user } = await reauthenticateWithCredential(firebaseUser, cred)
+
+      return updatePassword(user, newPassword).catch(error => {
+         throw new Error('Updating password failed.')
+      })
     } catch (error) {
       throw new Error('Password provided invalid.')
     }
-
-    return updatePassword(firebaseUser, newPassword).catch(error => {
-       throw new Error('Updating password failed.')
-    })
   }
 
   const changeEmail = async (email, password) => {
-    const cred = EmailAuthProvider.credential(firebaseUser.email, password)
+    const cred = EmailAuthProvider.credential(user.email + '', password)
 
     try {
-      await reauthenticateWithCredential(firebaseUser, cred)
+      const { user } = await reauthenticateWithCredential(firebaseUser, cred)
+
+      return updateEmail(user, email).catch(error => {
+         throw ctxError('Email invalid. Try another one.', error)
+      })
     } catch (error) {
       throw ctxError('Password invalid.', error)
     }
-
-    return updateEmail(firebaseUser, email).catch(error => {
-       throw ctxError('Email invalid. Try another one.', error)
-    })
   }
 
   const getAvatar = () => {
