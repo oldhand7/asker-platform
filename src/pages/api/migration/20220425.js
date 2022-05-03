@@ -1,13 +1,12 @@
 
 
 import { createApiHandler as getHandler } from 'libs/nc';
-import { getAuth } from 'firebase-admin/auth'
-import { saveCollectionDocument, getManyFromCollection } from 'libs/firestore-admin';
+import { saveCollectionDocument, filterManyDocuments } from 'libs/firestore-admin';
 
 const handler = getHandler();
 
 const migrate = () => {
-  return getManyFromCollection('questions')
+  return filterManyDocuments('questions')
     .then(async questions => {
 
       await Promise.all(questions.map(q => {

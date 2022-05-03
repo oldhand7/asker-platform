@@ -1,16 +1,17 @@
-import { login } from 'libs/user';
 import { getSettings } from 'libs/firestore-admin';
 import { useUser } from 'libs/user';
 import { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import AdminProfileForm from 'forms/admin-profile/admin-profile-form'
-import CompanyProfileForm from 'forms/company-profile/company-profile-form'
 import { withUserGuardSsr } from 'libs/iron-session';
-import CompanyEmployeesForm from 'forms/company-employees/company-employees-form';
 import classNames from 'classnames';
+import dynamic from 'next/dynamic';
 
 import 'react-tabs/style/react-tabs.css';
 import styles from 'styles/pages/profile.module.scss';
+
+const CompanyProfileForm = dynamic(() => import('forms/company-profile/company-profile-form'))
+const CompanyEmployeesForm = dynamic(() => import('forms/company-employees/company-employees-form'))
 
 const ProfilePage = () => {
   const { user } = useUser()

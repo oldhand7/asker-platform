@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import useForm from 'libs/use-form';
 import Button from 'components/Button/PlatformButton';
 import TextInputField from 'components/TextInputField/TextInputField'
-import {useSite} from 'libs/site';
 import ProjectFormStager from 'components/ProjectFormStager/ProjectFormStager';
 import ProjectFormInterviewers from 'components/ProjectFormInterviewers/ProjectFormInterviewers';
 import { useState, useEffect } from 'react';
@@ -11,13 +10,13 @@ import { features, featureTypes } from 'libs/features';
 import { addFlash } from 'libs/flash';
 import Alert from 'components/Alert/Alert';
 import { useUser } from 'libs/user';
-import { saveProject, saveCollectionDocument } from 'libs/firestore'
+import { saveCollectionDocument } from 'libs/firestore'
 import { useRouter } from 'next/router';
 import Preloader from 'components/Preloader/Preloader'
 import NewStageDroppable from 'components/NewStageDroppable/NewStageDroppable'
 import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField';
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
-import FlexRow from 'components/FlexRow/FlexRow';
+import ErrorBox from 'components/ErrorBox/ErrorBox';
 
 import styles from './project-form.module.scss';
 
@@ -55,7 +54,7 @@ const defaultValues = {
     }
   },
   template: null,
-  interviews: [],
+  interviewsCount: 0,
   interviewsAwaitingCount: 0,
   saveAsTemplate: false
 }
@@ -70,13 +69,13 @@ const messages = {
 }
 
 const ProjectForm = ({ project, className }) => {
-  const [config, t] = useSite();
   const [stage, setStage] = useState(null);
   const [stageErrors, setStageErrors] = useState([]);
   const [error, setError] =  useState(null);
   const { user } = useUser();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [pristine, setPristine] = useState(true);
 
   const [values, errors, control] = useForm({
     values: project ? { ...defaultValues, ...project} : defaultValues,
@@ -103,6 +102,14 @@ const ProjectForm = ({ project, className }) => {
   }
 
   const handleSubmit = (values) => {
+    if (stageErrors.length) {
+      setPristine(false);
+
+      return;
+    }
+
+    setPristine(false);
+
     if (stageErrors.length) {
       setError(new Error('Some stages are invalid.'))
 
@@ -136,11 +143,11 @@ const ProjectForm = ({ project, className }) => {
       }
 
       tasks.push(saveCollectionDocument('templates', copy))
-      tasks.push(saveProject(values))
+      tasks.push(saveCollectionDocument('projects', values))
     } else {
       delete values.saveAsTemplate;
 
-      tasks.push(saveProject(values))
+      tasks.push(saveCollectionDocument('projects', values))
     }
 
     setLoading(true)
@@ -239,7 +246,7 @@ const ProjectForm = ({ project, className }) => {
         <h2 className={styles['project-form-template']}>Template: {project.template.name}</h2>
         : null}
 
-        <TextInputField value={values.name} placeholder={t('Name')} error={errors ? t(errors.name) : null} onChange={control.input('name')} autoComplete='off' name='name' type='text' className={classNames(styles['project-form-field'], styles['project-form-field-name'])} />
+        <TextInputField value={values.name} placeholder={'Name'} error={errors ? errors.name : null} onChange={control.input('name')} autoComplete='off' name='name' type='text' className={classNames(styles['project-form-field'], styles['project-form-field-name'])} />
 
         <div className={classNames(styles['project-form-field'], styles['project-form-field-stages'])}>
           <h3 className={styles['project-form-field-title']}>Interview Stages</h3>
@@ -264,22 +271,22 @@ const ProjectForm = ({ project, className }) => {
         {error ? <Alert type="error">{error.message}</Alert> : null}
 
         {
-          stageErrors.length ?
-          <div className="form-error">
-            <p>You can't save form, becouse some stages are invalid.</p>
-            <ul>
-              {stageErrors.map(({ stage, error}) => <li key={stage.id}>{stage.name}: {error.message}</li>)}
-            </ul>
-          </div> : null
-        }
-
-        {
         !values.template ?
         <CheckboxInputField checked={values.saveAsTemplate} className={styles['project-form-field']} onChange={control.toggle('saveAsTemplate')} label='Also save project as template' /> :
         null
         }
 
-        <Button disabled={loading || errors || stageErrors.length} type="submit" className={styles['project-form-submit']}>{!loading ? (project ? 'Save project' : 'Create project') : 'Loading...'}</Button>
+        {
+          !pristine && stageErrors.length ?
+          <ErrorBox className={styles['project-form-stage-error-report']}>
+            <p>You can't save form, because some stages are invalid:</p>
+            <ul>
+              {stageErrors.map(({ stage, error}) => <li key={stage.id}>{stage.name}</li>)}
+            </ul>
+          </ErrorBox> : null
+        }
+
+        <Button disabled={loading || errors} type="submit" className={styles['project-form-submit']}>{!loading ? (project ? 'Save project' : 'Create project') : 'Loading...'}</Button>
       </div>
     </div>
     {loading ? <Preloader /> : null}

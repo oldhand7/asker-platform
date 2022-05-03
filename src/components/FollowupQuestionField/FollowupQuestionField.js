@@ -1,6 +1,4 @@
 import classNames from 'classnames';
-import TextInputField from 'components/TextInputField/TextInputField';
-import OutlineButton from 'components/Button/OutlineButton';
 import FollowupQuestionForm from 'forms/followup-question/followup-question-form';
 import TrashButton from 'components/TrashButton/TrashButton';
 

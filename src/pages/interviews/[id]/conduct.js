@@ -1,7 +1,7 @@
 import { getSettings } from 'libs/firestore-admin';
 import { withUserGuardSsr } from 'libs/iron-session'
 import Head from 'next/head';
-import { getCompanyProject, getCompanyInterview } from 'libs/firestore-admin'
+import { getSingleDocument, filterSingleDocument } from 'libs/firestore-admin'
 import InterviewForm from 'forms/interview/interview-form'
 
 import styles from 'styles/pages/interview-conduct.module.scss';
@@ -22,8 +22,8 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
       notFound: true
     }
   }
-  
-  const interview = await getCompanyInterview(req.session.user.companyId, query.id);
+
+  const interview = await getSingleDocument('interviews', query.id)
 
   if (!interview) {
     return {
@@ -31,11 +31,14 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
-  const project =  await getCompanyProject(req.session.user.companyId, interview.projectId)
+  const project =  await filterSingleDocument('projects', [
+    ['id', '==', interview.projectId],
+    ['companyId', '==',  req.session.user.companyId]
+  ])
 
   return {
     props: {
-      interview,
+      interview: JSON.parse(JSON.stringify(interview)),
       project,
       config: await getSettings()
     }

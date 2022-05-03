@@ -1,8 +1,6 @@
 import dynamic from 'next/dynamic'
 import AdminLayout from 'layouts/admin/admin-layout';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { getUser } from 'libs/firebase';
 
 import styles from 'styles/pages/admin.module.scss';
 

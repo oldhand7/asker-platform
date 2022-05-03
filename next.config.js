@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const i18n = require('./i18n.json');
 
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
 if (process.env.APP_ENV === 'testing') {
 	require('dotenv').config({
 		path: './.env.testing',
@@ -8,7 +12,7 @@ if (process.env.APP_ENV === 'testing') {
 	})
 }
 
-module.exports = {
+module.exports = withBundleAnalyzer({
 	reactStrictMode: true,
 	trailingSlash: true,
 	i18n,
@@ -23,5 +27,13 @@ module.exports = {
   },
 	env: {
 		NEXT_PUBLIC_APP_ENV: process.env.APP_ENV
+	},
+	webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+		config.plugins.push(new webpack.IgnorePlugin({
+			resourceRegExp: /^\.\/(?!(en))(.+)$/,
+			contextRegExp: /validatorjs\/src\/lang/
+		}));
+
+		return config;
 	}
-};
+});

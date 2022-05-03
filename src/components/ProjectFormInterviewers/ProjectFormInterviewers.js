@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useState, useEffect, useCallback } from 'react';
 import Autocomplete from 'components/Autocomplete/Autocomplete';
-import { getCompanyEmployees } from 'libs/firestore';
+import { filterManyDocuments } from 'libs/firestore';
 import { useUser } from 'libs/user';
 import TrashButton from 'components/TrashButton/TrashButton'
 
@@ -23,7 +23,9 @@ const ProjectFormInterviewers = ({ className, interviewers = [], onChange }) => 
     }
 
     if (user.companyId) {
-      getCompanyEmployees(user.companyId)
+      filterManyDocuments('users', [
+        ['companyId', '==', user.companyId]
+      ])
         .then(employees => {
           setAutocompleteOptions(employees.map(employee2interviewer))
         })

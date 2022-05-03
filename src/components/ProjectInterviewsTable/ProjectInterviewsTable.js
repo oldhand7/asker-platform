@@ -1,7 +1,5 @@
 import Table from 'rc-table';
 import classNames from 'classnames';
-import Stager from 'components/Stager/Stager';
-import ProjectTableStatCell from 'components/ProjectTableStatCell/ProjectTableStatCell';
 import { useRouter } from 'next/router';
 import NODATA from 'components/NODATA/NODATA';
 import InterviewScore from 'components/InterviewScore/InterviewScore';

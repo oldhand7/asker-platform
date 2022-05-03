@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import QuestionScoreBoardVertical from 'components/QuestionScoreBoardVertical/QuestionScoreBoardVertical';
-import { useState, useEffect } from 'react';
 
 import styles from './QuestionScoreBoard.module.scss';
 

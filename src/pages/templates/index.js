@@ -7,15 +7,13 @@ import Button from 'components/Button/PlatformButton';
 import Head from 'next/head';
 import Alert from 'components/Alert/Alert';
 import { useFlash } from 'libs/flash';
-import { getTemplates } from 'libs/firestore-admin'
+import { filterManyDocuments } from 'libs/firestore-admin'
 import Pagination from 'components/Pagination/Pagination';
 import Preloader from 'components/Preloader/Preloader';
 import { useDebounce } from 'libs/debounce';
 import PlusIcon from 'components/Icon/PlusIcon';
 import { useRouter } from 'next/router';
-import DropDownButton from 'components/DropDownButton/DropDownButton';
 import { deleteSingle } from 'libs/firestore';
-import { useModal } from 'libs/modal';
 
 import styles from 'styles/pages/templates.module.scss';
 
@@ -43,18 +41,6 @@ const TemplatesPage = ({ templates = [], perPage = PER_PAGE, currentPage = 1 }) 
       setPage(1)
     }
   }, [filter.q])
-
-  const handleQuery = q => {
-    const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
-
-    return Promise.resolve([
-      ...autoCompleteOptions.filter(aco => regex.test(aco.templateName.toLowerCase()))
-    ])
-  }
-
-  const filterData = data => {
-
-  }
 
   useDebounce(() => {
     const { q } = filter;
@@ -133,10 +119,13 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
-  const templates = await getTemplates(
-    req.session.user.companyId,
-    query.sort || 'createdAt',
-    query.order || (!query.sort ? 'desc' : 'asc')
+  const templates = await filterManyDocuments('templates',
+    [
+      ['companyId', 'in', [req.session.user.companyId, 'asker']]
+    ],
+    [
+      [query.sort || 'createdAt', query.order || (!query.sort ? 'desc' : 'asc')]
+    ]
   )
 
   return {

@@ -78,9 +78,7 @@ const getColumns = ({ handleCompactMenuChoice, sort, order, user }) => ([
   }
 ]);
 
-import demoProjects from 'data/demo/projects.json';
-
-const TemplateTable = ({ className, data = demoProjects, onDelete, ...props }) => {
+const TemplateTable = ({ className, data = [], onDelete, ...props }) => {
   const router = useRouter()
   const {user} = useUser()
 

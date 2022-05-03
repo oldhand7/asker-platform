@@ -2,7 +2,6 @@ import useForm from 'libs/use-form';
 import classNames from 'classnames';
 import TextInputField from 'components/TextInputField/TextInputField';
 import PlatformButton from 'components/Button/PlatformButton';
-import { useSite } from 'libs/site';
 import PlusIcon from 'components/Icon/PlusIcon'
 import { saveCollectionDocument } from 'libs/firestore';
 import Preloader from 'components/Preloader/Preloader';
@@ -33,7 +32,6 @@ const CriteriaOptionForm = ({ className, onValues, type }) => {
     ...defaultValues,
     type: type.id
   }, rules, messages })
-  const [config, t] = useSite()
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const { user } = useUser();
@@ -62,8 +60,8 @@ const CriteriaOptionForm = ({ className, onValues, type }) => {
   return <form data-test-id="criteria-option-form" method="POST" noValidate className={classNames(styles['criteria-option-form'], className)} onSubmit={control.submit(handleSubmit)}>
     <h2 className={styles['criteria-option-form-title']}>{type.name} option</h2>
     {error ? <Alert type="error">{error.message}</Alert> : null}
-    <TextInputField value={values.name} placeholder={t('Name')} error={errors ? t(errors.name) : null} onChange={control.input('name')} autoComplete='off' name="name" className={styles['criteria-option-form-field']} />
-    <TextareaInputField value={values.desc} placeholder={t('Definition (optional)')} error={errors ? t(errors.desc) : null} onChange={control.input('desc')} name="desc" className={styles['criteria-option-form-field']} />
+    <TextInputField value={values.name} placeholder={'Name'} error={errors ? errors.name : null} onChange={control.input('name')} autoComplete='off' name="name" className={styles['criteria-option-form-field']} />
+    <TextareaInputField value={values.desc} placeholder={'Definition (optional)'} error={errors ? errors.desc : null} onChange={control.input('desc')} name="desc" className={styles['criteria-option-form-field']} />
     <PlatformButton disabled={loading} type="submit" className={styles['criteria-option-form-submit']}>
       {!loading ?
       <><PlusIcon /> Add option</> :

@@ -1,5 +1,4 @@
-import { Admin, Resource, ListGuesser } from 'react-admin';
-import simpleRestProvider from 'ra-data-simple-rest';
+import { Admin, Resource } from 'react-admin';
 import { blueGrey, lightBlue } from "@material-ui/core/colors";
 import { PagesList, PagesEdit, PagesAdd } from 'admin/resources/pages/pages-resource';
 import { SectionsList, SectionsEdit, SectionsAdd } from 'admin/resources/sections/sections-resource';

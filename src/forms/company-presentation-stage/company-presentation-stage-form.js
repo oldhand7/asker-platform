@@ -17,14 +17,12 @@ const defaultValues = {
 
 const rules = {
   notes: 'max:320',
-  files: 'required|array|min:1'
+  files: 'array'
 }
 
 const messages = {
   required: '* - required field'
 }
-
-const sum = (sum, x) => sum + x
 
 const CompanyPresentationStageForm = ({ values, className, onValues, onError }) => {
   const [formValues, errors, control] = useForm({

@@ -1,11 +1,8 @@
 import useForm from 'libs/use-form';
 import classNames from 'classnames';
-import { sendContactMessage } from 'libs/api';
 import Alert from 'components/Alert/Alert';
 import { useState, useEffect } from 'react';
 import TextInputField from 'components/TextInputField/TextInputField';
-import Button from 'components/Button/Button';
-import { useSite } from 'libs/site';
 import { useUser } from 'libs/user';
 import { useCompany } from 'libs/company'
 import Preloader from 'components/Preloader/Preloader'
@@ -30,7 +27,6 @@ const CompanyProfileForm = ({ className }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
-  const [config, t] = useSite()
   const { user } = useUser()
   const [company, updateCompany] = useCompany(user && user.companyId)
   const [values, errors, control] = useForm({ values: company ? company : defaultValues, rules, messages })
@@ -43,7 +39,7 @@ const CompanyProfileForm = ({ className }) => {
 
   useEffect(() => {
     if (errors) {
-      setError(new Error(t('Form fields invalid.')))
+      setError(new Error('Form fields invalid.'))
     } else {
       setError(null);
     }
@@ -52,7 +48,7 @@ const CompanyProfileForm = ({ className }) => {
   const handleSubmit = () => {
     updateCompany(values)
       .then(() => {
-        setSuccess(t('Company data updated!'));
+        setSuccess('Company data updated!');
       })
       .catch(error => {
         setError(new Error(`Company update failed: ${error.message}`))
@@ -107,9 +103,9 @@ const CompanyProfileForm = ({ className }) => {
       </Uploader>
     </div>
 
-    <TextInputField value={values.name} placeholder={t('Name')} label={t('Name')}  error={errors ? t(errors.name) : null} onChange={control.input('name')}  name='name' type='text' className={styles['company-profile-form-field']} />
+    <TextInputField value={values.name} placeholder={'Name'} label={'Name'}  error={errors ? errors.name : null} onChange={control.input('name')}  name='name' type='text' className={styles['company-profile-form-field']} />
 
-    <button className={styles['company-profile-form-submit']} disabled={loading} type="submit">{!loading ? t('Save') : t('Loading...')}</button>
+    <button className={styles['company-profile-form-submit']} disabled={loading} type="submit">{!loading ? 'Save' : 'Loading...'}</button>
   </form> : <Preloader />
 }
 

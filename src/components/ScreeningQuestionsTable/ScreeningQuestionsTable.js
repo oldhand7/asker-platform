@@ -1,6 +1,5 @@
 import Table from 'rc-table';
 import classNames from 'classnames';
-import NODATA from 'components/NODATA/NODATA';
 import PlusIcon from 'components/Icon/PlusIcon';
 import { getScreeningQuestionLabelBySubtype } from 'forms/screening-question/screening-question-form';
 

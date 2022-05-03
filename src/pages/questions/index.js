@@ -4,7 +4,6 @@ import { useEffect, useState} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import QuestionsTable from 'components/QuestionsTable/QuestionsTable';
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget'
-import Button from 'components/Button/PlatformButton';
 import Head from 'next/head';
 import Alert from 'components/Alert/Alert';
 import { useFlash } from 'libs/flash';
@@ -17,13 +16,11 @@ import QuestionFilter from 'components/QuestionFilter/QuestionFilter'
 import FilterButton from 'components/Button/FilterButton';
 import DropDownButton from 'components/DropDownButton/DropDownButton';
 import {criteriaTypes} from 'libs/criteria';
-import {getQuestions} from 'libs/firestore-admin';
+import {filterManyDocuments} from 'libs/firestore-admin';
 import { deleteSingle } from 'libs/firestore';
 import { questionTypes } from 'libs/questions';
 
 import styles from 'styles/pages/questions.module.scss';
-
-import dummyQuestions from 'data/demo/questions.json'
 
 const PER_PAGE = 15;
 
@@ -44,18 +41,6 @@ const QuestionPage = ({ questions = [], companyId, perPage = PER_PAGE, currentPa
       setPage(1)
     }
   }, [filter.q])
-
-  const handleQuery = q => {
-    const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
-
-    return Promise.resolve([
-      ...autoCompleteOptions.filter(aco => regex.test(aco.name.toLowerCase()) && !interviewers.find(i => i.id == aco.id))
-    ])
-  }
-
-  const filterData = data => {
-
-  }
 
   useDebounce(() => {
     const { q, company, criteria } = filter;
@@ -179,11 +164,19 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
-  const questions = await getQuestions(
-    req.session.user.companyId,
-    query.sort || 'createdAt',
-    query.order || (!query.sort ? 'desc' : 'asc')
-  );
+  const sort = [
+    [query.sort || 'createdAt', query.order || (!query.sort ? 'desc' : 'asc')]
+  ]
+
+  if (query.sort == 'type') {
+    sort.push(['subtype', query.order || (!query.sort ? 'desc' : 'asc')])
+  }
+
+  const questions = await filterManyDocuments('questions',
+  [
+    ['companyId', 'in', [req.session.user.companyId, 'asker']]
+  ],
+  sort)
 
   return {
     props: {

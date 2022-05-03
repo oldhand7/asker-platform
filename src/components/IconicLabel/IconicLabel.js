@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
 
 import styles from './IconicLabel.module.scss';
 

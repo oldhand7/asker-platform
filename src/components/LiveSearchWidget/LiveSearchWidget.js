@@ -1,8 +1,6 @@
 import classNames from 'classnames';
-import useForm from 'libs/use-form';
 import ResetIcon from 'components/Icon/ResetIcon'
 import SearchIcon from 'components/Icon/SearchIcon'
-import { useRef, useEffect, useState } from 'react';
 
 import styles from './LiveSearchWidget.module.scss';
 

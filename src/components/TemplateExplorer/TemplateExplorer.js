@@ -6,7 +6,7 @@ import LiveSearch from 'components/LiveSearchWidget/LiveSearchWidget';
 import { useUser } from 'libs/user';
 import TemplateSummaryTable from 'components/TemplateSummaryTable/TemplateSummaryTable';
 import PlusIcon from 'components/Icon/PlusIcon';
-import { getManyFromCollection } from 'libs/firestore';
+import { filterManyDocuments } from 'libs/firestore';
 import { useRouter } from 'next/router';
 
 import styles from './TemplateExplorer.module.scss';
@@ -31,7 +31,7 @@ const TemplateExplorer = ({ className, onTemplate, label = '' }) => {
 
   useEffect(() => {
     if (user) {
-      getManyFromCollection('templates', [
+      filterManyDocuments('templates', [
         ['companyId', 'in', ['asker', user.companyId]]
       ], [['name', 'asc']]).then(settemplates)
     }

@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import dynamic from 'next/dynamic';
 import AdminLayout from 'layouts/admin/admin-layout';
 import Preloader from 'components/Preloader/Preloader';

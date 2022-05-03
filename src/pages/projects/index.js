@@ -3,20 +3,20 @@ import { useEffect, useState} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import ProjectTabe from 'components/ProjectTable/ProjectTable';
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget'
-import Button from 'components/Button/BrandishButton';
 import Head from 'next/head';
 import Alert from 'components/Alert/Alert';
 import { useFlash } from 'libs/flash';
-import { getCompanyProjects as getCompanyProjectsAdmin } from 'libs/firestore-admin'
+import { filterManyDocuments } from 'libs/firestore-admin'
 import Pagination from 'components/Pagination/Pagination';
 import { useDebounce } from 'libs/debounce';
 import PlusIcon from 'components/Icon/PlusIcon';
 import { useRouter } from 'next/router';
 import DropDownButton from 'components/DropDownButton/DropDownButton';
-import styles from 'styles/pages/projects.module.scss';
 import ProjectTemplateModal from 'modals/project-template/project-template-modal';
 import { useModal } from 'libs/modal';
 import Preloader from 'components/Preloader/Preloader';
+
+import styles from 'styles/pages/projects.module.scss';
 
 const PER_PAGE = 15;
 
@@ -44,10 +44,6 @@ const ProjectsPage = ({ projects = [], perPage = PER_PAGE, currentPage = 1 }) =>
     return Promise.resolve([
       ...autoCompleteOptions.filter(aco => regex.test(aco.name.toLowerCase()) && !interviewers.find(i => i.id == aco.id))
     ])
-  }
-
-  const filterData = data => {
-
   }
 
   useDebounce(() => {
@@ -144,10 +140,13 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
-  const projects = await getCompanyProjectsAdmin(
-    req.session.user.companyId,
-    query.sort || 'createdAt',
-    query.order || (!query.sort ? 'desc' : 'asc'),
+  const projects = await filterManyDocuments('projects',
+    [
+      ['companyId', '==', req.session.user.companyId]
+    ],
+    [
+      [query.sort || 'createdAt', query.order || (!query.sort ? 'desc' : 'asc')]
+    ]
   )
 
   return {

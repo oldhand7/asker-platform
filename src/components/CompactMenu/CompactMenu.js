@@ -1,4 +1,3 @@
-import PlatformButton from 'components/Button/PlatformButton';
 import classNames from 'classnames';
 import { useState, useEffect, useRef } from 'react';
 import VerticalDotsIcon from 'components/Icon/VerticalDotsIcon'

@@ -252,7 +252,8 @@ const beforeRun = async () => {
       id: 'philips-engineer',
       name: 'Philips Engineer'
     },
-    interviews: []
+    interviewsCount: 0,
+    interviewsAwaitingCount: 0
   })
 
   await createInterview({
@@ -261,8 +262,8 @@ const beforeRun = async () => {
     projectId: projectId,
     candidate: { id: 'ca', name: 'Candidate A' },
     score: 40,
-    status: 'completed',
-    evaluations: [], //@TODO
+    status: 'complete',
+    evaluations: [],
     createdAt: 1,
     updatedAt: 0
   })
@@ -273,7 +274,7 @@ const beforeRun = async () => {
     projectId: projectId,
     candidate: { id: 'cb', name: 'Candidate B' },
     status: 'awaiting',
-    evaluations: [], //@TODO
+    evaluations: [],
     createdAt: 2,
     updatedAt: 0,
   })

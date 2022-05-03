@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import { Draggable } from 'react-drag-and-drop'
 import FeatureLabel from 'components/FeatureLabel/FeatureLabel';
 

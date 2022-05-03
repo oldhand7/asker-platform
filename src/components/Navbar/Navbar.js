@@ -1,17 +1,18 @@
-import Button from 'components/Button/Button';
 import Menu from 'components/Menu/Menu';
 import Logo from 'components/Logo/Logo';
 import classNames from 'classnames';
 import { useState, useEffect } from 'react';
 import MenuToggle from 'components/MenuToggle/MenuToggle';
 import { useSite } from 'libs/site';
-import { page2menu } from 'libs/helper';
 import { useScrollDirection } from 'react-use-scroll-direction'
 import UserMenu from 'components/UserMenu/UserMenu';
 import { useUser } from 'libs/user';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 
 import styles from './Navbar.module.scss';
+
+const NavbarUserResolved = dynamic(() => import("components/NavbarUserResolved/NavbarUserResolved"), { ssr: false })
 
 const menuItems = [
   {
@@ -110,10 +111,7 @@ const Navbar = ({ className, menu = [] }) => {
         <Menu items={menuItemsMobile(user)} onClick={() => setOpen(false)} className={styles['navbar-menu']} />
       }
 
-      {user && !loading ? <UserMenu className={styles['navbar-session']} /> : null}
-      {!user && !loading ? <Link href="/login/">
-        <a className={styles['navbar-login-link']}>Login</a></Link> : null}
-      {!user && loading ? <span></span> : null}
+      <NavbarUserResolved user={user} loading={loading} className={styles['navbar-session']} styles={styles} />
 
       <MenuToggle className={styles['navbar-toggle']} onClick={handleMobileToggle} active={open} />
     </div>

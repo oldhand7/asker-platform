@@ -1,12 +1,7 @@
 import Table from 'rc-table';
 import classNames from 'classnames';
 import Stager from 'components/Stager/Stager';
-import ProjectTableStatCell from 'components/ProjectTableStatCell/ProjectTableStatCell';
-import { useRouter } from 'next/router';
 import NODATA from 'components/NODATA/NODATA';
-import InterviewScore from 'components/InterviewScore/InterviewScore';
-import PlatformButton from 'components/Button/PlatformButton';
-import PlayIcon from 'components/Icon/PlayIcon';
 import { criteriaTypes } from 'libs/criteria';
 import CompactMenu from 'components/CompactMenu/CompactMenu';
 import FilterIcon from 'components/Icon/FilterIcon';
@@ -15,6 +10,7 @@ import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
 import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
 import Link from 'next/link';
 import { useUser } from 'libs/user';
+import { useRouter } from 'next/router';
 
 import styles from './QuestionsTable.module.scss';
 

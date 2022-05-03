@@ -20,16 +20,15 @@ const messages = {
 
 const PasswordForm = ({ className, onSuccess }) => {
   const [values, errors, control] = useForm({ values: defaultValues, rules, messages })
-  const [config, t] = useSite()
 
   const handleSubmit = () => {
     onSuccess(values.password)
   }
 
   return <form method="POST" noValidate className={classNames(styles['password-form'], className)} onSubmit={control.submit(handleSubmit)}>
-    <PasswordInputField focus={true} value={values.password} placeholder={t('Password')} label={t('Password')} icon={null} error={errors ? t(errors.password) : null} onChange={control.input('password')} autoComplete='off' name='password' className={styles['password-form-field']} />
+    <PasswordInputField focus={true} value={values.password} placeholder={'Password'} label={'Password'} icon={null} error={errors ? errors.password : null} onChange={control.input('password')} autoComplete='off' name='password' className={styles['password-form-field']} />
 
-    <button className={styles['password-form-submit']} type="submit">{t('Submit')}</button>
+    <button className={styles['password-form-submit']} type="submit">{'Submit'}</button>
   </form>
 }
 

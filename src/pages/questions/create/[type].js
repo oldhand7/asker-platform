@@ -1,16 +1,15 @@
 import { questionTypes } from 'libs/questions';
 import { withUserGuardSsr } from 'libs/iron-session';
 import { getSettings } from 'libs/firestore-admin';
-import { useRouter } from 'next/router';
 import Head from 'next/head'
-import ScreeningQuestionForm from 'forms/screening-question/screening-question-form';
-import EvaluationQuestionForm from 'forms/evaluation-question/evaluation-question-form';
+import dynamic from 'next/dynamic'
+
+const ScreeningQuestionForm = dynamic(() => import('forms/screening-question/screening-question-form'));
+const EvaluationQuestionForm = dynamic(() => import('forms/evaluation-question/evaluation-question-form'));
 
 import styles from 'styles/pages/question-create.module.scss';
 
 const QuestionCreatePage = ({ questionType, questionSubtype }) => {
-  const router = useRouter();
-
   return <div className={styles['question-create-page']}>
     <Head>
       <title>Create a new {((questionSubtype || questionType).altName || (questionSubtype || questionType).name).toLowerCase()} question  - Asker</title>

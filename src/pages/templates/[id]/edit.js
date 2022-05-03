@@ -2,7 +2,7 @@ import { getSettings } from 'libs/firestore-admin';
 import { withUserGuardSsr } from 'libs/iron-session'
 import TemplateForm from 'forms/template/template-form';
 import Head from 'next/head';
-import { getCompanyTemplate } from 'libs/firestore-admin'
+import { getSingleDocument } from 'libs/firestore-admin'
 
 import styles from 'styles/pages/templates-edit.module.scss';
 
@@ -22,7 +22,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
-  const template = await getCompanyTemplate(req.session.user.companyId, query.id);
+  const template = await getSingleDocument('templates', query.id);
 
   if (!template) {
     return {
@@ -32,7 +32,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
 
   return {
     props: {
-      template,
+      template: JSON.parse(JSON.stringify(template)),
       config: await getSettings()
     }
   }

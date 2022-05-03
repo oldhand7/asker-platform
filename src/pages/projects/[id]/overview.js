@@ -1,9 +1,8 @@
 import { getSettings } from 'libs/firestore-admin';
 import { useEffect, useState } from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
-import ProjectForm from 'forms/project/project-form';
 import Head from 'next/head';
-import { getCompanyProject, getProjectInterviews } from 'libs/firestore-admin'
+import { getSingleDocument, filterManyDocuments } from 'libs/firestore-admin'
 import PlatformButton from 'components/Button/PlatformButton';
 import Preloader from 'components/Preloader/Preloader';
 import ProjectInterviewsTable from 'components/ProjectInterviewsTable/ProjectInterviewsTable'
@@ -12,7 +11,7 @@ import { useModal } from 'libs/modal';
 import PlusIcon from 'components/Icon/PlusIcon';
 import { useRouter } from 'next/router';
 import Alert from 'components/Alert/Alert';
-import { saveInterview, deleteSingle } from 'libs/firestore'
+import { saveCollectionDocument, deleteSingle } from 'libs/firestore'
 import Link from 'next/link';
 import { useFlash } from 'libs/flash'
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
@@ -46,7 +45,8 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
       status: 'awaiting'
     }
 
-    saveInterview(interview).then(interviewId => {
+    saveCollectionDocument('interviews', interview)
+    .then(interviewId => {
       interview.id = interviewId
 
       setInterviews([
@@ -118,7 +118,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
-  const project = await getCompanyProject(req.session.user.companyId, query.id);
+  const project = await getSingleDocument('projects', query.id)
 
   if (!project) {
     return {
@@ -126,11 +126,13 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
-  const interviews = await getProjectInterviews(query.id);
+  const interviews = await filterManyDocuments('interviews', [
+    ['projectId', '==', project.id]
+  ]);
 
   return {
     props: {
-      project,
+      project: JSON.parse(JSON.stringify(project)),
       interviews,
       config: await getSettings()
     }

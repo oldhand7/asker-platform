@@ -18,7 +18,7 @@ const TeamRolePresentationForm = ({ className, stage, project, last, nextId }) =
     setDocuments(values.files.filter(f => !isImage(f.name)))
   }, [stage, project])
 
-  return <div className={styles['team-role-presentation-int-form']}>
+  return <div className={classNames(styles['team-role-presentation-int-form'], className)}>
     <h2 className={styles['team-role-presentation-int-form-title']}>Team role presentation</h2>
 
     {

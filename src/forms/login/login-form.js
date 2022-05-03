@@ -1,7 +1,5 @@
 import useForm from 'libs/use-form';
 import { useEffect, useState } from 'react';
-import { withRouter } from 'next/router';
-import { authenticateUser } from 'libs/api'
 import Alert from 'components/Alert/Alert';
 import classNames from 'classnames';
 import TextInputField from 'components/TextInputField/TextInputField';

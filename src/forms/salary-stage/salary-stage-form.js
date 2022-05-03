@@ -1,7 +1,7 @@
 import { Range, getTrackBackground } from 'react-range';
 import TextInputField from 'components/TextInputField/TextInputField';
 import useForm from 'libs/use-form'
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import classNames from 'classnames';
 
 import styles from './salary-stage-form.module.scss';

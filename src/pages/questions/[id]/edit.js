@@ -1,17 +1,16 @@
 import { criteriaTypes } from 'libs/criteria';
 import { withUserGuardSsr } from 'libs/iron-session';
 import { getSettings } from 'libs/firestore-admin';
-import { useRouter } from 'next/router';
 import { getSingleDocument } from 'libs/firestore-admin';
 import Head from 'next/head';
-import ScreeningQuestionForm from 'forms/screening-question/screening-question-form';
-import EvaluationQuestionForm from 'forms/evaluation-question/evaluation-question-form';
+import dynamic from 'next/dynamic'
+
+const ScreeningQuestionForm = dynamic(() => import('forms/screening-question/screening-question-form'));
+const EvaluationQuestionForm = dynamic(() => import('forms/evaluation-question/evaluation-question-form'));
 
 import styles from 'styles/pages/question-edit.module.scss';
 
 const QuestionEditPage = ({ question }) => {
-  const router = useRouter();
-
   return <div className={styles['question-edit-page']}>
     <Head>
       <title>{question.name} - {question.companyId === 'asker' ? 'Clone' : 'Edit'} question - Asker</title>
@@ -24,12 +23,7 @@ const QuestionEditPage = ({ question }) => {
 }
 
 export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
-  const filter = [
-    ['id', '==', query.id],
-    ['companyId', 'in', ['asker', req.session.user.companyId]]
-  ];
-
-  const question = await getSingleDocument('questions', filter)
+  const question = await getSingleDocument('questions', query.id)
 
   if (!question) {
     return {
@@ -40,7 +34,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
   return {
     props: {
       config: await getSettings(),
-      question
+      question: JSON.parse(JSON.stringify(question))
     }
   }
 })

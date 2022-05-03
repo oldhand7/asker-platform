@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import Alert from 'components/Alert/Alert';
 import { useRouter } from 'next/router';
 import Preloader from 'components/Preloader/Preloader';
-import { saveInterview } from 'libs/firestore';
+import { saveCollectionDocument } from 'libs/firestore';
 import useForm from 'libs/use-form';
 import { useState, useEffect} from 'react';
 import BrandishButton from 'components/Button/BrandishButton';
@@ -10,10 +10,6 @@ import CandidateCard from 'components/CandidateCard/CandidateCard';
 import { addFlash} from 'libs/flash';
 import StageInterviewForm from 'components/StageInterviewForm/StageInterviewForm';
 import styles from './interview-form.module.scss';
-
-const defaultValues = {
-
-}
 
 const rules = {}
 
@@ -59,7 +55,7 @@ const InterviewForm = ({ className, interview, project }) => {
 
     interview.score = Math.round(score * 100 / total);
 
-    saveInterview(interview)
+    saveCollectionDocument('interviews', interview)
       .then(() => {
         addFlash('Interview complete')
 
