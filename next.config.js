@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
 const i18n = require('./i18n.json');
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
-
 if (process.env.APP_ENV === 'testing') {
 	require('dotenv').config({
 		path: './.env.testing',
@@ -12,7 +8,7 @@ if (process.env.APP_ENV === 'testing') {
 	})
 }
 
-module.exports = withBundleAnalyzer({
+module.exports = {
 	reactStrictMode: true,
 	trailingSlash: true,
 	i18n,
@@ -36,4 +32,4 @@ module.exports = withBundleAnalyzer({
 
 		return config;
 	}
-});
+};
