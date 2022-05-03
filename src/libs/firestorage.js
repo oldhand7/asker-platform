@@ -1,4 +1,4 @@
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { getUser } from 'libs/firebase'
 import { trim } from 'libs/helper';
 
@@ -30,4 +30,12 @@ export const uploadUserFile = (file, type = '') => {
       return uploadBytes(storageRef, file)
         .then(snapshot => getDownloadURL(snapshot.ref))
     })
+}
+
+//This never used
+export const deleteFile = async (file) => {
+  const storage = await getStorage();
+  const fileRef =  ref(storage, file.url)
+
+  return deleteObject(fileRef)
 }

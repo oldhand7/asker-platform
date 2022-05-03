@@ -17,6 +17,7 @@ import NewStageDroppable from 'components/NewStageDroppable/NewStageDroppable'
 import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField';
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
 import ErrorBox from 'components/ErrorBox/ErrorBox';
+import { ctxError} from 'libs/helper';
 
 import styles from './project-form.module.scss';
 
@@ -162,7 +163,9 @@ const ProjectForm = ({ project, className }) => {
 
         router.push('/projects/')
       })
-      .catch(setError)
+      .catch(error => {
+        setError(ctxError('Server error', error))
+      })
   }
 
   useEffect(() => {

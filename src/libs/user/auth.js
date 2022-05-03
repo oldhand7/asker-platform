@@ -92,9 +92,6 @@ export const useAuth = () => {
           }
         })
       })
-      .catch(error => {
-        throw new ctxError('Email or password invalid.', error)
-      })
   }
 
   const logout = async () => {

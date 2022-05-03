@@ -15,6 +15,7 @@ import DropDownButton from 'components/DropDownButton/DropDownButton';
 import ProjectTemplateModal from 'modals/project-template/project-template-modal';
 import { useModal } from 'libs/modal';
 import Preloader from 'components/Preloader/Preloader';
+import { ctxError } from 'libs/helper';
 
 import styles from 'styles/pages/projects.module.scss';
 
@@ -92,7 +93,9 @@ const ProjectsPage = ({ projects = [], perPage = PER_PAGE, currentPage = 1 }) =>
 
         setSuccess('Project deleted')
       })
-      .catch(setError)
+      .catch(error => {
+        setError(ctxError('Server error', error))
+      })
   }
 
   useEffect(() => {

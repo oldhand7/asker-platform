@@ -138,7 +138,7 @@ const AdminProfileForm = ({ className }) => {
       return Promise.reject();
     },
     onError: (error) => {
-      setError(error)
+      setError(ctxError('Uploading photo failed.', error))
     },
     accept: "image/jpeg"
   }

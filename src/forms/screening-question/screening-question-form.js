@@ -12,6 +12,7 @@ import MultichoiceIcon from 'components/Icon/MultichoiceIcon';
 import BoxesIcon from 'components/Icon/BoxesIcon';
 import DoubleCheckIcon from 'components/Icon/DoubleCheckIcon';
 import TextIcon from 'components/Icon/TextIcon';
+import { ctxError }from 'libs/helper';
 
 import styles from './screening-question-form.module.scss';
 
@@ -85,7 +86,9 @@ const ScreeningQuestionForm = ({ className, question, type = 'screening', onValu
           router.push('/questions/')
         }
       })
-      .catch(setError)
+      .catch(error => {
+        setError(ctxError('Server error', error))
+      })
   }
 
   useEffect(() => {

@@ -14,6 +14,7 @@ import { useDebounce } from 'libs/debounce';
 import PlusIcon from 'components/Icon/PlusIcon';
 import { useRouter } from 'next/router';
 import { deleteSingle } from 'libs/firestore';
+import { ctxError } from 'libs/helper';
 
 import styles from 'styles/pages/templates.module.scss';
 
@@ -77,7 +78,9 @@ const TemplatesPage = ({ templates = [], perPage = PER_PAGE, currentPage = 1 }) 
         setLoading(false);
         setSuccess('Template deleted')
       })
-      .catch(setError)
+      .catch(error => {
+        setError(ctxError('Deleting template failed', error))
+      })
   }
 
   useEffect(() => {

@@ -12,7 +12,6 @@ const Preloader = ({ className}) => {
     setShow(true);
   }, [show])
 
-  //@TODO: https://codepen.io/jonitrythall/pen/ojKgdx
   return show ? <div className={classNames(styles['preloader'], className)}>
     <img className={styles['preloader-image']} src={PreloaderGif.src} alt="" />
   </div> : null

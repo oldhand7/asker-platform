@@ -93,6 +93,10 @@ const FileDropInputField = ({ maxFiles = MAX_UPLOAD_COUNT, bundleReminingBytes =
 
         setSuccess('Upload success.')
 
+        setTimeout(() => {
+          setSuccess(null)
+        }, 5000)
+
         setLoading(false);
       })
       .catch(error => {
@@ -135,7 +139,9 @@ const FileDropInputField = ({ maxFiles = MAX_UPLOAD_COUNT, bundleReminingBytes =
         files.push(file);
         return Promise.resolve(file)
       },
-      onError: setError,
+      onError: error => {
+        setError(ctxError('Upload failed', error))
+      },
       onSuccess: onFiles,
       multiple: true,
       accept: Object.values(allowed).map(mime => mime).join(', '),
@@ -159,6 +165,9 @@ const FileDropInputField = ({ maxFiles = MAX_UPLOAD_COUNT, bundleReminingBytes =
 
               setSuccess('Upload success.')
 
+              setTimeout(() => {
+                setSuccess(null)
+              }, 5000)
 
               setLoading(false);
             })

@@ -43,7 +43,6 @@ const getColumns = ({ handleDelete }) => ([
 
 const FileManager = ({ className, files = [], onChange }) => {
   const handleDelete = (file) => {
-    //@TODO: remove from server
     if (confirm('Are you sure?')) {
       onChange([
         ...files.filter(f => f != file)

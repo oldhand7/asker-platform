@@ -13,6 +13,7 @@ import FollowupQuestionField from 'components/FollowupQuestionField/FollowupQues
 import Alert from 'components/Alert/Alert';
 import { addFlash } from 'libs/flash';
 import { useRouter } from 'next/router';
+import { error } from 'libs/helper';
 
 import styles from './evaluation-question-form.module.scss';
 
@@ -79,7 +80,9 @@ const EvaluationQuestionForm = ({ className, question, subtype, onValues }) => {
           router.push('/questions/')
         }
       })
-      .catch(setError)
+      .catch(error => {
+          setError(ctxError('Server error', error))
+      })
   }
 
   const handleSubmitFailure = () => {
