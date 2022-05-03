@@ -1,7 +1,5 @@
-import Modal, { createModalElement } from 'components/Modal/Modal';
+import Modal from 'components/Modal/Modal';
 import CandidateForm from 'forms/candidate/candidate-form';
-import ReacDOM from 'react-dom';
-import { useSite } from 'libs/site';
 
 import styles from './candidate-modal.module.scss';
 

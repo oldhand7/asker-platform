@@ -1,30 +1,5 @@
 import { useState, useEffect } from "react";
-import { getApp, getUser as getFirebaseUser } from 'libs/firebase';
-const { collection, getFirestore, doc, getDoc, setDoc} = require('firebase/firestore');
-
-export const getCompany = id => {
-  return getFirebaseUser()
-    .then(user => {
-      const db = getFirestore(getApp());
-
-      const docRef = doc(db, "companies", id);
-
-      return getDoc(docRef).then(snap => {
-        return snap.exists ? snap.data() : null
-      })
-    })
-}
-
-export const updateCompany = (id, data) => {
-  return getFirebaseUser()
-    .then(user => {
-      const db = getFirestore(getApp());
-
-      const docRef = doc(db, "companies", id);
-
-      return setDoc(docRef, data, { merge: true })
-    })
-}
+import { getSingleDocument, saveCollectionDocument } from 'libs/firestore';
 
 const cache = {}
 
@@ -36,7 +11,7 @@ export const useCompany = (id) => {
       if (cache[id]) {
         setCompany(cache[id])
       } else {
-        getCompany(id).then(company => {
+        getSingleDocument('companies', id).then(company => {
           cache[id] = company
           setCompany(company)
         })
@@ -49,7 +24,7 @@ export const useCompany = (id) => {
       return Promise.resolve(new Error('No company.'))
     }
 
-    return updateCompany(id, data)
+    return saveCollectionDocument('companies', data)
       .then(() => {
         const updated = {
           ...company,

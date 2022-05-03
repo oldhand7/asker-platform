@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell } from 'recharts';
 import colorBetween from 'color-between';
 
 import styles from './InterviewScore.module.scss';

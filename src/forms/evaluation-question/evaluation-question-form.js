@@ -1,11 +1,10 @@
 import classNames from 'classnames';
 import useForm from 'libs/use-form';
-import {criteriaTypes} from 'libs/criteria';
 import PlatformButton from 'components/Button/PlatformButton';
 import CriteriaOptionInputField from 'components/CriteriaOptionInputField/CriteriaOptionInputField';
 import QuestionScoreInputField from 'components/QuestionScoreInputField/QuestionScoreInputField';
 import { useUser } from 'libs/user';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { saveCollectionDocument } from 'libs/firestore';
 import TextInputField from 'components/TextInputField/TextInputField';
 import Preloader from 'components/Preloader/Preloader';

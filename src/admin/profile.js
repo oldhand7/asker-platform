@@ -1,10 +1,8 @@
 import { Admin, Resource } from 'react-admin';
-import simpleRestProvider from 'ra-data-simple-rest';
 import ProfileDataProvider from 'admin/data-providers/profile/profile-data-provider';
 import { getFirebaseConfig } from 'libs/config';
 import { CompanyUsersList, CompanyUsersEdit, CompanyUsersAdd } from 'admin/resources/company-users/company-users-resource';
 import ProfileLayout from 'admin/components/ProfileLayout/ProfileLayout';
-import { useUser } from 'libs/user';
 import { createTheme } from '@material-ui/core/styles';
 import { blueGrey } from "@material-ui/core/colors";
 
@@ -41,8 +39,6 @@ const theme = createTheme({
 })
 
 const ProfileAdminApp = () => {
-    const { user } = useUser()
-
     return <Admin layout={ProfileLayout} theme={theme} layout={ProfileLayout} dataProvider={dataProvider}>
         <Resource name={`users`} list={CompanyUsersList} edit={CompanyUsersEdit} create={CompanyUsersAdd} />
     </Admin>

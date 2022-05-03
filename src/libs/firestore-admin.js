@@ -4,119 +4,69 @@ import { snap2data } from 'libs/helper';
 
 const db = getFirestore(getApp());
 
-//fyi https://googleapis.dev/nodejs/firestore/latest/
-export const getSettings = () => {
-    return db.collection('settings').select('id', 'value', 'images').get().then(snap => {
-      const items = {}
+export const getSettings = async () => {
+    const settigns = await filterManyDocuments('settings')
 
-      for (let doc of snap.docs) {
-        const d = doc.data();
+    const result = {}
 
-        items[d.id] = d.value
-      }
-
-      return items
-    })
-}
-
-export const getTranslations = (db, locale = 'en') => {
-  return db.collection('translations').select('id', 'text', 'translation').get().then(snap => {
-    const items = {}
-
-    for (let doc of snap.docs) {
-      const d = doc.data();
-
-      items[d.text] = d['translation'][locale]
+    for (let i = 0; i < settigns.length; i++) {
+      result[settigns[i].id] = settigns[i].value
     }
 
-    return items
-  })
+  return result;
 }
 
 export const getConfig = async (db) => {
   return {
     ...(await getSettings(db)),
-    translation: await getTranslations(db)
+    translation: {}
   }
 }
 
-export const getUser = (uid) => {
-  return db
-    .collection('users')
-    .doc(uid)
-    .get()
-    .then(snap => snap.data())
-}
-
-export const getCompanyProjects = (companyId, sort = 'createdAt', order = 'DESC') => {
-  if (!companyId) {
-    return Promise.resolve([])
-  }
-
-  return db.collection('projects')
-    .where('companyId', '==', companyId)
-    .orderBy(sort, order)
-    .get()
-    .then(snap2data)
-}
-
-export const getCompanyProject = (companyId, projectId) => {
-  return db
-    .collection('projects')
-    .where('companyId', '==', companyId)
-    .where(FieldPath.documentId(), '==', projectId)
-    .get()
-    .then(snap2data)
-    .then(res => res[0])
-}
-
-
-export const getCompanyInterview = (companyId, interviewId) => {
-  return db
-    .collection('interviews')
-    .where('companyId', '==', companyId)
-    .where(FieldPath.documentId(), '==', interviewId)
-    .get()
-    .then(snap2data)
-    .then(res => res[0])
-}
-
-export const getProjectInterviews = (projectId) => {
-  return db
-    .collection('interviews')
-    .where('projectId', '==', projectId)
-    .orderBy('createdAt', 'DESC')
-    .get()
-    .then(snap2data)
-}
-
-export const getQuestions = (companyId, sort = 'createdAt', order = 'desc') => {
-  let query = db
-    .collection('questions')
-    .where('companyId', 'in', [companyId, 'asker'])
-    .orderBy(sort, order)
-
-  if (sort == 'type') {
-    query = query.orderBy('subtype', order)
-  }
-
-  return query.get().then(snap2data)
-}
-
-export const getSingleDocument = (col, filter = []) => {
+export const filterSingleDocument = (col, filter = [], sort = []) => {
   let query = db.collection(col)
 
   for (let i = 0; i < filter.length; i++) {
+    if (filter[i][0] == 'id') {
+      filter[i][0] == FieldPath.documentId();
+    }
+
     query = query.where(...filter[i])
+  }
+
+  for (let i = 0; i < sort.length; i++) {
+    query = query.orderBy(...sort[i])
   }
 
   return query.get().then(snap2data).then(res => res[0])
 }
 
-export const getManyFromCollection = col => {
+export const filterManyDocuments = (col, filter = [], sort = []) => {
   let query = db.collection(col)
 
+  for (let i = 0; i < filter.length; i++) {
+    if (filter[i][0] == 'id') {
+      filter[i][0] == FieldPath.documentId();
+    }
+
+    query = query.where(...filter[i])
+  }
+
+  for (let i = 0; i < sort.length; i++) {
+    query = query.orderBy(...sort[i])
+  }
+
   return query.get().then(snap2data)
+}
+
+export const getSingleDocument = (col, id) => {
+  let query = db.collection(col)
+
+  return db
+    .collection(col)
+    .doc(id)
+    .get()
+    .then(snap => snap.data())
 }
 
 export const saveCollectionDocument = (col, doc) => {
@@ -127,23 +77,4 @@ export const saveCollectionDocument = (col, doc) => {
   } else {
     return query.add(doc)
   }
-}
-
-export const getTemplates = (companyId, sort = 'createdAt', order = 'desc') => {
-  let query = db
-    .collection('templates')
-    .where('companyId', 'in', [companyId, 'asker'])
-    .orderBy(sort, order)
-
-  return query.get().then(snap2data)
-}
-
-export const getCompanyTemplate = (companyId, templateIdId) => {
-  return db
-    .collection('templates')
-    .where('companyId', 'in', [companyId, 'asker'])
-    .where(FieldPath.documentId(), '==', templateIdId)
-    .get()
-    .then(snap2data)
-    .then(res => res[0])
 }

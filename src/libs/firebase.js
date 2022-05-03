@@ -1,8 +1,6 @@
-const { initializeApp, getApps, applicationDefault } = require("firebase/app");
+const { initializeApp, getApps } = require("firebase/app");
 import {
-  getAuth as firebaseGetAuth,
-  updatePassword, reauthenticateWithCredential,
-  EmailAuthProvider, onAuthStateChanged, updateEmail } from 'firebase/auth'
+  getAuth as firebaseGetAuth, onAuthStateChanged } from 'firebase/auth'
 import { getFirebaseConfig } from 'libs/config';
 
 export const getApp = () => {

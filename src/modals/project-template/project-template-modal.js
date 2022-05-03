@@ -1,7 +1,5 @@
-import Modal, { createModalElement } from 'components/Modal/Modal';
+import Modal from 'components/Modal/Modal';
 import ProjectTemplateForm from 'forms/project-template/project-template-form';
-import ReacDOM from 'react-dom';
-import { useSite } from 'libs/site';
 
 import styles from './project-template-modal.module.scss';
 

@@ -17,7 +17,7 @@ const defaultValues = {
 
 const rules = {
   notes: 'max:320',
-  files: 'required|array|min:1'
+  files: 'array'
 }
 
 const messages = {

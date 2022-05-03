@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import Preloader from 'components/Preloader/Preloader'
 import NewStageDroppable from 'components/NewStageDroppable/NewStageDroppable'
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
+import ErrorBox from 'components/ErrorBox/ErrorBox';
 
 import styles from './template-form.module.scss';
 
@@ -68,6 +69,7 @@ const TemplateForm = ({ template, className }) => {
   const { user } = useUser();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [pristine, setPristine] = useState(true);
 
   const [values, errors, control] = useForm({
     values: template ? template : defaultValues,
@@ -94,6 +96,14 @@ const TemplateForm = ({ template, className }) => {
   }
 
   const handleSubmit = (values) => {
+    if (stageErrors.length) {
+      setPristine(false);
+
+      return;
+    }
+
+    setPristine(false);
+
     if (stageErrors.length) {
       setError(new Error('Some stages are invalid.'))
 
@@ -205,7 +215,7 @@ const TemplateForm = ({ template, className }) => {
 
         <h2 className={styles['template-form-title']}>Create a new template</h2>
 
-        <TextInputField value={values.templateName} placeholder={t('Name')} error={errors ? t(errors.templateName) : null} onChange={control.input('templateName')} autoComplete='off' name='templateName' type='text' className={classNames(styles['template-form-field'], styles['template-form-field-name'])} />
+        <TextInputField value={values.templateName} placeholder={'Name'} error={errors ? errors.templateName : null} onChange={control.input('templateName')} autoComplete='off' name='templateName' type='text' className={classNames(styles['template-form-field'], styles['template-form-field-name'])} />
 
         <div className={classNames(styles['template-form-field'], styles['template-form-field-stages'])}>
           <h3 className={styles['template-form-field-title']}>Interview Stages</h3>
@@ -222,16 +232,16 @@ const TemplateForm = ({ template, className }) => {
         {error ? <Alert type="error">{error.message}</Alert> : null}
 
         {
-          stageErrors.length ?
-          <div className="form-error">
-            <p>You can't save form, becouse some stages are invalid.</p>
+          !pristine && stageErrors.length ?
+          <ErrorBox className={styles['template-form-stage-error-report']}>
+            <p>You can't save form, because some stages are invalid:</p>
             <ul>
-              {stageErrors.map(({ stage, error}) => <li key={stage.id}>{stage.name}: {error.message}</li>)}
+              {stageErrors.map(({ stage, error}) => <li key={stage.id}>{stage.name}</li>)}
             </ul>
-          </div> : null
+          </ErrorBox> : null
         }
 
-        <Button disabled={loading || errors || stageErrors.length} type="submit" className={styles['template-form-submit']}>{!loading ? (template ? 'Save template' : 'Create template') : 'Loading...'}</Button>
+        <Button disabled={loading || errors} type="submit" className={styles['template-form-submit']}>{!loading ? (template ? 'Save template' : 'Create template') : 'Loading...'}</Button>
       </div>
     </div>
     {loading ? <Preloader /> : null}

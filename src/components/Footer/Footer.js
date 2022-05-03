@@ -3,7 +3,6 @@ import SocialMenu from 'components/SocialMenu/SocialMenu';
 import ContactMenu from 'components/ContactMenu/ContactMenu';
 import Logo from 'components/Logo/Logo';
 import Copyright from 'components/Copyright/Copyright';
-import Link from 'next/link';
 import { useSite } from 'libs/site';
 import ContactModal from 'modals/contact/contact-modal';
 import MessageUsButton from 'components/MessageUsButton/MessageUsButton';
@@ -23,7 +22,7 @@ const Footer = () => {
         <p className={styles['footer-company-text']}>{config && config['company-about']}</p>
       </div>
       <div className={styles['footer-contact-widget']}>
-        <h3 className={styles['footer-contact-widget-title']}>{t('Contact')}</h3>
+        <h3 className={styles['footer-contact-widget-title']}>Contact</h3>
         <ContactMenu email={config && config['company-email']} address={config && config['company-address']} />
       </div>
 
@@ -36,8 +35,8 @@ const Footer = () => {
           <Copyright className={styles['footer-copyright']} />
 
           <div className={styles['footer-links']}>
-            <a href={`${process.env.NEXT_PUBLIC_LANDING_PAGE_URL}terms`}>{t('Terms and conditions')}</a>
-            <a href={`${process.env.NEXT_PUBLIC_LANDING_PAGE_URL}cookie-policy`}>{t('Cookie policy')}</a>
+            <a href={`${process.env.NEXT_PUBLIC_LANDING_PAGE_URL}terms`}>Terms and conditions</a>
+            <a href={`${process.env.NEXT_PUBLIC_LANDING_PAGE_URL}cookie-policy`}>Cookie policy</a>
           </div>
 
           <SocialMenu links={{

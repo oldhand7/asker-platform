@@ -4,7 +4,7 @@ import { useModal } from 'libs/modal';
 import CriteriaOptionModal from 'modals/criteria-option/criteria-option-modal';
 import Autocomplete from 'components/Autocomplete/Autocomplete';
 import { useUser } from 'libs/user';
-import { getManyFromCollection } from 'libs/firestore'
+import { filterManyDocuments } from 'libs/firestore'
 import { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import TrashButton from 'components/TrashButton/TrashButton';
@@ -22,7 +22,7 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, type }) =
       ['type', '==', type.id]
     ]
 
-    getManyFromCollection('criteriaOptions', filter).then(setCriteriaOptions)
+    filterManyDocuments('criteriaOptions', filter).then(setCriteriaOptions)
   }, [type, user, value])
 
   const handleCriteriaOption = option => {

@@ -1,16 +1,12 @@
-import { getCriteriaTypeById } from 'libs/criteria';
 import classNames from 'classnames';
-import QuestionScoreBoard from 'components/QuestionScoreBoard/QuestionScoreBoard';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useForm from 'libs/use-form';
 import EvaluationQuestionIntForm from 'forms/evaluation-question-int/evaluation-question-int-form'
-import { uid } from 'uid';
 import NextButton from 'components/Button/NextButton';
 import { handleNext } from 'libs/helper';
 
 import styles from './evaluation-questions-multiple-form.module.scss';
 
-const defaultValues = {}
 const rules = {}
 const messages = {}
 

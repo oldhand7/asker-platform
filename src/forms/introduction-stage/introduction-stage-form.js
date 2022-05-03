@@ -1,8 +1,6 @@
-import Separator from 'components/Separator/Separator'
 import TextareaInputField from 'components/TextareaInputField/TextareaInputField'
-import FileDropInputField from 'components/FileDropInputField/FileDropInputField'
 import useForm from 'libs/use-form';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import classNames from 'classnames';
 
 import styles from './introduction-stage-form.module.scss';

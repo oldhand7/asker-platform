@@ -2,8 +2,6 @@ import classNames from 'classnames';
 import { useEffect } from 'react';
 import useForm from 'libs/use-form';
 import ScreeningQuestionExplorer from 'components/ScreeningQuestionExplorer/ScreeningQuestionExplorer';
-import { getCriteriaTypeById } from 'libs/criteria';
-import TrashButton from 'components/TrashButton/TrashButton';
 import SelectedQuestionsList from 'components/SelectedQuestionsList/SelectedQuestionsList';
 
 import styles from './other-question-stage-form.module.scss';
@@ -25,12 +23,6 @@ const OtherQuestionStageForm = ({ className, values, onValues, feature, onError 
     messages,
     pristine: false
   })
-
-  const handleQuestionRemove = question => {
-    if (confirm('Are you sure?')) {
-      control.set('questions', [...formValues.questions.filter(q => q != question)])
-    }
-  }
 
   useEffect(() => {
     if (!errors) {

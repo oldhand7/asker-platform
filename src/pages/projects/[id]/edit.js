@@ -2,7 +2,7 @@ import { getSettings } from 'libs/firestore-admin';
 import { withUserGuardSsr } from 'libs/iron-session'
 import ProjectForm from 'forms/project/project-form';
 import Head from 'next/head';
-import { getCompanyProject } from 'libs/firestore-admin'
+import { getSingleDocument } from 'libs/firestore-admin'
 
 import styles from 'styles/pages/projects-edit.module.scss';
 
@@ -21,8 +21,8 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
       notFound: true
     }
   }
-  
-  const project = await getCompanyProject(req.session.user.companyId, query.id);
+
+  const project = await getSingleDocument('projects', query.id);
 
   if (!project) {
     return {
@@ -32,7 +32,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
 
   return {
     props: {
-      project,
+      project: JSON.parse(JSON.stringify(project)),
       config: await getSettings()
     }
   }

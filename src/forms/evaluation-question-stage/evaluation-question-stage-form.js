@@ -15,7 +15,9 @@ const rules = {
   questions: 'array'
 }
 
-const messages = {}
+const messages = {
+
+}
 
 const EvaluationQuestionStageForm = ({ className, values, onValues, feature, onError }) => {
   const [formValues, errors, control] = useForm({
@@ -35,7 +37,7 @@ const EvaluationQuestionStageForm = ({ className, values, onValues, feature, onE
     if (!errors) {
       onValues && onValues(formValues)
     } else {
-      onError(new Error("Form invalid"))
+      onError(new Error("Must have at leas one question."))
     }
   }, [formValues, errors])
 

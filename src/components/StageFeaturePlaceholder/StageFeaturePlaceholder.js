@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import UpDownIcon from 'components/Icon/UpDownIcon';
-import { useEffect, useState} from 'react'
 import styles from './StageFeaturePlaceholder.module.scss';
 import { Droppable } from 'react-drag-and-drop'
 

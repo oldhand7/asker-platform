@@ -1,15 +1,11 @@
 import { Range, getTrackBackground } from 'react-range';
-import TextInputField from 'components/TextInputField/TextInputField';
 import useForm from 'libs/use-form'
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import classNames from 'classnames';
 import { handleNext } from 'libs/helper';
 import NextButton from 'components/Button/NextButton';
 
 import styles from './salary-int-form.module.scss';
-
-const MIN = 0;
-const MAX = 9000;
 
 const defaultValues = {
   currency: '€',

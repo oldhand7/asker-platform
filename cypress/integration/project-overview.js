@@ -111,7 +111,7 @@ describe('Project overview', () => {
           })
       })
 
-    cy.wait(1000)
+    cy.wait(10000)
 
     cy.visit('/projects/')
 

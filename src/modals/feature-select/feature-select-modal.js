@@ -1,6 +1,5 @@
-import Modal, { createModalElement } from 'components/Modal/Modal';
+import Modal from 'components/Modal/Modal';
 import FeatureSelectForm from 'forms/feature-select/feature-select-form';
-import ReacDOM from 'react-dom';
 
 import styles from './feature-select-modal.module.scss';
 

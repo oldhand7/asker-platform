@@ -1,20 +1,9 @@
 import { getApp, getUser } from 'libs/firebase';
 import { getFirestore, collection, query, where, getDocs, setDoc, doc, Timestamp,
-orderBy, limit, deleteDoc } from 'firebase/firestore';
+orderBy, limit, deleteDoc, getDoc } from 'firebase/firestore/lite';
 import { snap2data } from 'libs/helper';
 
-
-export const getCompanyEmployees = (companyId) => {
-  const db = getFirestore(getApp());
-
-  const c = collection(db, 'users');
-  const w = where('companyId', '==', companyId);
-  const q = query(c, w)
-
-  return getDocs(q).then(snap2data)
-}
-
-export const saveProject = (values) => {
+export const saveCollectionDocument = (col, values = {})  => {
   const db = getFirestore(getApp());
 
   return getUser()
@@ -22,11 +11,14 @@ export const saveProject = (values) => {
       let d;
 
       if (!values.id) {
-        d = doc(collection(db, "projects"));
+        d = doc(collection(db, col));
+
+        values.id = d.id;
+
         values.createdAt = Timestamp.now()
         values.updatedAt = Timestamp.now()
       } else {
-        d = doc(db, 'projects', values.id);
+        d = doc(db, col, values.id);
         values.updatedAt = Timestamp.now()
         delete values.createdAt
       }
@@ -37,30 +29,7 @@ export const saveProject = (values) => {
     })
 }
 
-export const saveInterview = (values) => {
-  const db = getFirestore(getApp());
-
-  return getUser()
-    .then(async () => {
-      let d;
-
-      if (!values.id) {
-        d = doc(collection(db, "interviews"));
-        values.createdAt = Timestamp.now()
-        values.updatedAt = Timestamp.now()
-      } else {
-        d = doc(db, 'interviews', values.id);
-        values.updatedAt = Timestamp.now()
-        delete values.createdAt
-      }
-
-      await setDoc(d, values, { merge: true })
-
-      return d.id;
-    })
-}
-
-export const getManyFromCollection = (col, filter = [], order = [], max) => {
+export const filterManyDocuments = (col, filter = [], order = [], max) => {
   const db = getFirestore(getApp());
 
   return getUser()
@@ -77,26 +46,14 @@ export const getManyFromCollection = (col, filter = [], order = [], max) => {
     })
 }
 
-export const saveCollectionDocument = (col, values = {})  => {
+export const getSingleDocument = (col, id) => {
   const db = getFirestore(getApp());
 
   return getUser()
     .then(async () => {
-      let d;
-
-      if (!values.id) {
-        d = doc(collection(db, col));
-        values.createdAt = Timestamp.now()
-        values.updatedAt = Timestamp.now()
-      } else {
-        d = doc(db, col, values.id);
-        values.updatedAt = Timestamp.now()
-        delete values.createdAt
-      }
-
-      await setDoc(d, values, { merge: true })
-
-      return d.id;
+      const dr = doc(db, col, id);
+      const d = await getDoc(dr);
+      return d.data()
     })
 }
 

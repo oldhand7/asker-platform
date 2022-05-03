@@ -6,7 +6,7 @@ import LiveSearch from 'components/LiveSearchWidget/LiveSearchWidget';
 import { useUser } from 'libs/user';
 import EvaluationQuestionsTable from 'components/EvaluationQuestionsTable/EvaluationQuestionsTable';
 import PlusIcon from 'components/Icon/PlusIcon';
-import { getManyFromCollection } from 'libs/firestore';
+import { filterManyDocuments } from 'libs/firestore';
 import EvaluationQuestionModal from 'modals/evaluation-question/evaluation-question-modal';
 import { useModal } from 'libs/modal';
 
@@ -35,7 +35,7 @@ const EvaluationQuestionExplorer = ({ className, criteria, questions, onQuestion
 
   useEffect(() => {
     if (user) {
-      getManyFromCollection('questions', [
+      filterManyDocuments('questions', [
         ['companyId', 'in', ['asker', user.companyId]],
         ['criteria.type', '==', criteria.id]
       ], [['criteria.name', 'asc'], ['name', 'asc']]).then(setAvailableQuestions)

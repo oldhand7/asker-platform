@@ -1,7 +1,5 @@
-import Modal, { createModalElement } from 'components/Modal/Modal';
+import Modal from 'components/Modal/Modal';
 import EvaluationQuestionForm from 'forms/evaluation-question/evaluation-question-form';
-import ReacDOM from 'react-dom';
-import { useSite } from 'libs/site';
 
 import styles from './evaluation-question-modal.module.scss';
 

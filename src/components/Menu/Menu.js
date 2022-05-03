@@ -1,16 +1,8 @@
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 
 import styles from './Menu.module.scss';
-
-const menuItems = [
-  {
-    href: '/',
-    title: 'Home'
-  }
-]
 
 const Menu = ({ className, onClick, items = [] }) => {
   const router = useRouter();

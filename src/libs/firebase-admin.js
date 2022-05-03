@@ -1,4 +1,4 @@
-const { initializeApp, getApps, applicationDefault } = require("firebase-admin/app");
+const { initializeApp, getApps } = require("firebase-admin/app");
 const { credential } = require("firebase-admin");
 import { getAppEnv } from 'libs/config';
 

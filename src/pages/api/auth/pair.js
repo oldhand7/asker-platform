@@ -3,9 +3,8 @@ import { sessionOptions } from 'libs/iron-session';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { validate } from 'libs/validator';
 import { getApp } from 'libs/firebase-admin';
-import { getFirestore } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
-import { getUser} from 'libs/firestore-admin';
+import { getSingleDocument} from 'libs/firestore-admin';
 
 const handler = createApiHandler()
 
@@ -35,7 +34,7 @@ handler.post(async (req, res) => {
     }
 
     try {
-      const user = await getUser(claims.uid);
+      const user = await getSingleDocument('users', claims.uid);
 
       if (!user) {
         res.status(404).json({

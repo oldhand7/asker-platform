@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import { useUser, logout } from 'libs/user';
+import { useUser } from 'libs/user';
 import UserCard from 'components/UserCard/UserCard';
 import Link from 'next/link';
 import CarretDown from 'components/Icon/CarretDown';
@@ -8,7 +8,7 @@ import styles from './UserMenu.module.scss';
 
 const UserMenu = ({ className }) => {
   const [open, setOpen] = useState(false);
-  const { user, getAvatar } = useUser();
+  const { user, loading, getAvatar } = useUser();
   const menuRef = useRef();
 
   const getClassNames = () => {

@@ -14,7 +14,7 @@ const SelectedQuestionsList = ({ title = 'Selected questions', className, questi
     onChange(questions.filter(q => q != question))
   }
 
-  return <div className={styles['selected-question-list']}>
+  return <div className={classNames(styles['selected-question-list'], className)}>
     <h3 className={styles['selected-question-list-title']}>{title}</h3>
 
     <ul className={styles['selected-question-list-questions']}>

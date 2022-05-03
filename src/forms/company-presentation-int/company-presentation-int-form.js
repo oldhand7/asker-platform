@@ -18,7 +18,7 @@ const CompanyPresentationForm = ({ className, stage, project, last, nextId }) =>
     setDocuments(values.files.filter(f => !isImage(f.name)))
   }, [stage, project])
 
-  return <div className={styles['company-presentation-int-form']}>
+  return <div className={classNames(styles['company-presentation-int-form'], className)}>
     <h2 className={styles['company-presentation-int-form-title']}>Company presentation</h2>
 
     {

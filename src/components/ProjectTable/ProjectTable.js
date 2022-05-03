@@ -86,9 +86,7 @@ const getColumns = ({ handleCompactMenuChoice, onSort, sort, order }) => ([
   }
 ]);
 
-import demoProjects from 'data/demo/projects.json';
-
-const ProjectTable = ({ className, data = demoProjects, onDelete, ...props }) => {
+const ProjectTable = ({ className, data = [], onDelete, ...props }) => {
   const router = useRouter()
 
   const handleCompactMenuChoice = (c, row) => {

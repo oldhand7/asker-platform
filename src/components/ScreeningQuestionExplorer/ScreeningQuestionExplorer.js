@@ -6,7 +6,7 @@ import LiveSearch from 'components/LiveSearchWidget/LiveSearchWidget';
 import { useUser } from 'libs/user';
 import ScreeningQuestionsTable from 'components/ScreeningQuestionsTable/ScreeningQuestionsTable';
 import PlusIcon from 'components/Icon/PlusIcon';
-import { getManyFromCollection } from 'libs/firestore';
+import { filterManyDocuments } from 'libs/firestore';
 import { getScreeningQuestionLabelBySubtype } from 'forms/screening-question/screening-question-form';
 import ScreeningQuestionModal from 'modals/screening-question/screening-question-modal';
 import { useModal } from 'libs/modal';
@@ -43,7 +43,7 @@ const ScreeningQuestionExplorer = ({ className, criteria, questions, onQuestions
 
   useEffect(() => {
     if (user) {
-      getManyFromCollection('questions', [
+      filterManyDocuments('questions', [
         ['companyId', 'in', ['asker', user.companyId]],
         ['type', '==', type]
       ], [['name', 'asc']]).then(setAvailableQuestions)
@@ -88,7 +88,7 @@ const ScreeningQuestionExplorer = ({ className, criteria, questions, onQuestions
         question
       ])
 
-      handleQuestionAdd(question)    
+      handleQuestionAdd(question)
     }
   }
 

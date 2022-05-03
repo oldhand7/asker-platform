@@ -2,21 +2,10 @@ import classNames from 'classnames';
 import TextInputField from 'components/TextInputField/TextInputField';
 import OutlineButton from 'components/Button/OutlineButton';
 import PlusIcon from 'components/Icon/PlusIcon';
-import useForm from 'libs/use-form';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import TrashButton from 'components/TrashButton/TrashButton';
 
 import styles from './answers-form.module.scss';
-
-const defaultValues = {
-  name: ''
-}
-
-const validationRules = {
-  name: 'required|max:140'
-}
-
-const validationMessages = {}
 
 const AnswersForm = ({ values = [], className, onValues, title = '' }) => {
 

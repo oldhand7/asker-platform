@@ -2,9 +2,9 @@ import { getApp } from 'libs/firebase';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
 updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider, browserLocalPersistence,
 setPersistence } from "firebase/auth";
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { saveCollectionDocument } from 'libs/firestore';
-import { createPairSession, logoutUser } from 'libs/api';
+import { createPairSession } from 'libs/api';
 import { ctxError } from 'libs/helper';
 
 const getLocalMetauser = () => {

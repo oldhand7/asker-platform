@@ -21,8 +21,11 @@
         font-size: 12rem;
         font-weight: 500;
         line-height: 64rem;
-        padding: 0 20rem 0 40rem;
         white-space: nowrap;
+
+        @media (max-width: 1600px) {
+          padding: 0 20rem;
+        }
       }
     }
 
@@ -37,8 +40,16 @@
       }
 
       td {
-        padding: 20rem 20rem 20rem 40rem;
+        padding: 20rem;
         height: 174rem;
+
+        @media (max-width: 1600px) {
+          padding: 20rem 15rem;
+        }
+
+        &:first-child {
+          padding-left: 40rem;
+        }
       }
     }
   }

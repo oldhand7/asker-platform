@@ -10,7 +10,7 @@ const app = getApp();
 const handler = getHandler();
 
 handler.put(async (req, res) => {
-  const { query, body } = req;
+  const { body } = req;
 
   const rules = {
     email: 'required|email',

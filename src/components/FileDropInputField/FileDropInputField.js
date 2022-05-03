@@ -1,12 +1,11 @@
 import InputField from 'components/InputField/InputField';
 import {useDropzone} from 'react-dropzone'
 import classNames from 'classnames';
-import { useCallback} from 'react';
 import CloudUploadIcon from 'components/Icon/CloudUploadIcon';
 import Uploader from 'rc-upload';
 import { useUser } from 'libs/user';
 import { uploadCompanyFile } from 'libs/firestorage';
-import { UPLOAD_LIMIT_MB, BUNDLE_UPLOAD_LIMIT_MB, BUNDLE_MAX_FILES } from 'libs/config';
+import { UPLOAD_LIMIT_MB, BUNDLE_MAX_FILES } from 'libs/config';
 import { useState, useEffect } from 'react';
 import Preloader from 'components/Preloader/Preloader';
 import { humanFileSize, ctxError, calcFileBundleSizeBytes, inExtension } from 'libs/helper';

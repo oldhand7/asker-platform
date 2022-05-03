@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import dynamic from 'next/dynamic';
 import { useUser } from 'libs/user';
 
 import styles from './company-employees-form.module.scss';

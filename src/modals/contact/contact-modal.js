@@ -1,7 +1,5 @@
-import Modal, { createModalElement } from 'components/Modal/Modal';
+import Modal from 'components/Modal/Modal';
 import ContactForm from 'forms/contact/contact-form';
-import ReacDOM from 'react-dom';
-import { useSite } from 'libs/site';
 
 import styles from './contact-modal.module.scss';
 

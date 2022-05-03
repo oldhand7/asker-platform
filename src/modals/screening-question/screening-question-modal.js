@@ -1,7 +1,5 @@
-import Modal, { createModalElement } from 'components/Modal/Modal';
+import Modal from 'components/Modal/Modal';
 import ScreeningQuestionForm from 'forms/screening-question/screening-question-form';
-import ReacDOM from 'react-dom';
-import { useSite } from 'libs/site';
 
 import styles from './screening-question-modal.module.scss';
 

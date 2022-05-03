@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
 import classNames from 'classnames';
-import Icon from 'components/Icon/Icon';
 
 import styles from './TextInput.module.scss';
 
@@ -8,13 +7,7 @@ const TextInput = ({ focus, className, name = '', type="text", onFocus, onBlur, 
   const [focused, setFocused] = useState(false)
 
   const ref = useRef();
-
-  const handleIconClick = () => {
-    if (ref.current) {
-      ref.current.focus()
-    }
-  }
-
+  
   useEffect(() => {
     if (focus && ref.current) {
       ref.current.focus()

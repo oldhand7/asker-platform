@@ -1,15 +1,8 @@
 import classNames from 'classnames';
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell } from 'recharts';
 import { useEffect, useState } from 'react';
 
 import styles from './ProjectEvaluationCriteria.module.scss';
-
-const data = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 },
-];
 
 const COLORS = ['#43B88C', '#1E453E', '#E5C673'];
 

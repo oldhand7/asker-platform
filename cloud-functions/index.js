@@ -44,7 +44,7 @@ exports.stampCollections = functions.firestore.document('{collectionName}/{docId
 });
 
 exports.firebaseAccountCreate = functions.auth.user().onCreate(async (user) => {
-  const snap = await admin.firestore()
+  await admin.firestore()
     .collection('users')
     .doc(user.uid)
     .get()
@@ -63,21 +63,22 @@ exports.firebaseAccountCreate = functions.auth.user().onCreate(async (user) => {
 });
 
 exports.interviewCreate = functions.firestore.document('interviews/{docId}')
-  .onCreate(async (snap, context) => {
+  .onCreate(async (snap) => {
     const interview = snap.data();
 
     try {
+      const projectFields = {
+        interviewsCount: admin.firestore.FieldValue.increment(1)
+      }
+
+      if (interview.status != 'complete') {
+          projectFields.interviewsAwaitingCount = admin.firestore.FieldValue.increment(1);
+      }
+
       await admin.firestore()
         .collection('projects')
         .doc(interview.projectId)
-        .update({
-          interviews: admin.firestore.FieldValue.arrayUnion({
-            id: snap.id,
-            candidate: interview.candidate,
-            status: interview.status
-          }),
-          interviewsAwaitingCount: admin.firestore.FieldValue.increment(1)
-        })
+        .update(projectFields)
     } catch (error) {
       console.log(error)
 
@@ -86,68 +87,43 @@ exports.interviewCreate = functions.firestore.document('interviews/{docId}')
 });
 
 exports.updateInterview = functions.firestore.document('interviews/{docId}')
-  .onUpdate(async (change, context) => {
+  .onUpdate(async (change) => {
     const interview = change.after.data();
+    const interviewOld = change.before.data();
 
-    try {
-      const interviews = await admin.firestore()
-        .collection('interviews')
-        .select('id', 'candidate', 'status')
-        .where('projectId', '==', interview.projectId)
-        .get()
-        .then(snap => {
-          const interviews = []
+    if (interviewOld.status != 'complete' && interview.status == 'complete') {
+      try {
+        await admin.firestore()
+          .collection('projects')
+          .doc(interview.projectId)
+          .update({
+            interviewsAwaitingCount: admin.firestore.FieldValue.increment(-1)
+          })
+      } catch (error) {
+        console.log(error)
 
-          snap.forEach((interview) => {
-            interviews.push(interview.data())
-          });
-
-          return interviews;
-        })
-
-      await admin.firestore()
-        .collection('projects')
-        .doc(interview.projectId)
-        .update({
-          interviews,
-          interviewsAwaitingCount: interviews.filter(i => i.status != 'complete').length
-        })
-    } catch (error) {
-      console.log(error)
-
-      return null;
+        return null;
+      }
     }
 });
 
 exports.interviewDelete = functions.firestore.document('interviews/{docId}')
-  .onDelete(async (snap, context) => {
+  .onDelete(async (snap) => {
     const interview = snap.data();
 
     try {
-      const interviews = await admin.firestore()
-        .collection('interviews')
-        .select('id', 'candidate', 'status')
-        .where('projectId', '==', interview.projectId)
-        .get()
-        .then(snap => {
-          const interviews = []
+      const projectFields = {
+        interviewsCount: admin.firestore.FieldValue.increment(-1)
+      }
 
-          snap.forEach((interview) => {
-            interviews.push(interview.data())
-          });
-
-          return interviews;
-        })
-
-      const interviewsUpdated = interviews.filter(i => i.id != interview.id);
+      if (interview.status == 'awaiting') {
+        projectFields.interviewsAwaitingCount = admin.firestore.FieldValue.increment(-1);
+      }
 
       await admin.firestore()
         .collection('projects')
         .doc(interview.projectId)
-        .update({
-          interviews: interviewsUpdated,
-          interviewsAwaitingCount: interviewsUpdated.filter(i => i.status != 'complete').length
-        })
+        .update(projectFields)
     } catch (error) {
       console.log(error)
 
@@ -156,7 +132,7 @@ exports.interviewDelete = functions.firestore.document('interviews/{docId}')
 });
 
 exports.platformAccountCreate = functions.firestore.document('users/{docId}')
-  .onCreate(async (snap, context) => {
+  .onCreate(async (snap) => {
     const platformUser = snap.data();
 
     try {
@@ -170,7 +146,7 @@ exports.platformAccountCreate = functions.firestore.document('users/{docId}')
 
 exports.platformAccountUpdate = functions.firestore
   .document('users/{docId}')
-  .onUpdate(async (change, context) => {
+  .onUpdate(async (change) => {
     const platformUser = change.after.data();
 
     try {

@@ -15,7 +15,7 @@ const ProjectTemplateForm = ({ className, onValues, close }) => {
     close(t)
   }
 
-  return <div className={styles['project-template-form']}>
+  return <div className={classNames(styles['project-template-form'], classNames)}>
     <TemplateExplorer className={styles['project-template-form-explorer']} onTemplate={handleTemplateChoice} />
   </div>
 }

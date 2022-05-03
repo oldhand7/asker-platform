@@ -1,5 +1,4 @@
 import Table from 'rc-table';
-import TrashIcon from 'components/Icon/TrashIcon';
 import classNames from 'classnames';
 import Link from 'next/link';
 import TrashButton from 'components/TrashButton/TrashButton'

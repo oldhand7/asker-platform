@@ -1,12 +1,11 @@
 import Table from 'rc-table';
 import classNames from 'classnames';
-import NODATA from 'components/NODATA/NODATA';
 import ArrowRightIcon from 'components/Icon/ArrowRightIcon';
 import Button from 'components/Button/TryButton';
 
 import styles from './TemplateSummaryTable.module.scss';
 
-const getColumns = ({ onQuestion, onTemplate }) => ([
+const getColumns = ({ onTemplate }) => ([
   {
     title: 'Template',
     dataIndex: 'templateName',

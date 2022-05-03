@@ -10,7 +10,7 @@ const SummaryIntForm = ({ className, stage, project, config, last, nextId }) => 
     <div className={classNames(
       styles['summary-int-form-text'],
       'format'
-    )}>{config.text}</div>
+    )}>{config && config.text}</div>
     {!last ? <NextButton onClick={() => handleNext(nextId)} className={styles['team-role-int-form-next-button']} /> : null}
   </div>
 }

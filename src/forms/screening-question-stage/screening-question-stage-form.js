@@ -2,8 +2,6 @@ import classNames from 'classnames';
 import { useEffect } from 'react';
 import useForm from 'libs/use-form';
 import ScreeningQuestionExplorer from 'components/ScreeningQuestionExplorer/ScreeningQuestionExplorer';
-import { getCriteriaTypeById } from 'libs/criteria';
-import TrashButton from 'components/TrashButton/TrashButton';
 import SelectedQuestionsList from 'components/SelectedQuestionsList/SelectedQuestionsList';
 
 import styles from './screening-question-stage-form.module.scss';

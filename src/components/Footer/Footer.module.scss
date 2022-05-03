@@ -78,6 +78,11 @@
     flex: 1;
     justify-content: center;
 
+    @media (max-width: 1024px) {
+      flex-direction: column;
+      margin: 20rem 0;
+    }
+
     a {
       white-space: nowrap;
       margin-right: 30rem;

@@ -10,7 +10,7 @@ export const withSite = (WrappedComponent) => (props) => {
       <SiteContext.Provider value={[
         config ? config : null,
         w => {
-          return config && config.translations && config.translations[w] ? config.translations[w] : w;
+          return w; //config && config.translations && config.translations[w] ? config.translations[w] : w;
         }
       ]}>
       <WrappedComponent
