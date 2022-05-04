@@ -1,4 +1,4 @@
-const firebase = require('./firebase.js');
+const firebase = require('./firebase');
 
 /**
  * @type {Cypress.PluginConfig}
