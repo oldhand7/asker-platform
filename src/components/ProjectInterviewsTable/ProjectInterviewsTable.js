@@ -15,8 +15,6 @@ import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
 import styles from './ProjectInterviewsTable.module.scss';
 
 const getSortLink = (name, sort, order, project) => {
-  const router = useRouter();
-
   return `/projects/${project.id}/overview/?sort=${name}&order=${sort == name ? (order == 'asc' ? 'desc' : 'asc') : 'asc'}`
 }
 

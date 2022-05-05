@@ -116,7 +116,8 @@ const QuestionsTable = ({ className, data = [], onDelete, ...props }) => {
 
   const tagRow = (rec) => {
     return {
-      'data-company-id': rec.companyId
+      'data-company-id': rec.companyId,
+      onClick: () => router.push(`/questions/${rec.id}/edit/`)
     }
   }
 

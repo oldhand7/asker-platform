@@ -36,6 +36,7 @@
     border-collapse:separate;
     border-spacing: 0 20rem;
 
+
     td {
       position: relative;
     }
@@ -52,10 +53,10 @@
         font-size: 12rem;
         font-weight: 500;
         line-height: 64rem;
-        padding: 0 20rem 0 40rem;
+        padding: 0 20rem;
 
-        @media (max-width: 1600px) {
-          padding: 0 20rem;
+        &:first-child {
+          padding-left: 40rem;
         }
       }
     }
@@ -73,10 +74,6 @@
       td {
         padding: 20rem;
         height: 174rem;
-
-        @media (max-width: 1600px) {
-          padding: 20rem 15rem;
-        }
 
         &:first-child {
           padding-left: 40rem;

@@ -1,10 +1,10 @@
 .project-interviews-table {
   &-evaluations {
       display: flex;
-      justify-content: center;
+      justify-content: left;
 
       &-evaluation {
-        margin: 0 40rem;
+        margin-right: 40rem;
       }
   }
 
@@ -29,7 +29,11 @@
         font-size: 12rem;
         font-weight: 500;
         line-height: 64rem;
-        padding: 0 20rem 0 40rem;
+        padding: 0 20rem;
+
+        &:first-child {
+          padding-left: 30rem;
+        }
       }
     }
 
@@ -44,8 +48,12 @@
       }
 
       td {
-        padding: 20rem 20rem 20rem 40rem;
+        padding: 20rem;
         height: 174rem;
+
+        &:first-child {
+          padding-left: 30rem;
+        }
       }
     }
   }
