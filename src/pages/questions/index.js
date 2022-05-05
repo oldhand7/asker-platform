@@ -58,8 +58,12 @@ const QuestionPage = ({ questions = [], companyId, perPage = PER_PAGE, currentPa
 
     if (q && filteredQuestions.length) {
       const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
+      //
 
-      filteredQuestions = filteredQuestions.filter(data => regex.test(data.name.toLowerCase()))
+      filteredQuestions = filteredQuestions.filter(data => {
+        const criteriaName = (data.criteria && data.criteria.name) || ''
+        return regex.test(data.name.toLowerCase()) || regex.test(criteriaName.toLowerCase())
+      })
     }
 
     setQuestions(filteredQuestions)
@@ -126,6 +130,14 @@ const QuestionPage = ({ questions = [], companyId, perPage = PER_PAGE, currentPa
       setSuccess(flashSuccess)
     }
   }, [flashSuccess])
+
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        setSuccess(null)
+      }, 7000)
+    }
+  }, [success])
 
   return <div className={styles['questions-page']}>
       <Head>

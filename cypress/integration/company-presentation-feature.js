@@ -20,18 +20,17 @@ describe('Company presentation feature', () => {
 
     cy.get('[data-test-id="stage-2"]')
       .contains('Company presentation')
-      .click()
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
         cy.get('table').should('not.exist')
-        cy.get('textarea').type('Our company is good company.')
+        cy.get('[data-test-id="html-input-field"]').click('center').type('Our company is good company.')
 
         cy.get('[data-test-id="file-upload-area"]')
           .should('contain', 'Drag and Drop files here')
           .should('contain', 'Maximum file size: 1MB')
           .should('contain', 'Max files per upload: 3')
-          .should('contain', 'Allowed formats: .pdf, .jpg, .png, .jpeg, .gif')
+          .should('contain', 'Allowed formats: .pdf, .pptx, .ppt, .docx, .xls, .jpg, .png, .jpeg, .gif')
           .find('input[type="file"]')
           .first()
           .attachFile('uploads/corporate-presentation.pdf')

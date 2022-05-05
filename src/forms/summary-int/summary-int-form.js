@@ -1,6 +1,8 @@
 import classNames from 'classnames';
 import NextButton from 'components/Button/NextButton';
 import { handleNext } from 'libs/helper';
+import striptags from 'striptags';
+import { allowedHtmlTags } from 'libs/config';
 
 import styles from './summary-int-form.module.scss';
 
@@ -10,7 +12,8 @@ const SummaryIntForm = ({ className, stage, project, config, last, nextId }) => 
     <div className={classNames(
       styles['summary-int-form-text'],
       'format'
-    )}>{config && config.text}</div>
+    )} dangerouslySetInnerHTML={{
+      __html: config && striptags(config.html || config.text, allowedHtmlTags)}}></div>
     {!last ? <NextButton onClick={() => handleNext(nextId)} className={styles['team-role-int-form-next-button']} /> : null}
   </div>
 }

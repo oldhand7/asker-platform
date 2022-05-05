@@ -1,7 +1,8 @@
 import classNames from 'classnames';
 import NextButton from 'components/Button/NextButton';
 import { handleNext } from 'libs/helper';
-
+import striptags from 'striptags';
+import { allowedHtmlTags } from 'libs/config';
 import styles from './introduction-int-form.module.scss';
 
 const IntroductionIntForm = ({ last, nextId, className, stage, project, config }) => {
@@ -10,7 +11,8 @@ const IntroductionIntForm = ({ last, nextId, className, stage, project, config }
     <div className={classNames(
       styles['introduction-int-form-text'],
       'format'
-    )}>{config.text}</div>
+    )} dangerouslySetInnerHTML={{
+      __html: config && striptags(config.html || config.text, allowedHtmlTags)}}></div>
 
     {
     !last ?

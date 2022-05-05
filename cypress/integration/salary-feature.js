@@ -16,7 +16,6 @@ describe('Salary feature', () => {
 
     cy.get('[data-test-id="stage-2"]')
       .contains('Salary')
-      .click()
 
     cy.get('[data-test-id="feature-form"]')
       .should('contain', 'Salary range')

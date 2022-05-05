@@ -114,6 +114,14 @@ const ProjectsPage = ({ projects = [], perPage = PER_PAGE, currentPage = 1 }) =>
     setSuccess(flashSuccess)
   }, [flashSuccess])
 
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        setSuccess(null)
+      }, 7000)
+    }
+  }, [success])
+
   return <div className={styles['projects-page']}>
       <Head>
         <title>Projects - Asker</title>

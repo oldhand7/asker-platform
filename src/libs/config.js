@@ -35,6 +35,7 @@ export const getFirebaseConfig = () => {
   return firebaseConfig[getAppEnv()]
 }
 
-export const UPLOAD_LIMIT_MB = getAppEnv() === 'testing' ? 1 : 5;
+export const UPLOAD_LIMIT_MB = getAppEnv() === 'testing' ? 1 : 10;
 export const BUNDLE_UPLOAD_LIMIT_MB = getAppEnv() === 'testing' ? 2 : UPLOAD_LIMIT_MB * 2;
 export const BUNDLE_MAX_FILES = getAppEnv() === 'testing' ? 3 : 10;
+export const allowedHtmlTags = ['ul', 'ol', 'li', 'b', 'i', 'strong', 'em']

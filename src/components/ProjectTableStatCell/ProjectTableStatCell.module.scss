@@ -4,12 +4,14 @@
   color: $brandish-grey;
   white-space: nowrap;
   line-height: 3em;
+  font-size: 10rem;
 
   &-count {
-    font-size: 20rem;
+    font-size: 15rem;
     color: #5B5B5B;
     display: inline-block;
     margin-right: 9rem;
+    min-width: 15rem;
   }
 
   &-status {

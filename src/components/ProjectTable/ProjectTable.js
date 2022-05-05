@@ -103,7 +103,13 @@ const ProjectTable = ({ className, data = [], onDelete, ...props }) => {
     }
   }
 
-  return <Table rowKey={row => row.id} className={classNames(
+  const tagRow = (row) => {
+    return {
+      onClick: () => router.push(`/projects/${row.id}/overview/`)
+    }
+  }
+
+  return <Table onRow={tagRow} rowKey={row => row.id} className={classNames(
     styles['project-table'],
     className
   )} columns={getColumns({ handleCompactMenuChoice, sort: router.query.sort || 'createdAt', order: router.query.order || 'desc' })} data={data} {...props} />

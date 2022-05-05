@@ -1,9 +1,12 @@
 .summary-int-form {
-  max-width: 560rem;
+
 
   &-title {
     margin-bottom: 20rem;
+      max-width: 560rem;
   }
 
-  &-text {}
+  &-text {
+      max-width: 560rem;
+  }
 }

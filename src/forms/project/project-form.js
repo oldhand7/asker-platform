@@ -228,7 +228,11 @@ const ProjectForm = ({ project, className }) => {
   }
 
   const handleStageSelect = (st) => {
-    setStage(st);
+    if (stage == st) {
+      setStage(null);
+    } else {
+      setStage(st);
+    }
   }
 
   const handleAddDropStage = (stage) => {

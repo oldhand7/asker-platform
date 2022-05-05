@@ -1,0 +1,53 @@
+@import 'styles/vars';
+
+.html-input-field {
+  cursor: auto !important;
+  position: relative;
+
+  &-input {
+    background: rgba($brandish-grey, 0.15);
+    border-radius: 10px;
+    min-height: 120rem;
+    padding: 10rem 40rem 15rem 20rem;
+
+    &-editor {
+      min-height: inherit;
+    }
+
+    &-editor-container {
+      min-height: inherit;
+    }
+  }
+
+  &-toolbar {
+    position: absolute;
+    right: 10rem;
+    top: 10rem;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+
+    &-button {
+      margin-bottom: 2.5rem;
+      background: 0;
+      border: 0;
+      cursor: pointer;
+      padding: 5rem;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &-icon {
+        vertical-align: middle;
+        top: -1px;
+        position: relative;
+        color: rgba($brandish-grey, 0.15);
+      }
+
+      &:hover &-icon {
+        color: $brandish-grey;
+      }
+    }
+  }
+}

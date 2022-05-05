@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react';
 import { isImage, handleNext } from 'libs/helper';
 import Link from 'next/link';
 import NextButton from 'components/Button/NextButton';
+import striptags from 'striptags';
+import { allowedHtmlTags } from 'libs/config';
 
 import styles from './team-role-presentation-int-form.module.scss';
 
-const TeamRolePresentationForm = ({ className, stage, project, last, nextId }) => {
+const TeamRolePresentationForm = ({ className, stage, project, last, nextId, config }) => {
   const [images, setImages] = useState([]);
   const [documents, setDocuments] = useState([]);
 
@@ -20,6 +22,12 @@ const TeamRolePresentationForm = ({ className, stage, project, last, nextId }) =
 
   return <div className={classNames(styles['team-role-presentation-int-form'], className)}>
     <h2 className={styles['team-role-presentation-int-form-title']}>Team role presentation</h2>
+
+    <div className={classNames(
+      styles['team-role-presentation-int-form-text'],
+      'format'
+    )} dangerouslySetInnerHTML={{
+      __html: config && striptags(config.notes, allowedHtmlTags)}}></div>
 
     {
       images.length ?
@@ -34,7 +42,7 @@ const TeamRolePresentationForm = ({ className, stage, project, last, nextId }) =
         {documents.map(doc => (
           <li className={styles['team-role-presentation-int-form-docs-list-file']}>
             <Link href={doc.url}>
-              <a className={styles['team-role-presentation-int-form-docs-list-file-link']}>
+              <a target="_blank" className={styles['team-role-presentation-int-form-docs-list-file-link']}>
               {doc.name}
               </a>
             </Link>

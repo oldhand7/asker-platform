@@ -97,7 +97,8 @@ const TemplateTable = ({ className, data = [], onDelete, ...props }) => {
 
   const tagRow = (rec) => {
     return {
-      'data-company-id': rec.companyId
+      'data-company-id': rec.companyId,
+      onClick: () => router.push(`/templates/${rec.id}/edit/`)
     }
   }
 

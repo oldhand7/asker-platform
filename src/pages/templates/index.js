@@ -95,6 +95,14 @@ const TemplatesPage = ({ templates = [], perPage = PER_PAGE, currentPage = 1 }) 
     }
   }, [success])
 
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        setSuccess(null)
+      }, 7000)
+    }
+  }, [success])
+
   return <div className={styles['templates-page']}>
       <Head>
         <title>Templates listing - Asker</title>

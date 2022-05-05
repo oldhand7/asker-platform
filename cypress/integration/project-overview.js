@@ -3,7 +3,7 @@ describe('Project overview', () => {
     cy.login('joe.philips@example.com', 'test123', 'project-overview')
   })
 
-  it('cliking on project list project redirects to verview page', () => {
+  it('cliking on project list project redirects to overview page', () => {
     cy.visit('/projects/')
 
     cy.get('table tbody tr')
@@ -61,17 +61,17 @@ describe('Project overview', () => {
         cy.get('tr')
           .eq(0)
           .within(() => {
-            cy.get('td').eq(0).should('contain', 'Candidate B')
-            cy.get('td').eq(1).should('not.contain', '%')
-            cy.get('td').eq(2).should('contain', 'Start interview')
+            cy.get('td').eq(0).should('contain', 'Candidate A')
+            cy.get('td').eq(1).should('contain', '40%')
+            cy.get('td').eq(2).should('not.contain', 'Start interview')
           })
 
         cy.get('tr')
           .eq(1)
           .within(() => {
-            cy.get('td').eq(0).should('contain', 'Candidate A')
-            cy.get('td').eq(1).should('contain', '40%')
-            cy.get('td').eq(2).should('not.contain', 'Start interview')
+            cy.get('td').eq(0).should('contain', 'Candidate B')
+            cy.get('td').eq(1).should('not.contain', '%')
+            cy.get('td').eq(2).should('contain', 'Start interview')
           })
       })
   })
