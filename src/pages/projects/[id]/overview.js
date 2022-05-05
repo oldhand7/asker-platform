@@ -19,11 +19,16 @@ import { ctxError } from 'libs/helper';
 
 import styles from 'styles/pages/project-overview.module.scss';
 
+const defaultSort = [
+  ['status', 'desc'], // complete, awaiting
+  ['createdAt', 'desc']
+]
+
 const ProjectOverviewPage = ({ project, interviews = [] }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const openCandidateModal = useModal(CandidateModal, { size: 'large' });
-  const [_interviews, setInterviews] = useState(interviews);
+  const [_interviews, setInterviews] = useState([]);
   const [error, setError] = useState(null);
   const flashSuccess = useFlash('success');
   const [success, setSuccess] = useState(null);
@@ -67,6 +72,10 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
       setLoading(false);
     }
   }, [error])
+
+  useEffect(() => {
+    setInterviews(interviews)
+  }, [interviews])
 
   const handleDeleteInterview = (interview) => {
       if (!confirm('Are you sure?')) {
@@ -118,7 +127,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
 
       <div className={styles['project-overview-page-interviews']}>
         <PlatformButton onClick={() => openCandidateModal(handleCandidate)} className={styles['project-overview-page-interviews-add-candidate']}><PlusIcon /> Add candidate</PlatformButton>
-        <ProjectInterviewsTable onDelete={handleDeleteInterview} className={styles['project-overview-page-interviews-table']} data={_interviews} />
+        <ProjectInterviewsTable project={project} onDelete={handleDeleteInterview} className={styles['project-overview-page-interviews-table']} data={_interviews} />
       </div>
       {loading ? <Preloader /> : null}
   </div>
@@ -139,11 +148,14 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
-  const interviews = await filterManyDocuments('interviews', [
-    ['projectId', '==', project.id]
-  ], [
-    ['createdAt', 'desc']
-  ]);
+  const interviews = await filterManyDocuments('interviews',
+    [
+      ['projectId', '==', project.id]
+    ],
+    query.sort ? [
+      [query.sort, query.order || 'asc']
+    ] : defaultSort
+  )
 
   return {
     props: {

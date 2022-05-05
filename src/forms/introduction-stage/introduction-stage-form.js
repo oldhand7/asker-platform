@@ -1,4 +1,4 @@
-import TextareaInputField from 'components/TextareaInputField/TextareaInputField'
+import HtmlInputField from 'components/HtmlInputField/HtmlInputField'
 import useForm from 'libs/use-form';
 import { useEffect } from 'react';
 import classNames from 'classnames';
@@ -6,15 +6,16 @@ import classNames from 'classnames';
 import styles from './introduction-stage-form.module.scss';
 
 const defaultValues = {
-  text: ''
+  text: '',
+  html: ''
 }
 
 const rules = {
-  text: 'max:320'
+  text: 'max:10000',
 }
 
 const messages = {
-  max: 'Text is too long (320 characters max)'
+  max: 'Text is too long'
 }
 
 const IntroductionStageForm = ({ className, onValues, values, onError }) => {
@@ -35,7 +36,7 @@ const IntroductionStageForm = ({ className, onValues, values, onError }) => {
 
 
   return <div className={classNames(className, styles['introduction-stage-form'])}>
-    <TextareaInputField value={formValues.text} error={errors && errors['text']} className={classNames(styles['introduction-stage-form-field'], styles['introduction-stage-form-text'])} name="text" onChange={control.input('text')} placeholder="Enter your introduction text" />
+    <HtmlInputField value={formValues.html || formValues.text} error={errors && errors['html']} className={classNames(styles['introduction-stage-form-field'], styles['introduction-stage-form-text'])} name="html" onChange={control.input('html', false)} placeholder="Enter your introduction text" />
   </div>
 }
 

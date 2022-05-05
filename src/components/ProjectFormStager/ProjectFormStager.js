@@ -27,7 +27,7 @@ const ProjectFormStager = ({ feature, featureValues, featureOnError, featureOnVa
         ...stages.slice(0, index),
         ...stages.slice(index + 1)
       ])
-    } else if (confirm('Are you sure?') && onStages) {
+    } else if (onStages) {
       onStages([
         ...stages.map(s => (s != stage) ? s : null)
       ])
@@ -59,7 +59,7 @@ const ProjectFormStager = ({ feature, featureValues, featureOnError, featureOnVa
     if (!feature) {
       return;
     }
-    
+
     const stagesCopy = [
       ...stages
     ]

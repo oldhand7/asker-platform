@@ -1,4 +1,4 @@
-import TextareaInputField from 'components/TextareaInputField/TextareaInputField'
+import HtmlInputField from 'components/HtmlInputField/HtmlInputField'
 import useForm from 'libs/use-form';
 import { useEffect } from 'react';
 import classNames from 'classnames';
@@ -6,15 +6,16 @@ import classNames from 'classnames';
 import styles from './summary-stage-form.module.scss';
 
 const defaultValues = {
-  text: ''
+  text: '',
+  html: ''
 }
 
 const rules = {
-  text: 'max:320'
+  html: 'max:10000'
 }
 
 const messages = {
-  max: 'Text is too long (320 characters max)'
+  max: 'Text is too long'
 }
 
 const SummaryStageForm = ({ className, onValues, values, onError }) => {
@@ -37,7 +38,7 @@ const SummaryStageForm = ({ className, onValues, values, onError }) => {
   return <div className={classNames(className, styles['summary-stage-form'])}>
     <h3 className={styles['summary-stage-form-title']}>Summary text</h3>
 
-    <TextareaInputField value={formValues.text} error={errors && errors['text']} className={styles['summary-stage-form-field']} name="text" onChange={control.input('text')} placeholder="Enter your summary text" />
+    <HtmlInputField value={formValues.html || formValues.text} error={errors && errors['html']} className={styles['summary-stage-form-field']} name="html" onChange={control.input('html', false)} placeholder="Enter your summary text" />
   </div>
 }
 

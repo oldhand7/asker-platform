@@ -1,5 +1,5 @@
 import Separator from 'components/Separator/Separator'
-import TextareaInputField from 'components/TextareaInputField/TextareaInputField'
+import HtmlInputField from 'components/HtmlInputField/HtmlInputField'
 import FileDropInputField from 'components/FileDropInputField/FileDropInputField'
 import useForm from 'libs/use-form';
 import { useState, useEffect } from 'react';
@@ -16,7 +16,7 @@ const defaultValues = {
 }
 
 const rules = {
-  notes: 'max:320',
+  notes: 'max:10000',
   files: 'array'
 }
 
@@ -56,7 +56,7 @@ const CompanyPresentationStageForm = ({ values, className, onValues, onError }) 
   }, [formValues])
 
   return <div className={classNames(className, styles['company-presentation-stage-form'])}>
-    <TextareaInputField error={errors && errors['notes']} className={classNames(styles['company-presentation-stage-form-field'], styles['company-presentation-stage-form-notes'])} name="notes" onChange={control.input('notes')} placeholder="Enter your introductory text" />
+    <HtmlInputField error={errors && errors['notes']} className={classNames(styles['company-presentation-stage-form-field'], styles['company-presentation-stage-form-notes'])} name="notes" onChange={control.input('notes', false)} placeholder="Enter your introductory text" />
     <Separator className={styles['company-presentation-separator']} text="Or" />
     {
       formValues.files.length ?

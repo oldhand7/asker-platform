@@ -15,6 +15,7 @@ export const features = [
   { id: 'experience-questions', name: 'Experience based questions', shortName: 'Experience questions', type: 'evaluation', metadata: { criteria: 'experience' } },
   { id: 'hard-skill-questions', name: 'Hard skill based questions', shortName: 'Hard-skill questions', type: 'evaluation', metadata: { criteria: 'hard-skill' } },
   { id: 'culture-fit-questions', name: 'Culture-fit based questions', shortName: 'ulture-fit questions', type: 'evaluation', metadata: { criteria: 'culture-fit' }  },
+  { id: 'introduction', name: 'Introduction', type: 'other' },
   { id: 'summary', name: 'Summary', type: 'other' },
   { id: 'other-questions', name: 'Others', type: 'other' }
 ]

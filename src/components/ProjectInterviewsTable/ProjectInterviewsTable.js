@@ -8,17 +8,34 @@ import PlayIcon from 'components/Icon/PlayIcon';
 import EvaluationScore from 'components/EvaluationScore/EvaluationScore';
 import FilterIcon from 'components/Icon/FilterIcon';
 import CompactMenu from 'components/CompactMenu/CompactMenu';
+import Link from 'next/link';
+import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
+import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
 
 import styles from './ProjectInterviewsTable.module.scss';
 
-const getColumns = ({ handleCompactMenuChoice }) => ([
+const getSortLink = (name, sort, order, project) => {
+  const router = useRouter();
+
+  return `/projects/${project.id}/overview/?sort=${name}&order=${sort == name ? (order == 'asc' ? 'desc' : 'asc') : 'asc'}`
+}
+
+const getSortArrowIcon = (name, sort, order) => {
+  return name == sort ? (order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
+}
+
+const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
   {
-    title: 'Name',
+    title: <Link href={getSortLink('candidate.name', sort, order, project)}>
+      <a>Name {getSortArrowIcon('candidate.name', sort, order)}</a>
+    </Link>,
     dataIndex: 'name',
     render: (_, row) => row.candidate.name
   },
   {
-    title: 'Total interview score',
+    title: <Link href={getSortLink('score', sort, order, project)}>
+      <a>Total interview score {getSortArrowIcon('score', sort, order)}</a>
+    </Link>,
     dataIndex: 'score',
     key: 'score',
     render: (score) => {
@@ -67,14 +84,18 @@ const getColumns = ({ handleCompactMenuChoice }) => ([
     }
   },
   {
-    title: <FilterIcon />,
+    title: <Link href={`/projects/${project.id}/overview/`}>
+      <FilterIcon />
+    </Link>,
     render: (_, row) => {
       const options = [
-        { id: 'start', name: 'Start interview' }
+
       ]
 
       if (typeof row.score !== "undefined") {
         options.push({ id: 'edit', name: 'Edit response' })
+      } else {
+        options.push({ id: 'start', name: 'Start interview' })
       }
 
       options.push({ id: 'delete', name: 'Delete' })
@@ -86,7 +107,7 @@ const getColumns = ({ handleCompactMenuChoice }) => ([
   }
 ]);
 
-const ProjectInterviewsTable = ({ className, data = [], onDelete, ...props }) => {
+const ProjectInterviewsTable = ({ className, data = [], onDelete, project, ...props }) => {
   const router = useRouter()
 
   const handleCompactMenuChoice = (c, rec) => {
@@ -102,7 +123,7 @@ const ProjectInterviewsTable = ({ className, data = [], onDelete, ...props }) =>
   return <Table rowKey={row => row.id} className={classNames(
     styles['project-interviews-table'],
     className
-  )} columns={getColumns({ handleCompactMenuChoice })} data={data} {...props} />
+  )} columns={getColumns({ handleCompactMenuChoice, project,  sort: router.query.sort || '', order: router.query.order || ''  })} data={data} {...props} />
 }
 
 export default ProjectInterviewsTable;
