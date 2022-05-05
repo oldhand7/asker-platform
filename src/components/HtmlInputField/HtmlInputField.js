@@ -9,7 +9,7 @@ import {stateToHTML} from 'draft-js-export-html';
 
 import styles from './HtmlInputField.module.scss';
 
-const HtmlInputField = ({ error, value, onChange, className, placeholder, focus = false }) => {
+const HtmlInputField = ({ error, value = '', onChange, className, placeholder, focus = false }) => {
   const [editorState, setEditorState] = useState(EditorState.createWithContent(
     ContentState.createFromBlockArray(convertFromHTML(value || ''))
   ));
@@ -33,8 +33,12 @@ const HtmlInputField = ({ error, value, onChange, className, placeholder, focus 
   }, [editor])
 
   useEffect(() => {
-    onChange(stateToHTML(editorState.getCurrentContent()))
-  }, [editorState])
+    const newValue = stateToHTML(editorState.getCurrentContent())
+
+    if (onChange && newValue != value && newValue) {
+      onChange(newValue)
+    }
+  }, [editorState, value, onChange])
 
   const toggleBold = () => {
     setEditorState(RichUtils.toggleInlineStyle(editorState, 'BOLD'))
@@ -48,15 +52,17 @@ const HtmlInputField = ({ error, value, onChange, className, placeholder, focus 
     setEditorState(RichUtils.toggleBlockType(editorState, 'ordered-list-item'))
   }
 
-  return <div className={classNames(styles['html-input-field'], className)}>
-    <>
-    <Editor editorState={editorState} ref={(element) => {
+  return <div data-test-id="html-input-field" className={classNames(styles['html-input-field'], className)}>
+    <Editor
+        editorState={editorState}
+        ref={(element) => {
           editor.current = element;
-        }} placeholder={placeholder} editorState={editorState}
+        }}
         onChange={setEditorState}
+        placeholder={placeholder}
         placeholderClassName={styles['html-input-field-input-placeholder']}
-         />
-         </>
+      />
+
     <div className={styles['html-input-field-toolbar']}>
       <button type="button" className={styles['html-input-field-toolbar-button']} onMouseDown={toggleBold}>
         <BIcon className={styles['html-input-field-toolbar-button-icon']} />

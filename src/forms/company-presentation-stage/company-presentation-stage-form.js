@@ -56,7 +56,7 @@ const CompanyPresentationStageForm = ({ values, className, onValues, onError }) 
   }, [formValues])
 
   return <div className={classNames(className, styles['company-presentation-stage-form'])}>
-    <HtmlInputField error={errors && errors['notes']} className={classNames(styles['company-presentation-stage-form-field'], styles['company-presentation-stage-form-notes'])} name="notes" onChange={control.input('notes', false)} placeholder="Enter your introductory text" />
+    <HtmlInputField value={formValues.notes} error={errors && errors['notes']} className={classNames(styles['company-presentation-stage-form-field'], styles['company-presentation-stage-form-notes'])} name="notes" onChange={control.input('notes', false)} placeholder="Enter your introductory text" />
     <Separator className={styles['company-presentation-separator']} text="Or" />
     {
       formValues.files.length ?

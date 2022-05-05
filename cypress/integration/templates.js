@@ -52,7 +52,7 @@ describe('Templates', () => {
       cy.get('[data-test-id="stage-2"]').contains('Salary')
       cy.get('[data-test-id="stage-3"]').contains('Summary')
 
-      cy.get('[data-test-id="feature-form"]').find('textarea').type('Demo TPL hello')
+      cy.get('[data-test-id="feature-form"]').find('[data-test-id="html-input-field"]').type('Demo TPL hello')
 
       cy.get('button').contains('Create template').click()
     })

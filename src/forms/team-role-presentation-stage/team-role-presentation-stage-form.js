@@ -58,7 +58,7 @@ const TeamRolePresentationStageForm = ({ values, className, onValues, onError })
   }, [formValues])
 
   return <div className={classNames(className, styles['team-role-presentation-stage-form'])}>
-    <HtmlInputField error={errors && errors['notes']} className={classNames(styles['team-role-presentation-stage-form-field'], styles['team-role-presentation-stage-form-notes'])} name="notes" onChange={control.input('notes', false)} placeholder="Enter your introductory text" />
+    <HtmlInputField value={formValues.notes} error={errors && errors['notes']} className={classNames(styles['team-role-presentation-stage-form-field'], styles['team-role-presentation-stage-form-notes'])} name="notes" onChange={control.input('notes', false)} placeholder="Enter your introductory text" />
     <Separator className={styles['team-role-presentation-separator']} text="Or" />
     {
       formValues.files.length ?

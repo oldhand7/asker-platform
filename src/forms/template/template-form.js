@@ -201,7 +201,11 @@ const TemplateForm = ({ template, className }) => {
   }
 
   const handleStageSelect = (st) => {
-    setStage(st);
+    if (stage == st) {
+      setStage(null);
+    } else {
+      setStage(st);
+    }
   }
 
   const handleAddDropStage = (stage) => {
@@ -216,7 +220,9 @@ const TemplateForm = ({ template, className }) => {
       <div className={styles['template-form-details-inner']}>
         <ProjectEvaluationCriteria project={values} className={styles['template-form-criteria']} />
 
-        <h2 className={styles['template-form-title']}>Create a new template</h2>
+        <h2 className={styles['template-form-title']}>
+          {!template ? 'Create a new template' : 'Edit template'}
+        </h2>
 
         <TextInputField value={values.templateName} placeholder={'Name'} error={errors ? errors.templateName : null} onChange={control.input('templateName')} autoComplete='off' name='templateName' type='text' className={classNames(styles['template-form-field'], styles['template-form-field-name'])} />
 

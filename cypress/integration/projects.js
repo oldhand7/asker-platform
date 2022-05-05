@@ -59,7 +59,9 @@ describe('Projects', () => {
       cy.get('[data-test-id="stage-2"]').contains('Introduction').click()
       cy.get('[data-test-id="stage-3"]').contains('Drag and drop here to add a section')
 
-      cy.get('[data-test-id="feature-form"]').find('textarea').type('Hello world')
+      cy.get('[data-test-id="feature-form"]')
+        .find('[data-test-id="html-input-field"]').click('center')
+        .type('Hello world')
 
       cy.get('[data-test-id="interviewers"]').find('input').type('Jane{enter}')
       cy.get('[data-test-id="interviewers"]').find('input').type('Joe{enter}')
