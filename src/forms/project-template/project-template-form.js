@@ -15,8 +15,16 @@ const ProjectTemplateForm = ({ className, onValues, close }) => {
     close(t)
   }
 
+  const handleNewTemplate = (t) => {
+    if (t) {
+      router.push(`/templates/create/`)
+    }
+
+    close(t)
+  }
+
   return <div className={classNames(styles['project-template-form'], classNames)}>
-    <TemplateExplorer className={styles['project-template-form-explorer']} onTemplate={handleTemplateChoice} />
+    <TemplateExplorer onNewTemplate={handleNewTemplate} className={styles['project-template-form-explorer']} onTemplate={handleTemplateChoice} />
   </div>
 }
 

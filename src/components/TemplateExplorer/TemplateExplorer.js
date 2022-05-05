@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 
 import styles from './TemplateExplorer.module.scss';
 
-const TemplateExplorer = ({ className, onTemplate, label = '' }) => {
+const TemplateExplorer = ({ className, onTemplate, label = '', onNewTemplate }) => {
   const { user } = useUser();
   const [templates, settemplates] = useState([]);
   const [filteredTemplates, setFilteredTemplates] = useState([])
@@ -71,7 +71,7 @@ const TemplateExplorer = ({ className, onTemplate, label = '' }) => {
             <FilterButton theme='green' className={styles['template-explorer-company-filter-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker templates</FilterButton>
             <FilterButton theme='grape' className={styles['template-explorer-company-filter-button']} active={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user && user.companyId)}>Your templates</FilterButton>
           </div>
-          <OutlineButton className={styles['template-explorer-create-template']} onClick={() => router.push('/templates/create/')}><PlusIcon /> Create new template</OutlineButton>
+          <OutlineButton className={styles['template-explorer-create-template']} onClick={onNewTemplate}><PlusIcon /> Create new template</OutlineButton>
         </div>
         <LiveSearch className={styles['template-explorer-live-search']} q={filter.q} onQuery={q => setFilter({ ...filter, q})} />
       </div>
