@@ -5,15 +5,16 @@
 // @import 'debug';
 
 :root {
-  font-size: calc(0.70 * 100vw / 1440);
-  --container-width: 80%;
+  font-size: calc(0.6 * 100vw / 1440);
+  --container-width: 60%;
 
   @media (max-width: 1920px) {
-    font-size: calc(0.80 * 100vw / 1440);
+    font-size: calc(0.65 * 100vw / 1440);
   }
 
   @media (max-width: 1600px) {
-    font-size: calc(0.90 * 100vw / 1440);
+    --container-width: 80%;
+    font-size: calc(0.7 * 100vw / 1440);
   }
 
   @media (max-width: 1440px) {
@@ -21,12 +22,13 @@
   }
 
   @media (max-width: 1200px) {
+    --container-width: 90%;
     font-size: calc(1.1 * 100vw / 1440);
   }
 
   @media (max-width: 1024px) {
     font-size: calc(1.25 * 100vw / 1440);
-    --container-width: 90%;
+    --container-width: 95%;
   }
 
   @media (max-width: 768px) {
