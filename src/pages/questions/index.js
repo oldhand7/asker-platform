@@ -131,6 +131,14 @@ const QuestionPage = ({ questions = [], companyId, perPage = PER_PAGE, currentPa
     }
   }, [flashSuccess])
 
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        setSuccess(null)
+      }, 7000)
+    }
+  }, [success])
+
   return <div className={styles['questions-page']}>
       <Head>
         <title>Questions listing - Asker</title>

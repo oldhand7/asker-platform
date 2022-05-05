@@ -86,6 +86,14 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
         })
   }
 
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        setSuccess(null)
+      }, 7000)
+    }
+  }, [success])
+
   return <div className={styles['project-overview-page']}>
       <Head>
         <title>{project.name} - Project overview - Asker</title>

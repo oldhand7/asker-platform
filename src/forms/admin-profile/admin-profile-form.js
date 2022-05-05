@@ -155,6 +155,14 @@ const AdminProfileForm = ({ className }) => {
     }
   }, [success])
 
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        setSuccess(null)
+      }, 7000)
+    }
+  }, [success])
+
   return <form data-test-id="admin-profile-form" method="POST" noValidate className={classNames(styles['admin-profile-form'], className)} onSubmit={control.submit(handleSubmit)}>
     {error ? <Alert className={styles['admin-profile-form-alert']} type="error">{error.message}</Alert> : null}
     {success ? <Alert close={false} className={styles['admin-profile-form-alert']}  type="success">{success}</Alert> : null}
