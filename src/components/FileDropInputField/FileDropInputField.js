@@ -14,6 +14,10 @@ import styles from './FileDropInputField.module.scss';
 
 const defaultAllowed = {
   'pdf': ['application/pdf'],
+  'pptx': ['application/vnd.openxmlformats-officedocument.presentationml.presentation'],
+  'ppt': ['application/vnd.ms-powerpoint'],
+  'docx': ['application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+  'xls': ['application/vnd.ms-excel'],
   'jpg': ['image/jpeg'],
   'png': ['image/png'],
   'jpeg': ['image/jpeg'],
