@@ -40,10 +40,10 @@ describe('Questions', () => {
     cy.get('table thead tr')
       .first()
       .within(() => {
-        cy.get('th').eq(0).should('contain', 'Type of question')
+        cy.get('th').eq(0).should('contain', 'Question type')
         cy.get('th').eq(1).should('contain', 'Criterion')
         cy.get('th').eq(2).should('contain', 'Question')
-        cy.get('th').eq(3).should('contain', 'Follow up questions')
+        cy.get('th').eq(3).should('contain', 'Follow-up questions')
       })
 
     cy.contains('No questions to show.')

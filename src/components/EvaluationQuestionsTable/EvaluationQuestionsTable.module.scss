@@ -12,11 +12,11 @@
     font-size: 12rem;
     color: $brandish-grey;
     font-weight: 500;
+    padding-left: 5rem;
   }
 
   tbody tr[data-company-id] td:first-child {
     color: $brandish-grape;
-    font-weight: 500;
   }
 
   tbody tr[data-company-id="asker"] td:first-child {
@@ -27,5 +27,20 @@
     border: 0;
     background: 0;
     cursor: pointer;
+  }
+
+  tbody {
+    td {
+      font-size: 12rem;
+      padding: 5rem;
+    }
+
+    td:nth-child(2) {
+      white-space: nowrap;
+    }
+
+    tr:hover {
+      background: rgba($brandish-grey, 0.1);
+    }
   }
 }

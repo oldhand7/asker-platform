@@ -25,7 +25,7 @@ const getSortArrowIcon = (name, sort, order) => {
 const getColumns = ({ handleCompactMenuChoice, sort, order, user }) => ([
   {
     title: <Link href={getSortLink('type', sort, order)}>
-      <a>Type of question {getSortArrowIcon('type', sort, order)}</a>
+      <a>Question type {getSortArrowIcon('type', sort, order)}</a>
     </Link>,
     key: 'type',
     render: (_, row) => {
@@ -72,7 +72,7 @@ const getColumns = ({ handleCompactMenuChoice, sort, order, user }) => ([
   },
   {
     title: <Link href={getSortLink('followupCount', sort, order)}>
-      <a>Follow up questions  {getSortArrowIcon('followupCount', sort, order)}</a>
+      <a>Follow-up questions  {getSortArrowIcon('followupCount', sort, order)}</a>
     </Link>,
     dataIndex: 'followup',
     key: 'followup',

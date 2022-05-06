@@ -4,12 +4,15 @@ import { useEffect } from 'react';
 import classNames from 'classnames';
 import { handleNext } from 'libs/helper';
 import NextButton from 'components/Button/NextButton';
+import HtmlInputField from 'components/HtmlInputField/HtmlInputField';
+import FlexRow from 'components/FlexRow/FlexRow';
 
 import styles from './salary-int-form.module.scss';
 
 const defaultValues = {
   currency: '€',
-  range: [0, 0]
+  range: [0, 0],
+  notes: ''
 }
 
 const rules = {
@@ -18,7 +21,10 @@ const rules = {
 
 const SalaryIntForm = ({ last, nextId, className, values, onValues, config }) => {
   const [formValues, errors, control] = useForm({
-    values: values ? values : { ...defaultValues, range: [config.range[0], config.range[1]]},
+    values: values ? values : { ...defaultValues, range: [
+      config.config ? config.config[0] : config.range[0],
+      config.config ? config.config[1] : config.range[1]
+    ]},
     rules,
     pristine: false
   })
@@ -31,6 +37,7 @@ const SalaryIntForm = ({ last, nextId, className, values, onValues, config }) =>
 
   return <div className={classNames(styles['salary-int-form'], className)}>
     <h2 className={styles['salary-int-form-title']}>Salary</h2>
+
 
     <div className={classNames(styles['salary-int-form-field'], styles['salary-int-form-slider'])}>
       <span className={styles['salary-int-form-slider-min']}>{config.currency}{config.range[0]} -</span>
@@ -72,6 +79,7 @@ const SalaryIntForm = ({ last, nextId, className, values, onValues, config }) =>
        }}
         />
     </div>
+    <HtmlInputField className={styles['salary-int-form-notes']} value={formValues.notes || ''} onChange={control.input('notes', false)} placeholder='Notes about salary'  />
     {!last ? <NextButton onClick={() => handleNext(nextId)} className={styles['salary-int-form-next-button']} /> : null}
   </div>
 }

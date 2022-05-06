@@ -18,6 +18,7 @@ import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
 import ErrorBox from 'components/ErrorBox/ErrorBox';
 import { ctxError} from 'libs/helper';
+import FeatureForm from 'components/FeatureForm/FeatureForm';
 
 import styles from './project-form.module.scss';
 
@@ -240,6 +241,19 @@ const ProjectForm = ({ project, className }) => {
     setStage(stage)
   }
 
+  useEffect(() => {
+    if (stage) {
+      const el = document.querySelector('#feature-form')
+
+      if (el) {
+        el.scrollIntoView({
+          block: 'center',
+          behavior: 'smooth'
+        })
+      }
+    }
+  }, [stage])
+
   return  <form data-test-id="project-form" onSubmit={control.submit(handleSubmit, handleSubmitFailure)} className={classNames(styles['project-form'], className)}>
     <ProjectFormSidebar className={styles['project-form-sidebar']} />
 
@@ -258,13 +272,18 @@ const ProjectForm = ({ project, className }) => {
         <div className={classNames(styles['project-form-field'], styles['project-form-field-stages'])}>
           <h3 className={styles['project-form-field-title']}>Interview Stages</h3>
 
-          <ProjectFormStager featureValues={stage && values.config[stage.id]} featureOnError={onStageError} featureOnValues={handleStageValues} feature={stage} onStages={handleStages} activeStage={stage} onStageSelect={handleStageSelect} stages={values.stages} className={styles['project-form-stages']}  />
+          <ProjectFormStager  onStages={handleStages} activeStage={stage} onStageSelect={handleStageSelect} stages={values.stages} className={styles['project-form-stages']}  />
 
           <NewStageDroppable onStage={handleAddDropStage}>
           <div style={{ padding: '15rem 0'}}>
           {values.stages.length < 12 ? <button type="button" className={styles['project-form-add-stage']}onClick={() => addStage()}>Add stage +</button> : null}
           </div>
           </NewStageDroppable>
+
+          {stage ?
+          <div className={styles['project-form-stager-feature-form']} id="feature-form" data-test-id="feature-form">
+            <FeatureForm values={stage && values.config[stage.id]} onError={onStageError} onValues={handleStageValues} feature={stage} />
+          </div> : null}
         </div>
 
         <div className={classNames(styles['project-form-field'], styles['project-form-field-interviewers'])}>

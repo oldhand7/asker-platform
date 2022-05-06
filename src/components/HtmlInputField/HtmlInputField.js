@@ -1,79 +1,61 @@
-import {Editor, EditorState, RichUtils, Modifier, ContentState, convertFromHTML } from 'draft-js';
 import classNames from 'classnames';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import BIcon from 'components/Icon/BIcon';
 import ListIcon from 'components/Icon/ListIcon';
 import NumListIcon from 'components/Icon/NumListIcon';
-import './react-draftjs-fix'
-import {stateToHTML} from 'draft-js-export-html';
+import dynamic from 'next/dynamic';
 
 import styles from './HtmlInputField.module.scss';
 
+const Editor = dynamic(
+  () => import('jodit-react'),
+  { ssr: false }
+)
+
 const HtmlInputField = ({ error, value = '', onChange, className, placeholder, focus = false }) => {
-  const [editorState, setEditorState] = useState(EditorState.createWithContent(
-    ContentState.createFromBlockArray(convertFromHTML(value || ''))
-  ));
+  const editor = useRef(null)
 
-  const editor = useRef();
-
-  useEffect(() => {
-    if (editor && editor.current && focus) {
-      editor.current.focus()
-    }
-  }, [editor, focus])
-
-  useEffect(() => {
-    if (editor && editor.current) {
-      editor.current.editorContainer.closest('.DraftEditor-root')
-      .classList.add(styles['html-input-field-input'])
-
-      editor.current.editorContainer.classList.add(styles['html-input-field-input-editor-container'])
-      editor.current.editor.classList.add(styles['html-input-field-input-editor'])
-    }
-  }, [editor])
-
-  useEffect(() => {
-    const newValue = stateToHTML(editorState.getCurrentContent())
-
-    if (onChange && newValue != value && newValue) {
-      onChange(newValue)
-    }
-  }, [editorState, value, onChange])
+  const config = useMemo(() => ({
+    readonly: false,
+    placeholder: placeholder || 'Start typing...',
+    buttons: ['bold', 'ul', 'ol'],
+    toolbarAdaptive: false,
+    editorCssClass: styles['html-input-field-input'],
+    "showCharsCounter": false,
+    "showWordsCounter": false,
+    "showXPathInStatusbar": false,
+    theme: 'custom',
+    mode: 'vertical',
+    minHeight: '0',
+    toolbarSticky: false,
+     controls: {
+            ul: {
+                list: false
+            },
+            ol: {
+                list: false
+            }
+        }
+  }), [placeholder])
 
   const toggleBold = () => {
-    setEditorState(RichUtils.toggleInlineStyle(editorState, 'BOLD'))
   }
 
   const toggleList = () => {
-    setEditorState(RichUtils.toggleBlockType(editorState, 'unordered-list-item'))
   }
 
   const toggleNumList = () => {
-    setEditorState(RichUtils.toggleBlockType(editorState, 'ordered-list-item'))
   }
 
   return <div data-test-id="html-input-field" className={classNames(styles['html-input-field'], className)}>
-    <Editor
-        editorState={editorState}
-        ref={(element) => {
-          editor.current = element;
-        }}
-        onChange={setEditorState}
-        placeholder={placeholder}
-        placeholderClassName={styles['html-input-field-input-placeholder']}
-      />
+      <Editor
+              ref={editor}
+              value={value}
+              config={config}
+              tabIndex={1}
+              onChange={onChange}
+            />
 
-    <div className={styles['html-input-field-toolbar']}>
-      <button type="button" className={styles['html-input-field-toolbar-button']} onMouseDown={toggleBold}>
-        <BIcon className={styles['html-input-field-toolbar-button-icon']} />
-      </button>
-      <button type="button" className={styles['html-input-field-toolbar-button']} onMouseDown={toggleList}>
-        <ListIcon className={styles['html-input-field-toolbar-button-icon']} />
-      </button>
-      <button type="button" className={styles['html-input-field-toolbar-button']} onMouseDown={toggleNumList}>
-        <NumListIcon className={styles['html-input-field-toolbar-button-icon']} />
-      </button>
-    </div>
     {error ? <p className="form-error">{error}</p> : null}
   </div>
 }

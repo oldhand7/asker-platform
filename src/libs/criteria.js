@@ -118,23 +118,48 @@ export const criteriaTypes = [{
     desc: 'Aims to assess wheter the candidate possesses the necessary skills required for the position. Skills are things that are learnt and can improve over time. They can be things such as being good at a specific program, knowing a foreign language or UI/UX design. ',
     rules: [{
         name: 'Novice',
-        steps: null
+        steps: [
+          'Limited understanding of skill.',
+          'Lacks context and perspective',
+          'Mainly theoretical and little real-life experience',
+          'Makes decisions based on data only without consideration'
+        ]
       },
       {
         name: 'Beginner',
-        steps: null
+        steps: [
+          'Makes decisions based on data only without consideration',
+          'Can use the context to advantage to some solve problems',
+          'Some real life experiences',
+          'May have a hard time knowing how to prioritize'
+        ]
       },
       {
         name: 'Competent',
-        steps: null
+        steps: [
+          'Great theoretical understanding',
+          'Uses context to advantage and applies relevant problem solving',
+          'Lots of experience',
+          'Plan and work deliberately on their own'
+        ]
       },
       {
         name: 'Proficient',
-        steps: null
+        steps: [
+          'Excellent theoretical understanding',
+          'Intuitively know how to solve problems',
+          'Great amount of experience',
+          'Holisitc view and can prioritize with ease'
+        ]
       },
       {
-        name: 'Expert',
-        steps: null
+        name: 'Master',
+        steps: [
+          'Immense theoretical understanding',
+          'Intuitively know what how prioritize to solve problems',
+          'Applies relevant pieces of skill regardless of context',
+          'Holistic view and intuitive decision making'
+        ]
       }
     ]
   }

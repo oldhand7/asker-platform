@@ -1,7 +1,7 @@
 @import 'styles/vars';
 
 .salary-int-form {
-
+  position: relative;
 
   &-title {
     margin-bottom: 30rem
@@ -9,6 +9,20 @@
 
   &-field {
     margin-bottom: 40rem;
+  }
+
+  &-notes {
+    width: 350rem;
+    position: absolute;
+    right: 0;
+    top: 50rem;
+
+    @media (max-width: 1024px) {
+      position: relative;
+      top: 20rem;
+      width: 100%;
+      max-width: 768rem;
+    }
   }
 
   &-slider {
