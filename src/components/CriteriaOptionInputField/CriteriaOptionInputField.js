@@ -18,11 +18,15 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, type }) =
 
   useEffect(() => {
     const filter = [
-      ['companyId', '==', user.companyId],
+      ['companyId', 'in', [user.companyId, 'asker']],
       ['type', '==', type.id]
     ]
 
-    filterManyDocuments('criteriaOptions', filter).then(setCriteriaOptions)
+    const sort = [
+      ['name', 'asc']
+    ]
+
+    filterManyDocuments('criteriaOptions', filter, sort).then(setCriteriaOptions)
   }, [type, user, value])
 
   const handleCriteriaOption = option => {
