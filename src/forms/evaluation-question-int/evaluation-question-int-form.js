@@ -83,7 +83,6 @@ const EvaluationQuestionIntForm = ({ className, question, stage, project, values
       </ul>
     </div>
     <div className={styles['evaluation-question-int-form-block']}>
-
       <InterviewNotes className={styles['evaluation-question-int-form-notes']} value={formValues.notes} onChange={control.input('notes', false)} />
     </div>
     <QuestionScoreBoard score={formValues.score} votes={formValues.votes} onVotes={handleVotes} className={styles['evaluation-question-int-form-sb']} rules={question.rules} />
