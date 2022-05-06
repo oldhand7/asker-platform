@@ -62,11 +62,17 @@ const beforeRun = async () => {
   const userId8Joe  = await helpers.createUser('Joe Spencer', 'joe.spencer@example.com', 'test123', companyId8, 'admin', false)
   const userId8Jane = await helpers.createUser('Jane Spencer', 'jane.spencer@example.com', 'test123', companyId8, 'hr', false)
 
-  //User 8
+  //User 9
   const companyId9 = await helpers.createCompany('Rogers & Co')
 
   const userId9Joe  = await helpers.createUser('Joe Rogers', 'joe.rogers@example.com', 'test123', companyId9, 'admin', false)
   const userId9Jane = await helpers.createUser('Jane Rogers', 'jane.rogers@example.com', 'test123', companyId9, 'hr', false)
+
+  //User 10
+  const companyId10 = await helpers.createCompany('Kirby & Co')
+
+  const userId10Joe  = await helpers.createUser('Joe Kirby', 'joe.kirby@example.com', 'test123', companyId10, 'admin', false)
+  const userId10Jane = await helpers.createUser('Jane Kirby', 'jane.kirby@example.com', 'test123', companyId10, 'hr', false)
 
   await helpers.createQuestion({
     name: 'CQ1',

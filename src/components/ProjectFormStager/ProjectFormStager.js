@@ -4,7 +4,6 @@ import FeatureDragDropLabel from 'components/FeatureDragDropLabel/FeatureDragDro
 import { useEffect, useState } from 'react';
 import StageFeaturePlaceholder from 'components/StageFeaturePlaceholder/StageFeaturePlaceholder'
 import TrashButton from 'components/TrashButton/TrashButton'
-import FeatureForm from 'components/FeatureForm/FeatureForm';
 import { useModal } from 'libs/modal';
 import FeatureSelectModal from 'modals/feature-select/feature-select-modal';
 import LoadButton from 'components/LoadButton/LoadButton';
@@ -103,11 +102,6 @@ const ProjectFormStager = ({ feature, featureValues, featureOnError, featureOnVa
                 <TrashButton onClick={(ev) => handleStageDelete(stage, index, ev)} className={styles['project-form-stager-item-control-button']} />
               </div>
             </div>
-
-            {feature == stage ?
-            <div className={styles['project-form-stager-feature-form']} id="feature-form" data-test-id="feature-form">
-              <FeatureForm values={featureValues} onError={featureOnError} onValues={featureOnValues} feature={feature} />
-            </div> : null}
           </li>
         )}
         </Draggable>

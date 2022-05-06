@@ -17,6 +17,7 @@ import NewStageDroppable from 'components/NewStageDroppable/NewStageDroppable'
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
 import ErrorBox from 'components/ErrorBox/ErrorBox';
 import { ctxError } from 'libs/helper';
+import FeatureForm from 'components/FeatureForm/FeatureForm';
 
 import styles from './template-form.module.scss';
 
@@ -229,13 +230,18 @@ const TemplateForm = ({ template, className }) => {
         <div className={classNames(styles['template-form-field'], styles['template-form-field-stages'])}>
           <h3 className={styles['template-form-field-title']}>Interview Stages</h3>
 
-          <ProjectFormStager featureValues={stage && values.config[stage.id]} featureOnError={onStageError} featureOnValues={handleStageValues} feature={stage} onStages={handleStages} activeStage={stage} onStageSelect={handleStageSelect} stages={values.stages} className={styles['template-form-stages']}  />
+          <ProjectFormStager onStages={handleStages} activeStage={stage} onStageSelect={handleStageSelect} stages={values.stages} className={styles['template-form-stages']}  />
 
           <NewStageDroppable onStage={handleAddDropStage}>
           <div style={{ padding: '15rem 0'}}>
           {values.stages.length < 12 ? <button type="button" className={styles['template-form-add-stage']}onClick={() => addStage()}>Add stage +</button> : null}
           </div>
           </NewStageDroppable>
+
+          {stage ?
+          <div className={styles['template-form-stager-feature-form']} id="feature-form" data-test-id="feature-form">
+            <FeatureForm values={stage && values.config[stage.id]} onError={onStageError} onValues={handleStageValues} feature={stage} />
+          </div> : null}
         </div>
 
         {error ? <Alert type="error">{error.message}</Alert> : null}
