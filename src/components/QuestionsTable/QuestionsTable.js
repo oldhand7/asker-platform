@@ -11,22 +11,36 @@ import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
 import Link from 'next/link';
 import { useUser } from 'libs/user';
 import { useRouter } from 'next/router';
+import { useQueryStates, queryTypes } from 'next-usequerystate'
 
 import styles from './QuestionsTable.module.scss';
 
-const getSortLink = (name, sort, order) => {
-  return `?sort=${name}&order=${sort == name ? (order == 'asc' ? 'desc' : 'asc') : 'asc'}`
-}
+const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user }) => {
+  const getSortArrowIcon = (name) => {
+    return name == sortOrder.sort ? (sortOrder.order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
+  }
 
-const getSortArrowIcon = (name, sort, order) => {
-  return name == sort ? (order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
-}
+  const handleSortOrder = name => {
+    const newOrder =  {
+      sort: name,
+      order: sortOrder.sort == name ? (sortOrder.order == 'asc' ? 'desc' : 'asc') : 'asc'
+    }
 
-const getColumns = ({ handleCompactMenuChoice, sort, order, user }) => ([
+    return e => {
+      e.preventDefault();
+      setSortOrder(newOrder);
+    }
+  }
+
+  const handleDefaultSortOrder = e => {
+    e.preventDefault();
+    setSortOrder({ sort: 'createdAt', order: 'desc' })
+  }
+
+  return [
   {
-    title: <Link href={getSortLink('type', sort, order)}>
-      <a>Question type {getSortArrowIcon('type', sort, order)}</a>
-    </Link>,
+    title: <a href='#' onClick={handleSortOrder('type')}>
+      Question type {getSortArrowIcon('type')}</a>,
     key: 'type',
     render: (_, row) => {
       if (row.type == 'evaluation') {
@@ -55,25 +69,22 @@ const getColumns = ({ handleCompactMenuChoice, sort, order, user }) => ([
     }
   },
   {
-    title: <Link href={getSortLink('criteria.name', sort, order)}>
-      <a>Criterion {getSortArrowIcon('criteria.name', sort, order)}</a>
-    </Link>,
+    title: <a href='#' onClick={handleSortOrder('criteria.name')}>
+      Criterion {getSortArrowIcon('criteria.name')}</a>,
     key: 'criteria',
     render: (_, { criteria }) => {
       return criteria ? criteria.name : <NODATA />
     }
   },
   {
-    title: <Link href={getSortLink('name', sort, order)}>
-      <a>Question {getSortArrowIcon('name', sort, order)}</a>
-    </Link>,
+    title: <a href='#' onClick={handleSortOrder('name')}>
+      Question {getSortArrowIcon('name')}</a>,
     dataIndex: 'name',
     key: 'name'
   },
   {
-    title: <Link href={getSortLink('followupCount', sort, order)}>
-      <a>Follow-up questions  {getSortArrowIcon('followupCount', sort, order)}</a>
-    </Link>,
+    title: <a href='#' onClick={handleSortOrder('followupCount')}>
+      Follow-up questions {getSortArrowIcon('followupCount')}</a>,
     dataIndex: 'followup',
     key: 'followup',
     render: (questions) => questions && questions.length ? <ul className={styles['questions-table-followup-questions']}>
@@ -81,7 +92,7 @@ const getColumns = ({ handleCompactMenuChoice, sort, order, user }) => ([
     </ul> : <NODATA />
   },
   {
-    title: <Link href="?sort=createdAt&order=desc"><a><FilterIcon /></a></Link>,
+    title: <a href='#' onClick={handleDefaultSortOrder}><FilterIcon /></a>,
     key: 'action',
     render: (_, row) => {
       const options = [
@@ -95,14 +106,19 @@ const getColumns = ({ handleCompactMenuChoice, sort, order, user }) => ([
         })
       }
 
-      return <CompactMenu options={options} onChoice={c => handleCompactMenuChoice(c, row)} />
+      return <CompactMenu className={styles['questions-table-control']} options={options} onChoice={c => handleCompactMenuChoice(c, row)} />
     }
   }
-]);
+]};
 
 const QuestionsTable = ({ className, data = [], onDelete, ...props }) => {
   const router = useRouter()
   const {user} = useUser()
+
+  const [sortOrder, setSortOrder] = useQueryStates({
+    sort: queryTypes.string.withDefault(router.query.sort || 'createdAt'),
+    order: queryTypes.string.withDefault(router.query.order || 'desc')
+  }, { history: 'push' })
 
   const handleCompactMenuChoice = (c, row) => {
     if (c.id == 'edit') {
@@ -126,8 +142,8 @@ const QuestionsTable = ({ className, data = [], onDelete, ...props }) => {
     className
   )} columns={getColumns({
     handleCompactMenuChoice,
-    sort: router.query.sort || 'createdAt',
-    order: router.query.order || 'desc',
+    sortOrder,
+    setSortOrder,
     user
   })} data={data} {...props} />
 }

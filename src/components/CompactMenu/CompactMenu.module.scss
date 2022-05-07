@@ -8,6 +8,13 @@
     background: 0;
     border: 1px solid $brandish-grey;
     display: inline-block;
+    outline: 0;
+    border-radius: 4px;
+
+    &-icon {
+      position: relative;
+      top: 2px;
+    }
   }
 
   &-options {

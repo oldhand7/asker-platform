@@ -9,39 +9,50 @@ import { dateFromTs, ctxError } from 'libs/helper';
 import UserCard from 'components/UserCard/UserCard';
 import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
 import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
-import Link from 'next/link';
 import { useUser } from 'libs/user';
+import { useQueryStates, queryTypes } from 'next-usequerystate'
 
 import styles from './TemplateTable.module.scss';
 
-const getSortLink = (name, sort, order) => {
-  return `?sort=${name}&order=${sort == name ? (order == 'asc' ? 'desc' : 'asc') : 'asc'}`
-}
+const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user }) => {
+  const getSortArrowIcon = (name) => {
+    return name == sortOrder.sort ? (sortOrder.order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
+  }
 
-const getSortArrowIcon = (name, sort, order) => {
-  return name == sort ? (order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
-}
+  const handleSortOrder = name => {
+    const newOrder =  {
+      sort: name,
+      order: sortOrder.sort == name ? (sortOrder.order == 'asc' ? 'desc' : 'asc') : 'asc'
+    }
 
-const getColumns = ({ handleCompactMenuChoice, sort, order, user }) => ([
+    return e => {
+      e.preventDefault();
+      setSortOrder(newOrder);
+    }
+  }
+
+  const handleDefaultSortOrder = e => {
+    e.preventDefault();
+    setSortOrder({ sort: 'createdAt', order: 'desc' })
+  }
+
+  return [
   {
-    title: <Link href={getSortLink('templateName', sort, order)}>
-      <a>Template name {getSortArrowIcon('templateName', sort, order)}</a>
-    </Link>,
+    title: <a href='#' onClick={handleSortOrder('templateName')}>
+      Template name {getSortArrowIcon('templateName')}</a>,
     dataIndex: 'templateName',
     key: 'name',
   },
   {
-    title: <Link href={getSortLink('user.name', sort, order)}>
-      <a>Created by {getSortArrowIcon('user.name', sort, order)}</a>
-    </Link>,
+    title: <a href='#' onClick={handleSortOrder('user.name')}>
+      Created by {getSortArrowIcon('user.name')}</a>,
     dataIndex: 'user',
     key: 'user',
     render: (user) => (user && <UserCard title={user.name} />) || <NODATA />
   },
   {
-    title: <Link href={getSortLink('createdAt', sort, order)}>
-      <a>Date created {getSortArrowIcon('createdAt', sort, order)}</a>
-    </Link>,
+    title: <a href='#' onClick={handleSortOrder('createdAt')}>
+      Date created {getSortArrowIcon('createdAt')}</a>,
     dataIndex: 'createdAt',
     key: 'createdAt',
     render: createdAt => {
@@ -49,9 +60,8 @@ const getColumns = ({ handleCompactMenuChoice, sort, order, user }) => ([
     }
   },
   {
-    title: <Link href={getSortLink('stagesCount', sort, order)}>
-      <a>Interview stages {getSortArrowIcon('stagesCount', sort, order)}</a>
-    </Link>,
+    title: <a href='#' onClick={handleSortOrder('stagesCount')}>
+      Interview stages {getSortArrowIcon('stagesCount')}</a>,
     dataIndex: 'stages',
     key: 'stages',
     render: (stages) => {
@@ -59,7 +69,7 @@ const getColumns = ({ handleCompactMenuChoice, sort, order, user }) => ([
     }
   },
   {
-    title: <Link href="?sort=createdAt&order=desc"><a><FilterIcon /></a></Link>,
+    title: <a href='#' onClick={handleDefaultSortOrder}><FilterIcon /></a>,
     render: (_, row) => {
       const options = [
         { id: 'edit', name: user && user.companyId == row.companyId ? 'Edit' : 'Edit copy' },
@@ -73,14 +83,19 @@ const getColumns = ({ handleCompactMenuChoice, sort, order, user }) => ([
         })
       }
 
-      return <CompactMenu options={options} onChoice={c => handleCompactMenuChoice(c, row)} />
+      return <CompactMenu className={styles['template-table-control']} options={options} onChoice={c => handleCompactMenuChoice(c, row)} />
     }
   }
-]);
+]};
 
 const TemplateTable = ({ className, data = [], onDelete, ...props }) => {
   const router = useRouter()
   const {user} = useUser()
+
+  const [sortOrder, setSortOrder] = useQueryStates({
+    sort: queryTypes.string.withDefault(router.query.sort || 'createdAt'),
+    order: queryTypes.string.withDefault(router.query.order || 'desc')
+  }, { history: 'push' })
 
   const handleCompactMenuChoice = (c, row) => {
     if (c.id == 'edit') {
@@ -107,8 +122,8 @@ const TemplateTable = ({ className, data = [], onDelete, ...props }) => {
     className
   )} columns={getColumns({
     handleCompactMenuChoice,
-    sort: router.query.sort || 'createdAt',
-    order: router.query.order || 'desc',
+    sortOrder,
+    setSortOrder,
     user
   })} data={data} {...props} />
 }

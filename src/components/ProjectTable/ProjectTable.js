@@ -9,37 +9,49 @@ import CompactMenu from 'components/CompactMenu/CompactMenu';
 import Link from 'next/link';
 import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
 import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
+import { useQueryStates, queryTypes } from 'next-usequerystate'
 
 import styles from './ProjectTable.module.scss';
 
-const getSortLink = (name, sort, order) => {
-  return `?sort=${name}&order=${sort == name ? (order == 'asc' ? 'desc' : 'asc') : 'asc'}`
-}
+const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder }) => {
+  const getSortArrowIcon = (name) => {
+    return name == sortOrder.sort ? (sortOrder.order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
+  }
 
-const getSortArrowIcon = (name, sort, order) => {
-  return name == sort ? (order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
-}
+  const handleSortOrder = name => {
+    const newOrder =  {
+      sort: name,
+      order: sortOrder.sort == name ? (sortOrder.order == 'asc' ? 'desc' : 'asc') : 'asc'
+    }
 
-const getColumns = ({ handleCompactMenuChoice, onSort, sort, order }) => ([
+    return e => {
+      e.preventDefault();
+      setSortOrder(newOrder);
+    }
+  }
+
+  const handleDefaultSortOrder = e => {
+    e.preventDefault();
+    setSortOrder({ sort: 'createdAt', order: 'desc' })
+  }
+
+  return [
   {
-    title: <Link href={getSortLink('name', sort, order)}>
-      <a>Project name {getSortArrowIcon('name', sort, order)}</a>
-    </Link>,
+    title: <a href='#' onClick={handleSortOrder('name')}>
+      Project name {getSortArrowIcon('name')}</a>,
     dataIndex: 'name',
     key: 'name'
   },
   {
-    title: <Link href={getSortLink('template.name', sort, order)}>
-      <a>Template name {getSortArrowIcon('template.name', sort, order)}</a>
-    </Link>,
+    title: <a href='#' onClick={handleSortOrder('template.name')}>
+      Template name {getSortArrowIcon('template.name')}</a>,
     dataIndex: 'template',
     key: 'template',
     render: (template) => (template && template.name) || <NODATA />
   },
   {
-    title: <Link href={getSortLink('interviewersCount', sort, order)}>
-      <a>Interviewer name {getSortArrowIcon('interviewersCount', sort, order)}</a>
-    </Link>,
+    title: <a href='#' onClick={handleSortOrder('interviewersCount')}>
+      Interviewer name {getSortArrowIcon('interviewersCount')}</a>,
     dataIndex: 'interviewers',
     key: 'interviewers',
     render: (interviewers) => {
@@ -49,9 +61,8 @@ const getColumns = ({ handleCompactMenuChoice, onSort, sort, order }) => ([
     }
   },
   {
-    title: <Link href={getSortLink('stagesCount', sort, order)}>
-      <a>Interview stages {getSortArrowIcon('stagesCount', sort, order)}</a>
-    </Link>,
+    title: <a href='#' onClick={handleSortOrder('stagesCount')}>
+      Interview stages {getSortArrowIcon('stagesCount')}</a>,
     dataIndex: 'stages',
     key: 'stages',
     render: (stages) => {
@@ -59,15 +70,14 @@ const getColumns = ({ handleCompactMenuChoice, onSort, sort, order }) => ([
     }
   },
   {
-    title: <Link href={getSortLink('interviewsAwaitingCount', sort, order)}>
-      <a>Interview status {getSortArrowIcon('interviewsAwaitingCount', sort, order)}</a>
-    </Link>,
+    title: <a href='#' onClick={handleSortOrder('interviewsAwaitingCount')}>
+      Interview status {getSortArrowIcon('interviewsAwaitingCount')}</a>,
     render: (candidates, project) => {
       return <ProjectTableStatCell project={project} />
     }
   },
   {
-    title: <Link href="?sort=createdAt&order=desc"><a><FilterIcon /></a></Link>,
+    title: <a href='#' onClick={handleDefaultSortOrder}><FilterIcon /></a>,
     render: (_, row) => {
       const options = [
         { id: 'overview', name: 'Interviews' },
@@ -81,13 +91,18 @@ const getColumns = ({ handleCompactMenuChoice, onSort, sort, order }) => ([
         })
       }
 
-      return <CompactMenu options={options} onChoice={c => handleCompactMenuChoice(c, row)} />
+      return <CompactMenu className={styles['project-table-control']} options={options} onChoice={c => handleCompactMenuChoice(c, row)} />
     }
   }
-]);
+]};
 
 const ProjectTable = ({ className, data = [], onDelete, ...props }) => {
   const router = useRouter()
+
+  const [sortOrder, setSortOrder] = useQueryStates({
+    sort: queryTypes.string.withDefault(router.query.sort || 'createdAt'),
+    order: queryTypes.string.withDefault(router.query.order || 'desc')
+  }, { history: 'push' })
 
   const handleCompactMenuChoice = (c, row) => {
     if (c.id == 'edit') {
@@ -112,7 +127,7 @@ const ProjectTable = ({ className, data = [], onDelete, ...props }) => {
   return <Table onRow={tagRow} rowKey={row => row.id} className={classNames(
     styles['project-table'],
     className
-  )} columns={getColumns({ handleCompactMenuChoice, sort: router.query.sort || 'createdAt', order: router.query.order || 'desc' })} data={data} {...props} />
+  )} columns={getColumns({ handleCompactMenuChoice, sortOrder, setSortOrder })} data={data} {...props} />
 }
 
 export default ProjectTable;

@@ -41,7 +41,7 @@ export const filterSingleDocument = (col, filter = [], sort = []) => {
   return query.get().then(snap2data).then(res => res[0])
 }
 
-export const filterManyDocuments = (col, filter = [], sort = []) => {
+export const filterManyDocuments = async (col, filter = [], sort = [], page = 1, perPage = 5000, stats) => {
   let query = db.collection(col)
 
   for (let i = 0; i < filter.length; i++) {
@@ -55,6 +55,13 @@ export const filterManyDocuments = (col, filter = [], sort = []) => {
   for (let i = 0; i < sort.length; i++) {
     query = query.orderBy(...sort[i])
   }
+
+  if (stats) {
+    stats.size = await query.select().get().then(snap => snap.size)
+  }
+
+  query = query.offset((page - 1) * perPage)
+  query = query.limit(perPage)
 
   return query.get().then(snap2data)
 }

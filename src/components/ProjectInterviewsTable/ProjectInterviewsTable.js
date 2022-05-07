@@ -100,7 +100,9 @@ const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
 
       return <CompactMenu
         options={options}
-        onChoice={c => handleCompactMenuChoice(c, row)} />
+        onChoice={c => handleCompactMenuChoice(c, row)}
+        className={styles['project-interviews-table-control']}
+        />
     }
   }
 ]);
