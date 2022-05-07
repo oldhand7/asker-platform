@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { getSettings } from 'libs/firestore-admin';
-import { useEffect, useState} from 'react';
+import { useEffect, useState, useMemo, useCallback} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import QuestionsTable from 'components/QuestionsTable/QuestionsTable';
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget'
@@ -20,36 +20,59 @@ import {filterManyDocuments} from 'libs/firestore-admin';
 import { deleteSingle } from 'libs/firestore';
 import { questionTypes } from 'libs/questions';
 import { ctxError } from 'libs/helper';
+import { useQueryState } from 'next-usequerystate'
 
 import styles from 'styles/pages/questions.module.scss';
 
 const PER_PAGE = 15;
+const DEFAULT_SORT = 'createdAt';
+const DEFAULT_ORDER = 'desc';
 
-const QuestionPage = ({ questions = [], companyId, perPage = PER_PAGE, currentPage = 1 }) => {
+const defaultFilter = {
+   q: '',
+   company: ['asker'],
+   questionTypes: [] ,
+   page: 1,
+   pristine: true,
+   perPage: PER_PAGE
+}
+
+const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
   const router = useRouter();
   const flashSuccess = useFlash('success');
   const [success, setSuccess]  = useState(flashSuccess)
   const { user } = useUser();
-  const [filter, setFiler] = useState({ q: '', company: ['asker', companyId], criteria: [] })
-  const [page, setPage] = useState(currentPage);
-  const [filteredQuestions, setQuestions] = useState(questions);
+  const [filter, setFilter] = useState({
+    ...defaultFilter,
+    company: ['asker', companyId],
+    page: Number.parseInt(router.query.page || defaultFilter.page),
+    perPage: Number.parseInt(router.query.perPage || defaultFilter.perPage)
+  })
+  const [filteredQuestions, setFilteredQuestions] = useState(questions);
   const [deletedQuestions, setDeletedQuestions] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [qMax, setMaxQ] = useQueryState('fl')
 
   useEffect(() => {
-    if (filter.q) {
-      setPage(1)
+    if (!filter.pristine) {
+      setLoading(true)
+      setMaxQ(true)
     }
-  }, [filter.q])
+  }, [filter.pristine])
 
   useDebounce(() => {
-    const { q, company, criteria } = filter;
+    const { q, company, questionTypes } = filter;
 
     let filteredQuestions = questions.filter(q => {
+      const inQuestionTypes = opt => {
+        const isEvaluation = q.type == 'evaluation';
+        return isEvaluation && q.subtype == c.id || !isEvaluation && q.type == c.id
+      }
+
       const conditions = [
         company.indexOf(q.companyId) > -1,
-        !criteria.length || criteria.find(c => ((q.type == 'evaluation' && q.subtype == c.id) || (!q.type != 'evaluation' && q.type == c.id))),
+        !questionTypes.length || questionTypes.find(inQuestionTypes),
         deletedQuestions.indexOf(q.id) === -1
       ]
 
@@ -58,7 +81,6 @@ const QuestionPage = ({ questions = [], companyId, perPage = PER_PAGE, currentPa
 
     if (q && filteredQuestions.length) {
       const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
-      //
 
       filteredQuestions = filteredQuestions.filter(data => {
         const criteriaName = (data.criteria && data.criteria.name) || ''
@@ -66,29 +88,29 @@ const QuestionPage = ({ questions = [], companyId, perPage = PER_PAGE, currentPa
       })
     }
 
-    setQuestions(filteredQuestions)
+    setFilteredQuestions(filteredQuestions)
   }, 500, [filter, questions, deletedQuestions])
 
   const toggleCompany = (companyId) => {
     const existsAlready = filter.company.find(c => c == companyId);
 
-    setFiler({
+    setFilter({
       ...filter,
+      pristine: false,
       company: existsAlready ?
         filter.company.filter(c => c != companyId) :
-        [...filter.company, companyId]
+        [...filter.company, companyId],
+      page: 1
     })
-
-    setPage(1)
   }
 
   const handleQuestionFilterOptions = options => {
-    setFiler({
+    setFilter({
       ...filter,
-      criteria: options
+      pristine: false,
+      questionTypes: options,
+      page: 1
     })
-
-    setPage(1)
   }
 
   const deleteQuestion = (q) => {
@@ -106,6 +128,7 @@ const QuestionPage = ({ questions = [], companyId, perPage = PER_PAGE, currentPa
         ])
 
         setLoading(false);
+
         setSuccess('Question deleted')
       })
       .catch(error => {
@@ -139,6 +162,27 @@ const QuestionPage = ({ questions = [], companyId, perPage = PER_PAGE, currentPa
     }
   }, [success])
 
+  useEffect(() => {
+    setLoading(false);
+  }, [questions])
+
+  const tableData = useMemo(() => filteredQuestions.slice(
+      (filter.page - 1) * filter.perPage,
+      (filter.page - 1) * filter.perPage + filter.perPage
+    ), [filter.page, filter.perPage, filteredQuestions])
+
+  const handleQuery = useCallback(q => {
+    setFilter({ ...filter, pristine: false, page: 1, q })
+  }, [filter])
+
+  const handlePageChange = useCallback(p => {
+    setFilter({ ...filter, pristine: false, page: Number.parseInt(p) })
+  }, [filter])
+
+  const relativeTotal = useMemo(() => {
+    return questions.length == total ? filteredQuestions.length : total
+  }, [questions, filteredQuestions, total])
+
   return <div className={styles['questions-page']}>
       <Head>
         <title>Questions listing - Asker</title>
@@ -149,11 +193,11 @@ const QuestionPage = ({ questions = [], companyId, perPage = PER_PAGE, currentPa
           <FilterButton className={styles['questions-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker questions</FilterButton>
           <FilterButton className={styles['questions-page-filter-company-button']} theme="grape" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your questions</FilterButton>
         </div>
-        <QuestionFilter className={styles['questions-page-filter-criteria']} selected={filter.criteria} onFilter={handleQuestionFilterOptions} />
+        <QuestionFilter className={styles['questions-page-filter-question-filter']} selected={filter.questionTypes} onFilter={handleQuestionFilterOptions} />
       </div>
 
       <div className={styles['questions-page-nav']}>
-          <LiveSearchWidget q={filter.q} onQuery={q => setFiler({ ...filter, q })} />
+          <LiveSearchWidget q={filter.q} onQuery={handleQuery} />
           <DropDownButton onChoice={c => router.push(`/questions/create/${(c.rules ? 'evaluation' : c.id)}/${(c.rules ? `?subtype=${c.id}` : '')}`)} options={[
             ...criteriaTypes,
             ...questionTypes.filter(qt => qt.id != 'evaluation')
@@ -165,8 +209,8 @@ const QuestionPage = ({ questions = [], companyId, perPage = PER_PAGE, currentPa
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <QuestionsTable onDelete={deleteQuestion} emptyText="No questions to show." data={filteredQuestions.slice((page-1) * perPage, (page-1) * perPage + perPage)} className={styles['questions-page-table']} />
-      <Pagination page={page} className={styles['questions-page-pagination']} onChange={setPage} total={filteredQuestions.length} perPage={perPage} />
+      <QuestionsTable onDelete={deleteQuestion} emptyText="No questions to show." data={tableData} className={styles['questions-page-table']} />
+      <Pagination page={filter.page} className={styles['questions-page-pagination']} onChange={handlePageChange} total={relativeTotal} perPage={filter.perPage} />
 
       {loading ? <Preloader /> : null}
   </div>
@@ -179,27 +223,39 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
+  const dbQuery = [
+    ['companyId', 'in', [req.session.user.companyId, 'asker']]
+  ];
+
   const sort = [
-    [query.sort || 'createdAt', query.order || (!query.sort ? 'desc' : 'asc')]
+    query.sort || DEFAULT_SORT,
+    query.order || DEFAULT_ORDER
   ]
 
-  if (query.sort == 'type') {
-    sort.push(['subtype', query.order || (!query.sort ? 'desc' : 'asc')])
+  const dbSort = [sort]
+
+  if (sort[0] == 'type') {
+    dbSort.push(['subtype',  sort[1]])
   }
 
-  const questions = await filterManyDocuments('questions',
-  [
-    ['companyId', 'in', [req.session.user.companyId, 'asker']]
-  ],
-  sort)
+  let questions;
+  let total;
+
+  if (query.sort && query.order || query.fl) {
+    questions = await filterManyDocuments('questions', dbQuery, dbSort)
+    total = questions.length
+  } else {
+    const stat = { size: 0 }
+    questions = await filterManyDocuments('questions', dbQuery, dbSort, 1, PER_PAGE, stat)
+    total = stat.size;
+  }
 
   return {
     props: {
       config: await getSettings(),
       companyId: req.session.user.companyId,
       questions,
-      perPage: Number.parseInt(query.perPage || PER_PAGE),
-      currentPage: Number.parseInt(query.page || 1)
+      total
     }
   }
 })

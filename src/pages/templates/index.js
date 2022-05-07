@@ -1,5 +1,5 @@
 import { getSettings } from 'libs/firestore-admin';
-import { useEffect, useState} from 'react';
+import { useEffect, useState, useMemo, useCallback} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import TemplateTable from 'components/TemplateTable/TemplateTable';
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget'
@@ -15,21 +15,42 @@ import PlusIcon from 'components/Icon/PlusIcon';
 import { useRouter } from 'next/router';
 import { deleteSingle } from 'libs/firestore';
 import { ctxError } from 'libs/helper';
+import { useQueryState } from 'next-usequerystate'
 
 import styles from 'styles/pages/templates.module.scss';
 
 const PER_PAGE = 15;
+const DEFAULT_SORT = 'createdAt';
+const DEFAULT_ORDER = 'desc';
 
-const TemplatesPage = ({ templates = [], perPage = PER_PAGE, currentPage = 1 }) => {
+const defaultFilter = {
+  q: '',
+  page: 1,
+  perPage: PER_PAGE,
+  pristine: true
+}
+
+const TemplatesPage = ({ templates = [], total = 0 }) => {
   const flashSuccess  =  useFlash('success')
-  const [filter, setFiler] = useState({ q: ''})
-  const [page, setPage] = useState(currentPage);
-  const [filteredTemplates, setTemplates] = useState(templates);
+  const [filteredTemplates, setFilteredTemplates] = useState(templates);
   const router = useRouter();
+  const [filter, setFilter] = useState({
+    ...defaultFilter,
+    page: Number.parseInt(router.query.page || defaultFilter.page),
+    perPage: Number.parseInt(router.query.perPage || defaultFilter.perPage)
+  })
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
   const [deletedTemplates, setDeletedTemplates] = useState([]);
+  const [qMax, setMaxQ] = useQueryState('fl')
+
+  useEffect(() => {
+    if (!filter.pristine) {
+      setLoading(true)
+      setMaxQ(true)
+    }
+  }, [filter.pristine])
 
   useEffect(() => {
     if (flashSuccess) {
@@ -38,10 +59,8 @@ const TemplatesPage = ({ templates = [], perPage = PER_PAGE, currentPage = 1 }) 
   }, [flashSuccess])
 
   useEffect(() => {
-    if (filter.q) {
-      setPage(1)
-    }
-  }, [filter.q])
+    setLoading(false);
+  }, [templates])
 
   useDebounce(() => {
     const { q } = filter;
@@ -49,7 +68,7 @@ const TemplatesPage = ({ templates = [], perPage = PER_PAGE, currentPage = 1 }) 
     let filteredTemplates = templates.filter(t => deletedTemplates.indexOf(t.id) == -1)
 
     if (!q) {
-      setTemplates(filteredTemplates);
+      setFilteredTemplates(filteredTemplates);
 
       return;
     }
@@ -58,7 +77,7 @@ const TemplatesPage = ({ templates = [], perPage = PER_PAGE, currentPage = 1 }) 
 
     filteredTemplates = filteredTemplates.filter(data => regex.test(data.templateName.toLowerCase()))
 
-    setTemplates(filteredTemplates)
+    setFilteredTemplates(filteredTemplates)
   }, 500, [filter, templates, deletedTemplates])
 
   const deleteTemplate = (t) => {
@@ -103,21 +122,38 @@ const TemplatesPage = ({ templates = [], perPage = PER_PAGE, currentPage = 1 }) 
     }
   }, [success])
 
+  const handlePageChange = useCallback(p => {
+    setFilter({ ...filter, pristine: false, page: Number.parseInt(p) })
+  }, [filter])
+
+  const relativeTotal = useMemo(() => {
+    return templates.length == total ? filteredTemplates.length : total
+  }, [templates, filteredTemplates, total])
+
+  const tableData = useMemo(() => filteredTemplates.slice(
+      (filter.page - 1) * filter.perPage,
+      (filter.page - 1) * filter.perPage + filter.perPage
+    ), [filter.page, filter.perPage, filteredTemplates])
+
+  const handleQuery = useCallback(q => {
+    setFilter({ ...filter, pristine: false, page: 1, q })
+  }, [filter])
+
   return <div className={styles['templates-page']}>
       <Head>
         <title>Templates listing - Asker</title>
       </Head>
       <div className={styles['templates-page-nav']}>
-          <LiveSearchWidget q={filter.q} onQuery={q => setFiler({ q })} />
+          <LiveSearchWidget q={filter.q} onQuery={handleQuery} />
           <Button href='/templates/create/'><PlusIcon /> Create new template</Button>
       </div>
 
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <TemplateTable onDelete={deleteTemplate} emptyText="No templates to show." data={filteredTemplates.slice((page - 1) * perPage, (page - 1) * perPage + perPage)} className={styles['templates-page-table']} />
+      <TemplateTable onDelete={deleteTemplate} emptyText="No templates to show." data={tableData} className={styles['templates-page-table']} />
 
-      <Pagination page={page} className={styles['templates-page-pagination']} onChange={setPage} total={filteredTemplates.length} perPage={perPage} />
+      <Pagination page={filter.page} className={styles['templates-page-pagination']} onChange={handlePageChange} total={relativeTotal} perPage={filter.perPage} />
 
       {loading ? <Preloader/> : null}
   </div>
@@ -130,21 +166,34 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
-  const templates = await filterManyDocuments('templates',
-    [
-      ['companyId', 'in', [req.session.user.companyId, 'asker']]
-    ],
-    [
-      [query.sort || 'createdAt', query.order || (!query.sort ? 'desc' : 'asc')]
-    ]
-  )
+  const dbQuery = [
+    ['companyId', 'in', [req.session.user.companyId, 'asker']]
+  ];
+
+  const sort = [
+    query.sort || DEFAULT_SORT,
+    query.order || DEFAULT_ORDER
+  ]
+
+  const dbSort = [sort]
+
+  let templates;
+  let total;
+
+  if (query.sort && query.order || query.fl) {
+    templates = await filterManyDocuments('templates', dbQuery, dbSort)
+    total = templates.length
+  } else {
+    const stat = { size: 0 }
+    templates = await filterManyDocuments('templates', dbQuery, dbSort, 1, PER_PAGE, stat)
+    total = stat.size;
+  }
 
   return {
     props: {
       config: await getSettings(),
       templates,
-      perPage: Number.parseInt(query.perPage || PER_PAGE),
-      currentPage: Number.parseInt(query.page || 1)
+      total
     }
   }
 })

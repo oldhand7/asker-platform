@@ -1,5 +1,5 @@
 import { getSettings } from 'libs/firestore-admin';
-import { useEffect, useState} from 'react';
+import { useEffect, useState, useMemo, useCallback} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import ProjectTabe from 'components/ProjectTable/ProjectTable';
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget'
@@ -16,36 +16,45 @@ import ProjectTemplateModal from 'modals/project-template/project-template-modal
 import { useModal } from 'libs/modal';
 import Preloader from 'components/Preloader/Preloader';
 import { ctxError } from 'libs/helper';
+import { useQueryState } from 'next-usequerystate'
 
 import styles from 'styles/pages/projects.module.scss';
 
 const PER_PAGE = 15;
+const DEFAULT_SORT = 'createdAt';
+const DEFAULT_ORDER = 'desc';
 
-const ProjectsPage = ({ projects = [], perPage = PER_PAGE, currentPage = 1 }) => {
+const defaultFilter = {
+  q: '',
+  page: 1,
+  perPage: PER_PAGE,
+  pristine: true
+}
+
+const ProjectsPage = ({ projects = [], total = 0 }) => {
   const flashSuccess  =  useFlash('success')
-  const [filter, setFiler] = useState({ q: ''})
-  const [page, setPage] = useState(currentPage);
-  const [filteredProjects, setProjects] = useState(projects);
+  const [filteredProjects, setFilteredProjects] = useState(projects);
   const router = useRouter();
+  const [filter, setFilter] = useState({
+    ...defaultFilter,
+    page: Number.parseInt(router.query.page || defaultFilter.page),
+    perPage: Number.parseInt(router.query.perPage || defaultFilter.perPage)
+  })
   const openTemplateModal = useModal(ProjectTemplateModal, { size: 'large' })
   const [deletedProjects, setDeletedProjects] = useState([])
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
+  const [qMax, setMaxQ] = useQueryState('fl')
+
+  console.log(filter)
 
   useEffect(() => {
-    if (filter.q) {
-      setPage(1)
+    if (!filter.pristine) {
+      setLoading(true)
+      setMaxQ(true)
     }
-  }, [filter.q])
-
-  const handleQuery = q => {
-    const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
-
-    return Promise.resolve([
-      ...autoCompleteOptions.filter(aco => regex.test(aco.name.toLowerCase()) && !interviewers.find(i => i.id == aco.id))
-    ])
-  }
+  }, [filter.pristine])
 
   useDebounce(() => {
     const { q } = filter;
@@ -53,7 +62,7 @@ const ProjectsPage = ({ projects = [], perPage = PER_PAGE, currentPage = 1 }) =>
     let filteredProjects = projects.filter(p => deletedProjects.indexOf(p.id) == -1);
 
     if (!q) {
-      setProjects(filteredProjects);
+      setFilteredProjects(filteredProjects);
 
       return;
     }
@@ -62,7 +71,7 @@ const ProjectsPage = ({ projects = [], perPage = PER_PAGE, currentPage = 1 }) =>
 
     filteredProjects = filteredProjects.filter(data => regex.test(data.name.toLowerCase()))
 
-    setProjects(filteredProjects)
+    setFilteredProjects(filteredProjects)
   }, 500, [filter, projects, deletedProjects])
 
   const handleProjectCreate = c => {
@@ -122,12 +131,37 @@ const ProjectsPage = ({ projects = [], perPage = PER_PAGE, currentPage = 1 }) =>
     }
   }, [success])
 
+  useEffect(() => {
+    setLoading(false);
+  }, [projects])
+
+  const handlePageChange = p => {
+    setFilter({ ...filter, pristine: false, page: Number.parseInt(p) })
+  }
+
+  const getRelativeTotal = () => {
+    return projects.length == total ? filteredProjects.length : total
+  }
+
+  const handleQuery = useCallback(q => {
+    setFilter({ ...filter, pristine: false, page: 1, q })
+  }, [filter])
+
+  const tableData = useMemo(() => filteredProjects.slice(
+      (filter.page - 1) * filter.perPage,
+      (filter.page - 1) * filter.perPage + filter.perPage
+    ), [filter.page, filter.perPage, filteredProjects])
+
+    const relativeTotal = useMemo(() => {
+      return projects.length == total ? filteredProjects.length : total
+    }, [projects, filteredProjects, total])
+
   return <div className={styles['projects-page']}>
       <Head>
         <title>Projects - Asker</title>
       </Head>
       <div className={styles['projects-page-nav']}>
-          <LiveSearchWidget q={filter.q} onQuery={q => setFiler({ q })} />
+          <LiveSearchWidget q={filter.q} onQuery={handleQuery} />
           <DropDownButton onChoice={handleProjectCreate} options={[
             { id: 'blank-project', name: 'Blank project' },
             { id: 'template-project', name: 'Use template' }
@@ -137,8 +171,8 @@ const ProjectsPage = ({ projects = [], perPage = PER_PAGE, currentPage = 1 }) =>
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <ProjectTabe onDelete={deleteProject} emptyText="No projects to show." data={filteredProjects.slice((page - 1) * perPage, (page - 1) * perPage + perPage)} className={styles['projects-page-table']} />
-      <Pagination page={page} className={styles['projects-page-pagination']} onChange={setPage} total={filteredProjects.length} perPage={perPage} />
+      <ProjectTabe onDelete={deleteProject} emptyText="No projects to show." data={tableData} className={styles['projects-page-table']} />
+      <Pagination page={filter.page} className={styles['projects-page-pagination']} onChange={handlePageChange} total={relativeTotal} perPage={filter.perPage} />
 
       {loading ? <Preloader /> : null}
   </div>
@@ -151,21 +185,34 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 
-  const projects = await filterManyDocuments('projects',
-    [
-      ['companyId', '==', req.session.user.companyId]
-    ],
-    [
-      [query.sort || 'createdAt', query.order || (!query.sort ? 'desc' : 'asc')]
-    ]
-  )
+  const dbQuery = [
+    ['companyId', '==', req.session.user.companyId]
+  ];
+
+  const sort = [
+    query.sort || DEFAULT_SORT,
+    query.order || DEFAULT_ORDER
+  ]
+
+  const dbSort = [sort]
+
+  let projects;
+  let total;
+
+  if (query.sort && query.order || query.fl) {
+    projects = await filterManyDocuments('projects', dbQuery, dbSort)
+    total = projects.length
+  } else {
+    const stat = { size: 0 }
+    projects = await filterManyDocuments('projects', dbQuery, dbSort, 1, PER_PAGE, stat)
+    total = stat.size;
+  }
 
   return {
     props: {
       config: await getSettings(),
       projects,
-      perPage: Number.parseInt(query.perPage || PER_PAGE),
-      currentPage: Number.parseInt(query.page || 1)
+      total
     }
   }
 })
