@@ -12,7 +12,7 @@ import styles from './choice-question-form.module.scss'
 
 const rules =  {
   name: 'required',
-  desc: 'max:140',
+  desc: 'max:9000',
   answers: 'required|min:1'
 }
 
@@ -33,7 +33,7 @@ const ChoiceQuestionForm = ({ values, className, onValues, onCancel, loading, mu
   }, [formValues, multichoice])
 
   return <form data-test-id="choice-question-form" onSubmit={control.submit(onValues)} className={classNames(styles['choice-question-form'], className)}>
-    <TextInputField error={errors && errors.name} className={styles['choice-question-form-field']} onChange={control.input('name')} value={formValues.name} label="Title" name='name' placeholder="ex: do you have a driver’s licence?" />
+    <TextInputField error={errors && errors.name} className={styles['choice-question-form-field']} onChange={control.input('name')} value={formValues.name} label="Title" name='name' placeholder={!multichoice ? "E.g. Do you have a driving licence?" : "E.g. Which of the following systems are you used working with?"} />
     <TextareaInputField error={errors && errors.desc} className={styles['choice-question-form-field']} onChange={control.input('desc')} value={formValues.desc} label="Description" name='desc' placeholder="Description" />
 
     <div>

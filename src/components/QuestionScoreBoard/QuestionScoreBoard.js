@@ -42,7 +42,7 @@ const QuestionScoreBoard = ({ className, score = 0, rules, votes = [], onVotes, 
           scores={votes[index]  ? votes[index].tail : []}
           onScores={scores => handleScores(scores, index)}
           onHead={() => toggleHead(index)}
-          className={styles['question-score-board-column-item-']}
+          className={styles['question-score-board-column-item']}
         />
       </li>)}
     </ul>

@@ -30,7 +30,7 @@ const defaultValues = {
 
 const validationRules = {
   name: 'required|max:140',
-  desc: 'max:280',
+  desc: 'max:9000',
   followup: 'max:10',
   criteria: 'required'
 }
@@ -105,11 +105,15 @@ const EvaluationQuestionForm = ({ className, question, subtype, onValues }) => {
     {error ? <Alert type="error">{error.message}</Alert> : null}
 
     <div className={styles['evaluation-question-form-wrapper']}>
-      <h2 className={styles['evaluation-question-form-title']}>{question ? 'Edit question' : subtype.cta}</h2>
+      <h2 className={styles['evaluation-question-form-title']}>{question ? `Edit ${subtype.altName.toLowerCase()} question` : subtype.cta}</h2>
       {!question ? <p className={styles['evaluation-question-form-desc']}>{subtype.desc}</p> : null}
       <CriteriaOptionInputField error={errors && errors['criteria']} value={values.criteria} type={subtype} onChange={control.input('criteria', false)} className={styles['evaluation-question-form-input-field']} />
       <TextInputField value={values.name}  error={errors && errors['name']} autoComplete="off" name="name" onChange={control.input('name')} label="Question" placeholder="Write your question here" className={styles['evaluation-question-form-input-field']} />
-      <TextareaInputField value={values.desc}  error={errors && errors['desc']} name="desc" onChange={control.input('desc')} label="Definition" placeholder="Write your definition here" className={styles['evaluation-question-form-input-field']} />
+      {
+        subtype.id == 'competency' ?
+       <TextareaInputField value={values.desc}  error={errors && errors['desc']} name="desc" onChange={control.input('desc')} label="Definition" placeholder="Write your definition here" className={styles['evaluation-question-form-input-field']} /> :
+       null
+      }
       <FollowupQuestionField questions={values.followup} onChange={control.input('followup', false)} className={styles['evaluation-question-form-input-field']} />
     </div>
 
