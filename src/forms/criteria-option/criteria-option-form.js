@@ -61,7 +61,11 @@ const CriteriaOptionForm = ({ className, onValues, type }) => {
     <h2 className={styles['criteria-option-form-title']}>{type.name} option</h2>
     {error ? <Alert type="error">{error.message}</Alert> : null}
     <TextInputField value={values.name} placeholder={'Name'} error={errors ? errors.name : null} onChange={control.input('name')} autoComplete='off' name="name" className={styles['criteria-option-form-field']} />
-    <TextareaInputField value={values.desc} placeholder={'Definition (optional)'} error={errors ? errors.desc : null} onChange={control.input('desc')} name="desc" className={styles['criteria-option-form-field']} />
+    {
+      type.id == 'competency' ?
+      <TextareaInputField value={values.desc} placeholder={'Definition (optional)'} error={errors ? errors.desc : null} onChange={control.input('desc')} name="desc" className={styles['criteria-option-form-field']} /> :
+      null
+    }
     <PlatformButton disabled={loading} type="submit" className={styles['criteria-option-form-submit']}>
       {!loading ?
       <><PlusIcon /> Add option</> :

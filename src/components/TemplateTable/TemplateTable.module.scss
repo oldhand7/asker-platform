@@ -94,7 +94,17 @@
         &:first-child {
           padding-left: 30rem;
         }
+
+        &:last-child {
+          position: relative;
+        }
       }
     }
+  }
+
+  &-control {
+    position: absolute;
+    right: 5rem;
+    top: 5rem;
   }
 }

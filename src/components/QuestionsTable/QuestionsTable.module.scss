@@ -79,7 +79,17 @@
         &:first-child {
           padding-left: 40rem;
         }
+
+        &:last-child {
+          position: relative;
+        }
       }
     }
+  }
+
+  &-control {
+    position: absolute;
+    right: 5rem;
+    top: 5rem;
   }
 }

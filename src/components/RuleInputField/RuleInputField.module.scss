@@ -9,6 +9,13 @@
 
   &-item {
       margin-bottom: 20rem;
+
+      &-input {
+        textarea {
+          padding: 10rem;
+          font-size: 14rem;
+        }
+      }
   }
 
   &-head {
