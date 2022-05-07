@@ -16,7 +16,7 @@ const defaultValues = {
 }
 
 const rules = {
-  notes: 'max:10000',
+  notes: 'max:9000',
   files: 'array'
 }
 

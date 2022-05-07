@@ -29,6 +29,15 @@
     color: white;
   }
 
+  &-empty &-head {
+    cursor: pointer;
+
+    &:hover {
+      background: $brandish-green;
+      color: white;
+    }
+  }
+
   &-steps {
     margin: 0;
     padding: 0;

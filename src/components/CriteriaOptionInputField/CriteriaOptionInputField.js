@@ -8,6 +8,8 @@ import { filterManyDocuments } from 'libs/firestore'
 import { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import TrashButton from 'components/TrashButton/TrashButton';
+import Separator from 'components/Separator/Separator'
+import FlexRow from 'components/FlexRow/FlexRow';
 
 import styles from './CriteriaOptionInputField.module.scss';
 
@@ -53,9 +55,12 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, type }) =
       !value ?
       <>
         <Autocomplete className={styles['criteria-option-input-field-autocomplete']} options={criteriaOptions} onSearch={handleCriteriaOption} />
-        <OutlineButton type="button" onClick={() => openCriteriaOptionModal(handleCriteriaOption)} className={styles['criteria-option-input-field-button']} >
-          <PlusIcon /> Create new
-        </OutlineButton>
+        <FlexRow>
+          <Separator background='' />
+          <OutlineButton type="button" onClick={() => openCriteriaOptionModal(handleCriteriaOption)} className={styles['criteria-option-input-field-button']} >
+            <PlusIcon /> Create new {type.name.toLowerCase()}
+          </OutlineButton>
+        </FlexRow>
       </> :
       <div className={styles['criteria-option-input-field-card']}>
         <span className={styles['criteria-option-input-field-card-label']}>

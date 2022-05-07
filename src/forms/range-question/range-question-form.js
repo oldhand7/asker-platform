@@ -33,7 +33,7 @@ const RangeQuestionForm = ({ values, className, onValues, onCancel, loading }) =
   })
 
   return <form data-test-id="range-question-form" onSubmit={control.submit(onValues)} className={classNames(styles['range-question-form'], className)}>
-    <TextInputField error={errors && errors.name} className={styles['range-question-form-field']} onChange={control.input('name')} value={formValues.name} label="Title" name='name' placeholder="ex: do you have a driver’s licence?" />
+    <TextInputField error={errors && errors.name} className={styles['range-question-form-field']} onChange={control.input('name')} value={formValues.name} label="Title" name='name' placeholder="E.g. What is your salary requirement?" />
     <TextareaInputField error={errors && errors.desc} className={styles['range-question-form-field']} onChange={control.input('desc')} value={formValues.desc} label="Description" name='desc' placeholder="Description" />
 
     <FlexRow>

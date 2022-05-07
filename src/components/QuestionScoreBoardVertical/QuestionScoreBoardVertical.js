@@ -12,7 +12,8 @@ const QuestionScoreBoardVertical = ({ className, index, rule, scores = [], activ
   return <div className={classNames(
     styles['question-score-board-vertical'],
     className,
-    active ? styles['question-score-board-vertical-active'] : ''
+    active ? styles['question-score-board-vertical-active'] : '',
+    !rule.steps ? styles['question-score-board-vertical-empty'] : ''
   )}>
     <div onClick={onHead} className={styles['question-score-board-vertical-head']}>
       <h4 className={styles['question-score-board-vertical-head-title']}>{index}</h4>

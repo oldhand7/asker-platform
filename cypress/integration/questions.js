@@ -115,6 +115,8 @@ describe('Questions', () => {
           .should('contain', 'Criteria A')
 
         cy.get('[data-test-id="followup-question-field"]').within(() => {
+            cy.get('button').click()
+
             cy.get('input')
               .type('Followup question 1{enter}')
               .type('Followup question 2{enter}')
