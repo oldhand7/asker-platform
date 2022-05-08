@@ -10,6 +10,7 @@ import { CompaniesList, CompaniesEdit, CompaniesAdd } from 'admin/resources/comp
 import { getFirebaseConfig } from 'libs/config';
 import { Layout } from 'admin/components/AdminLayout/AdminLayout';
 import SettingsSharpIcon from '@material-ui/icons/SettingsSharp';
+import { CriteriaOptionsList, CriteriaOptionsEdit, CriteriaOptionsAdd } from 'admin/resources/criteria-options/criteria-options-resource';
 
 import CustomAuthProvider from 'admin/auth-providers/custom/custom-auth-provider';
 import CustomDataProvider from 'admin/data-providers/custom/custom-data-provider';
@@ -45,6 +46,7 @@ const authProvider = CustomAuthProvider(firebaseConfig);
 const AdminApp = () => {
     return <Admin  layout={Layout} theme={theme} authProvider={authProvider} dataProvider={dataProvider}>
         <Resource name="users" options={{domain: "platform", label: 'Users'}} list={UsersList} edit={UsersEdit} create={UsersAdd} />
+        <Resource name="criteriaOptions" options={{domain: "platform", label: 'Criterias'}} list={CriteriaOptionsList} edit={CriteriaOptionsEdit} create={CriteriaOptionsAdd} />
         <Resource name="pages" options={{domain: "landing", label: 'Pages'}} list={PagesList} edit={PagesEdit} create={PagesAdd} />
         <Resource name="sections" options={{domain: "landing", label: 'Sections'}} list={SectionsList} edit={SectionsEdit} create={SectionsAdd} />
         <Resource name="employees" options={{domain: "landing", label: 'Employees'}} list={EmployeesList} edit={EmployeesEdit} create={EmployeesAdd} />
