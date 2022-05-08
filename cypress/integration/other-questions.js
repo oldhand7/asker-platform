@@ -266,7 +266,7 @@ describe('Other questions', () => {
               .should('contain', 'Other question')
               .should('contain', 'What is the meaning of life?')
               .should('contain', 'Meaning meaning meaning')
-              .get('textarea').type('42')
+              .get('[data-test-id="html-input-field"]').click().type('42')
 
             //Q4
             cy.get('[data-test-id="other-question-int"]').eq(3)
@@ -314,7 +314,7 @@ describe('Other questions', () => {
 
             //Q4A
             cy.get('[data-test-id="other-question-int"]').eq(2)
-              .find('textarea').should('have.value', '42')
+              .find('[data-test-id="html-input-field"]').should('contain', '42')
 
             //Q2A
             cy.get('[data-test-id="other-question-int"]').eq(3)

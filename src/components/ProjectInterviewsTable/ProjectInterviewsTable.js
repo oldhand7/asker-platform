@@ -11,6 +11,8 @@ import CompactMenu from 'components/CompactMenu/CompactMenu';
 import Link from 'next/link';
 import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
 import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
+import { EVALUATION_SUBTYPES_NO_CRITERIA } from 'libs/config';
+import { getSubtype } from 'libs/helper';
 
 import styles from './ProjectInterviewsTable.module.scss';
 
@@ -57,14 +59,42 @@ const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
 
       const scoredEvaluations = Object.values(stages).map(stage => Object.values(stage).filter(eva => eva.score))
 
-      let evas = [];
+      const isCriteriaQuestion = e => {
+        const subtype = getSubtype(e);
+        return EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(subtype) == -1;
+      }
+
+      let evasWithCriterias = [];
+      let evasWithoutCriterias = [];
 
       for (let i = 0; i < scoredEvaluations.length; i++) {
-        evas = [
-          ...evas,
-          ...scoredEvaluations[i]
+        evasWithCriterias = [
+          ...evasWithCriterias,
+          ...scoredEvaluations[i].filter(e => isCriteriaQuestion(e))
+        ]
+
+        evasWithoutCriterias = [
+          ...evasWithoutCriterias,
+          ...scoredEvaluations[i].filter(e => !isCriteriaQuestion(e))
         ]
       }
+
+      const evasWithoutCriteriasReduced = Object.values(evasWithoutCriterias.reduce((evas, e) => {
+        const subtype = getSubtype(e);
+
+        if (!evas[subtype]) {
+          evas[subtype] = { ...e }
+        } else {
+          evas[subtype].score = Math.round((evas[subtype].score + e.score) / 2)
+        }
+
+        return evas;
+      }, {}))
+
+      let evas = [
+        ...evasWithCriterias,
+        ...evasWithoutCriteriasReduced
+      ]
 
       evas.sort(function(a, b) {
         const sa = a.score / a.maxScore;
@@ -77,14 +107,14 @@ const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
       });
 
       return <div className={styles['project-interviews-table-evaluations']}>
-          {evas.reverse().slice(0, 3).map((e, index) => <EvaluationScore key={index} evaluation={e} className={styles['project-interviews-table-evaluations-evaluation']} />)}
+          {evas.reverse().map((e, index) => <EvaluationScore key={e.criteria && e.criteria.id || e.subtype} evaluation={e} className={styles['project-interviews-table-evaluations-evaluation']} />)}
       </div>
     }
   },
   {
-    title: <Link href={`/projects/${project.id}/overview/`}>
+    title: <a href={`/projects/${project.id}/overview/`}>
       <FilterIcon />
-    </Link>,
+    </a>,
     render: (_, row) => {
       const options = [
 

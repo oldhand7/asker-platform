@@ -14,7 +14,8 @@
     "cypress": "cypress open",
     "cypress-run": "cypress run",
     "test-server": "npm run test-build && npm run test-start",
-    "test": "start-test test-server 3000 cypress-run"
+    "test": "start-test test-server 3000 cypress-run",
+    "jest": "jest --watch"
   },
   "dependencies": {
     "@splidejs/react-splide": "^0.6.20",
@@ -64,10 +65,16 @@
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "^2.1.0",
+    "@testing-library/jest-dom": "^5.16.4",
+    "babel-jest": "^28.1.0",
     "cypress": "^9.5.3",
     "cypress-file-upload": "^5.0.8",
     "eslint": "8.11.0",
     "eslint-config-next": "12.1.0",
-    "start-server-and-test": "^1.14.0"
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
+    "start-server-and-test": "^1.14.0",
+    "@testing-library/react": "^12.1.5"
   }
 }

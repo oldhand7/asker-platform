@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import QuestionScoreBoardVertical from 'components/QuestionScoreBoardVertical/QuestionScoreBoardVertical';
+import { useEffect, useState } from 'react';
 
 import styles from './QuestionScoreBoard.module.scss';
 
@@ -26,8 +27,8 @@ const QuestionScoreBoard = ({ className, score = 0, rules, votes = [], onVotes, 
     }));
 
     if (score != index + 1) {
-      vOff[index].head = true;
-      vOff[index].tail = vOff[index].tail.map(_ => true);
+        vOff[index].head = true;
+        vOff[index].tail = vOff[index].tail.map(_ => true);
     }
 
     onVotes(vOff)
@@ -39,7 +40,7 @@ const QuestionScoreBoard = ({ className, score = 0, rules, votes = [], onVotes, 
           index={index + 1}
           rule={rule}
           active={score == index + 1}
-          scores={votes[index]  ? votes[index].tail : []}
+          scores={votes[index] ? votes[index].tail : []}
           onScores={scores => handleScores(scores, index)}
           onHead={() => toggleHead(index)}
           className={styles['question-score-board-column-item']}

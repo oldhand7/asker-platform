@@ -47,8 +47,6 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
   const [success, setSuccess] = useState(null);
   const [qMax, setMaxQ] = useQueryState('fl')
 
-  console.log(filter)
-
   useEffect(() => {
     if (!filter.pristine) {
       setLoading(true)

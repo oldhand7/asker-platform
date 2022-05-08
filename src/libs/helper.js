@@ -248,3 +248,14 @@ export const handleNext = id => {
     nextEl.scrollIntoView()
   }
 }
+
+export const ucFirst = s => `${s[0].toUpperCase()}${s.slice(1)}`
+
+export const getSubtype = item => {
+  return item.subtype || (item.criteria && item.criteria.type) || '';
+}
+
+export const createDummyVotes = question => question.rules.map(rule => ({
+  head: false,
+  tail: rule.steps ? rule.steps.map(s => false) : []
+}))

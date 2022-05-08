@@ -2,6 +2,8 @@
   &-evaluations {
       display: flex;
       justify-content: left;
+      max-width: 100%;
+      overflow-x: auto;
 
       &-evaluation {
         margin-right: 40rem;

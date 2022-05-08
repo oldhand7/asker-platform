@@ -1,10 +1,11 @@
 import { getCriteriaTypeById } from 'libs/criteria';
 import classNames from 'classnames';
 import QuestionScoreBoard from 'components/QuestionScoreBoard/QuestionScoreBoard';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import useForm from 'libs/use-form';
-import { calcScore } from 'libs/helper';
+import { calcScore, createDummyVotes } from 'libs/helper';
 import InterviewNotes from 'components/InterviewNotes/InterviewNotes';
+import { EVALUATION_SUBTYPES_NO_CRITERIA } from 'libs/config';
 
 import styles from './evaluation-question-int-form.module.scss';
 
@@ -18,33 +19,32 @@ const defaultValues = {
 const rules = {}
 const messages = {}
 
+const adjust = (values, question) => {
+  values.criteria = question.criteria;
+  values.subtype = question.subtype;
+  values.maxScore = question.rules.length;
+
+  if (values.votes.length != question.rules) {
+    values.votes = createDummyVotes(question);
+  }
+
+  return values;
+}
+
 const EvaluationQuestionIntForm = ({ className, question, stage, project, values, onValues, onError }) => {
   const [formValues, errors, control] = useForm({
-    values: values ? values : defaultValues,
+    values: adjust(
+      values ? values : defaultValues,
+      question
+    ),
     rules,
     messages
   })
   const [criteria, setCriteria] = useState(null);
 
   useEffect(() => {
-    if (!values && question) {
-      const dummyVotes = question.rules.map(rule => ({
-        head: false,
-        tail: rule.steps ? rule.steps.map(s => false) : []
-      }))
-
-      control.setValues({
-        criteria: question.criteria,
-        score: 0,
-        maxScore: question.rules.length,
-        votes: dummyVotes
-      })
-    }
-  }, [question, values])
-
-  useEffect(() => {
     if (question) {
-      setCriteria(getCriteriaTypeById(question.criteria.type))
+      setCriteria(getCriteriaTypeById(question.subtype))
     } else {
       setCriteria(null)
     }
@@ -58,6 +58,17 @@ const EvaluationQuestionIntForm = ({ className, question, stage, project, values
     }
   }, [formValues])
 
+  useEffect(() => {
+    const adjust = {}
+
+    if (!formValues.subtype && question) {
+      control.set('subtype', question.subtype)
+    }
+
+    if (!formValues.maxScore && question.rules.length) {
+      control.set('subtype', question.subtype)
+    }
+  }, [question, formValues])
 
   const handleVotes = (votes) => {
     control.setValues({
@@ -70,10 +81,13 @@ const EvaluationQuestionIntForm = ({ className, question, stage, project, values
   return question ? <div className={classNames(styles['evaluation-question-int-form'], className)}>
     <div className={styles['evaluation-question-int-form-block']}>
       <h2 className={styles['evaluation-question-int-form-title']}>{criteria && `${criteria.altName || criteria.name} question`}</h2>
-      <div className={styles['evaluation-question-int-form-criteria']}>
-        <h2 className={styles['evaluation-question-int-form-criteria-name']}>{question && question.criteria.name}</h2>
-        <p className={styles['evaluation-question-int-form-criteria-desc']}>{question && question.criteria.desc}</p>
-      </div>
+
+      {EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(question.subtype) == -1 ?
+        <div className={styles['evaluation-question-int-form-criteria']}>
+          <h2 className={styles['evaluation-question-int-form-criteria-name']}>{question && question.criteria.name}</h2>
+          <p className={styles['evaluation-question-int-form-criteria-desc']}>{question && question.criteria.desc}</p>
+        </div> : null}
+
       <h2 className={styles['evaluation-question-int-form-question-title']}>Question</h2>
       <h2 className={styles['evaluation-question-int-form-question-name']}>{question.name}</h2>
       <ul className={styles['evaluation-question-int-form-question-questions']}>

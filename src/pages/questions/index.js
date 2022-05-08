@@ -83,7 +83,7 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
       const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
 
       filteredQuestions = filteredQuestions.filter(data => {
-        const criteriaName = (data.criteria && data.criteria.name) || ''
+        const criteriaName = data.criteria && data.criteria.name || '';
         return regex.test(data.name.toLowerCase()) || regex.test(criteriaName.toLowerCase())
       })
     }

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import TextareaInputField from 'components/TextareaInputField/TextareaInputField';
+import HtmlInputField from 'components/HtmlInputField/HtmlInputField';
 
 import styles from './text-question-int-form.module.scss';
 
@@ -8,7 +8,7 @@ const TextQuestionIntForm = ({ className, question, values, onValues }) => {
     <h3>{question.name}</h3>
     <p>{question.desc}</p>
 
-    <TextareaInputField value={(values || [''])[0]} className={styles['text-question-int-form-note']} onChange={ev => onValues([ev.target.value])}  />
+    <HtmlInputField value={(values || [''])[0]} className={styles['text-question-int-form-note']} onChange={value => onValues([value])}  />
   </div>
 }
 
