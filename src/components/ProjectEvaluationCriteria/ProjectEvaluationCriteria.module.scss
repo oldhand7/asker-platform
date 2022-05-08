@@ -5,6 +5,7 @@
   background: white;
   padding: 20rem;
   text-align: center;
+  max-width: 490rem;
 
   div {
     max-width: 100%;
@@ -28,13 +29,13 @@
 
   &-legend {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     font-size: 14rem;
     flex-wrap: wrap;
     line-height: 20rem;
+    padding: 0 20rem;
 
     &-item {
-
       &::before {
           content: '';
           width: 1em;
@@ -43,12 +44,14 @@
           border-radius: 50%;
           background: currentColor;
           vertical-align: middle;
-          margin-right: 10rem;
+          margin-right: 5rem;
       }
 
       &-label {
         color: $brandish-tar;
         font-weight: 500;
+        font-size: 12rem;
+        padding-right: 10rem;
       }
     }
   }

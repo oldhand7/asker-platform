@@ -17,6 +17,8 @@ import { error } from 'libs/helper';
 
 import styles from './evaluation-question-form.module.scss';
 
+const EVALUATION_SUBTYPES_NO_CRITERIA = ['culture-fit', 'motivation'];
+
 const defaultValues = {
   name: '',
   criteria: null,
@@ -28,17 +30,17 @@ const defaultValues = {
   rules: []
 }
 
-const validationRules = {
+const createValidationRules = type => ({
   name: 'required|max:140',
   desc: 'max:9000',
   followup: 'max:10',
-  criteria: 'required'
-}
+  criteria: EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(type.id) != -1 ? '' : 'required'
+})
 
 const EvaluationQuestionForm = ({ className, question, subtype, onValues }) => {
   const [values, errors, control] = useForm({
     values: question ? question : { ...defaultValues, rules: subtype.rules },
-    rules: validationRules
+    rules: createValidationRules(subtype)
   })
   const {user} = useUser();
   const [loading, setLoading] = useState(false);
@@ -107,7 +109,13 @@ const EvaluationQuestionForm = ({ className, question, subtype, onValues }) => {
     <div className={styles['evaluation-question-form-wrapper']}>
       <h2 className={styles['evaluation-question-form-title']}>{question ? `Edit ${subtype.altName.toLowerCase()} question` : subtype.cta}</h2>
       {!question ? <p className={styles['evaluation-question-form-desc']}>{subtype.desc}</p> : null}
-      <CriteriaOptionInputField error={errors && errors['criteria']} value={values.criteria} type={subtype} onChange={control.input('criteria', false)} className={styles['evaluation-question-form-input-field']} />
+
+      {
+        EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(subtype.id) == -1 ?
+        <CriteriaOptionInputField error={errors && errors['criteria']} value={values.criteria} type={subtype} onChange={control.input('criteria', false)} className={styles['evaluation-question-form-input-field']} /> :
+        null
+      }
+
       <TextInputField value={values.name}  error={errors && errors['name']} autoComplete="off" name="name" onChange={control.input('name')} label="Question" placeholder="Write your question here" className={styles['evaluation-question-form-input-field']} />
       {
         subtype.id == 'competency' ?

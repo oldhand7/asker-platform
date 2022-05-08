@@ -37,7 +37,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
     if (flashSuccess) {
       setSuccess(flashSuccess)
     }
-  }, flashSuccess)
+  }, [flashSuccess])
 
   const handleCandidate = (values) => {
     if (!values) return;

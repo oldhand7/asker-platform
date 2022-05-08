@@ -67,7 +67,7 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
     let filteredQuestions = questions.filter(q => {
       const inQuestionTypes = opt => {
         const isEvaluation = q.type == 'evaluation';
-        return isEvaluation && q.subtype == c.id || !isEvaluation && q.type == c.id
+        return isEvaluation && q.subtype == opt.id || !isEvaluation && q.type == opt.id
       }
 
       const conditions = [
@@ -83,7 +83,7 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
       const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
 
       filteredQuestions = filteredQuestions.filter(data => {
-        const criteriaName = (data.criteria && data.criteria.name) || ''
+        const criteriaName = data.criteria && data.criteria.name || '';
         return regex.test(data.name.toLowerCase()) || regex.test(criteriaName.toLowerCase())
       })
     }

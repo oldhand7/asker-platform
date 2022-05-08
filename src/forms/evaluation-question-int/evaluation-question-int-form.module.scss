@@ -5,6 +5,7 @@
   flex-wrap: wrap;
   font-weight: 500;
   color: $brandish-tar;
+  align-items: flex-start;
 
   &-block {
     flex: 1 1 50%;
@@ -13,7 +14,7 @@
 
   &-sb {
     flex: 1 1 100%;
-    margin-top: 50rem;
+    margin-top: 150rem;
   }
 
   &-title {

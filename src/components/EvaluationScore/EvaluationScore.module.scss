@@ -14,5 +14,10 @@
 
   &-stars {
     white-space: nowrap;
+
+    & > span {
+      display: inline-block !important;
+      float: none !important;
+    }
   }
 }

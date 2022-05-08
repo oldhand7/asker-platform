@@ -1,10 +1,17 @@
 import classNames from 'classnames';
 import { PieChart, Pie, Cell } from 'recharts';
 import { useEffect, useState } from 'react';
+import { ucFirst } from 'libs/helper';
+import { getSubtype } from 'libs/helper';
+import { EVALUATION_SUBTYPES_NO_CRITERIA } from 'libs/config';
 
 import styles from './ProjectEvaluationCriteria.module.scss';
 
-const COLORS = ['#43B88C', '#1E453E', '#E5C673'];
+const COLORS = [
+  '#43B88C', '#1E453E', '#E5C673',
+  '#D74E96', '#FF915D', '#D8F75A',
+  '#3EABA3', '#FFD95D', '#4ACC61'
+];
 
 const ProjectEvaluationCriteria = ({ className, project }) => {
   const [criteria, setCriteria] = useState([]);
@@ -25,20 +32,31 @@ const ProjectEvaluationCriteria = ({ className, project }) => {
     let criteriaMax = 0;
 
     for (let i = 0; i < questions.length; i++) {
-      const { criteria } = questions[i];
+      const { criteria, subtype, type } = questions[i];
 
-      if (!criteria) {
+      let id;
+
+      if (type == 'screening' || type == 'other') {
+        id = type
+      } else if (
+        EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(getSubtype(questions[i])) > -1) {
+        id = subtype
+      } else {
+        id = criteria.id
+      }
+
+      if (!id) {
         continue;
       }
 
-      if (!criterias[criteria.id]) {
-        criterias[criteria.id] = {
-          ...criteria,
+      if (!criterias[id]) {
+        criterias[id] = {
+          name: criteria ? criteria.name : ucFirst(id),
           count: 0
         }
       }
 
-      criterias[criteria.id].count++
+      criterias[id].count++
     }
 
     let criterias2 = Object.values(criterias)
@@ -50,12 +68,12 @@ const ProjectEvaluationCriteria = ({ className, project }) => {
       return 0;
     });
 
-    setCriteria(criterias2.reverse().slice(0, 3).map(c => (
-      { ...c, p: Math.min(Math.round(c.count * 100 / Math.min(3, criterias2.length)), 100) }
+    setCriteria(criterias2.reverse().map(c => (
+      { ...c, p: Math.min(Math.round(c.count * 100 / questions.length), 100) }
     )))
   }, [project])
 
-  return criteria.length ? <div className={classNames(styles['project-evaluation-criteria'], className)}>
+  return criteria.length ? <div data-testid="project-evaluation-criteria" className={classNames(styles['project-evaluation-criteria'], className)}>
   <h2 className={styles['project-evaluation-criteria-title']}>Evaluation Criteria</h2>
   <PieChart className={styles['project-evaluation-criteria-chart']} width={500} height={250} >
          <Pie
@@ -73,9 +91,10 @@ const ProjectEvaluationCriteria = ({ className, project }) => {
          </Pie>
        </PieChart>
       <div className={styles['project-evaluation-criteria-legend']}>
-        {criteria.map((c, index) => <div style={{ color: COLORS[index % COLORS.length] }} className={styles['project-evaluation-criteria-legend-item']} key={c.id}>
-          <span className={styles['project-evaluation-criteria-legend-item-label']}>{c.p}% {c.name}</span>
-          </div>)}
+        {criteria.map((c, index) => (
+          <div key={c.name} style={{ color: COLORS[index % COLORS.length] }} className={styles['project-evaluation-criteria-legend-item']}>
+            <span className={styles['project-evaluation-criteria-legend-item-label']}>{c.p}% {c.name}</span>
+          </div>))}
       </div>
   </div> : null
 }

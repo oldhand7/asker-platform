@@ -29,7 +29,7 @@ const EvaluationQuestionsMultipleForm = ({ last = false, nextId = null, index = 
   return <div className={classNames(styles['evaluation-questions-multiples'], className)}>
     {project.config[stage.id].questions.map((q, _index) => (
       <div key={q.id}  id={`${stage.id}-${index}-${_index}`} className={styles['evaluation-questions-multiple-question']}>
-        <EvaluationQuestionIntForm key={q.id} question={q} className={styles['evaluation-questions-multiple-question']} values={formValues[q.id]} onValues={control.input(q.id, false)} />
+        <EvaluationQuestionIntForm key={q.id} question={q} className={styles['evaluation-questions-multiple-question-form']} values={formValues[q.id]} onValues={control.input(q.id, false)} />
         {
           _index < project.config[stage.id].questions.length - 1 || !last ?
           <NextButton

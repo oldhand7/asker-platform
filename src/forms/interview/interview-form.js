@@ -41,13 +41,9 @@ const InterviewForm = ({ className, interview, project }) => {
 
       for (let i = 0; i < evaluations.length; i++) {
         if (typeof evaluations[i].score !== "undefined") {
-          let maxScore = evaluations[i].score;
+          let maxScore = evaluations[i].maxScore || evaluations[i].score;
 
-          if (evaluations[i].maxScore) {
-            maxScore = evaluations[i].maxScore;
-          }
-
-          score += Math.round(evaluations[i].score / maxScore);
+          score += evaluations[i].score / maxScore;
 
           total++;
         }

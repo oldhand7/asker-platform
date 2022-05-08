@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { validate } from 'libs/validator';
 
 const useForm = (options = {}) => {
@@ -54,12 +54,12 @@ const useForm = (options = {}) => {
     }
   }
 
-  const handleSet = (field, value) => {
+  const handleSet = useCallback((field, value) => {
     setValues({
       ...values,
       [field]: value
     })
-  }
+  }, [values])
 
   const reset = () => {
     setPristine(true);

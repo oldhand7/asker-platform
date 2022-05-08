@@ -74,13 +74,21 @@ const beforeRun = async () => {
   const userId10Joe  = await helpers.createUser('Joe Kirby', 'joe.kirby@example.com', 'test123', companyId10, 'admin', false)
   const userId10Jane = await helpers.createUser('Jane Kirby', 'jane.kirby@example.com', 'test123', companyId10, 'hr', false)
 
+  //User 11
+  const companyId11 = await helpers.createCompany('Arnolds & Co')
+
+  const userId11Joe  = await helpers.createUser('Joe Arnolds', 'joe.arnolds@example.com', 'test123', companyId11, 'admin', false)
+  const userId11Jane = await helpers.createUser('Jane Arnolds', 'jane.arnolds@example.com', 'test123', companyId11, 'hr', false)
+
   await helpers.createQuestion({
     name: 'CQ1',
     companyId: companyId2,
     criteria: {
       name: 'CA',
       type: 'competency'
-    }
+    },
+    type: 'evaluation',
+    subtype: 'competency'
   })
 
   await helpers.createQuestion({
@@ -89,7 +97,9 @@ const beforeRun = async () => {
     criteria: {
       name: 'CB',
       type: 'competency'
-    }
+    },
+    type: 'evaluation',
+    subtype: 'competency'
   })
 
   await helpers.createQuestion({
@@ -98,7 +108,9 @@ const beforeRun = async () => {
     criteria: {
       name: 'CC',
       type: 'competency'
-    }
+    },
+    type: 'evaluation',
+    subtype: 'competency'
   })
 
   //allow some time to pass for propagation of claims

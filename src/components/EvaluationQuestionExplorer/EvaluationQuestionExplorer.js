@@ -9,6 +9,7 @@ import PlusIcon from 'components/Icon/PlusIcon';
 import { filterManyDocuments } from 'libs/firestore';
 import EvaluationQuestionModal from 'modals/evaluation-question/evaluation-question-modal';
 import { useModal } from 'libs/modal';
+import {EVALUATION_SUBTYPES_NO_CRITERIA} from 'libs/config';
 
 import styles from './EvaluationQuestionExplorer.module.scss';
 
@@ -35,10 +36,16 @@ const EvaluationQuestionExplorer = ({ className, criteria, questions, onQuestion
 
   useEffect(() => {
     if (user) {
+      const dbSort = [['name', 'asc']]
+
+      if (EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(criteria.id) == -1) {
+        dbSort.unshift(['criteria.name', 'asc'])
+      }
+
       filterManyDocuments('questions', [
         ['companyId', 'in', ['asker', user.companyId]],
-        ['criteria.type', '==', criteria.id]
-      ], [['criteria.name', 'asc'], ['name', 'asc']]).then(setAvailableQuestions)
+        ['subtype', '==', criteria.id]
+      ], dbSort).then(setAvailableQuestions)
     }
   }, [user, criteria])
 
@@ -62,7 +69,9 @@ const EvaluationQuestionExplorer = ({ className, criteria, questions, onQuestion
 
       filteredQuestions = filteredQuestions.filter(q => {
         const nameQ = regex.test(q.name.toLowerCase());
-        const criteriaQ = regex.test(q.criteria.name.toLowerCase());
+
+        const criteriaName = q.criteria && q.criteria.name || ''
+        const criteriaQ = regex.test(criteriaName.toLowerCase());
 
         return nameQ || criteriaQ;
       })
