@@ -67,7 +67,7 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
     let filteredQuestions = questions.filter(q => {
       const inQuestionTypes = opt => {
         const isEvaluation = q.type == 'evaluation';
-        return isEvaluation && q.subtype == c.id || !isEvaluation && q.type == c.id
+        return isEvaluation && q.subtype == opt.id || !isEvaluation && q.type == opt.id
       }
 
       const conditions = [
