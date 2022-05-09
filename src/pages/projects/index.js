@@ -17,6 +17,7 @@ import { useModal } from 'libs/modal';
 import Preloader from 'components/Preloader/Preloader';
 import { ctxError } from 'libs/helper';
 import { useQueryState } from 'next-usequerystate'
+import { deleteSingle } from 'libs/firestore';
 
 import styles from 'styles/pages/projects.module.scss';
 

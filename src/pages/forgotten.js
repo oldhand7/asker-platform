@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
-import LoginForm from 'forms/login/login-form';
+import ForgottenForm from 'forms/forgotten/forgotten-form';
 import { getSettings } from 'libs/firestore-admin';
 import { useUser } from 'libs/user';
 import { useEffect} from 'react';
 import Head from 'next/head';
 
-import styles from 'styles/pages/login.module.scss';
+import styles from 'styles/pages/forgotten.module.scss';
 
-const LoginPage = () => {
+const ForgottenPage = () => {
   const router = useRouter();
   const { user, login} = useUser()
 
@@ -17,11 +17,11 @@ const LoginPage = () => {
     }
   }, [user])
 
-  return <div className={styles['login-page']}>
+  return <div className={styles['forgotten-page']}>
     <Head>
-      <title>Login - Asker</title>
+      <title>Forgotten - Login - Asker</title>
     </Head>
-    <LoginForm className={styles['login-page-form']} authFunction={login} />
+    <ForgottenForm className={styles['forgotten-page-form']}  />
   </div>
 }
 
@@ -33,6 +33,6 @@ export const getServerSideProps = async ({ req, res}) => {
   }
 }
 
-LoginPage.noAuth = true;
+ForgottenPage.noAuth = true;
 
-export default LoginPage;
+export default ForgottenPage;
