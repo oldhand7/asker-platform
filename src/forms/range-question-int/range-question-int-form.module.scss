@@ -1,13 +1,26 @@
 @import 'styles/vars';
 
 .range-question-int-form {
+  &-desc {
+    font-size: 14rem;
+    margin: 5rem 0;
+
+    ul, ul {
+      padding-left: 40rem;
+    }
+
+    p > br:first-child {
+      display: none;
+    }
+  }
+  
   &-slider {
     margin-top: 70rem;
     font-size: 14rem;
     padding: 0 20rem;
     margin-left: auto;
     margin-right: auto;
-    
+
     &-track {
       height: 10rem;
       width: 100%;

@@ -2,11 +2,11 @@ import BrandishButton from 'components/Button/BrandishButton';
 import TextButton from 'components/Button/TextButton';
 import classNames from 'classnames';
 import TextInputField from 'components/TextInputField/TextInputField';
-import TextareaInputField from 'components/TextareaInputField/TextareaInputField';
 import { useEffect, useState } from 'react';
 import useForm from 'libs/use-form';
 import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField';
 import AnswersForm from 'forms/answers/answers-form';
+import HtmlInputField from 'components/HtmlInputField/HtmlInputField';
 
 import styles from './choice-question-form.module.scss'
 
@@ -33,8 +33,8 @@ const ChoiceQuestionForm = ({ values, className, onValues, onCancel, loading, mu
   }, [formValues, multichoice])
 
   return <form data-test-id="choice-question-form" onSubmit={control.submit(onValues)} className={classNames(styles['choice-question-form'], className)}>
-    <TextInputField error={errors && errors.name} className={styles['choice-question-form-field']} onChange={control.input('name')} value={formValues.name} label="Title" name='name' placeholder={!multichoice ? "E.g. Do you have a driving licence?" : "E.g. Which of the following systems are you used working with?"} />
-    <TextareaInputField error={errors && errors.desc} className={styles['choice-question-form-field']} onChange={control.input('desc')} value={formValues.desc} label="Description" name='desc' placeholder="Description" />
+    <TextInputField error={errors && errors.name} className={styles['choice-question-form-field']} onChange={control.input('name')} value={formValues.name || ''} label="Title" name='name' placeholder={!multichoice ? "E.g. Do you have a driving licence?" : "E.g. Which of the following systems are you used working with?"} />
+    <HtmlInputField error={errors && errors.desc} className={styles['choice-question-form-field']} onChange={control.input('desc', false)} value={formValues.desc} label="Description" name='desc' placeholder="Description" />
 
     <div>
       <AnswersForm values={formValues.answers} onValues={control.input('answers', false)} className={styles['choice-question-form-field']} title='Answers' />

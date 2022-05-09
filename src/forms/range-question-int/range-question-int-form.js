@@ -1,5 +1,7 @@
 import classNames from 'classnames';
 import { Range, getTrackBackground } from 'react-range';
+import striptags from 'striptags';
+import { allowedHtmlTags } from 'libs/config';
 
 import styles from './range-question-int-form.module.scss'
 
@@ -10,8 +12,10 @@ const RangeQuestionIntForm = ({ className, question, values, onValues }) => {
   ]
 
   return <div className={classNames(styles['range-question-int-form'], className)}>
-    <h3>{question.name}</h3>
-    <p>{question.desc}</p>
+  <h3 className={styles['range-question-int-form-title']}>{question.name}</h3>
+  <div className={styles['range-question-int-form-desc']}
+  dangerouslySetInnerHTML={{ __html: striptags(question.desc, allowedHtmlTags) }}></div>
+
 
     <div className={styles['range-question-int-form-slider']}>
       <Range

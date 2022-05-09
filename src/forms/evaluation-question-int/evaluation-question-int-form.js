@@ -6,6 +6,8 @@ import useForm from 'libs/use-form';
 import { calcScore, createDummyVotes } from 'libs/helper';
 import InterviewNotes from 'components/InterviewNotes/InterviewNotes';
 import { EVALUATION_SUBTYPES_NO_CRITERIA } from 'libs/config';
+import striptags from 'striptags';
+import { allowedHtmlTags } from 'libs/config';
 
 import styles from './evaluation-question-int-form.module.scss';
 
@@ -85,11 +87,20 @@ const EvaluationQuestionIntForm = ({ className, question, stage, project, values
       {EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(question.subtype) == -1 ?
         <div className={styles['evaluation-question-int-form-criteria']}>
           <h2 className={styles['evaluation-question-int-form-criteria-name']}>{question && question.criteria.name}</h2>
-          <p className={styles['evaluation-question-int-form-criteria-desc']}>{question && question.criteria.desc}</p>
+          <div
+            className={styles['evaluation-question-int-form-criteria-desc']}
+            dangerouslySetInnerHTML={{__html: striptags(
+              question && question.criteria && question.criteria.desc,
+              allowedHtmlTags)}}></div>
         </div> : null}
 
       <h2 className={styles['evaluation-question-int-form-question-title']}>Question</h2>
       <h2 className={styles['evaluation-question-int-form-question-name']}>{question.name}</h2>
+      <div
+        className={styles['evaluation-question-int-form-question-desc']}
+        dangerouslySetInnerHTML={{__html: striptags(
+          question && question.desc, allowedHtmlTags)}}></div>
+
       <ul className={styles['evaluation-question-int-form-question-questions']}>
         {(question.followup || []).map((fq, index) => (
           <li className={styles['evaluation-question-int-form-question-questions-question']} key={index}>{fq}</li>

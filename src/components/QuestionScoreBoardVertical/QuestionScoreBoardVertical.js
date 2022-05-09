@@ -1,4 +1,6 @@
 import classNames from 'classnames';
+import striptags from 'striptags';
+import { allowedHtmlTags } from 'libs/config';
 
 import styles from './QuestionScoreBoardVertical.module.scss';
 
@@ -23,8 +25,9 @@ const QuestionScoreBoardVertical = ({ className, index, rule, scores = [], activ
       {(rule.steps || []).map((step, index) => (
         <li onClick={() => toggleStep(index)} key={index} className={classNames(
           styles['question-score-board-vertical-steps-step'],
+          'format',
           scores[index] ? styles['question-score-board-vertical-steps-step-active'] : ''
-        )}>{step}</li>
+        )} dangerouslySetInnerHTML={{__html: striptags(step, allowedHtmlTags)}}></li>
       ))}
     </ul>
   </div>

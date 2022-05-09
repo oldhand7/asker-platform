@@ -14,6 +14,7 @@ const Editor = dynamic(
 
 const HtmlInputField = ({ error, value = '', onChange, className, placeholder, focus = false }) => {
   const editor = useRef(null)
+  const [content, setContent] = useState(value)
 
   const config = useMemo(() => ({
     readonly: false,
@@ -38,14 +39,11 @@ const HtmlInputField = ({ error, value = '', onChange, className, placeholder, f
         }
   }), [placeholder])
 
-  const toggleBold = () => {
-  }
-
-  const toggleList = () => {
-  }
-
-  const toggleNumList = () => {
-  }
+  useEffect(() => {
+    if (value != content) {
+      onChange(content)
+    }
+  }, [value, content, onChange])
 
   return <div data-test-id="html-input-field" className={classNames(styles['html-input-field'], className)}>
       <Editor
@@ -53,7 +51,7 @@ const HtmlInputField = ({ error, value = '', onChange, className, placeholder, f
               value={value}
               config={config}
               tabIndex={1}
-              onChange={onChange}
+              onChange={setContent}
             />
 
     {error ? <p className="form-error">{error}</p> : null}

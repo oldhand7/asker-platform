@@ -35,7 +35,8 @@ describe('Screening question feature', () => {
     cy.get('[data-test-id="choice-question-form"]')
       .within(() => {
         cy.get('input[name="name"]').type('Some multichoice question')
-        cy.get('textarea[name="desc"]').type('Some multichoice question description')
+        cy.get('[data-test-id="html-input-field"]').click()
+          .type('Some multichoice question description')
 
         cy.get('[data-test-id="answers-form"]')
           .find('ul')
@@ -91,7 +92,8 @@ describe('Screening question feature', () => {
       })
 
     cy.get('input[name="name"]').type('{selectAll}{backspace}Some single choice question')
-    cy.get('textarea[name="desc"]').type('{selectAll}{backspace}Some single choice question description')
+    cy.get('[data-test-id="html-input-field"]').click()
+      .type('{selectAll}{backspace}Some single choice question description')
     cy.get('input[type="checkbox"]').uncheck()
 
     cy.contains('Save question').click()

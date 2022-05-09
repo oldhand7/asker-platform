@@ -14,7 +14,7 @@
 
   &-sb {
     flex: 1 1 100%;
-    margin-top: 150rem;
+    margin-top: 130rem;
   }
 
   &-title {
@@ -37,6 +37,7 @@
     &-desc {
       font-size: 14rem;
       line-height: 21rem;
+      margin-top: 10rem;
     }
   }
 
@@ -53,6 +54,11 @@
       font-size: 18rem;
       line-height: 27rem;
       font-weight: 500;
+    }
+
+    &-desc {
+      margin-top: 10rem;
+      font-size: 14rem;
     }
 
     //Followup question list

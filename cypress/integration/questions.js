@@ -83,7 +83,8 @@ describe('Questions', () => {
       .should('contain', 'Create a new competency based question')
       .within(() => {
         cy.get('input[name="name"]').first().type('Sample question')
-        cy.get('textarea[name="desc"]').type('Sample question desc')
+        cy.get('[data-test-id="html-input-field"]').first().click()
+          .type('Sample question desc')
 
         cy.get('[data-test-id="criteria-option-input-field"]').as('criteria')
           .within(() => {

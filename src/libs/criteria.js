@@ -119,46 +119,56 @@ export const criteriaTypes = [{
     rules: [{
         name: 'Novice',
         steps: [
-          'Limited understanding of skill.',
-          'Lacks context and perspective',
-          'Mainly theoretical and little real-life experience',
-          'Makes decisions based on data only without consideration'
+          `<ul>
+            <li>Limited understanding of skill.</li>
+            <li>Lacks context and perspective</li>
+            <li>Mainly theoretical and little real-life experience</li>
+            <li>Makes decisions based on data only without consideration</li>
+          </ul>`
         ]
       },
       {
         name: 'Beginner',
         steps: [
-          'Makes decisions based on data only without consideration',
-          'Can use the context to advantage to some solve problems',
-          'Some real life experiences',
-          'May have a hard time knowing how to prioritize'
+          `<ul>
+            <li>Theoretical understanding of skill</li>
+            <li>Can use the context to advantage to some solve problems</li>
+            <li>Some real life experiences</li>
+            <li>May have a hard time knowing how to prioritize</li>
+          </ul>`
         ]
       },
       {
         name: 'Competent',
         steps: [
-          'Great theoretical understanding',
-          'Uses context to advantage and applies relevant problem solving',
-          'Lots of experience',
-          'Plan and work deliberately on their own'
+          `<ul>
+            <li>Great theoretical understanding</li>
+            <li>Use context to advantage to and applies relevant problem solving</li>
+            <li>Lots of experience</li>
+            <li>Plan and work deliberately on their own</li>
+          </ul>`
         ]
       },
       {
         name: 'Proficient',
         steps: [
-          'Excellent theoretical understanding',
-          'Intuitively know how to solve problems',
-          'Great amount of experience',
-          'Holisitc view and can prioritize with ease'
+          `<ul>
+            <li>Excellent theoretical understanding</li>
+            <li>Intuitively know how to solve problems</li>
+            <li>Great amount of experience</li>
+            <li>Holisitc view and can prioritize with ease</li>
+          </ul>`
         ]
       },
       {
         name: 'Master',
         steps: [
-          'Immense theoretical understanding',
-          'Intuitively know what how prioritize to solve problems',
-          'Applies relevant pieces of skill regardless of context',
-          'Holistic view and intuitive decision making'
+          `<ul>
+            <li>Immense theoretical understanding</li>
+            <li>Intuitively know what how prioritize to solve problems</li>
+            <li>Applies relevant pieces of skill regardless of context</li>
+            <li>Holistic view and intuitive decision making</li>
+          </ul>`
         ]
       }
     ]

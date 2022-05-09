@@ -1,4 +1,17 @@
 .text-question-int-form {
+  &-desc {
+    font-size: 14rem;
+    margin: 5rem 0;
+
+    ul, ul {
+      padding-left: 40rem;
+    }
+
+    p > br:first-child {
+      display: none;
+    }
+  }
+  
   &-note {
     margin-top: 15rem;
     width: 540rem;

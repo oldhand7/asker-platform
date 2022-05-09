@@ -2,15 +2,15 @@ import BrandishButton from 'components/Button/BrandishButton';
 import TextButton from 'components/Button/TextButton';
 import classNames from 'classnames';
 import TextInputField from 'components/TextInputField/TextInputField';
-import TextareaInputField from 'components/TextareaInputField/TextareaInputField';
 import useForm from 'libs/use-form';
 import FlexRow from 'components/FlexRow/FlexRow'
+import HtmlInputField from 'components/HtmlInputField/HtmlInputField';
 
 import styles from './range-question-form.module.scss'
 
 const rules =  {
   name: 'required',
-  desc: 'max:140',
+  desc: 'max:9000',
   min: 'required|numeric',
   max: 'required|numeric',
   unit: 'required',
@@ -34,7 +34,7 @@ const RangeQuestionForm = ({ values, className, onValues, onCancel, loading }) =
 
   return <form data-test-id="range-question-form" onSubmit={control.submit(onValues)} className={classNames(styles['range-question-form'], className)}>
     <TextInputField error={errors && errors.name} className={styles['range-question-form-field']} onChange={control.input('name')} value={formValues.name} label="Title" name='name' placeholder="E.g. What is your salary requirement?" />
-    <TextareaInputField error={errors && errors.desc} className={styles['range-question-form-field']} onChange={control.input('desc')} value={formValues.desc} label="Description" name='desc' placeholder="Description" />
+    <HtmlInputField error={errors && errors.desc} className={styles['range-question-form-field']} onChange={control.input('desc', false)} value={formValues.desc} label="Description" name='desc' placeholder="Description" />
 
     <FlexRow>
       <TextInputField error={errors && errors.min} className={styles['range-question-form-field']} onChange={control.input('min')} value={formValues.min} label="Start value" name='min' placeholder="e.g 0"  />

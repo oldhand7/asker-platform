@@ -29,7 +29,9 @@ describe('Modal froms', () => {
       .should('contain', 'Create a new competency based question')
       .within(() => {
         cy.get('input[name="name"]').first().type('Sample question')
-        cy.get('textarea[name="desc"]').type('Sample question desc')
+
+        cy.get('[data-test-id="html-input-field"]').first().click()
+          .type('Sample question desc')
 
         cy.get('[data-test-id="criteria-option-input-field"]').as('criteria')
           .within(() => {
@@ -166,7 +168,9 @@ describe('Modal froms', () => {
         cy.get('[data-test-id="choice-question-form"]')
           .within(() => {
             cy.get('input[name="name"]').type('Do you like fruits?')
-            cy.get('textarea[name="desc"]').type('Fruits fruits fruits')
+
+            cy.get('[data-test-id="html-input-field"]').click()
+              .type('Fruits fruits fruits')
 
             cy.get('[data-test-id="answers-form"]')
               .find('ul')

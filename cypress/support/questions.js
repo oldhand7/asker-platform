@@ -8,7 +8,7 @@ Cypress.Commands.add('createTextQuestion', (name = 'Demo ABC', desc = '') => {
       cy.get('input[name="name"]').type(name)
 
       if (desc) {
-        cy.get('textarea[name="desc"]').type(desc)
+        cy.get('[data-test-id="html-input-field"]').click().type(desc)
       }
 
       cy.contains('Create question').click()
@@ -50,7 +50,7 @@ Cypress.Commands.add('createEvaluationCriteriaQuestion', (type = 'competency', d
       cy.get('button[type="submit"]').click()
     })
     .wait(2000)
-    
+
   cy.get('button[type="submit"]').should('contain', 'Add question').click()
 
   cy.get('[data-test-id="alert-success"]').should('contain', 'Question created')

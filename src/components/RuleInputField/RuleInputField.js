@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import TextInputField from 'components/TextInputField/TextInputField';
 import TextareaInputField from 'components/TextareaInputField/TextareaInputField';
 import PencilIcon from 'components/Icon/PencilIcon';
+import HtmlInputField from 'components/HtmlInputField/HtmlInputField';
 
 import styles from './RuleInputField.module.scss';
 
@@ -69,7 +70,7 @@ const RuleInputField = ({ className, rule, index = 1, onChange }) => {
     {
       rule.steps ?
       rule.steps.map((step, index) => <li key={`rs${index}`} className={styles['rule-input-field-item']}>
-        <TextareaInputField value={step.slice(0, 140)} onChange={ev => handleStepValue(ev.target.value, index)} className={styles['rule-input-field-item-input']} placeholder="Write here" />
+        <HtmlInputField value={step.slice(0, 9000)} onChange={val => handleStepValue(val, index)} className={styles['rule-input-field-item-input']} placeholder="Write here" />
       </li>) : null
     }
   </ul>

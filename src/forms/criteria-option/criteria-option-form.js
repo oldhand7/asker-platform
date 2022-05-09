@@ -9,7 +9,7 @@ import Alert from 'components/Alert/Alert';
 import { useState, useEffect } from 'react';
 import { ctxError } from 'libs/helper';
 import { useUser } from 'libs/user';
-import TextareaInputField from 'components/TextareaInputField/TextareaInputField';
+import HtmlInputField from 'components/HtmlInputField/HtmlInputField'
 
 import styles from './criteria-option-form.module.scss';
 
@@ -30,6 +30,7 @@ const messages = {
 const CriteriaOptionForm = ({ className, onValues, type }) => {
   const [values, errors, control] = useForm({ values: {
     ...defaultValues,
+    date: +(new Date()),
     type: type.id
   }, rules, messages })
   const [loading, setLoading] = useState(false);
@@ -63,7 +64,7 @@ const CriteriaOptionForm = ({ className, onValues, type }) => {
     <TextInputField value={values.name} placeholder={'Name'} error={errors ? errors.name : null} onChange={control.input('name')} autoComplete='off' name="name" className={styles['criteria-option-form-field']} />
     {
       type.id == 'competency' ?
-      <TextareaInputField value={values.desc} placeholder={'Definition (optional)'} error={errors ? errors.desc : null} onChange={control.input('desc')} name="desc" className={styles['criteria-option-form-field']} /> :
+      <HtmlInputField value={values.desc} placeholder={'Definition (optional)'} error={errors ? errors.desc : null} onChange={control.input('desc', false)} name="desc" className={styles['criteria-option-form-field']} /> :
       null
     }
     <PlatformButton disabled={loading} type="submit" className={styles['criteria-option-form-submit']}>

@@ -1,4 +1,17 @@
 .multichoice-question-int-form {
+  &-desc {
+    font-size: 14rem;
+    margin: 5rem 0;
+
+    ul, ul {
+      padding-left: 40rem;
+    }
+
+    p > br:first-child {
+      display: none;
+    }
+  }
+  
   &-answers {
     padding: 0;
     list-style: none;

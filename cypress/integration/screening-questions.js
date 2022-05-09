@@ -16,7 +16,8 @@ describe('Screening questions', () => {
     cy.get('[data-test-id="choice-question-form"]')
       .within(() => {
         cy.get('input[name="name"]').type('Do you like fruits?')
-        cy.get('textarea[name="desc"]').type('Fruits fruits fruits')
+        cy.get('[data-test-id="html-input-field"]').click()
+          .type('Fruits fruits fruits')
 
         cy.get('[data-test-id="answers-form"]')
           .find('ul')
@@ -50,7 +51,8 @@ describe('Screening questions', () => {
       cy.get('[data-test-id="choice-question-form"]')
         .within(() => {
           cy.get('input[name="name"]').type('What music do you like?')
-          cy.get('textarea[name="desc"]').type('Music music music')
+          cy.get('[data-test-id="html-input-field"]').click()
+            .type('Music music music')
 
           cy.get('[data-test-id="answers-form"]')
             .find('ul')
@@ -86,7 +88,8 @@ describe('Screening questions', () => {
         cy.get('[data-test-id="range-question-form"]')
           .within(() => {
             cy.get('input[name="name"]').type('How deep is Atlantic Ocean?')
-            cy.get('textarea[name="desc"]').type('Ocean ocean ocean')
+            cy.get('[data-test-id="html-input-field"]').click()
+              .type('Ocean ocean ocean')
 
             cy.get('input[name="unit"]').type('km')
             cy.get('input[name="min"]').type('1')
@@ -114,7 +117,8 @@ describe('Screening questions', () => {
         cy.get('[data-test-id="text-question-form"]')
           .within(() => {
             cy.get('input[name="name"]').type('What is the meaning of life?')
-            cy.get('textarea[name="desc"]').type('Meaning meaning meaning')
+            cy.get('[data-test-id="html-input-field"]').click()
+              .type('Meaning meaning meaning')
           })
 
           cy.contains("Create question").click()

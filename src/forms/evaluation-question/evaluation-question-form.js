@@ -14,6 +14,7 @@ import Alert from 'components/Alert/Alert';
 import { addFlash } from 'libs/flash';
 import { useRouter } from 'next/router';
 import { error } from 'libs/helper';
+import HtmlInputField from 'components/HtmlInputField/HtmlInputField'
 
 import styles from './evaluation-question-form.module.scss';
 
@@ -119,7 +120,7 @@ const EvaluationQuestionForm = ({ className, question, subtype, onValues }) => {
       <TextInputField value={values.name}  error={errors && errors['name']} autoComplete="off" name="name" onChange={control.input('name')} label="Question" placeholder="Write your question here" className={styles['evaluation-question-form-input-field']} />
       {
         subtype.id == 'competency' ?
-       <TextareaInputField value={values.desc}  error={errors && errors['desc']} name="desc" onChange={control.input('desc')} label="Definition" placeholder="Write your definition here" className={styles['evaluation-question-form-input-field']} /> :
+       <HtmlInputField value={values.desc}  error={errors && errors['desc']} name="desc" onChange={control.input('desc', false)} label="Definition" placeholder="Write your definition here" className={styles['evaluation-question-form-input-field']} /> :
        null
       }
       <FollowupQuestionField questions={values.followup} onChange={control.input('followup', false)} className={styles['evaluation-question-form-input-field']} />
