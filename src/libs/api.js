@@ -68,3 +68,15 @@ export const updateFirebaseUserEmailAndPassword = (uid, email, password) => {
 
   return fetcher(`/api/firebase-proxy/users/password`, options);
 }
+
+export const sendPasswordResetLink = email => {
+  const options = {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email })
+  }
+
+  return fetcher(`/api/auth/password-reset/`, options);
+}

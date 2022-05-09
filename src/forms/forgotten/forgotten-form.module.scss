@@ -1,6 +1,4 @@
-@import 'styles/vars';
-
-.login-form {
+.forgotten-form {
   padding: 40rem;
 
   &-input-field {
@@ -12,13 +10,5 @@
     width: 100%;
     line-height: 4em;
     margin-top: 20rem;
-  }
-
-  &-link {
-    text-decoration: underline;
-
-    &:hover {
-      color: $brandish-grey;
-    }
   }
 }
