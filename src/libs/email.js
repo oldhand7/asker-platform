@@ -15,7 +15,7 @@ export const sendCustomPasswordResetEmail = async (userEmail, link) => {
   let htmlMessage = '';
 
   htmlMessage += `<p>A request for password change was initiated from Asker website.`
-  htmlMessage += ` If this was you plese follow link below. Otherwise just ignore this message.</p>`;
+  htmlMessage += ` If this was you please follow link below. Otherwise just ignore this message.</p>`;
   htmlMessage += `<p><strong>Link:</strong> <a href="${link}">${link}</a></p>`;
   htmlMessage += `<div><em>Asker team</em></div>`;
 
