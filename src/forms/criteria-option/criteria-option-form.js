@@ -27,10 +27,9 @@ const messages = {
 
 }
 
-const CriteriaOptionForm = ({ className, onValues, type }) => {
-  const [values, errors, control] = useForm({ values: {
+const CriteriaOptionForm = ({ className, onValues, values, type }) => {
+  const [formValues, errors, control] = useForm({ values: values ? values : {
     ...defaultValues,
-    date: +(new Date()),
     type: type.id
   }, rules, messages })
   const [loading, setLoading] = useState(false);
@@ -40,13 +39,13 @@ const CriteriaOptionForm = ({ className, onValues, type }) => {
   const handleSubmit = async () => {
     setLoading(true);
 
-    values.companyId = user.companyId;
+    formValues.companyId = user.companyId;
 
     try {
-      const id = await saveCollectionDocument('criteriaOptions', values)
+      const id = await saveCollectionDocument('criteriaOptions', formValues)
 
       onValues({
-        ...values,
+        ...formValues,
         id
       })
     } catch (error) {
@@ -61,15 +60,15 @@ const CriteriaOptionForm = ({ className, onValues, type }) => {
   return <form data-test-id="criteria-option-form" method="POST" noValidate className={classNames(styles['criteria-option-form'], className)} onSubmit={control.submit(handleSubmit)}>
     <h2 className={styles['criteria-option-form-title']}>{type.name} option</h2>
     {error ? <Alert type="error">{error.message}</Alert> : null}
-    <TextInputField value={values.name} placeholder={'Name'} error={errors ? errors.name : null} onChange={control.input('name')} autoComplete='off' name="name" className={styles['criteria-option-form-field']} />
+    <TextInputField value={formValues.name} placeholder={'Name'} error={errors ? errors.name : null} onChange={control.input('name')} autoComplete='off' name="name" className={styles['criteria-option-form-field']} />
     {
       type.id == 'competency' ?
-      <HtmlInputField value={values.desc} placeholder={'Definition (optional)'} error={errors ? errors.desc : null} onChange={control.input('desc', false)} name="desc" className={styles['criteria-option-form-field']} /> :
+      <HtmlInputField value={formValues.desc} placeholder={'Definition (optional)'} error={errors ? errors.desc : null} onChange={control.input('desc', false)} name="desc" className={styles['criteria-option-form-field']} /> :
       null
     }
     <PlatformButton disabled={loading} type="submit" className={styles['criteria-option-form-submit']}>
       {!loading ?
-      <><PlusIcon /> Add option</> :
+      (!formValues.id ? <><PlusIcon />  Add option</> : 'Save option') :
       'Loading...'
       }
     </PlatformButton>

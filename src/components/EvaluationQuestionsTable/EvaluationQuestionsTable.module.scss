@@ -43,4 +43,14 @@
       background: rgba($brandish-grey, 0.1);
     }
   }
+
+  &-label {
+    &-name {
+      display: block;
+    }
+
+    &-desc {
+      color: $brandish-grey;
+    }
+   }
 }

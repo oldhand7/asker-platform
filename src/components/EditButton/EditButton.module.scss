@@ -1,0 +1,15 @@
+@import 'styles/vars';
+
+.edit-button {
+  background: 0;
+  border: 0;
+  cursor: pointer;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:hover &-icon {
+    stroke: $brandish-tar;
+  }
+}

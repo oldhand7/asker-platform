@@ -10,12 +10,14 @@ import classNames from 'classnames';
 import TrashButton from 'components/TrashButton/TrashButton';
 import Separator from 'components/Separator/Separator'
 import FlexRow from 'components/FlexRow/FlexRow';
+import EditButton from 'components/EditButton/EditButton';
+import striptags from 'striptags';
 
 import styles from './CriteriaOptionInputField.module.scss';
 
 const CriteriaOptionInputField = ({ error, className, value, onChange, type }) => {
   const [criteriaOptions, setCriteriaOptions] = useState([]);
-  const openCriteriaOptionModal = useModal(CriteriaOptionModal, { type })
+  const openCriteriaOptionModal = useModal(CriteriaOptionModal, { type, values: value })
   const { user } = useUser();
 
   useEffect(() => {
@@ -36,12 +38,7 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, type }) =
       return;
     }
 
-    onChange({
-      id: option.id,
-      name: option.name,
-      desc: option.desc || '',
-      type: type.id
-    })
+    onChange(option)
   }
 
   const resetOption = () => {
@@ -57,15 +54,27 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, type }) =
         <Autocomplete className={styles['criteria-option-input-field-autocomplete']} options={criteriaOptions} onSearch={handleCriteriaOption} />
         <FlexRow>
           <Separator background='' />
-          <OutlineButton type="button" onClick={() => openCriteriaOptionModal(handleCriteriaOption)} className={styles['criteria-option-input-field-button']} >
+          <OutlineButton type="button" onClick={() => openCriteriaOptionModal(onChange)} className={styles['criteria-option-input-field-button']} >
             <PlusIcon /> Create new {type.name.toLowerCase()}
           </OutlineButton>
         </FlexRow>
       </> :
       <div className={styles['criteria-option-input-field-card']}>
-        <span className={styles['criteria-option-input-field-card-label']}>
-          {value.name}
-        </span>
+        <div className={styles['criteria-option-input-field-card-label']}>
+          <span className={styles['criteria-option-input-field-card-label-name']}>{value.name}</span>
+          {
+            value.desc ?
+            <div
+              className={styles['criteria-option-input-field-card-label-desc']}
+              dangerouslySetInnerHTML={{ __html: striptags(value.desc) }}></div> :
+            null
+          }
+        </div>
+        {
+          value.companyId == user.companyId ?
+          <EditButton onClick={() => openCriteriaOptionModal(onChange)} className={styles['criteria-option-input-field-card-button']} /> :
+          null
+        }
         <TrashButton onClick={resetOption} className={styles['criteria-option-input-field-card-button']} />
       </div>
     }

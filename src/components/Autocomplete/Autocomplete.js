@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { useRef } from 'react';
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget';
-
+import striptags from 'striptags'
 import styles from './Autocomplete.module.scss';
 
 const AutocompleteOptions = ({ options, index, className, onChoice }) => {
@@ -21,7 +21,10 @@ const AutocompleteOptions = ({ options, index, className, onChoice }) => {
   return <ul className={styles['autocomplete-options']}>
   {
     options.length ?
-    options.map((option, index) => <li data-test-id="autocomplete-option" key={index} {...optionProps(option, index)}>{option.name}</li>) :
+    options.map((option, index) => <li data-test-id="autocomplete-option" key={index} {...optionProps(option, index)}>
+      <span className={styles['autocomplete-options-item-name']}>{option.name}</span>
+      {option.desc ? <div className={styles['autocomplete-options-item-desc']} dangerouslySetInnerHTML={{ __html: striptags(option.desc)}}></div> : null}
+    </li>) :
     <li key="no-options-warn" className={classNames(styles['autocomplete-options-item'], styles['autocomplete-options-item-warning'])}>No results.</li>
   }
   </ul>
@@ -124,24 +127,15 @@ const Autocomplete = ({ onSearch, className, options = [] }) => {
     }
   }, [open])
 
-  const fiterOptions = q => {
-    const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
-
-    return options.filter(o => regex.test(o.name.toLowerCase()))
-  }
-
-  const getOptions = q => {
-    const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
-
-    return options.filter(o => regex.test(o.name.toLowerCase()))
-  }
-
   useEffect(() => {
     const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
 
-    setOptions(
-      options.filter(o => regex.test(o.name.toLowerCase()))
-    )
+    setOptions(options.filter(o => {
+      const nameFilter = regex.test(o.name.toLowerCase());
+      const descFilter = o.desc && regex.test(o.desc.toLowerCase());
+
+      return nameFilter || descFilter;
+    }))
   }, [q, options])
 
   const handleQuery = (q) => {

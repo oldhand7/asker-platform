@@ -2,6 +2,7 @@ import Table from 'rc-table';
 import classNames from 'classnames';
 import PlusIcon from 'components/Icon/PlusIcon';
 import { EVALUATION_SUBTYPES_NO_CRITERIA } from 'libs/config';
+import striptags from 'striptags';
 
 import styles from './EvaluationQuestionsTable.module.scss';
 
@@ -10,7 +11,11 @@ const getColumns = ({ onQuestion, criteria }) => {
     {
       title: 'Questions',
       dataIndex: 'name',
-      key: 'name'
+      key: 'name',
+      render: (name, row) => <div className={styles['evaluation-questions-table-label']}>
+        <span className={styles['evaluation-questions-table-label-name']}>{name}</span>
+        {row.desc ? <div className={styles['evaluation-questions-table-label-desc']}>{striptags(row.desc)}</div> : null}
+      </div>
     }
   ];
 

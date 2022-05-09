@@ -72,8 +72,9 @@ const EvaluationQuestionExplorer = ({ className, criteria, questions, onQuestion
 
         const criteriaName = q.criteria && q.criteria.name || ''
         const criteriaQ = regex.test(criteriaName.toLowerCase());
+        const descQ = q.desc && regex.test(q.desc.toLowerCase());
 
-        return nameQ || criteriaQ;
+        return nameQ || criteriaQ || descQ;
       })
     }
 

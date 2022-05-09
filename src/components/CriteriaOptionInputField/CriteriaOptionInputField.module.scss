@@ -1,14 +1,6 @@
 @import 'styles/vars';
 
 .criteria-option-input-field {
-  &-label {
-    font-weight: 500;
-    margin-bottom: 5rem;
-    line-height: 24rem;
-    font-size: 16rem;
-    display: block;
-  }
-
   &-autocomplete {
     margin: 10rem 0;
 
@@ -22,12 +14,19 @@
   }
 
   &-card {
-    padding: 10rem;
+    margin: 10rem 0;
     text-transform: uppercase;
-
+    display: flex;
     &-label {
-      color: $brandish-green;
-      font-size: 1.5em;
+      &-name {
+        font-size: 1.5em;
+        color: $brandish-green;
+      }
+
+      &-desc {
+        color: $brandish-grey;
+        font-size: 14rem;
+      }
     }
 
   }
