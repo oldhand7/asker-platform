@@ -259,7 +259,7 @@ const ProjectForm = ({ project, className }) => {
 
     <div className={styles['project-form-details']}>
       <div className={styles['project-form-details-inner']}>
-        <ProjectEvaluationCriteria project={values} className={styles['project-form-criteria']} />
+        <ProjectEvaluationCriteria project={values} onScoringRules={control.input('scoringRules', false)} className={styles['project-form-criteria']} />
 
         <h2 className={styles['project-form-title']}>Create a new project</h2>
 

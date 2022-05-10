@@ -1,4 +1,4 @@
-import * as Validator from 'validatorjs';
+import Validator from 'validatorjs';
 
 Validator.register('phone_e164', function(value, requirement, attribute) { // requirement parameter defaults to null
   return value.match(/^\+[1-9]\d{10,14}$/);
@@ -24,6 +24,8 @@ export const validate = (form = {}, rules = {}, messages = {}) => {
   validation.passes();
 
   return parse(validation.errors.all());
+
+  return false;
 }
 
 export default Validator;

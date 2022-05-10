@@ -1,101 +1,152 @@
 import classNames from 'classnames';
 import { PieChart, Pie, Cell } from 'recharts';
-import { useEffect, useState } from 'react';
-import { ucFirst } from 'libs/helper';
+import { useEffect, useState, useMemo } from 'react';
+import { ucFirst, projectStageQuestionsReducer } from 'libs/helper';
 import { getSubtype } from 'libs/helper';
-import { EVALUATION_SUBTYPES_NO_CRITERIA } from 'libs/config';
-
+import { COLOR_MAP } from 'libs/config';
+import ProjectEvaluationCriteriaLegend from 'components/ProjectEvaluationCriteriaLegend/ProjectEvaluationCriteriaLegend';
 import styles from './ProjectEvaluationCriteria.module.scss';
+import EditButton from 'components/EditButton/EditButton'
+import ScoringRulesModal from 'modals/scoring-rules/scoring-rules-modal';
+import { useModal } from 'libs/modal';
 
-const COLORS = [
-  '#43B88C', '#1E453E', '#E5C673',
-  '#D74E96', '#FF915D', '#D8F75A',
-  '#3EABA3', '#FFD95D', '#4ACC61'
-];
+const weightVal = val => Number.parseFloat((val * 100).toFixed(2))
 
-const ProjectEvaluationCriteria = ({ className, project }) => {
+const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
   const [criteria, setCriteria] = useState([]);
+  const [error, setError] = useState(null);
+  const openScoreAdjustmentModal = useModal(ScoringRulesModal, { values: project.scoringRules, criteria })
 
   useEffect(() => {
-    if (!project) {
-      return;
+    const { config, scoringRules } = project;
+
+    const questions = Object.values(config)
+      .reduce(projectStageQuestionsReducer, [])
+
+    const competencyQuestions = questions.filter(q => getSubtype(q) == 'competency')
+    const experienceQuestions = questions.filter(q => getSubtype(q) == 'experience')
+    const hardSkillQuestions = questions.filter(q => getSubtype(q) == 'hard-skill')
+    const motivationQuestions = questions.filter(q => getSubtype(q) == 'motivation')
+    const cultureFitQuestions = questions.filter(q => getSubtype(q) == 'culture-fit')
+    const screeningQuestions = questions.filter(q => q.type == 'screening')
+    const otherQuestions = questions.filter(q => q.type == 'other')
+
+    const criteriaAgregate = {
+      competency: {},
+      experience: {}
     }
 
-    const questions = Object.values(project.config).reduce((questions, stage) => {
-      return [
-        ...questions,
-        ...(stage.questions ? stage.questions : [])
-      ]
-    }, [])
+    const mixedQuestions = [
+      ...competencyQuestions,
+      ...experienceQuestions
+    ]
 
-    const criterias = {}
-    let criteriaMax = 0;
+    for (let i = 0; i < mixedQuestions.length; i++) {
+      const key = mixedQuestions[i].criteria.id;
+      const type = getSubtype(mixedQuestions[i])
 
-    for (let i = 0; i < questions.length; i++) {
-      const { criteria, subtype, type } = questions[i];
+      if (!criteriaAgregate[type][key]) {
+        criteriaAgregate[type][key] = 1
 
-      let id;
-
-      if (type == 'screening' || type == 'other') {
-        id = type
-      } else if (
-        EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(getSubtype(questions[i])) > -1) {
-        id = subtype
-      } else {
-        id = criteria.id
-      }
-
-      if (!id) {
-        continue;
-      }
-
-      if (!criterias[id]) {
-        criterias[id] = {
-          name: criteria ? criteria.name : ucFirst(id),
-          count: 0
+        criteriaAgregate[type][key] = {
+          id: key,
+          name: mixedQuestions[i].criteria.name,
+          count: 1,
+          type
         }
+      } else {
+        criteriaAgregate[type][key].count++
       }
-
-      criterias[id].count++
     }
 
-    let criterias2 = Object.values(criterias)
+    const criteria = [
+        ...Object.values(criteriaAgregate.competency),
+        ...Object.values(criteriaAgregate.experience)
+      ].map(c => ({
+        ...c,
+        weight: scoringRules && Number.parseFloat(scoringRules[c.id]) || weightVal(c.count / questions.length)
+      }))
 
-    criterias2.sort(function(ca, cb) {
-      if (ca.count < cb.count) return -1;
-      if (ca.count > cb.count) return 1;
+    if (hardSkillQuestions.length) {
+      criteria.push({
+        name: 'Hard-skill',
+        weight: scoringRules && Number.parseFloat(scoringRules['hard-skill']) || weightVal(hardSkillQuestions.length / questions.length),
+        type: 'hard-skill'
+      })
+    }
+
+    if (motivationQuestions.length) {
+      criteria.push({
+        name: 'Motivation',
+        weight: scoringRules && Number.parseFloat(scoringRules['motivation']) || weightVal(motivationQuestions.length / questions.length),
+        type: 'motivation'
+      })
+    }
+
+    if (cultureFitQuestions.length) {
+      criteria.push({
+        name: 'Culture-fit',
+        weight: scoringRules && Number.parseFloat(scoringRules['culture-fit']) || weightVal(cultureFitQuestions.length / questions.length),
+        type: 'culture-fit'
+      })
+    }
+
+    if (screeningQuestions.length) {
+      criteria.push({
+        name: 'Screening',
+        weight: scoringRules && Number.parseFloat(scoringRules['screening']) || weightVal(screeningQuestions.length / questions.length),
+        type: 'screening'
+      })
+    }
+
+    if (otherQuestions.length) {
+      criteria.push({
+        name: 'Other',
+        weight: scoringRules && Number.parseFloat(scoringRules['other']) || weightVal(otherQuestions.length / questions.length),
+        type: 'other'
+      })
+    }
+
+    criteria.sort(function(ca, cb) {
+      if (ca.weight < cb.weight) return 1;
+      if (ca.weight > cb.weight) return -1;
 
       return 0;
     });
 
-    setCriteria(criterias2.reverse().map(c => (
-      { ...c, p: Math.min(Math.round(c.count * 100 / questions.length), 100) }
-    )))
+    setCriteria(criteria)
   }, [project])
+
+  useEffect(() => {
+    const sum = criteria.reduce((s, c) => Number.parseFloat(c.weight) + s, 0)
+
+    if (Math.round(sum) != 100) {
+      setError(true)
+    } else {
+      setError(false)
+    }
+  }, [criteria])
 
   return criteria.length ? <div data-testid="project-evaluation-criteria" className={classNames(styles['project-evaluation-criteria'], className)}>
   <h2 className={styles['project-evaluation-criteria-title']}>Evaluation Criteria</h2>
   <PieChart className={styles['project-evaluation-criteria-chart']} width={500} height={250} >
-         <Pie
-           data={criteria}
-           innerRadius={70}
-           outerRadius={100}
-           fill="#8884d8"
-           paddingAngle={0}
-           dataKey="p"
+    <Pie
+      data={criteria}
+      innerRadius={70}
+      outerRadius={100}
+      fill="#8884d8"
+      paddingAngle={0}
+           dataKey="weight"
            stroke=''
          >
            {criteria.map((c, index) => (
-             <Cell key={`cell-${c.id}`} fill={COLORS[index % COLORS.length]} />
+             <Cell key={`cell-${c.id}`} fill={COLOR_MAP[c.type] ? COLOR_MAP[c.type] : '#CCC'} />
            ))}
          </Pie>
        </PieChart>
-      <div className={styles['project-evaluation-criteria-legend']}>
-        {criteria.map((c, index) => (
-          <div key={c.name} style={{ color: COLORS[index % COLORS.length] }} className={styles['project-evaluation-criteria-legend-item']}>
-            <span className={styles['project-evaluation-criteria-legend-item-label']}>{c.p}% {c.name}</span>
-          </div>))}
-      </div>
+      <ProjectEvaluationCriteriaLegend className={styles['project-evaluation-criteria-legend']} criteria={criteria} />
+      {error ? <p className="form-error">Criteria unbalanced!</p> : null}
+      {onScoringRules ? <EditButton text='Edit' className={styles['project-evaluation-criteria-edit']} onClick={() => openScoreAdjustmentModal(onScoringRules)} /> : null}
   </div> : null
 }
 

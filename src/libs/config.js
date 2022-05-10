@@ -40,3 +40,12 @@ export const BUNDLE_UPLOAD_LIMIT_MB = getAppEnv() === 'testing' ? 2 : UPLOAD_LIM
 export const BUNDLE_MAX_FILES = getAppEnv() === 'testing' ? 3 : 10;
 export const allowedHtmlTags = ['ul', 'ol', 'li', 'strong', 'p', 'em', 'br']
 export const EVALUATION_SUBTYPES_NO_CRITERIA = ['culture-fit', 'motivation'];
+export const COLOR_MAP = {
+  'competency': '#43B88C',
+  'experience': '#D8F75A',
+  'hard-skill': '#E5C673',
+  'motivation': '#D74E96',
+  'culture-fit': '#FF915D',
+  'other': '#CCC',
+  'screening': '#7844B8'
+}

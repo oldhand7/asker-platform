@@ -25,7 +25,7 @@ const db = getFirestore(app)
 
 const removeAllFirebaseUsers = () => {
   return getAuth()
-    .listUsers(30)
+    .listUsers(50)
     .then(async ({ users }) => {
       const tasks = []
 

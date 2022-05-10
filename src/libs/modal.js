@@ -5,7 +5,6 @@ export const ModalContext = createContext();
 
 export const withModal = (WrappedComponent) => {
   const withModal = (props) => {
-    const { pageProps: { config } } = props;
     const [modals, setModals] = useState([])
 
     const addModal = modal => {

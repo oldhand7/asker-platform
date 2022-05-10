@@ -86,19 +86,21 @@
   }
 
   &-criteria {
-    width: calc(100% - 640rem);
-    position: absolute;
+    position: fixed;
+    top: 25%;
+    transform: scale(0.8) translate(20%, -50%);
     right: 0;
-    top: 0rem;
+    width: 500rem;
+    box-shadow: -3px 5px 33px rgba(0, 0, 0, 0.15);
     z-index: 1;
 
-    @media (max-width: 1600px) {
-      position: fixed;
+    @media (max-height: 900px) {
       top: 50%;
-      transform: scale(0.8) translate(20%, -50%);
-      right: 0;
-      width: 300rem;
-      box-shadow: -3px 5px 33px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 1600px) {
+      width: 410rem;
+      top: 50%;
     }
 
     @media (max-width: 1200px) {

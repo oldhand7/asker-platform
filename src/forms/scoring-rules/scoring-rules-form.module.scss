@@ -1,0 +1,62 @@
+@import 'styles/vars';
+
+.scoring-rules-form {
+  border-radius: 36px;
+  background: white;
+  color: black;
+  position: relative;
+
+  table {
+    margin: 20rem 0;
+    width: 100%;
+    text-align: left;
+
+    tbody td {
+      width: 50%;
+    }
+  }
+
+  &-alert {
+    margin-bottom: 10rem;
+  }
+
+  &-title {
+    font-size: 24rem;
+    font-weight: 500rem;
+    margin-bottom: 20rem;
+  }
+
+  &-field {
+    margin: 20rem 0;
+    text-align: left;
+
+    input {
+      background: #EDEDED;
+      border: 0;
+    }
+  }
+
+  &-submit {
+    width: 100%;
+    cursor: pointer;
+    margin-top: 10rem;
+  }
+
+  &-input {
+    width: 100%;
+
+    input {
+      line-height: 3;
+    }
+  }
+
+  &-total {
+    font-size: 18rem;
+    margin: 10rem 0;
+    text-align: left;
+
+    &-value {
+      font-weight: bold;
+    }
+  }
+}

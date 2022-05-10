@@ -1,5 +1,6 @@
 import { render, screen, getByText } from '@testing-library/react'
 import ProjectEvaluationCriteria from './ProjectEvaluationCriteria'
+import { withModal } from 'libs/modal'
 
 const demoProject = {
   stages: [
@@ -43,12 +44,15 @@ const demoProject = {
 
 describe('ProjectEvaluationCriteria', () => {
   it('should have a list of evaluations sorted by Z-A', () => {
-    render(<ProjectEvaluationCriteria project={demoProject} />)
+
+    const ProjectEvaluationCriteriaWithModa = withModal(ProjectEvaluationCriteria)
+
+    render(<ProjectEvaluationCriteriaWithModa project={demoProject} />)
 
     expect(screen.getByText('Traveling', {exact: false})).toHaveTextContent('50% Traveling')
-    expect(screen.getByText('Motivation', {exact: false})).toHaveTextContent('13% Motivation')
-    expect(screen.getByText('Culture-fit', {exact: false})).toHaveTextContent('13% Culture-fit')
-    expect(screen.getByText('Other', {exact: false})).toHaveTextContent('13% Other')
-    expect(screen.getByText('Screening', {exact: false})).toHaveTextContent('13% Screening')
+    expect(screen.getByText('Motivation', {exact: false})).toHaveTextContent('12.5% Motivation')
+    expect(screen.getByText('Culture-fit', {exact: false})).toHaveTextContent('12.5% Culture-fit')
+    expect(screen.getByText('Other', {exact: false})).toHaveTextContent('12.5% Other')
+    expect(screen.getByText('Screening', {exact: false})).toHaveTextContent('12.5% Screening')
   })
 })
