@@ -10,11 +10,12 @@
   &-block {
     flex: 1 1 50%;
     position: relative;
+    min-height: 150rem;
   }
 
   &-sb {
     flex: 1 1 100%;
-    margin-top: 130rem;
+    margin-top: 50rem;
   }
 
   &-title {

@@ -26,8 +26,8 @@ const adjust = (values, question) => {
   values.subtype = question.subtype;
   values.maxScore = question.rules.length;
 
-  if (values.votes.length != question.rules) {
-    values.votes = createDummyVotes(question);
+  if (values.votes.length != question.rules.length) {
+    values.votes = createDummyVotes(question.rules);
   }
 
   return values;

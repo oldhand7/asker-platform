@@ -1,4 +1,5 @@
-export const criteriaTypes = [{
+export const criteriaTypes = [
+  {
     id: 'competency',
     name: 'Competency',
     altName: 'Competency based',

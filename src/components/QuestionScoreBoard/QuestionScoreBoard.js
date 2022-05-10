@@ -4,45 +4,62 @@ import { useEffect, useState } from 'react';
 
 import styles from './QuestionScoreBoard.module.scss';
 
-const QuestionScoreBoard = ({ className, score = 0, rules, votes = [], onVotes, onError }) => {
-  const handleScores = (scores, index) => {
+const QuestionScoreBoard = ({ className, rules, votes = [], onVotes, onError }) => {
+  const handleHead = (index) => {
     if (!onVotes) {
       return;
     }
 
-    const newVotes = [...votes];
+    const vOff = votes.map((v, i) => ({
+      head: false,
+      tail: v.tail
+    }));
 
-    newVotes[index] = {
-      head: scores.some(s => s),
-      tail: scores
+    vOff[index].head = true;
+
+    onVotes(vOff)
+  }
+
+  const handleTail = (scores, index) => {
+    if (!onVotes) {
+      return;
+    }
+
+    const vote = votes.find(v => v.head)
+
+    const newVotes = votes.map(v => ({
+      head: false,
+      tail: v.tail
+    }));
+
+    newVotes[index].tail = scores;
+
+    if (!vote || vote.head === 1) {
+      const touched = newVotes
+        .map((v, i) => v.tail.find(t => t) ? i+1 : 0)
+        .filter(s => s)
+
+
+      if (touched.length != 0) {
+        const sum = touched.reduce((sum, x) => x + sum, 0)
+        newVotes[Math.round(sum / touched.length) - 1].head = 1;
+      }
+    } else if (vote) {
+      newVotes[votes.indexOf(vote)].head = true;
     }
 
     onVotes(newVotes)
   }
 
-  const toggleHead = (index) => {
-    const vOff = votes.map((v, i) => ({
-      head: false,
-      tail: v.tail.map(_ => false)
-    }));
-
-    if (score != index + 1) {
-        vOff[index].head = true;
-        vOff[index].tail = vOff[index].tail.map(_ => true);
-    }
-
-    onVotes(vOff)
-  }
-
   return <ul className={classNames(styles['question-score-board'], className)}>
-      {rules.map((rule, index) => <li className={styles['question-score-board-column']} key={index}>
+      {rules.map((rule, index) => <li data-test-id={votes && votes[index] && votes[index].head ? 'question-score-board-active' : undefined}  className={styles['question-score-board-column']} key={index}>
         <QuestionScoreBoardVertical
           index={index + 1}
           rule={rule}
-          active={score == index + 1}
-          scores={votes[index] ? votes[index].tail : []}
-          onScores={scores => handleScores(scores, index)}
-          onHead={() => toggleHead(index)}
+          active={votes && votes[index] && votes[index].head}
+          scores={votes && votes[index] ? votes[index].tail : []}
+          onScores={scores => handleTail(scores, index)}
+          onHead={() => handleHead(index)}
           className={styles['question-score-board-column-item']}
         />
       </li>)}

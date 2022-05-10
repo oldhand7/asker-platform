@@ -18,6 +18,7 @@ module.exports = {
 
     // Handle module aliases
     '^libs/(.*)$': '<rootDir>/src/libs/$1',
+    '^components/(.*)$': '<rootDir>/src/components/$1',
   },
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
@@ -31,6 +32,5 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/',
     '^.+\\.module\\.(css|sass|scss)$',
-  ],
-  testIdAttribute: 'data-test-id',
+  ]
 }
