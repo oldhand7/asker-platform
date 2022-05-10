@@ -8,6 +8,7 @@ const QuestionScoreBoardVertical = ({ className, index, rule, scores = [], activ
   const toggleStep = (index) => {
     const newScores = [...scores];
     newScores[index] = !newScores[index]
+
     onScores(newScores)
   }
 

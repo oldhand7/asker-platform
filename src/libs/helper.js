@@ -176,40 +176,9 @@ export const ctxError = (message, error) => {
 }
 
 export const calcScore = (votes = []) => {
-  let maxScore = 0;
-  let score = 0;
-  let totalVotes = 0;
+  const v = votes.find(v => v.head)
 
-  for (let i = 0; i < votes.length; i++) {
-    const sv = i + 1;
-
-    let voteScore = 0
-
-    if (votes[i].tail.length === 0) {
-      voteScore = votes[i].head ? sv : 0;
-    } else {
-      const pos = votes[i].tail.filter(v => v)
-
-      if (pos.length) {
-        voteScore += sv * 0.7 + sv / votes[i].tail.length * pos.length * 0.3;
-      }
-    }
-
-    if (voteScore) {
-      score += voteScore
-      totalVotes++;
-      maxScore += sv
-    }
-  }
-
-  if (!totalVotes) {
-    return 0;
-  }
-
-  const maxAvg = maxScore / totalVotes;
-  const avg = score / totalVotes;
-
-  return Math.round(maxAvg * 0.5 + avg * 0.5);
+  return votes.indexOf(v) + 1;
 }
 
 export const isImage = (file) => {
@@ -255,7 +224,7 @@ export const getSubtype = item => {
   return item.subtype || (item.criteria && item.criteria.type) || '';
 }
 
-export const createDummyVotes = question => question.rules.map(rule => ({
+export const createDummyVotes = rules => rules.map(rule => ({
   head: false,
   tail: rule.steps ? rule.steps.map(s => false) : []
 }))
