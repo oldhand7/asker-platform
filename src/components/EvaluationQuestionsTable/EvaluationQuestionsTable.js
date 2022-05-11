@@ -14,7 +14,6 @@ const getColumns = ({ onQuestion, criteria }) => {
       key: 'name',
       render: (name, row) => <div className={styles['evaluation-questions-table-label']}>
         <span className={styles['evaluation-questions-table-label-name']}>{name}</span>
-        {row.desc ? <div className={styles['evaluation-questions-table-label-desc']}>{striptags(row.desc)}</div> : null}
       </div>
     }
   ];
