@@ -5,6 +5,8 @@ import { EVALUATION_SUBTYPES_NO_CRITERIA } from 'libs/config';
 import striptags from 'striptags';
 import TrashButton from 'components/TrashButton/TrashButton';
 import NODATA from 'components/NODATA/NODATA';
+import { criteriaTypes } from 'libs/criteria';
+import { useMemo } from 'react';
 
 import styles from './EvaluationQuestionsTable.module.scss';
 
@@ -20,9 +22,9 @@ const getColumns = ({ onQuestion, criteria = false, onDelete }) => {
     }
   ];
 
-  if (criteria && EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(criteria) == -1) {
+  if (criteria) {
     columns.push({
-      title: 'Criteria',
+      title: criteria.name,
       dataIndex: 'criteria',
       key: 'criteria',
       render: (criteria) => {
@@ -54,10 +56,16 @@ const tagRow = (rec) => {
 }
 
 const EvaluationQuestionsTable = ({ className, data = [], onQuestion, onDelete, criteria, ...props }) => {
+  const criteriaType = useMemo(() => {
+    return criteria &&
+      EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(criteria) == -1 &&
+      criteriaTypes.find(ct => ct.id == criteria)
+  }, [criteria])
+
   return <Table onRow={tagRow} emptyText="No questions found." rowKey={row => row.id} className={classNames(
     styles['evaluation-questions-table'],
     className
-  )} columns={getColumns({ onQuestion, criteria, onDelete })} data={data} {...props} />
+  )} columns={getColumns({ onQuestion, criteria: criteriaType, onDelete })} data={data} {...props} />
 }
 
 export default EvaluationQuestionsTable;

@@ -20,9 +20,10 @@ describe('Competency feature', () => {
 
           cy.contains('Selected questions')
             .parent()
-            .should('contain', 'No questions yet.')
+            .should('contain', 'No questions found.')
 
-          cy.get('table thead tr')
+          cy.get('table').first()
+            .find('thead tr')
             .children()
             .should('have.length', 3)
             .parent()
@@ -32,7 +33,8 @@ describe('Competency feature', () => {
             })
 
 
-          cy.get('table tbody tr')
+          cy.get('table').first()
+            .find('tbody tr')
             .should('have.length', 3)
             .parent()
             .within(() => {
@@ -51,14 +53,16 @@ describe('Competency feature', () => {
 
           cy.get('input[type="text"]').type('Q2')
 
-          cy.get('table tbody tr')
+          cy.get('table').first()
+            .find('tbody tr')
             .should('have.length', 1)
             .first()
             .contains('CQ2')
 
           cy.get('input[type="text"]').type('{selectAll}{backspace}CC')
 
-          cy.get('table tbody tr')
+          cy.get('table').first()
+            .find('tbody tr')
             .should('have.length', 1)
             .first()
             .contains('CQ3')
@@ -69,12 +73,13 @@ describe('Competency feature', () => {
 
           cy.get('input[type="text"]').type('{selectAll}{backspace}')
 
-          cy.get('table tbody tr')
+          cy.get('table').first()
+            .find('tbody tr')
             .should('have.length', 2)
 
           cy.contains('Your questions').click()
 
-          cy.get('table tbody').should('contain', 'No questions found.')
+          cy.get('table').first().should('contain', 'No questions found.')
 
           cy.on('window:confirm', (message) => {
             expect(message).to.equal('Are you sure?')
@@ -85,17 +90,17 @@ describe('Competency feature', () => {
           cy.contains('Selected questions')
             .parent()
             .within(() => {
-              cy.get('ul')
+              cy.get('table')
                 .contains('CQ3')
-                .closest('li')
+                .closest('tr')
                 .find('button')
                 .click()
             })
-            .should('contain', 'No questions yet.');
+            .should('contain', 'No questions found.');
 
           cy.contains('Your questions').click()
 
-          cy.get('table tbody tr')
+          cy.get('table').first().find('tbody tr')
             .should('have.length', 3)
         })
     })

@@ -31,7 +31,8 @@ describe('Screening questions', () => {
 
       cy.contains("Create question").click()
 
-      cy.get('table tbody tr')
+      cy.get('table').first()
+        .find('tbody tr')
         .first()
         .within(() => {
           cy.get('td').eq(0).should('contain', 'Screening').should('contain', 'Yes/No')
@@ -69,7 +70,8 @@ describe('Screening questions', () => {
 
         cy.contains("Create question").click()
 
-        cy.get('table tbody tr')
+        cy.get('table').first()
+          .find('tbody tr')
           .first()
           .within(() => {
             cy.get('td').eq(0).should('contain', 'Screening').should('contain', 'Multiple choice')
@@ -98,7 +100,8 @@ describe('Screening questions', () => {
 
           cy.contains("Create question").click()
 
-          cy.get('table tbody tr')
+          cy.get('table').first()
+            .find('tbody tr')
             .first()
             .within(() => {
               cy.get('td').eq(0).should('contain', 'Screening').should('contain', 'Range')
@@ -123,7 +126,8 @@ describe('Screening questions', () => {
 
           cy.contains("Create question").click()
 
-          cy.get('table tbody tr')
+          cy.get('table').first()
+            .find('tbody tr')
             .first()
             .within(() => {
               cy.get('td').eq(0).should('contain', 'Screening').should('contain', 'Text')
@@ -142,7 +146,8 @@ describe('Screening questions', () => {
         .within(() => {
           cy.get('h3').should('contain', 'Search screening question')
 
-          cy.get('table tbody tr')
+          cy.get('table').first()
+            .find('tbody tr')
             .should('have.length', 4)
             .parent()
             .within(() => {
@@ -167,7 +172,8 @@ describe('Screening questions', () => {
           cy.get('[data-test-id="subtype-filter"] button').eq(0)
             .should('contain', 'Yes/No').click()
 
-          cy.get('table tbody tr')
+          cy.get('table').first()
+            .find('tbody tr')
             .should('have.length', 1)
             .first()
             .should('contain', 'Do you like fruits?')
@@ -178,7 +184,8 @@ describe('Screening questions', () => {
           cy.get('[data-test-id="subtype-filter"] button').eq(1)
             .should('contain', 'Multiple choice').click()
 
-          cy.get('table tbody tr')
+          cy.get('table').first()
+            .find('tbody tr')
             .should('have.length', 1)
             .first()
             .should('contain', 'What music do you like?')
@@ -189,7 +196,8 @@ describe('Screening questions', () => {
           cy.get('[data-test-id="subtype-filter"] button').eq(3)
             .should('contain', 'Text').click()
 
-          cy.get('table tbody tr')
+          cy.get('table').first()
+            .find('tbody tr')
             .should('have.length', 3)
             .first()
             .should('not.contain', 'Do you like fruits?')
@@ -197,15 +205,20 @@ describe('Screening questions', () => {
           cy.get('[data-test-id="subtype-filter"] button').eq(0)
             .should('contain', 'Yes/No').click()
 
-          cy.get('table tbody tr')
+          cy.get('table').first()
+            .find('tbody tr')
             .should('have.length', 4)
 
-          cy.get('table tbody tr').first().find('button').click()
-          cy.get('table tbody tr').first().find('button').click()
-          cy.get('table tbody tr').first().find('button').click()
-          cy.get('table tbody tr').first().find('button').click()
+          cy.get('table').first()
+            .find('tbody')
+            .within(() => {
+              cy.get('tr').first().find('button').click()
+              cy.get('tr').first().find('button').click()
+              cy.get('tr').first().find('button').click()
+              cy.get('tr').first().find('button').click()
+            })
 
-          cy.get('ul')
+          cy.get('table').last()
             .should('contain', 'Do you like fruits?')
             .should('contain', 'What music do you like?')
             .should('contain', 'What is the meaning of life?')
