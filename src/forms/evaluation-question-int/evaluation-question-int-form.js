@@ -96,10 +96,7 @@ const EvaluationQuestionIntForm = ({ className, question, stage, project, values
 
       <h2 className={styles['evaluation-question-int-form-question-title']}>Question</h2>
       <h2 className={styles['evaluation-question-int-form-question-name']}>{question.name}</h2>
-      <div
-        className={styles['evaluation-question-int-form-question-desc']}
-        dangerouslySetInnerHTML={{__html: striptags(
-          question && question.desc, allowedHtmlTags)}}></div>
+
 
       <ul className={styles['evaluation-question-int-form-question-questions']}>
         {(question.followup || []).map((fq, index) => (
@@ -107,8 +104,15 @@ const EvaluationQuestionIntForm = ({ className, question, stage, project, values
         ))}
       </ul>
     </div>
-    <div className={styles['evaluation-question-int-form-block']}>
+    <div className={classNames(
+      styles['evaluation-question-int-form-block'],
+      styles['evaluation-question-int-form-block-notes']
+    )}>
       <InterviewNotes className={styles['evaluation-question-int-form-notes']} value={formValues.notes} onChange={control.input('notes', false)} />
+      <div
+        className={styles['evaluation-question-int-form-question-desc']}
+        dangerouslySetInnerHTML={{__html: striptags(
+          question && question.desc, allowedHtmlTags)}}></div>
     </div>
     <QuestionScoreBoard score={formValues.score} votes={formValues.votes} onVotes={handleVotes} className={styles['evaluation-question-int-form-sb']} rules={question.rules} />
   </div> : null

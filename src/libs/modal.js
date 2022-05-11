@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { useContext, useState } from "react";
+import { useContext, useState, useCallback, useEffect } from "react";
 
 export const ModalContext = createContext();
 
@@ -14,11 +14,21 @@ export const withModal = (WrappedComponent) => {
       ])
     }
 
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
       setModals([
         ...modals.slice(-1)
       ])
-    }
+    }, [modals])
+
+    useEffect(() => {
+      if (modals.length == 1) {
+        document.body.classList.add('modal');
+      }
+
+      if (modals.length == 0) {
+        document.body.classList.remove('modal');
+      }
+    }, [modals])
 
     return (
       <ModalContext.Provider value={[addModal, closeModal]}>

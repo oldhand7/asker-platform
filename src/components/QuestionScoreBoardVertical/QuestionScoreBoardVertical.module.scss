@@ -65,6 +65,15 @@
         background: $brandish-green;
         color: white;
       }
+
+      &-active {
+        cursor: pointer !important
+      }
     }
+  }
+
+  &-lock &-steps-step:hover {
+    cursor: default;
+    background: white;
   }
 }

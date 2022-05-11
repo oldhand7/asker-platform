@@ -76,6 +76,10 @@ body {
   @media (max-width: 540px) {
     font-size: 22rem;
   }
+
+  &.modal {
+    overflow: hidden;
+  }
 }
 
 .splide__slide.is-visible.is-active {

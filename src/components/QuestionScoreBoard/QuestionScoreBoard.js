@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import styles from './QuestionScoreBoard.module.scss';
 
 const QuestionScoreBoard = ({ className, rules, votes = [], onVotes, onError }) => {
+  const [lock, setLock] = useState(false);
+  
   const handleHead = (index) => {
     if (!onVotes) {
       return;
@@ -51,9 +53,30 @@ const QuestionScoreBoard = ({ className, rules, votes = [], onVotes, onError }) 
     onVotes(newVotes)
   }
 
+  useEffect(() => {
+    if (!votes) {
+      return;
+    }
+
+    const count = votes.reduce((count, votes) => {
+      let tailCount = 0;
+
+      for (let i = 0; i < votes.tail.length; i++) {
+        if (votes.tail[i]) {
+          tailCount++
+        }
+      }
+
+      return count + tailCount
+    }, 0)
+
+    setLock(count == 3);
+  }, [votes])
+
   return <ul className={classNames(styles['question-score-board'], className)}>
       {rules.map((rule, index) => <li data-test-id={votes && votes[index] && votes[index].head ? 'question-score-board-active' : undefined}  className={styles['question-score-board-column']} key={index}>
         <QuestionScoreBoardVertical
+          lock={lock}
           index={index + 1}
           rule={rule}
           active={votes && votes[index] && votes[index].head}

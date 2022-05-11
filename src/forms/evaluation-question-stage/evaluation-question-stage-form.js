@@ -43,7 +43,7 @@ const EvaluationQuestionStageForm = ({ className, values, onValues, feature, onE
 
   return <div className={classNames(styles['evaluation-question-from'], className)}>
     <EvaluationQuestionExplorer questions={formValues.questions} onQuestions={control.input('questions', false)} criteria={getCriteriaTypeById(feature && feature.metadata.criteria)} />
-    <SelectedQuestionsList questions={formValues.questions} onChange={control.input('questions', false)} />
+    <SelectedQuestionsList feature={feature} questions={formValues.questions} onChange={control.input('questions', false)} />
   </div>
 }
 

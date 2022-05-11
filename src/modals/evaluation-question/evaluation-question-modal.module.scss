@@ -3,9 +3,10 @@
   & > div {
     top: 50rem;
     padding: 40rem;
-    width: 100%;
-    max-width: 1024px;
     transform: translate(-50%, 0);
+    overflow-x: auto;
+    width: 90% !important;
+    max-width: 1200px;
 
     @media (max-width: 768px) {
       border-radius: 20px;

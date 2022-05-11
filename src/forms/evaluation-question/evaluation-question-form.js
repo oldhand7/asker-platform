@@ -118,11 +118,9 @@ const EvaluationQuestionForm = ({ className, question, subtype, onValues }) => {
       }
 
       <TextInputField value={values.name}  error={errors && errors['name']} autoComplete="off" name="name" onChange={control.input('name')} label="Question" placeholder="Write your question here" className={styles['evaluation-question-form-input-field']} />
-      {
-        subtype.id == 'competency' ?
-       <HtmlInputField value={values.desc}  error={errors && errors['desc']} name="desc" onChange={control.input('desc', false)} label="Definition" placeholder="Write your definition here" className={styles['evaluation-question-form-input-field']} /> :
-       null
-      }
+
+       <HtmlInputField value={values.desc}  error={errors && errors['desc']} name="desc" onChange={control.input('desc', false)} label="Definition" placeholder="Notes for interviewer" className={styles['evaluation-question-form-input-field']} />
+
       <FollowupQuestionField questions={values.followup} onChange={control.input('followup', false)} className={styles['evaluation-question-form-input-field']} />
     </div>
 
