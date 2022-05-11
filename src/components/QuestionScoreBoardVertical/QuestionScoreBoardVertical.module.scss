@@ -62,12 +62,14 @@
       &:hover,
       &-active {
         cursor: pointer;
-        background: $brandish-green;
         color: white;
+        background: $brandish-green;
       }
 
       &-active {
-        cursor: pointer !important
+        cursor: pointer !important;
+        background: $brandish-green !important;
+        color: white !important;
       }
     }
   }
@@ -75,5 +77,6 @@
   &-lock &-steps-step:hover {
     cursor: default;
     background: white;
+    color: inherit;
   }
 }
