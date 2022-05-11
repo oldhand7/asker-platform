@@ -30,7 +30,7 @@ Cypress.Commands.add('createEvaluationQuestion', (type = 'motivation', details) 
   cy.get('[data-test-id="alert-success"]').should('contain', 'Question created')
 })
 
-Cypress.Commands.add('createEvaluationCriteriaQuestion', (type = 'competency', details) => {
+Cypress.Commands.add('createEvaluationCriteriaQuestion', (type = 'competency', details, createNewCriteria = true) => {
   cy.visit(`/questions/create/evaluation/?subtype=${type}`)
 
   cy.get('form[data-test-id="evaluation-question-form"]')
@@ -38,18 +38,28 @@ Cypress.Commands.add('createEvaluationCriteriaQuestion', (type = 'competency', d
       cy.get('input[name="name"]').first().type(details.name || 'Are you good at maths?')
     })
 
-  cy.get('[data-test-id="criteria-option-input-field"]').as('criteria')
-    .within(() => {
-      cy.get('button').should('contain', 'Create new').click({ force: true})
-    })
+  if (createNewCriteria) {
+    cy.get('[data-test-id="criteria-option-input-field"]').as('criteria')
+      .within(() => {
+        cy.get('button').should('contain', 'Create new').click({ force: true})
+      })
 
-  cy.document().its('body')
-    .find(`#criteria-option-modal`)
-    .within(() => {
-      cy.get('input[name="name"]').type(details.criteria || 'Math')
-      cy.get('button[type="submit"]').click()
-    })
-    .wait(2000)
+    cy.document().its('body')
+      .find(`#criteria-option-modal`)
+      .within(() => {
+        cy.get('input[name="name"]').type(details.criteria || 'Math')
+        cy.get('button[type="submit"]').click()
+      })
+      .wait(2000)
+  } else {
+    cy.get('[data-test-id="criteria-option-input-field"]')
+      .within(() => {
+        cy.get('input')
+          .type(`${details.criteria}`)
+          .wait(2000)
+          .type(`{enter}`)
+      })
+  }
 
   cy.get('button[type="submit"]').should('contain', 'Add question').click()
 
