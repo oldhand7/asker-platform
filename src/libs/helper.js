@@ -228,3 +228,10 @@ export const createDummyVotes = rules => rules.map(rule => ({
   head: false,
   tail: rule.steps ? rule.steps.map(s => false) : []
 }))
+
+export const projectStageQuestionsReducer = (questions, stage) => {
+  return [
+    ...questions,
+    ...(stage.questions ? stage.questions : [])
+  ]
+}

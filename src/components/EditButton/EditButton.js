@@ -3,9 +3,9 @@ import classNames from 'classnames';
 
 import styles from './EditButton.module.scss';
 
-const EditButton = ({ className, ...props }) => (
+const EditButton = ({ className, text = '', ...props }) => (
   <button data-test-id="edit-button" className={classNames(styles['edit-button'], className)} type="button" {...props}>
-    <PencilIcon className={styles['edit-button-icon']} />
+    <PencilIcon className={styles['edit-button-icon']} /> {text}
   </button>
 )
 

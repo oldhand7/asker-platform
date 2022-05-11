@@ -219,7 +219,7 @@ const TemplateForm = ({ template, className }) => {
 
     <div className={styles['template-form-details']}>
       <div className={styles['template-form-details-inner']}>
-        <ProjectEvaluationCriteria project={values} className={styles['template-form-criteria']} />
+        <ProjectEvaluationCriteria project={values} onScoringRules={control.input('scoringRules', false)} className={styles['template-form-criteria']} />
 
         <h2 className={styles['template-form-title']}>
           {!template ? 'Create a new template' : 'Edit template'}
