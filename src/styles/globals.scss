@@ -26,6 +26,7 @@
   }
 
   @media (max-width: 1200px) {
+    --container-width: 90%;
     font-size: calc(1 * 100vw / 1440);
   }
 

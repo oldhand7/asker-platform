@@ -11,6 +11,7 @@ import { addFlash} from 'libs/flash';
 import StageInterviewForm from 'components/StageInterviewForm/StageInterviewForm';
 import styles from './interview-form.module.scss';
 import { ctxError } from 'libs/helper';
+import { calcInterviewScore } from 'libs/scoring';
 
 const rules = {}
 
@@ -29,28 +30,7 @@ const InterviewForm = ({ className, interview, project }) => {
 
     interview.evaluations = values;
     interview.status = 'complete'
-
-    const stages = Object.values(values)
-
-    //Evaluation scores
-    let score = 0;
-    let total = 0;
-
-    for (let s = 0; s < stages.length; s++) {
-      const evaluations = Object.values(stages[s])
-
-      for (let i = 0; i < evaluations.length; i++) {
-        if (typeof evaluations[i].score !== "undefined") {
-          let maxScore = evaluations[i].maxScore || evaluations[i].score;
-
-          score += evaluations[i].score / maxScore;
-
-          total++;
-        }
-      }
-    }
-
-    interview.score = Math.round(score * 100 / total);
+    interview.score = calcInterviewScore(interview, project)
 
     saveCollectionDocument('interviews', interview)
       .then(() => {
