@@ -12,7 +12,7 @@ import Link from 'next/link';
 import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
 import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
 import { EVALUATION_SUBTYPES_NO_CRITERIA } from 'libs/config';
-import { getSubtype } from 'libs/helper';
+import { getSubtype, ucFirst } from 'libs/helper';
 
 import styles from './ProjectInterviewsTable.module.scss';
 
@@ -46,68 +46,55 @@ const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
     title: 'Evaluations scores',
     dataIndex: 'evaluations',
     key: 'evaluations',
-    render: (stages, interview) => {
+    render: (evaluations, interview) => {
       if (typeof interview.score === 'undefined') {
         return <PlatformButton href={`/interviews/${interview.id}/conduct`}>
           <PlayIcon /> Start interview</PlatformButton>
       }
 
 
-      if (!stages) {
+      if (!evaluations) {
         return <NODATA />
       }
 
-      const scoredEvaluations = Object.values(stages).map(stage => Object.values(stage).filter(eva => eva.score))
+      const criterias = {}
 
-      const isCriteriaQuestion = e => {
-        const subtype = getSubtype(e);
-        return EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(subtype) == -1;
-      }
+      const stages = Object.values(evaluations)
 
-      let evasWithCriterias = [];
-      let evasWithoutCriterias = [];
+      for (let i = 0; i < stages.length; i++) {
+        const evaluations = Object.values(stages[i]);
 
-      for (let i = 0; i < scoredEvaluations.length; i++) {
-        evasWithCriterias = [
-          ...evasWithCriterias,
-          ...scoredEvaluations[i].filter(e => isCriteriaQuestion(e))
-        ]
+        for (let n = 0; n < evaluations.length; n++) {
+          const id = evaluations[n].criteria && evaluations[n].criteria.id;
+          const key = id || evaluations[n].subtype
 
-        evasWithoutCriterias = [
-          ...evasWithoutCriterias,
-          ...scoredEvaluations[i].filter(e => !isCriteriaQuestion(e))
-        ]
-      }
-
-      const evasWithoutCriteriasReduced = Object.values(evasWithoutCriterias.reduce((evas, e) => {
-        const subtype = getSubtype(e);
-
-        if (!evas[subtype]) {
-          evas[subtype] = { ...e }
-        } else {
-          evas[subtype].score = Math.round((evas[subtype].score + e.score) / 2)
+          if (!criterias[key]) {
+            criterias[key] = {
+              id: key,
+              name: id ? evaluations[n].criteria.name : ucFirst(evaluations[n].subtype),
+              score: evaluations[n].score
+            }
+          } else {
+            criterias[key].score += evaluations[n].score
+            criterias[key].score /= 2
+          }
         }
+      }
 
-        return evas;
-      }, {}))
-
-      let evas = [
-        ...evasWithCriterias,
-        ...evasWithoutCriteriasReduced
-      ]
+      const evas = Object.values(criterias)
 
       evas.sort(function(a, b) {
-        const sa = a.score / a.maxScore;
-        const sb = b.score / b.maxScore;
+        if (a.score > b.score) return -1;
+        if (a.score < b.score) return 1;
 
-        if (sa < sb) return -1;
-        if (sa > sb) return 1;
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
 
         return 0;
       });
 
       return <div className={styles['project-interviews-table-evaluations']}>
-          {evas.reverse().map((e, index) => <EvaluationScore key={e.criteria && e.criteria.id || e.subtype} evaluation={e} className={styles['project-interviews-table-evaluations-evaluation']} />)}
+          {evas.map((e, index) => <EvaluationScore key={e.criteria && e.criteria.id || e.subtype} evaluation={e} className={styles['project-interviews-table-evaluations-evaluation']} />)}
       </div>
     }
   },

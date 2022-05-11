@@ -218,7 +218,7 @@ export const handleNext = id => {
   }
 }
 
-export const ucFirst = s => `${s[0].toUpperCase()}${s.slice(1)}`
+export const ucFirst = s => s ? `${s[0].toUpperCase()}${s.slice(1)}` : s
 
 export const getSubtype = item => {
   return item.subtype || (item.criteria && item.criteria.type) || '';
