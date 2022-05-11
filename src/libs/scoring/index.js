@@ -1,0 +1,1 @@
+export { calcInterviewScore } from './scoring';

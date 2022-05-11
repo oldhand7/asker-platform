@@ -12,6 +12,18 @@ import { useModal } from 'libs/modal';
 
 const weightVal = val => Number.parseFloat((val * 100).toFixed(2))
 
+const ajusted = (criteria, scoringRules) => {
+
+  return criteria.map(c => {
+    const altWeight = (scoringRules || {})[c.type || c.id];
+
+    return {
+      ...c,
+      weight: typeof altWeight !== "undefined" ? Number.parseFloat(altWeight) : c.weight
+    }
+  })
+}
+
 const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
   const [criteria, setCriteria] = useState([]);
   const [error, setError] = useState(null);
@@ -118,20 +130,21 @@ const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
   }, [project])
 
   useEffect(() => {
-    const sum = criteria.reduce((s, c) => Number.parseFloat(c.weight) + s, 0)
+    const sum = ajusted(criteria, project.scoringRules).reduce((s, c) => Number.parseFloat(c.weight) + s, 0)
 
     if (Math.round(sum) != 100) {
       setError(true)
     } else {
       setError(false)
     }
-  }, [criteria])
+  }, [criteria, project])
 
   return criteria.length ? <div data-testid="project-evaluation-criteria" className={classNames(styles['project-evaluation-criteria'], className)}>
   <h2 className={styles['project-evaluation-criteria-title']}>Evaluation Criteria</h2>
+
   <PieChart className={styles['project-evaluation-criteria-chart']} width={500} height={250} >
     <Pie
-      data={criteria}
+      data={ajusted(criteria, project.scoringRules)}
       innerRadius={70}
       outerRadius={100}
       fill="#8884d8"
@@ -144,7 +157,7 @@ const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
            ))}
          </Pie>
        </PieChart>
-      <ProjectEvaluationCriteriaLegend className={styles['project-evaluation-criteria-legend']} criteria={criteria} />
+      <ProjectEvaluationCriteriaLegend className={styles['project-evaluation-criteria-legend']} criteria={ajusted(criteria, project.scoringRules)} />
       {error ? <p className="form-error">Criteria unbalanced!</p> : null}
       {onScoringRules ? <EditButton text='Edit' className={styles['project-evaluation-criteria-edit']} onClick={() => openScoreAdjustmentModal(onScoringRules)} /> : null}
   </div> : null
