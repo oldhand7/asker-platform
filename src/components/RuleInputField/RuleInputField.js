@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import classNames from 'classnames';
 import TextInputField from 'components/TextInputField/TextInputField';
 import TextareaInputField from 'components/TextareaInputField/TextareaInputField';
@@ -13,17 +13,17 @@ const RuleInputField = ({ className, rule, index = 1, onChange }) => {
 
   const headRef = useRef();
 
-  const editModeOff = () => {
+  const editModeOff = useCallback(() => {
     if (!errors) {
       setEdit(false);
     }
-  }
+  }, [errors])
 
   useEffect(() => {
     if (edit && headRef && headRef.current) {
       const handleOffClick = ev => {
         if (ev.target != headRef.current && !headRef.current.contains(ev.target)) {
-          editModeOff()
+          setEdit(false)
         }
       }
 
@@ -33,7 +33,7 @@ const RuleInputField = ({ className, rule, index = 1, onChange }) => {
         document.body.removeEventListener('click', handleOffClick)
       }
     }
-  }, [edit, headRef])
+  }, [edit, headRef, editModeOff])
 
   const handleStepValue = (val, index) => {
     const newSteps = [

@@ -15,7 +15,7 @@ const LoginPage = () => {
     if (user) {
       router.push('/projects/')
     }
-  }, [user])
+  }, [user, router])
 
   return <div className={styles['login-page']}>
     <Head>

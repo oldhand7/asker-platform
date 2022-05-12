@@ -15,11 +15,12 @@ const ForgottenPage = () => {
     if (user) {
       router.push('/projects/')
     }
-  }, [user])
+  }, [user, router])
 
   return <div className={styles['forgotten-page']}>
     <Head>
       <title>Forgotten - Login - Asker</title>
+      <meta name="robots" content="noindex" />
     </Head>
     <ForgottenForm className={styles['forgotten-page-form']}  />
   </div>

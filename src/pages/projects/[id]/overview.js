@@ -106,6 +106,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
   return <div className={styles['project-overview-page']}>
       <Head>
         <title>{project.name} - Project overview - Asker</title>
+        <meta name="robots" content="noindex" />
       </Head>
 
       <div className={styles['project-overview-page-overview']}>

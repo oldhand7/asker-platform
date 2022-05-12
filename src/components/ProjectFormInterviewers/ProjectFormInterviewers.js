@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Autocomplete from 'components/Autocomplete/Autocomplete';
 import { filterManyDocuments } from 'libs/firestore';
 import { useUser } from 'libs/user';

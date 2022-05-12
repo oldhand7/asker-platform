@@ -10,6 +10,7 @@ const InterviewConductPage = ({ interview, project }) => {
   return <div className={styles['interview-conduct-page']}>
       <Head>
         <title>{interview.candidate.name} - {project.name} - Conduct interview - Asker</title>
+        <meta name="robots" content="noindex" />
       </Head>
 
       <InterviewForm interview={interview} project={project} />

@@ -21,7 +21,7 @@ describe('Salary feature', () => {
       .should('contain', 'Salary range')
       .within(() => {
         cy.get('[role="slider"]').eq(0)
-          .should('have.attr', 'aria-valuemin', '1000')
+          .should('have.attr', 'aria-valuemin', '0')
           .should('have.attr', 'aria-valuenow', '1000')
           .should('contain', '€1000')
 
@@ -71,7 +71,7 @@ describe('Salary feature', () => {
         cy.get('h2').should('contain', 'Salary')
 
         cy.get('[role="slider"]').eq(0)
-          .should('have.attr', 'aria-valuemin', '1000')
+          .should('have.attr', 'aria-valuemin', '0')
           .should('have.attr', 'aria-valuenow', '1000')
           .should('contain', '$1000')
 
@@ -80,7 +80,7 @@ describe('Salary feature', () => {
           .should('have.attr', 'aria-valuenow', '3000')
           .should('contain', '$3000')
       })
-      .should('contain', '$1000 -')
+      .should('contain', '$0 -')
       .should('contain', '- $9000')
   })
 })

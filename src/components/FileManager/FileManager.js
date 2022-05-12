@@ -13,7 +13,7 @@ const getColumns = ({ handleDelete }) => ([
     key: 'preview',
     render: (_, file) => {
       if (isImage(file.name)) {
-        return <img width="2em" height="2em" className={styles['file-manager-thumb']} src={file.url} />
+        return <img alt="" width="2em" height="2em" className={styles['file-manager-thumb']} src={file.url} />
       } else {
         return <NODATA />;
       }

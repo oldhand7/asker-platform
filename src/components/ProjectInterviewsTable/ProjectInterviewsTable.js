@@ -13,6 +13,7 @@ import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
 import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
 import { EVALUATION_SUBTYPES_NO_CRITERIA } from 'libs/config';
 import { getSubtype, ucFirst } from 'libs/helper';
+import { features } from 'libs/features';
 
 import styles from './ProjectInterviewsTable.module.scss';
 
@@ -59,31 +60,38 @@ const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
 
       const criterias = {}
 
-      const stages = Object.values(evaluations)
+      const stageKeys = Object.keys(evaluations).filter(sk => {
+        //Leave out stages without criteria
+        return features.find(f => f.id == sk && f.metadata && f.metadata.criteria )
+      })
 
-      for (let i = 0; i < stages.length; i++) {
-        const evaluations = Object.values(stages[i]);
+      for (let i = 0; i < stageKeys.length; i++) {
+        const key = stageKeys[i];
 
-        for (let n = 0; n < evaluations.length; n++) {
-          const id = evaluations[n].criteria && evaluations[n].criteria.id;
-          const key = id || evaluations[n].subtype
+        const qEvaluations = Object.values(evaluations[key])
+
+        for (let n = 0; n < qEvaluations.length; n++) {
+          const qEval = qEvaluations[n];
+
+          const id = qEval.criteria && qEval.criteria.id;
+          const key = id || qEval.subtype
 
           if (!criterias[key]) {
             criterias[key] = {
               id: key,
-              name: id ? evaluations[n].criteria.name : ucFirst(evaluations[n].subtype),
-              score: evaluations[n].score
+              name: id ? qEval.criteria.name : ucFirst(qEval.subtype),
+              score: qEval.score
             }
           } else {
-            criterias[key].score += evaluations[n].score
+            criterias[key].score += qEval.score
             criterias[key].score /= 2
           }
         }
       }
 
-      const evas = Object.values(criterias)
+      const finalEvaluations = Object.values(criterias)
 
-      evas.sort(function(a, b) {
+      finalEvaluations.sort(function(a, b) {
         if (a.score > b.score) return -1;
         if (a.score < b.score) return 1;
 
@@ -94,7 +102,9 @@ const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
       });
 
       return <div className={styles['project-interviews-table-evaluations']}>
-          {evas.map((e, index) => <EvaluationScore key={e.criteria && e.criteria.id || e.subtype} evaluation={e} className={styles['project-interviews-table-evaluations-evaluation']} />)}
+          {
+            finalEvaluations.length ? finalEvaluations.map((e, index) => <EvaluationScore key={index} evaluation={e} className={styles['project-interviews-table-evaluations-evaluation']} />) :
+          <NODATA />}
       </div>
     }
   },
