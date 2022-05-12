@@ -59,7 +59,7 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
       setLoading(true)
       setMaxQ(true)
     }
-  }, [filter.pristine])
+  }, [filter.pristine, setMaxQ])
 
   useDebounce(() => {
     const { q, company, questionTypes } = filter;
@@ -186,6 +186,7 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
   return <div className={styles['questions-page']}>
       <Head>
         <title>Questions listing - Asker</title>
+        <meta name="robots" content="noindex" />
       </Head>
 
       <div className={styles['questions-page-filter']}>

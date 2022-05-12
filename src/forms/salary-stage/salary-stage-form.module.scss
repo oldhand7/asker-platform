@@ -10,7 +10,9 @@
   }
 
   &-slider {
-    margin-top: 70rem;
+     &-info {
+       margin-bottom: 100rem;
+     }
 
     &-track {
       height: 22rem;
@@ -57,6 +59,7 @@
         outline: 0;
         display: inline-block;
         font-weight: 500;
+        min-width: 60rem;
 
         &::after {
           content: '';

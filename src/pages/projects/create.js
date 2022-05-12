@@ -10,6 +10,7 @@ const ProjectsCreatePage = ({ template }) => {
   return <div className={styles['projects-create-page']}>
       <Head>
         <title>Create project - Asker</title>
+        <meta name="robots" content="noindex" />
       </Head>
       <ProjectForm project={template} className={styles['projects-create-page-form']} />
   </div>

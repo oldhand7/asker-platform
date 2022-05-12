@@ -9,6 +9,7 @@ const TemplatesCreatePage = () => {
   return <div className={styles['templates-create-page']}>
       <Head>
         <title>Create template - Asker</title>
+        <meta name="robots" content="noindex" />
       </Head>
       <TemplateForm className={styles['templates-create-page-form']} />
   </div>

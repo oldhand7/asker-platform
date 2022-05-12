@@ -6,5 +6,11 @@
 
   ul {
     padding: 0;
+    list-style: none;
+
+    li {
+      font-weight: 500;
+      margin-bottom: 10rem;
+    }
   }
 }

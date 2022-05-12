@@ -10,6 +10,7 @@ const ProjectsEditPage = ({ project }) => {
   return <div className={styles['projects-edit-page']}>
       <Head>
         <title>{project.name} - Edit Project - Asker</title>
+        <meta name="robots" content="noindex" />
       </Head>
       <ProjectForm project={project} className={styles['projects-edit-page-form']} />
   </div>

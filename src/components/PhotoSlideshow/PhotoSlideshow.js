@@ -21,7 +21,7 @@ const PhotoSlideshow = ({ className, images = [], options={} }) => {
       {
         images.map((image, index) => (
           <SplideSlide key={index}  className={styles['photo-slideshow-slide']}>
-          <img src={image} title="" className={styles['photo-slideshow-image']} />
+          <img alt="" src={image} title="" className={styles['photo-slideshow-image']} />
         </SplideSlide>))
       }
       </Splide>

@@ -1,7 +1,7 @@
 import { getCriteriaTypeById } from 'libs/criteria';
 import classNames from 'classnames';
 import QuestionScoreBoard from 'components/QuestionScoreBoard/QuestionScoreBoard';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import useForm from 'libs/use-form';
 import { calcScore, createDummyVotes } from 'libs/helper';
 import InterviewNotes from 'components/InterviewNotes/InterviewNotes';

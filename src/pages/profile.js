@@ -6,6 +6,7 @@ import AdminProfileForm from 'forms/admin-profile/admin-profile-form'
 import { withUserGuardSsr } from 'libs/iron-session';
 import classNames from 'classnames';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 
 import 'react-tabs/style/react-tabs.css';
 import styles from 'styles/pages/profile.module.scss';
@@ -22,6 +23,10 @@ const ProfilePage = () => {
   }, [])
 
   return <div className={styles['profile-page']}>
+    <Head>
+      <title>Profile - Asker</title>
+      <meta name="robots" content="noindex" />
+    </Head>
     {user && !loading ? <Tabs className={styles['profile-page-tabs']}>
       <TabList className={styles['profile-page-tab-list']}>
         <Tab className={styles['profile-page-tab']}>Profile</Tab>

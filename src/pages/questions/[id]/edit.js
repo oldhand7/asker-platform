@@ -14,6 +14,7 @@ const QuestionEditPage = ({ question }) => {
   return <div className={styles['question-edit-page']}>
     <Head>
       <title>{question.name} - {question.companyId === 'asker' ? 'Clone' : 'Edit'} question - Asker</title>
+      <meta name="robots" content="noindex" />
     </Head>
 
     {question.type == 'other' ? <ScreeningQuestionForm type='other' question={question} className={styles['question-edit-page-form']} /> : null}

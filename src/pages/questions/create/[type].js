@@ -13,6 +13,7 @@ const QuestionCreatePage = ({ questionType, questionSubtype }) => {
   return <div className={styles['question-create-page']}>
     <Head>
       <title>Create a new {((questionSubtype || questionType).altName || (questionSubtype || questionType).name).toLowerCase()} question  - Asker</title>
+      <meta name="robots" content="noindex" />
     </Head>
 
     { questionType.id == 'screening' ? <ScreeningQuestionForm className={styles['question-create-page-form']} /> : null}

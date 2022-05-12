@@ -10,6 +10,7 @@ const TemplatesEditPage = ({ template }) => {
   return <div className={styles['templates-edit-page']}>
       <Head>
         <title>{template.templateName} - Edit Template - Asker</title>
+        <meta name="robots" content="noindex" />
       </Head>
       <TemplateForm template={template} className={styles['templates-edit-page-form']} />
   </div>

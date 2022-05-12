@@ -53,7 +53,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
       setLoading(true)
       setMaxQ(true)
     }
-  }, [filter.pristine])
+  }, [filter.pristine, setMaxQ])
 
   useDebounce(() => {
     const { q } = filter;
@@ -158,6 +158,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
   return <div className={styles['projects-page']}>
       <Head>
         <title>Projects - Asker</title>
+        <meta name="robots" content="noindex" />
       </Head>
       <div className={styles['projects-page-nav']}>
           <LiveSearchWidget q={filter.q} onQuery={handleQuery} />

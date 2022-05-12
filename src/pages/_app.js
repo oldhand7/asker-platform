@@ -17,7 +17,7 @@ function App({ Component, pageProps }) {
     if (!user && !loading && !Component.noAuth) {
       router.push('/logout/')
     }
-  }, [user, loading, Component])
+  }, [user, loading, Component, router])
 
   const Layout = Component.layout ? Component.layout : DefaultLayout;
 

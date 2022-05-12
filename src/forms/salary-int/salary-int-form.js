@@ -1,11 +1,12 @@
 import { Range, getTrackBackground } from 'react-range';
 import useForm from 'libs/use-form'
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import { handleNext } from 'libs/helper';
 import NextButton from 'components/Button/NextButton';
 import HtmlInputField from 'components/HtmlInputField/HtmlInputField';
 import FlexRow from 'components/FlexRow/FlexRow';
+import clasNames from 'classnames';
 
 import styles from './salary-int-form.module.scss';
 
@@ -35,6 +36,29 @@ const SalaryIntForm = ({ last, nextId, className, values, onValues, config }) =>
     }
   }, [formValues, errors])
 
+  const background = useMemo(() => {
+    const bgStart = formValues.range[0] * 100 / config.range[1];
+    const bgEnd = formValues.range[1] * 100 / config.range[1];
+    const projectMin = config.config[0] * 100 / config.range[1];
+    const projectMax = config.config[1] * 100 / config.range[1];
+
+    return `
+    linear-gradient(
+      to right,
+      #B7B7B733 0%,
+      #B7B7B733 ${Math.min(bgStart, projectMin)}%,
+      #B7B7B733 ${projectMin}%,
+      #43B88C ${projectMin}%,
+      #43B88C ${projectMax}%,
+      #E5C673 ${projectMax}%,
+      #E5C673 ${Math.max(bgEnd, projectMax)}%,
+      #E5C673 ${Math.max(bgEnd, projectMax)}%,
+      #B7B7B733 ${projectMax}%,
+      #B7B7B733 100%
+      )
+    `;
+  }, [formValues])
+
   return <div className={classNames(styles['salary-int-form'], className)}>
     <h2 className={styles['salary-int-form-title']}>Salary</h2>
 
@@ -54,13 +78,7 @@ const SalaryIntForm = ({ last, nextId, className, values, onValues, config }) =>
            {...props}
            style={{
              ...props.style,
-             background: getTrackBackground({
-                  values: formValues.range,
-                  colors: ['#B7B7B733', '#43B88C', '#B7B7B733'],
-                  min: config.range[0],
-                  max: config.range[1]
-                })
-
+             background
            }}
            className={styles['salary-int-form-slider-track']}
          >
@@ -73,7 +91,11 @@ const SalaryIntForm = ({ last, nextId, className, values, onValues, config }) =>
            style={{
              ...props.style
            }}
-           className={styles['salary-int-form-slider-marker']}
+           className={clasNames(
+             styles['salary-int-form-slider-marker'],
+             // props.key == 0 && formValues.range[0] < config.config[0] || formValues.range[0] > config.config[1]  ? styles['salary-int-form-slider-marker-outside'] : '',
+             props.key == 1 && formValues.range[1] > config.config[1] ? styles['salary-int-form-slider-marker-outside'] : ''
+           )}
          >
          <span className={styles['salary-int-form-slider-marker-value']}>{config.currency}{formValues.range[props.key]}</span></div>
        }}

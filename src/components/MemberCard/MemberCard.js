@@ -25,7 +25,7 @@ const MemberCard = ({ className, member }) => {
   return <div className={classNames(styles['member-card'], className)}>
     {
       member.avatar ?
-      <img src={member.avatar} className={styles['member-card-avatar']} /> :
+      <img alt="" src={member.avatar} className={styles['member-card-avatar']} /> :
       null
     }
 

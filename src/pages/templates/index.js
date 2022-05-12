@@ -50,7 +50,7 @@ const TemplatesPage = ({ templates = [], total = 0 }) => {
       setLoading(true)
       setMaxQ(true)
     }
-  }, [filter.pristine])
+  }, [filter.pristine, setMaxQ])
 
   useEffect(() => {
     if (flashSuccess) {
@@ -142,6 +142,7 @@ const TemplatesPage = ({ templates = [], total = 0 }) => {
   return <div className={styles['templates-page']}>
       <Head>
         <title>Templates listing - Asker</title>
+        <meta name="robots" content="noindex" />
       </Head>
       <div className={styles['templates-page-nav']}>
           <LiveSearchWidget q={filter.q} onQuery={handleQuery} />

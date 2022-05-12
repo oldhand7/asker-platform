@@ -57,6 +57,7 @@ const Navbar = ({ className, menu = [] }) => {
   const [mode, setMode] = useState('normal');
   const { user, loading } = useUser();
   const [open, setOpen] = useState(false);
+  const [menuItemsLoad, setMenuItemsLoad] = useState([]);
 
   const {
     isScrollingUp,
@@ -95,6 +96,9 @@ const Navbar = ({ className, menu = [] }) => {
     setOpen(!open)
   }
 
+  useEffect(() => {
+    setMenuItemsLoad(user && menuItems || [])
+  }, [user, menuItems])
 
   return <div id="navbar" className={classNames(
     styles['navbar'],
@@ -107,7 +111,7 @@ const Navbar = ({ className, menu = [] }) => {
 
       {
         !open ?
-        <Menu items={menuItems} onClick={() => setOpen(false)} className={styles['navbar-menu']} /> :
+        <Menu items={menuItemsLoad} onClick={() => setOpen(false)} className={styles['navbar-menu']} /> :
         <Menu items={menuItemsMobile(user)} onClick={() => setOpen(false)} className={styles['navbar-menu']} />
       }
 
