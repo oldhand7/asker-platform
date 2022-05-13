@@ -10,10 +10,8 @@ export const getProjectEvaluationCriterias = (project) => {
 
   const questions = Object.values(config)
     .reduce(projectStageQuestionsReducer, [])
-    .filter(q => {
-      const subtype = getSubtype(q);
-
-      return subtype != 'screening' && subtype != 'other'
+    .filter(({ type }) => {
+      return type != 'screening' && type != 'other';
     })
 
   const aggregate = {

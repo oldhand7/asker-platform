@@ -54,7 +54,7 @@ const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
       innerRadius={70}
       outerRadius={100}
       fill="#8884d8"
-      paddingAngle={2}
+      paddingAngle={criteria.length == 1 ? 0 : 2}
            dataKey="weight"
            stroke=''
          >
