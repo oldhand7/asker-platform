@@ -87,7 +87,8 @@ const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
             interviewEvaluations.push({
               id: cKey,
               name: criteria.name,
-              score: Math.round(score / aggregate[key][cKey].length)
+              score: Math.round(score / aggregate[key][cKey].length),
+              type: criteria.type
             })
           }
         } else if (key == 'hard-skill') {
@@ -97,7 +98,8 @@ const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
             interviewEvaluations.push({
               id: `hs-${criteria.id}`,
               name: ucFirst(criteria.name),
-              score: Math.round(score / aggregate[key].length)
+              score: Math.round(score / aggregate[key].length),
+              type: 'hard-skill'
             })
           }
         } else {
@@ -110,17 +112,18 @@ const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
           interviewEvaluations.push({
             id: key,
             name: ucFirst(key),
-            score: Math.round(score / aggregate[key].length)
+            score: Math.round(score / aggregate[key].length),
+            type: key
           })
         }
       }
 
       interviewEvaluations.sort(function(a, b) {
-        if (a.score > b.score) return -1;
-        if (a.score < b.score) return 1;
+        if (a.type.toLowerCase() > b.type.toLowerCase()) return 1;
+        if (a.type.toLowerCase() < b.type.toLowerCase()) return -1;
 
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
+        if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+        if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
 
         return 0;
       });

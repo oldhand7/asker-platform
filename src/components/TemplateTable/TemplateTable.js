@@ -14,7 +14,7 @@ import { useQueryStates, queryTypes } from 'next-usequerystate'
 
 import styles from './TemplateTable.module.scss';
 
-const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user }) => {
+const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user, getAvatar }) => {
   const getSortArrowIcon = (name) => {
     return name == sortOrder.sort ? (sortOrder.order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
   }
@@ -48,7 +48,7 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user }) 
       Created by {getSortArrowIcon('user.name')}</a>,
     dataIndex: 'user',
     key: 'user',
-    render: (user) => (user && <UserCard title={user.name} />) || <NODATA />
+    render: (user) => (user && <UserCard title={user.name} avatar={getAvatar()} />) || <NODATA />
   },
   {
     title: <a href='#' onClick={handleSortOrder('createdAt')}>
@@ -90,7 +90,7 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user }) 
 
 const TemplateTable = ({ className, data = [], onDelete, ...props }) => {
   const router = useRouter()
-  const {user} = useUser()
+  const {user, getAvatar} = useUser()
 
   const [sortOrder, setSortOrder] = useQueryStates({
     sort: queryTypes.string.withDefault(router.query.sort || 'createdAt'),
@@ -124,7 +124,8 @@ const TemplateTable = ({ className, data = [], onDelete, ...props }) => {
     handleCompactMenuChoice,
     sortOrder,
     setSortOrder,
-    user
+    user,
+    getAvatar
   })} data={data} {...props} />
 }
 

@@ -108,20 +108,20 @@ describe('Interview', () => {
       .first()
       .within(() => {
         cy.get('[data-test-id="evaluation-score"]').eq(0)
-          .should('have.attr', 'data-score', '5')
-          .should('contain', 'MS Word')
-
-        cy.get('[data-test-id="evaluation-score"]').eq(1)
-          .should('have.attr', 'data-score', '4')
-          .should('contain', 'Traveling')
-
-        cy.get('[data-test-id="evaluation-score"]').eq(2)
           .should('have.attr', 'data-score', '3')
           .should('contain', 'ISO-90210')
 
-        cy.get('[data-test-id="evaluation-score"]').eq(3)
+        cy.get('[data-test-id="evaluation-score"]').eq(1)
           .should('have.attr', 'data-score', '2')
           .should('contain', 'Culture-fit')
+
+        cy.get('[data-test-id="evaluation-score"]').eq(2)
+          .should('have.attr', 'data-score', '4')
+          .should('contain', 'Traveling')
+
+        cy.get('[data-test-id="evaluation-score"]').eq(3)
+          .should('have.attr', 'data-score', '5')
+          .should('contain', 'MS Word')
 
         cy.get('[data-test-id="evaluation-score"]').eq(4)
           .should('have.attr', 'data-score', '1')
