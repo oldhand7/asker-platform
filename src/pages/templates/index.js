@@ -170,8 +170,8 @@ const TemplatesPage = ({ templates = [], companyId, total = 0 }) => {
 
       <div className={styles['templates-page-filter']}>
         <div data-test-id="company-filter" className={styles['templates-page-filter-company']}>
-          <FilterButton className={styles['templates-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker questions</FilterButton>
-          <FilterButton className={styles['templates-page-filter-company-button']} theme="grape" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your questions</FilterButton>
+          <FilterButton className={styles['templates-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker templates</FilterButton>
+          <FilterButton className={styles['templates-page-filter-company-button']} theme="grape" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your templates</FilterButton>
         </div>
       </div>
 
