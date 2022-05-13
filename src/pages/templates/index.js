@@ -16,6 +16,8 @@ import { useRouter } from 'next/router';
 import { deleteSingle } from 'libs/firestore';
 import { ctxError } from 'libs/helper';
 import { useQueryState } from 'next-usequerystate'
+import FilterButton from 'components/Button/FilterButton';
+import { useUser } from 'libs/user';
 
 import styles from 'styles/pages/templates.module.scss';
 
@@ -26,16 +28,18 @@ const DEFAULT_ORDER = 'desc';
 const defaultFilter = {
   q: '',
   page: 1,
+  company: ['asker'],
   perPage: PER_PAGE,
   pristine: true
 }
 
-const TemplatesPage = ({ templates = [], total = 0 }) => {
+const TemplatesPage = ({ templates = [], companyId, total = 0 }) => {
   const flashSuccess  =  useFlash('success')
   const [filteredTemplates, setFilteredTemplates] = useState(templates);
   const router = useRouter();
   const [filter, setFilter] = useState({
     ...defaultFilter,
+    company: ['asker', companyId],
     page: Number.parseInt(router.query.page || defaultFilter.page),
     perPage: Number.parseInt(router.query.perPage || defaultFilter.perPage)
   })
@@ -44,6 +48,7 @@ const TemplatesPage = ({ templates = [], total = 0 }) => {
   const [success, setSuccess] = useState(null);
   const [deletedTemplates, setDeletedTemplates] = useState([]);
   const [qMax, setMaxQ] = useQueryState('fl')
+  const { user } = useUser();
 
   useEffect(() => {
     if (!filter.pristine) {
@@ -65,7 +70,12 @@ const TemplatesPage = ({ templates = [], total = 0 }) => {
   useDebounce(() => {
     const { q } = filter;
 
-    let filteredTemplates = templates.filter(t => deletedTemplates.indexOf(t.id) == -1)
+    let filteredTemplates = templates.filter(t => {
+      const notDeleted = deletedTemplates.indexOf(t.id) == -1;
+      const companyFilter = filter.company.indexOf(t.companyId) > -1;
+
+      return companyFilter && notDeleted
+    })
 
     if (!q) {
       setFilteredTemplates(filteredTemplates);
@@ -139,11 +149,32 @@ const TemplatesPage = ({ templates = [], total = 0 }) => {
     setFilter({ ...filter, pristine: false, page: 1, q })
   }, [filter])
 
+  const toggleCompany = (companyId) => {
+    const existsAlready = filter.company.find(c => c == companyId);
+
+    setFilter({
+      ...filter,
+      pristine: false,
+      company: existsAlready ?
+        filter.company.filter(c => c != companyId) :
+        [...filter.company, companyId],
+      page: 1
+    })
+  }
+
   return <div className={styles['templates-page']}>
       <Head>
         <title>Templates listing - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
+
+      <div className={styles['templates-page-filter']}>
+        <div data-test-id="company-filter" className={styles['templates-page-filter-company']}>
+          <FilterButton className={styles['templates-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker questions</FilterButton>
+          <FilterButton className={styles['templates-page-filter-company-button']} theme="grape" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your questions</FilterButton>
+        </div>
+      </div>
+
       <div className={styles['templates-page-nav']}>
           <LiveSearchWidget q={filter.q} onQuery={handleQuery} />
           <Button href='/templates/create/'><PlusIcon /> Create new template</Button>
@@ -194,6 +225,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     props: {
       config: await getSettings(),
       templates,
+      companyId: req.session.user.companyId,
       total
     }
   }

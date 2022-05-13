@@ -19,6 +19,7 @@ import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/Proj
 import ErrorBox from 'components/ErrorBox/ErrorBox';
 import { ctxError} from 'libs/helper';
 import FeatureForm from 'components/FeatureForm/FeatureForm';
+import { calcDefaultScoringRules } from 'libs/project';
 
 import styles from './project-form.module.scss';
 
@@ -48,6 +49,7 @@ const defaultValues = {
     null,
     null
   ],
+  scoringRules: null,
   stagesCount: 0,
   userId: null,
   config: {
@@ -126,6 +128,10 @@ const ProjectForm = ({ project, className }) => {
     values.companyId = user.companyId;
     values.stagesCount = values.stages.filter(s => s).length;
     values.interviewersCount = values.interviewers.length;
+
+    if (!values.scoringRules) {
+      values.scoringRules = calcDefaultScoringRules(values)
+    }
 
     const tasks = []
 

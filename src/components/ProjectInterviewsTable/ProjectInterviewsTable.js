@@ -13,7 +13,7 @@ import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
 import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
 import { EVALUATION_SUBTYPES_NO_CRITERIA } from 'libs/config';
 import { getSubtype, ucFirst } from 'libs/helper';
-import { features } from 'libs/features';
+import { getInterviewAggregate } from 'libs/interview';
 
 import styles from './ProjectInterviewsTable.module.scss';
 
@@ -23,6 +23,10 @@ const getSortLink = (name, sort, order, project) => {
 
 const getSortArrowIcon = (name, sort, order) => {
   return name == sort ? (order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
+}
+
+const sumReducer = (sum, { score }) => {
+  return Number.parseInt(score) + sum;
 }
 
 const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
@@ -58,40 +62,60 @@ const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
         return <NODATA />
       }
 
-      const criterias = {}
+      const interviewEvaluations = []
 
-      const stageKeys = Object.keys(evaluations).filter(sk => {
-        //Leave out stages without criteria
-        return features.find(f => f.id == sk && f.metadata && f.metadata.criteria )
-      })
+      const aggregate = getInterviewAggregate(interview);
+      const aggregateKeys = Object.keys(aggregate);
 
-      for (let i = 0; i < stageKeys.length; i++) {
-        const key = stageKeys[i];
+      for (let i = 0; i < aggregateKeys.length; i++) {
+        const key = aggregateKeys[i];
 
-        const qEvaluations = Object.values(evaluations[key])
+        if (key == 'competency' || key == 'experience') {
+          const criteriaKeys = Object.keys(aggregate[key]);
 
-        for (let n = 0; n < qEvaluations.length; n++) {
-          const qEval = qEvaluations[n];
+          for (let n = 0; n < criteriaKeys.length; n++) {
+            const cKey = criteriaKeys[n];
 
-          const id = qEval.criteria && qEval.criteria.id;
-          const key = id || qEval.subtype
+            const score = aggregate[key][cKey].reduce(sumReducer, 0);
 
-          if (!criterias[key]) {
-            criterias[key] = {
-              id: key,
-              name: id ? qEval.criteria.name : ucFirst(qEval.subtype),
-              score: qEval.score
+            if (!score) {
+              continue;
             }
-          } else {
-            criterias[key].score += qEval.score
-            criterias[key].score /= 2
+
+            const { criteria } = aggregate[key][cKey][0];
+
+            interviewEvaluations.push({
+              id: cKey,
+              name: criteria.name,
+              score: Math.round(score / aggregate[key][cKey].length)
+            })
           }
+        } else if (key == 'hard-skill') {
+          for (let n = 0; n < aggregate['hard-skill'].length; n++) {
+            const { score, criteria } = aggregate['hard-skill'][n]
+
+            interviewEvaluations.push({
+              id: `hs-${criteria.id}`,
+              name: ucFirst(criteria.name),
+              score: Math.round(score / aggregate[key].length)
+            })
+          }
+        } else {
+          const score = aggregate[key].reduce(sumReducer, 0);
+
+          if (!score) {
+            continue;
+          }
+
+          interviewEvaluations.push({
+            id: key,
+            name: ucFirst(key),
+            score: Math.round(score / aggregate[key].length)
+          })
         }
       }
 
-      const finalEvaluations = Object.values(criterias)
-
-      finalEvaluations.sort(function(a, b) {
+      interviewEvaluations.sort(function(a, b) {
         if (a.score > b.score) return -1;
         if (a.score < b.score) return 1;
 
@@ -103,7 +127,12 @@ const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
 
       return <div className={styles['project-interviews-table-evaluations']}>
           {
-            finalEvaluations.length ? finalEvaluations.map((e, index) => <EvaluationScore key={index} evaluation={e} className={styles['project-interviews-table-evaluations-evaluation']} />) :
+            interviewEvaluations.length ? interviewEvaluations.map((e, index) => (
+              <EvaluationScore
+                key={index}
+                evaluation={e}
+                className={styles['project-interviews-table-evaluations-evaluation']} />
+            )) :
           <NODATA />}
       </div>
     }

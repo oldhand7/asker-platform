@@ -1,6 +1,21 @@
 .templates-page {
   padding: 40rem 0;
 
+  &-filter {
+    &-company{
+      margin-bottom: 25rem;
+
+      &-button {
+        margin-right: 5rem;
+      }
+
+      @media (max-width: 768px) {
+        text-align: center;
+      }
+    }
+
+  }
+
   &-nav {
     display: flex;
     justify-content: space-between;

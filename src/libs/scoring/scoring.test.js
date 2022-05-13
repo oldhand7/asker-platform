@@ -1,68 +1,106 @@
 import { calcInterviewScore } from './index';
 
-const interview = {
+const interview1 = {
     evaluations: {
-      'competency': {
-        'cq1': { score: 5, maxScore: 5, criteria: { id: 'criteria-x' } }
+      'competency-questions': {
+        'cq1': { score: 5, subtype: 'competency', criteria: { id: 'Stress tolerance' } }
       },
-      'motivation': {
-        'mq1': { score: 1, maxScore: 5, subtype: 'subtype-x' }
+      'motivation-questions': {
+        'mq1': { score: 1, subtype: 'motivation' }
       }
     }
 }
 
-const interview2 = {
+const interview2a = {
     evaluations: {
-      'competency': {
-        'cq1': { score: 5, maxScore: 5, criteria: { id: 'M' } },
-        'cq2': { score: 3, maxScore: 5, criteria: { id: 'M' } },
-        'cq3': { score: 3, maxScore: 5, criteria: { id: 'R' } },
-        'cq4': { score: 2, maxScore: 5, criteria: { id: 'R' } },
-        'cq5': { score: 2, maxScore: 5, criteria: { id: 'S' } }
+      'competency-questions': {
+        'cq1': { score: 5, subtype: 'competency', criteria: { id: 'Stress tolerance' } }
+      },
+      'motivation-questions': {
+        'mq1': { score: 1, subtype: 'motivation' }
+      }
+    }
+}
+
+const interview2b = {
+    evaluations: {
+      'competency-questions': {
+        'cq1': { score: 3, subtype: 'competency', criteria: { id: 'Stress tolerance' } }
+      },
+      'motivation-questions': {
+        'mq1': { score: 4, subtype: 'motivation' }
+      }
+    }
+}
+
+const interview3 = {
+    evaluations: {
+      'competency-questions': {
+        'cq1': { score: 2, subtype: 'competency', criteria: { id: 'Stress tolerance', name: 'Stress tolerance' } },
+        'cq2': { score: 3, subtype: 'competency', criteria: { id: 'Result oriented', name: 'Result oriented' } },
+        'cq3': { score: 5, subtype: 'competency', criteria: { id: 'Proactive', name: 'Proactive' } },
+        'cq4': { score: 5, subtype: 'competency', criteria: { id: 'Problem Solving', name: 'Problem Solving' } }
+      },
+      'motivation-questions': {
+        'mq1': { score: 5, subtype: 'motivation' }
+      },
+      'hard-skill-questions': {
+        'hsq1': { score: 5,  subtype: 'hard-skill', criteria: { id: 'CRM', name: 'CRM' } }
+      },
+      'experience-questions': {
+        'eq1': { score: 5,  subtype: 'experience', criteria: { id: 'Leadership experience', name: 'Leadership experience' } }
       }
     }
 }
 
 describe('scoring', () => {
-  it('should score evaluation questions', () => {
-    const project = {}
-
-    expect(calcInterviewScore(interview, project)).toEqual(50);
-  })
-
-  it('should score evaluation questions using adjustment layer', () => {
+  it('interview 1', () => {
     const project = {
       scoringRules: {
-        'criteria-x': 20,
-        'subtype-x': 80
+        'Stress tolerance': 50,
+        'motivation': 50
       }
     }
 
-    expect(calcInterviewScore(interview, project)).toEqual(20);
+    expect(calcInterviewScore(interview1, project)).toEqual(50);
   })
 
-  it('adjustment layer should not be affected by other or screening questions', () => {
+  it('interview 2a', () => {
     const project = {
       scoringRules: {
-        'criteria-x': 12.8,
-        'subtype-x': 51.2,
-        'other': 18,
-        'screening': 18
+        'Stress tolerance': 20,
+        'motivation': 80
       }
     }
 
-    expect(calcInterviewScore(interview, project)).toEqual(20);
+    expect(calcInterviewScore(interview2a, project)).toEqual(20);
+  })
+
+
+  it('interview 2b', () => {
+    const project = {
+      scoringRules: {
+        'Stress tolerance': 20,
+        'motivation': 80
+      }
+    }
+
+    expect(calcInterviewScore(interview2b, project)).toEqual(70);
   })
 
   it('should score evaluation questions (client example)', () => {
     const project = {
       scoringRules: {
-        'M': 30,
-        'R': 50,
-        'S': 20
+        'Stress tolerance': 15,
+        'Result oriented': 20,
+        'Proactive': 15,
+        'Problem Solving': 15,
+        'motivation': 10,
+        'hard-skill': 5,
+        'Leadership experience': 20
       }
     }
 
-    expect(calcInterviewScore(interview2, project)).toEqual(46);
+    expect(calcInterviewScore(interview3, project)).toEqual(79);
   })
 })

@@ -10,33 +10,38 @@
   line-height: 3em;
   display: inline-block;
   white-space: nowrap;
+  box-sizing: border-box;
 
   &[href]:hover {
     text-decoration: underline !important;
 
     span {
       text-decoration: inherit;
+      line-height: inherit;
     }
   }
 
   & > * {
     display: inline-block;
     vertical-align: middle;
+    line-height: 1;
     margin: 0 2rem;
   }
-
 
   &-filter {
     color: white;
     cursor: pointer;
-    line-height: 51rem;
     border: 2px solid $brandish-tar;
     border-radius: 5px;
     padding: 0 15rem;
-    line-height: 51rem;
+    line-height: calc(50rem - 4px);
     background: 0;
     color: $brandish-tar;
     font-weight: 500;
+
+    &-inner {
+      line-height: 1;
+    }
 
     &[data-state="on"] {
       color: white !important;
@@ -76,11 +81,11 @@
 
   &-outline {
     cursor: pointer;
-    line-height: 51rem;
-    border: 1px solid $brandish-tar;
+    border: 1rem solid $brandish-tar;
+    line-height: calc(50rem - 2px);
     border-radius: 5px;
-    padding: 0 15rem;
-    line-height: 51rem;
+    padding: 0rem 15rem;
+    line-height: 48rem;
     background: 0;
     color: $brandish-tar;
     font-weight: 500;

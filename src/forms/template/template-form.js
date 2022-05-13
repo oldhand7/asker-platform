@@ -18,6 +18,7 @@ import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/Proj
 import ErrorBox from 'components/ErrorBox/ErrorBox';
 import { ctxError } from 'libs/helper';
 import FeatureForm from 'components/FeatureForm/FeatureForm';
+import { calcDefaultScoringRules } from 'libs/project';
 
 import styles from './template-form.module.scss';
 
@@ -46,6 +47,7 @@ const defaultValues = {
     null,
     null
   ],
+  scoringRules: null,
   stagesCount: 0,
   userId: null,
   companyId: null,
@@ -123,6 +125,10 @@ const TemplateForm = ({ template, className }) => {
     values.user = {
       id: user.id,
       name: user.name
+    }
+
+    if (!values.scoringRules) {
+      values.scoringRules = calcDefaultScoringRules(values)
     }
 
     setLoading(true)

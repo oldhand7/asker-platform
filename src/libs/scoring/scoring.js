@@ -1,81 +1,41 @@
-export const calcInterviewScore = (interview, project) => {
-  const { evaluations } = interview;
-  const { scoringRules } = project;
+import { getInterviewAggregate } from 'libs/interview';
 
-  if (!evaluations) {
-    return 0;
+const scoreTable = [0, 25, 50, 75, 100]
+
+export const calcInterviewScore = (interview, { scoringRules }) => {
+  const aggregate = getInterviewAggregate(interview)
+
+  let interviewScore = 0;
+
+  const criteriaEvaluations = [
+    ...Object.values(aggregate.competency).reduce((a, c) => [...a, ...c], []),
+    ...Object.values(aggregate.experience).reduce((a, c) => [...a, ...c], [])
+  ]
+
+  for (let i = 0; i < criteriaEvaluations.length; i++) {
+    const { criteria, score, subtype } = criteriaEvaluations[i]
+
+    const p = (scoringRules[criteria.id] || 0) / aggregate[subtype][criteria.id].length;
+
+    const localScore = scoreTable[score-1] * (p / 100);
+
+    interviewScore += localScore
   }
 
-  //Evaluation scores
-  let score = 0;
-  let total = 0;
+  const categoryEvaluations = [
+    ...aggregate['hard-skill'],
+    ...aggregate['culture-fit'],
+    ...aggregate['motivation']
+  ]
 
-  //Evaluation makes a percentage of questions
-  let evaluationP = 100;
+  for (let i = 0; i < categoryEvaluations.length; i++) {
+    const { subtype, score } = categoryEvaluations[i]
+    const p = (scoringRules[subtype] || 0) / aggregate[subtype].length;
 
-  if (scoringRules && scoringRules['other']) {
-    evaluationP -= Number.parseFloat(scoringRules['other']);
+    const localScore = scoreTable[score-1] * (p / 100);
+
+    interviewScore += localScore
   }
 
-  if (scoringRules && scoringRules['screening']) {
-    evaluationP -= Number.parseFloat(scoringRules['screening']);
-  }
-
-  const stages = Object.values(evaluations)
-
-  const stat = {}
-
-  for (let s = 0; s < stages.length; s++) {
-    const evaluations = Object.values(stages[s])
-
-    for (let i = 0; i < evaluations.length; i++) {
-      if (typeof evaluations[i].score !== "undefined") {
-        const id = evaluations[i].criteria && evaluations[i].criteria.id;
-        const key = id || evaluations[i].subtype;
-
-        if (!stat[key]) {
-          stat[key] = 1
-        } else {
-          stat[key]++
-        }
-      }
-    }
-  }
-
-  for (let s = 0; s < stages.length; s++) {
-    const evaluations = Object.values(stages[s])
-
-    for (let i = 0; i < evaluations.length; i++) {
-      if (typeof evaluations[i].score !== "undefined") {
-        let maxScore = evaluations[i].maxScore || evaluations[i].score;
-
-        let cof = 1;
-
-        if (scoringRules) {
-          const id = evaluations[i].criteria && evaluations[i].criteria.id;
-          const key = id || evaluations[i].subtype;
-
-          if (typeof scoringRules[key] !== "undefined" && stat[key]) {
-            const p = scoringRules[key];
-
-            cof = Number.parseFloat(p) / stat[key] / evaluationP;
-          }
-        }
-
-        if (evaluations[i].score > 1) {
-          // 2 - 0.25
-          // 3 - 0.5
-          // 4 - 0.75
-          // 5 - 1
-          score += (evaluations[i].score - 1) / (maxScore - 1) * cof;
-        } else {
-          score += 0;
-        }
-
-        total++;
-      }
-    }
-  }
-
-  return scoringRules ? Math.round(score * 100) : Math.round(score * 100 / total);
+  return Math.round(interviewScore);
 }
