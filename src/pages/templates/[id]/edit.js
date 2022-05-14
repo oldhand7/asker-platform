@@ -3,6 +3,7 @@ import { withUserGuardSsr } from 'libs/iron-session'
 import TemplateForm from 'forms/template/template-form';
 import Head from 'next/head';
 import { getSingleDocument } from 'libs/firestore-admin'
+import { unpackQuestions } from 'libs/project';
 
 import styles from 'styles/pages/templates-edit.module.scss';
 
@@ -30,6 +31,8 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
       notFound: true
     }
   }
+
+  unpackQuestions(template)
 
   return {
     props: {

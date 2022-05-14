@@ -134,8 +134,8 @@ export const snap2data = snap => {
   snap.forEach((item, i) => {
     const data = item.data()
 
-    data.createdAt = data.createdAt && data.createdAt.seconds ? data.createdAt.seconds : '';
-    data.updatedAt = data.updatedAt && data.updatedAt.seconds ? data.updatedAt.seconds : '';
+    data.createdAt = data.createdAt && data.createdAt.seconds ? data.createdAt.seconds : data.createdAt;
+    data.updatedAt = data.updatedAt && data.updatedAt.seconds ? data.updatedAt.seconds : data.updatedAt;
     data.id = item.id
 
     items.push(data)

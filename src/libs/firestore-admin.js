@@ -1,5 +1,5 @@
 import { getApp } from 'libs/firebase-admin';
-const { getFirestore, FieldPath } = require('firebase-admin/firestore');
+const { getFirestore, FieldPath, Timestamp } = require('firebase-admin/firestore');
 import { snap2data } from 'libs/helper';
 
 const db = getFirestore(getApp());
@@ -80,8 +80,13 @@ export const saveCollectionDocument = (col, doc) => {
   let query = db.collection(col)
 
   if (doc.id) {
+    doc.updatedAt = Timestamp.now()
+
     return query.doc(doc.id).update(doc)
   } else {
+    doc.createdAt = Timestamp.now()
+    doc.updatedAt = Timestamp.now()
+
     return query.add(doc)
   }
 }

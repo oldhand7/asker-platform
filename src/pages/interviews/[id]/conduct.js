@@ -3,6 +3,7 @@ import { withUserGuardSsr } from 'libs/iron-session'
 import Head from 'next/head';
 import { getSingleDocument, filterSingleDocument } from 'libs/firestore-admin'
 import InterviewForm from 'forms/interview/interview-form'
+import { unpackQuestions } from 'libs/project';
 
 import styles from 'styles/pages/interview-conduct.module.scss';
 
@@ -37,10 +38,12 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     ['companyId', '==',  req.session.user.companyId]
   ])
 
+  unpackQuestions(project)
+
   return {
     props: {
       interview: JSON.parse(JSON.stringify(interview)),
-      project,
+      project: JSON.parse(JSON.stringify(project)),
       config: await getSettings()
     }
   }

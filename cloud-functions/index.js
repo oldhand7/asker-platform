@@ -34,8 +34,7 @@ exports.stampCollections = functions.firestore.document('{collectionName}/{docId
     const data = snap.data();
 
     if (!data.id) {
-      return snap.ref.set({
-        ...data,
+      return snap.ref.update({
         id: snap.id
       })
     }
@@ -185,4 +184,53 @@ exports.firebaseAccountDelete = functions.auth.user().onDelete(async (user) => {
         .doc(user.uid)
         .delete()
     }
+  });
+
+exports.updateQuestion = functions.firestore.document('questions/{docId}')
+    .onUpdate(async (change) => {
+      const question = change.after.data();
+
+      const key = `questionsMap.${question.id}`
+
+      const batchProjects = await admin.firestore()
+        .collection('projects')
+        .orderBy(key)
+        .get()
+        .then(response => {
+          let batch = admin.firestore().batch()
+
+          response.forEach((doc) => {
+             const docRef = admin.firestore().collection('projects').doc(doc.id)
+
+             batch.update(docRef,{
+               [key]: question
+             })
+          })
+
+          return batch;
+        })
+
+
+      const batchTemplates = await admin.firestore()
+        .collection('templates')
+        .orderBy(key)
+        .get()
+        .then(response => {
+          let batch = admin.firestore().batch()
+
+          response.forEach((doc) => {
+             const docRef = admin.firestore().collection('templates').doc(doc.id)
+
+             batch.update(docRef,{
+               [key]: question
+             })
+          })
+
+          return batch;
+        })
+
+      await Promise.all([
+        batchProjects.commit(),
+        batchTemplates.commit()
+      ])
   });

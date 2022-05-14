@@ -44,7 +44,7 @@ describe('Modal froms', () => {
           .should('contain', 'Competency option')
           .within(() => {
             cy.get('input[name="name"]').type('Criteria A')
-            cy.get('button[type="submit"]').click()
+            cy.get('button[type="submit"]').click().wait(2000)
         })
 
         cy.get('@criteria')

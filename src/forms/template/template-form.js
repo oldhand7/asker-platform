@@ -18,7 +18,7 @@ import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/Proj
 import ErrorBox from 'components/ErrorBox/ErrorBox';
 import { ctxError } from 'libs/helper';
 import FeatureForm from 'components/FeatureForm/FeatureForm';
-import { calcDefaultScoringRules } from 'libs/project';
+import { calcDefaultScoringRules, packQuestions } from 'libs/project';
 
 import styles from './template-form.module.scss';
 
@@ -113,6 +113,8 @@ const TemplateForm = ({ template, className }) => {
 
       return;
     }
+
+    packQuestions(values);
 
     if (values.companyId == 'asker') {
       delete values.id;

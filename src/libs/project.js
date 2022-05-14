@@ -100,3 +100,43 @@ export const calcDefaultScoringRules = project => {
 
   return rules;
 }
+
+export const unpackQuestions = v => {
+  if (!v.questionsMap) {
+    return v;
+  }
+
+  for (let i = 0; i < v.stages.filter(s => s).length; i++) {
+    const key = v.stages[i].id
+
+    if (v.config && v.config[key] && v.config[key].questions) {
+      const questions = v.config[key].questions
+        .map(qid => {
+          return v.questionsMap[qid]
+        })
+        .filter(q => q)
+
+       v.config[key].questions = questions
+    }
+  }
+}
+
+export const packQuestions = p => {
+  const questionsMap = {}
+
+  const stageKeys = Object.keys(p.config);
+
+  for (let i = 0; i < stageKeys.length; i++) {
+    const key = stageKeys[i];
+
+    if (p.config[key] && p.config[key].questions) {
+      p.config[key].questions = p.config[key].questions.map(q => {
+        questionsMap[q.id] = q;
+
+        return q.id;
+      })
+    }
+  }
+
+  p.questionsMap = questionsMap;
+}
