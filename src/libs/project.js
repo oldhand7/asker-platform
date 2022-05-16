@@ -60,13 +60,17 @@ export const getProjectEvaluationCriterias = (project) => {
   }
 
   const categoryQuestions = [
-    ...aggregate['culture-fit'],
-    ...aggregate['hard-skill'],
-    ...aggregate['motivation']
+    'culture-fit',
+    'hard-skill',
+    'motivation'
   ]
 
   for (let i = 0; i < categoryQuestions.length; i++) {
-    const subtype = getSubtype(categoryQuestions[i])
+    const subtype = categoryQuestions[i]
+
+    if (!aggregate[subtype].length) {
+      continue;
+    }
 
     const customP = scoringRules && scoringRules[subtype];
     const p = aggregate[subtype].length * 100 / questions.length;
