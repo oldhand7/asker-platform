@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { useFlash } from 'libs/flash'
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
 import { ctxError } from 'libs/helper';
+import { unpackQuestions } from 'libs/project';
 
 import styles from 'styles/pages/project-overview.module.scss';
 
@@ -148,6 +149,8 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
       notFound: true
     }
   }
+
+  unpackQuestions(project)
 
   const interviews = await filterManyDocuments('interviews',
     [
