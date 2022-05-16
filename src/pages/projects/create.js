@@ -3,6 +3,7 @@ import { withUserGuardSsr } from 'libs/iron-session'
 import ProjectForm from 'forms/project/project-form';
 import Head from 'next/head';
 import { getSingleDocument } from 'libs/firestore-admin'
+import { unpackQuestions } from 'libs/project';
 
 import styles from 'styles/pages/projects-create.module.scss';
 
@@ -30,6 +31,8 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
 
     if (template) {
       delete template.user;
+
+      unpackQuestions(template)
 
       template.template = {
         id: template.id,

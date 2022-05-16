@@ -28,7 +28,7 @@ const useForm = (options = {}) => {
      const errors = validate(values, options.rules, options.messages);
 
      if (!errors) {
-       cb(values, ev)
+       cb(JSON.parse(JSON.stringify(values)), ev)
      } else {
        setErrors(errors)
 
