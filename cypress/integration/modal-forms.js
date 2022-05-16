@@ -44,13 +44,14 @@ describe('Modal froms', () => {
           .should('contain', 'Competency option')
           .within(() => {
             cy.get('input[name="name"]').type('Criteria A')
-            cy.get('button[type="submit"]').click().wait(2000)
+            cy.get('button[type="submit"]').click().wait(3000)
         })
 
         cy.get('@criteria')
           .should('contain', 'Criteria A')
           .find('button[data-test-id="trash-button"]')
           .click()
+          .wait(3000)
 
         cy.get('@criteria')
           .should('not.contain', 'Criteria A')

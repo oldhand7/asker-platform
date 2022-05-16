@@ -75,4 +75,38 @@ describe('Templates', () => {
           })
       })
   })
+
+  it('shoud create project from template', () => {
+    cy.createTextQuestion('Sample questione')
+
+    cy.createDummyTemplate('Tmpl Test')
+
+    cy.tableFirstRowNavigate('Edit');
+
+    cy.get('[data-test-id="feature-screening-questions"]').drag('[data-test-id="stage-2"] .Droppable')
+
+    cy.get('[data-test-id="feature-form"]')
+      .within(() => {
+        cy.get('input').first().type('Sample questione')
+
+        cy.get('table tbody tr').first()
+          .find('button')
+          .click()
+      })
+
+    cy.contains('Save template').click()
+
+    cy.get('[data-test-id="alert-success"]').should('contain', 'Template saved');
+
+    cy.tableFirstRowNavigate('Create project')
+
+    cy.get('[data-test-id="stage-2"]').click()
+
+    cy.get('[data-test-id="feature-form"]')
+      .within(() => {
+        cy.get('table')
+          .last()
+          .should('contain', 'Sample questione')
+      })
+  })
 })
