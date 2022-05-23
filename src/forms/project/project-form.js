@@ -120,8 +120,6 @@ const ProjectForm = ({ project, className }) => {
       return;
     }
 
-    packQuestions(values);
-
     if (values.companyId == 'asker') {
       delete values.id;
     }
@@ -134,6 +132,8 @@ const ProjectForm = ({ project, className }) => {
     if (!values.scoringRules) {
       values.scoringRules = calcDefaultScoringRules(values)
     }
+
+    packQuestions(values);
 
     const tasks = []
 
