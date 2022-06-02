@@ -114,8 +114,6 @@ const TemplateForm = ({ template, className }) => {
       return;
     }
 
-    packQuestions(values);
-
     if (values.companyId == 'asker') {
       delete values.id;
     }
@@ -132,6 +130,8 @@ const TemplateForm = ({ template, className }) => {
     if (!values.scoringRules) {
       values.scoringRules = calcDefaultScoringRules(values)
     }
+
+    packQuestions(values);
 
     setLoading(true)
 
