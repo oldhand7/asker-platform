@@ -8,7 +8,7 @@ const CompanyEmployeesForm = ({ className }) => {
 
   return <div data-test-id="company-employees-form" className={classNames(styles['company-employees-form'], className)}>
     {user.companyId ?
-    <iframe className={styles['company-employees-form-iframe']} src={`/admin/profile/#/users?filter=${JSON.stringify({type: 'hr', companyId: user.companyId})}`}></iframe> :
+    <iframe className={styles['company-employees-form-iframe']} src={`/admin/profile/#/users?filter=${JSON.stringify({ companyId: user.companyId})}`}></iframe> :
     null}
   </div>
 }
