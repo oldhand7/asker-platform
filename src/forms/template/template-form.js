@@ -124,7 +124,8 @@ const TemplateForm = ({ template, className }) => {
 
     values.user = {
       id: user.id,
-      name: user.name
+      name: user.name,
+      avatar: user.images && user.images[0].src || null
     }
 
     if (!values.scoringRules) {

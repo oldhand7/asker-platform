@@ -48,7 +48,7 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user, ge
       Created by {getSortArrowIcon('user.name')}</a>,
     dataIndex: 'user',
     key: 'user',
-    render: (user) => (user && <UserCard title={user.name} avatar={getAvatar()} />) || <NODATA />
+    render: (user) => (user && <UserCard title={user.name} avatar={user.avatar} />) || <NODATA />
   },
   {
     title: <a href='#' onClick={handleSortOrder('createdAt')}>
