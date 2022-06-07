@@ -2,10 +2,9 @@
 FROM node:16-alpine
 # install Firebase CLI
 RUN npm install -g firebase-tools
-RUN npm install -g firebase-functions
-RUN npm install -g firebase-admin
 
 COPY ./.env.production ./
 RUN source ./.env.production
+RUN ls -la
 
 ENTRYPOINT ["/usr/local/bin/firebase"]
