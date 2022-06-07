@@ -26,4 +26,4 @@ steps:
   args: ['deploy', '--only', 'hosting:production,functions', '-P', 'default']
 images:
 - gcr.io/$PROJECT_ID/nextjs-app-platform
-timeout: 720s
+timeout: 900s

@@ -28,4 +28,4 @@ steps:
   args: ['deploy', '--only', 'functions', '-P', 'asker-beta']
 images:
 - gcr.io/$PROJECT_ID/nextjs-app-platform-beta
-timeout: 720s
+timeout: 900s
