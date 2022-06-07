@@ -5,6 +5,5 @@ RUN npm install -g firebase-tools
 
 COPY ./.env.production ./
 RUN source ./.env.production
-RUN ls -la
 
 ENTRYPOINT ["/usr/local/bin/firebase"]
