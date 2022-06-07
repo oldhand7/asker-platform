@@ -2,7 +2,19 @@
   "projects": {
     "default": "asker-3e929",
     "asker-dev": "asker-dev",
-    "asker-test": "asker-test-98028"
+    "asker-test": "asker-test-98028",
+    "asker-beta": "asker-beta"
   },
-  "targets": {}
+  "targets": {
+    "asker-3e929": {
+      "hosting": {
+        "production": [
+          "asker-platform1"
+        ],
+        "beta": [
+          "asker-platform-beta"
+        ]
+      }
+    }
+  }
 }

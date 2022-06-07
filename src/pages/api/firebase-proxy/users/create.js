@@ -38,10 +38,7 @@ handler.post(async (req, res) => {
       })
 
 
-
     const company = await getSingleDocument('companies', req.session.user.companyId)
-    console.log(company, req.session.user.companyId)
-
 
     await sendInvitationEmail(body.email, body.password, company)
 

@@ -13,6 +13,14 @@ export const firebaseConfig = {
     messagingSenderId: "546816163571",
     appId: "1:546816163571:web:3826c408d81bc00e6d4186"
   },
+  beta: {
+    apiKey: "AIzaSyBto0zX-ZMZ-CRbicOnwMvJrX79EYFtg7M",
+    authDomain: "asker-beta.firebaseapp.com",
+    projectId: "asker-beta",
+    storageBucket: "asker-beta.appspot.com",
+    messagingSenderId: "843130474301",
+    appId: "1:843130474301:web:b98b983285a090adcbbf54"
+  },
   development: {
     apiKey: "AIzaSyCmTfkWiv5sA89hDOkCAXA7xa3wNMbfoyQ",
     authDomain: "asker-dev.firebaseapp.com",

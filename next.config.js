@@ -8,6 +8,13 @@ if (process.env.APP_ENV === 'testing') {
 	})
 }
 
+if (process.env.APP_ENV === 'beta') {
+	require('dotenv').config({
+		path: './.env.beta',
+		override: true
+	})
+}
+
 module.exports = {
 	reactStrictMode: true,
 	trailingSlash: true,

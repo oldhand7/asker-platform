@@ -1,0 +1,9 @@
+# use latest Node
+FROM node:16-alpine
+# install Firebase CLI
+RUN npm install -g firebase-tools
+
+COPY ./.env.production ./
+RUN source ./.env.production
+
+ENTRYPOINT ["/usr/local/bin/firebase"]

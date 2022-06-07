@@ -5,9 +5,11 @@
   "scripts": {
     "dev": "export APP_ENV=development && next dev",
     "test-dev": "export APP_ENV=testing && next dev",
-    "build": "export APP_ENV=production && next build",
+    "build": "next build",
+    "beta-build": "export APP_ENV=beta && next build",
     "test-build": "export APP_ENV=testing && next build",
-    "start": "export APP_ENV=production && next start",
+    "start": "next start",
+    "beta-start": "export APP_ENV=beta && next start",
     "test-start": "export APP_ENV=testing && next start",
     "lint": "next lint",
     "deploy": "firebase deploy",
