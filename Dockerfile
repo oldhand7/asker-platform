@@ -6,7 +6,7 @@ COPY --chown=node:node package*.json ./
 USER node
 RUN npm install --only=production --verbose && npm cache clean --force --loglevel=error
 COPY --chown=node:node . /home/node/app
-RUN cd ./cloud-functions && npm run install && cd ../
+RUN cd /home/node/app/cloud-functions && npm run install && cd /home/node/app/
 
 RUN npm run build
 
