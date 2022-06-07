@@ -14,6 +14,32 @@
         "beta": [
           "asker-platform-beta"
         ]
+      },
+      "storage": {
+        "main": [
+          "asker-3e929.appspot.com"
+        ]
+      }
+    },
+    "asker-beta": {
+      "storage": {
+        "main": [
+          "asker-beta.appspot.com"
+        ]
+      }
+    },
+    "asker-dev": {
+      "storage": {
+        "main": [
+          "asker-dev.appspot.com"
+        ]
+      }
+    },
+    "asker-test": {
+      "storage": {
+        "main": [
+          "asker-test-98028.appspot.com"
+        ]
       }
     }
   }

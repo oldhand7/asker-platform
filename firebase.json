@@ -39,5 +39,12 @@
   ],
   "functions": {
     "source": "cloud-functions"
-  }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": [
+    { "rules": "storage.rules", "target": "main" }
+  ]
 }
