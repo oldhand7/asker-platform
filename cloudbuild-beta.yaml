@@ -28,7 +28,8 @@ steps:
 - name: 'gcr.io/$PROJECT_ID/firebase'
   args: ['deploy', '--only', 'hosting:beta', '-P', 'default']
 - name: 'gcr.io/$PROJECT_ID/firebase'
-  args: ['deploy', '--only', 'functions', '-P', 'default']
+  args: ['deploy', '--only', 'functions', '-P', 'asker-beta']
+#
 images:
 - gcr.io/$PROJECT_ID/nextjs-app-platform-beta
 timeout: 900s
