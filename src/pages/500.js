@@ -3,16 +3,16 @@ import BlankLayout from 'layouts/blank/blank-layout'
 
 import styles from 'styles/pages/error.module.scss';
 
-const Page404 = () => {
+const Page500 = () => {
   return <div className={styles['error-page']}>
     <Head>
-      <title>Page not found - Asker</title>
+      <title>Server error - Asker</title>
       <meta name="robots" content="noindex" />
     </Head>
-    <h2 className={styles['error-page-message']}>Page not found.</h2>
+    <h2 className={styles['error-page-message']}>Server error.</h2>
   </div>
 }
 
-Page404.layout = BlankLayout
+Page500.layout = BlankLayout
 
-export default Page404;
+export default Page500;
