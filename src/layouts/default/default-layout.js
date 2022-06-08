@@ -52,6 +52,7 @@ const DefaultLayout = ({ children }) => {
       <Navbar />
       <Content>{children}</Content>
       <Footer />
+      {process.env.NEXT_PUBLIC_APP_ENV == 'beta' ? <span className="beta-label">Staging server</span> : null}
     </Container>
   )
 }
