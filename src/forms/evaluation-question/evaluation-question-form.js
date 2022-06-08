@@ -32,7 +32,7 @@ const defaultValues = {
 }
 
 const createValidationRules = type => ({
-  name: 'required|max:140',
+  name: 'required|max:250',
   desc: 'max:9000',
   followup: 'max:10',
   criteria: EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(type.id) != -1 ? '' : 'required'

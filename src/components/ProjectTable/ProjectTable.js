@@ -10,10 +10,11 @@ import Link from 'next/link';
 import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
 import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
 import { useQueryStates, queryTypes } from 'next-usequerystate'
+import { useUser } from 'libs/user';
 
 import styles from './ProjectTable.module.scss';
 
-const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder }) => {
+const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user }) => {
   const getSortArrowIcon = (name) => {
     return name == sortOrder.sort ? (sortOrder.order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
   }
@@ -84,7 +85,7 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder }) => {
         { id: 'edit', name: 'Edit' }
       ]
 
-      if (row.companyId != 'asker') {
+      if (user && user.companyId == row.companyId) {
         options.push({
           id: 'delete',
           name: 'Delete'
@@ -98,6 +99,7 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder }) => {
 
 const ProjectTable = ({ className, data = [], onDelete, ...props }) => {
   const router = useRouter()
+  const { user } = useUser();
 
   const [sortOrder, setSortOrder] = useQueryStates({
     sort: queryTypes.string.withDefault(router.query.sort || 'createdAt'),
@@ -127,7 +129,7 @@ const ProjectTable = ({ className, data = [], onDelete, ...props }) => {
   return <Table onRow={tagRow} rowKey={row => row.id} className={classNames(
     styles['project-table'],
     className
-  )} columns={getColumns({ handleCompactMenuChoice, sortOrder, setSortOrder })} data={data} {...props} />
+  )} columns={getColumns({ handleCompactMenuChoice, sortOrder, setSortOrder, user })} data={data} {...props} />
 }
 
 export default ProjectTable;
