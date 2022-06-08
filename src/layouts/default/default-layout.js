@@ -9,21 +9,43 @@ import styles from './default-layout.module.scss';
 
 const DefaultLayout = ({ children }) => {
   const [config] = useSite();
-  const [injected, setInjected] = useState(false);
+  const [injected, setInjected] = useState({});
   const { user } = useUser();
 
   useEffect(() => {
-    if (injected) return;
+    if (injected.chat) return;
 
     if (user && config['tawk-property-id'] && config['tawk-client-id']) {
-      console.log('starting')
       import('tawkto-react')
         .then(TawkTo => TawkTo.default)
         .then(TawkTo => {
            new TawkTo(config['tawk-property-id'], config['tawk-client-id'])
         })
+        .then(() => {
+          setInjected({
+            ...injected,
+            chat: true
+          })
+        })
     }
-  }, [config, injected, user])
+  }, [config, user, injected])
+
+  useEffect(() => {
+    if (injected.ga) return;
+
+    if (config['google-analytics-platform-id']) {
+      import('ga-gtag')
+        .then(gtag => {
+          gtag.install(config['google-analytics-platform-id']);
+        })
+        .then(() => {
+          setInjected({
+            ...injected,
+            ga: true
+          })
+        })
+    }
+  }, [config, injected])
 
   return (
     <Container className={styles['layout-container']}>
