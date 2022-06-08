@@ -9,7 +9,8 @@ export const calcInterviewScore = (interview, { scoringRules }) => {
 
   const criteriaEvaluations = [
     ...Object.values(aggregate.competency).reduce((a, c) => [...a, ...c], []),
-    ...Object.values(aggregate.experience).reduce((a, c) => [...a, ...c], [])
+    ...Object.values(aggregate.experience).reduce((a, c) => [...a, ...c], []),
+    ...Object.values(aggregate['hard-skill']).reduce((a, c) => [...a, ...c], [])
   ]
 
   for (let i = 0; i < criteriaEvaluations.length; i++) {
@@ -23,7 +24,6 @@ export const calcInterviewScore = (interview, { scoringRules }) => {
   }
 
   const categoryEvaluations = [
-    ...aggregate['hard-skill'],
     ...aggregate['culture-fit'],
     ...aggregate['motivation']
   ]
