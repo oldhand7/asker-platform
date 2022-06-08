@@ -89,8 +89,8 @@ describe('Templates', () => {
       .within(() => {
         cy.get('input').first().type('Sample questione')
 
-        cy.get('table tbody tr').first()
-          .find('button')
+        cy.find('table').first()
+          .find('button[data-test-id="add-question"]').first()
           .click()
       })
 

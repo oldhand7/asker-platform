@@ -114,7 +114,7 @@ const TemplateForm = ({ template, className }) => {
       return;
     }
 
-    if (values.companyId == 'asker') {
+    if (user.companyId != 'asker' && values.companyId == 'asker') {
       delete values.id;
     }
 

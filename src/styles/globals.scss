@@ -114,3 +114,14 @@ body {
 h1, h2, h3, h4, h5 {
   font-weight: 500;
 }
+
+.beta-label {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  background: orange;
+  color: white;
+  padding: 2px 4px;
+  border-radius: 0px 4px 0px 0px;
+}

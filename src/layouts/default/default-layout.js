@@ -15,11 +15,11 @@ const DefaultLayout = ({ children }) => {
   useEffect(() => {
     if (injected.chat) return;
 
-    if (user && config['tawk-property-id'] && config['tawk-client-id']) {
+    if (user && config['platform-tawk-property-id'] && config['platform-tawk-client-id']) {
       import('tawkto-react')
         .then(TawkTo => TawkTo.default)
         .then(TawkTo => {
-           new TawkTo(config['tawk-property-id'], config['tawk-client-id'])
+           new TawkTo(config['platform-tawk-property-id'], config['platform-tawk-client-id'])
         })
         .then(() => {
           setInjected({
@@ -52,6 +52,7 @@ const DefaultLayout = ({ children }) => {
       <Navbar />
       <Content>{children}</Content>
       <Footer />
+      {process.env.NEXT_PUBLIC_APP_ENV == 'beta' ? <span className="beta-label">Staging server</span> : null}
     </Container>
   )
 }

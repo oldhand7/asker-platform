@@ -39,6 +39,7 @@ const getColumns = ({ onQuestion, criteria = false, onDelete }) => {
       render: (_, q) => <div>
         {onDelete ?   <TrashButton onClick={() => onDelete(q)} className={styles['evaluation-questions-table-delete']} /> : null}
         {onQuestion ?  <button type="button"
+          data-test-id="add-question"
           className={styles['evaluation-questions-table-add']}
           onClick={() => onQuestion(q)}><PlusIcon /></button> : null}
       </div>

@@ -120,10 +120,6 @@ const ProjectForm = ({ project, className }) => {
       return;
     }
 
-    if (values.companyId == 'asker') {
-      delete values.id;
-    }
-
     values.userId = user.id;
     values.companyId = user.companyId;
     values.stagesCount = values.stages.filter(s => s).length;
