@@ -4,7 +4,7 @@ describe('Scoring', () => {
     cy.viewport(1200, 800)
   })
 
-  it('should score with atjusted layer', () => {
+  it('should score with adjusted layer', () => {
     cy.on('window:confirm', () => true)
 
     cy.createEvaluationCriteriaQuestion('competency', { name: 'Are you familiar with ISO standards?', criteria: 'ISO-90210' });
@@ -92,7 +92,7 @@ describe('Scoring', () => {
       })
   })
 
-  it('should score with atjusted layer (46)', () => {
+  it('should score with adjusted layer (46)', () => {
     cy.on('window:confirm', () => true)
 
     cy.createEvaluationCriteriaQuestion('competency', { name: 'QM1', criteria: 'XCM' });

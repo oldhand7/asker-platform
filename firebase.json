@@ -1,23 +1,50 @@
 {
-  "hosting": {
-    "site": "asker-platform1",
-    "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "run": {
-          "serviceId": "nextjs-app-platform",
-          "region": "europe-west3"
+  "hosting": [
+    {
+      "target": "production",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "run": {
+            "serviceId": "nextjs-app-platform",
+            "region": "europe-west3"
+          }
         }
-      }
-    ]
-  },
+      ]
+    },
+    {
+      "target": "beta",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "run": {
+            "serviceId": "nextjs-app-platform-beta",
+            "region": "europe-west3"
+          }
+        }
+      ]
+    }
+  ],
   "functions": {
     "source": "cloud-functions"
-  }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": [
+    { "rules": "storage.rules", "target": "main" }
+  ]
 }

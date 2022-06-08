@@ -2,15 +2,19 @@
 /*
 
 # whitelist
-#
 !/Dockerfile
+!/Dockerfile-beta
 !/package.json
 !/package-lock.json
 !/next.config.js
 !/jsconfig.json
 !/src/
+!/cloud-functions/
 !/.env
 !/.env.production
 !/.babelrc
+!/.firebaserc
+!/firebase.json
 !/firebase-service-creds-production.json
+!/firebase-service-creds-beta.json
 !/i18n.json

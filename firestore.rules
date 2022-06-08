@@ -1,0 +1,113 @@
+rules_version = '2';
+
+	function isCompanyAdmin() {
+     return request.auth.token.type == 'admin';
+  }
+
+  function isAccessingCompanyData() {
+  	return resource.data.companyId == request.auth.token.companyId;
+  }
+
+  function isAskerCompanyResource() {
+    	return resource.data.companyId == 'asker';
+  }
+
+  function isWritingCompanyData() {
+  	return request.resource.data.companyId == request.auth.token.companyId;
+  }
+
+  function isSuperadmin() {
+  	return request.auth.token.superadmin == true;
+  }
+
+  function notUpdatingCompanyId() {
+  	return request.resource.data.companyId == resource.data.companyId;
+  }
+
+  function notUpdatingSuperadmin() {
+  	return !('superadmin' in request.resource.data) || request.resource.data.superadmin == resource.data.superadmin;
+  }
+
+  function userNotConfigured() {
+  	return resource.data.companyId == "" && resource.data.email == resource.data.name
+  }
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /{document=**} {
+      allow write: if request.auth != null && isSuperadmin();
+      allow read: if request.auth != null && isSuperadmin();
+    }
+
+    match /pages/{pageId} {
+      allow read: if true;
+    }
+
+    match /sections/{sectionId} {
+      allow read: if true;
+    }
+
+    match /employees/{employeeId} {
+      allow read: if true;
+    }
+
+    match /settings/{settingId} {
+      allow read: if true;
+    }
+
+    match /translations/{translationId} {
+      allow read: if true;
+    }
+
+    match /companies/{companyId} {
+      allow create: if false;
+      allow update: if request.auth != null && (isCompanyAdmin() && companyId == request.auth.token.companyId);
+      allow delete: if false;
+      allow read: if request.auth != null && companyId == request.auth.token.companyId;
+    }
+
+    match /criteriaOptions/{criteriaOptionId} {
+      allow create: if request.auth != null && isWritingCompanyData();
+      allow update: if request.auth != null && isAccessingCompanyData() && notUpdatingCompanyId();
+      allow delete: if request.auth != null && isAccessingCompanyData();
+      allow read: if request.auth != null && (isAccessingCompanyData() || isAskerCompanyResource());
+    }
+
+    match /interviews/{interviewId} {
+      allow create: if request.auth != null && isWritingCompanyData();
+      allow update: if request.auth != null && isAccessingCompanyData() && notUpdatingCompanyId();
+      allow delete: if request.auth != null && isAccessingCompanyData();
+      allow read: if request.auth != null && isAccessingCompanyData();
+    }
+
+    match /projects/{projectId} {
+      allow create: if request.auth != null && isWritingCompanyData();
+      allow update: if request.auth != null && isAccessingCompanyData() && notUpdatingCompanyId();
+      allow delete: if request.auth != null && isAccessingCompanyData();
+      allow read: if request.auth != null && isAccessingCompanyData();
+    }
+
+    match /questions/{questionId} {
+      allow create: if request.auth != null && isWritingCompanyData();
+      allow update: if request.auth != null && isAccessingCompanyData() && notUpdatingCompanyId();
+      allow delete: if request.auth != null && isAccessingCompanyData();
+      allow read: if request.auth != null && (isAccessingCompanyData() || isAskerCompanyResource());
+    }
+
+    match /templates/{templateId} {
+      allow create: if request.auth != null && isWritingCompanyData();
+      allow update: if request.auth != null && isAccessingCompanyData() && notUpdatingCompanyId();
+      allow delete: if request.auth != null && isAccessingCompanyData();
+      allow read: if request.auth != null && (isAccessingCompanyData() || isAskerCompanyResource());
+    }
+
+    match /users/{userId} {
+      allow create: if request.auth != null && isCompanyAdmin() && isWritingCompanyData() && (!('superadmin' in request.resource.data) || request.resource.data.superadmin != true);
+      allow update: if request.auth != null && (userId == request.auth.uid || isCompanyAdmin() && isAccessingCompanyData()) && (userNotConfigured() || notUpdatingSuperadmin());
+      allow delete: if request.auth != null && isCompanyAdmin() && isAccessingCompanyData() && userId != request.auth.uid;
+    	/* resource is null when react-admin checks for existing doc */
+      allow read: if request.auth != null && (resource == null || userId == request.auth.uid || isAccessingCompanyData());
+    }
+  }
+}

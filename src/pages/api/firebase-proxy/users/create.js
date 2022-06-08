@@ -1,10 +1,11 @@
 import { createApiHandler as getHandler } from 'libs/nc';
-import { withUserGuard } from 'libs/iron-session';
-import { sessionOptions } from 'libs/iron-session';
+import { withUserGuard, sessionOptions } from 'libs/iron-session';
 import { getApp } from 'libs/firebase-admin';
 import { validate } from 'libs/validator';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { getAuth } from 'firebase-admin/auth'
+import { sendInvitationEmail } from 'libs/email';
+import { getSingleDocument } from 'libs/firestore-admin';
 
 const app = getApp();
 const handler = getHandler();
@@ -35,6 +36,14 @@ handler.post(async (req, res) => {
         displayName: body.email, //this will help avoid update loops later
         password: body.password
       })
+
+
+    const company = await getSingleDocument(
+      'companies',
+      req.session.user.companyId || ' '
+    )
+
+    await sendInvitationEmail(body.email, body.password, company)
 
     res.status(200).json({
       uid: user.uid

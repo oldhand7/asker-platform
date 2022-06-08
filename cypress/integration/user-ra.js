@@ -44,5 +44,14 @@ describe('User RA', () => {
 
       cy.simpleLogin('f.dakota@hotmail.net', 'test456', true)
       cy.confirmLoggedInAs('F. Dakota')
+
+      cy.task('getLastEmail', 'f.dakota@hotmail.net')
+        .its('html')
+        .then((html) => {
+          cy.document().invoke('write', html)
+          cy.contains('credentials', { matchCase : false})
+          cy.contains('f.dakota@hotmail.net')
+          cy.contains('test456')
+        })
   })
 })
