@@ -15,11 +15,11 @@ const DefaultLayout = ({ children }) => {
   useEffect(() => {
     if (injected.chat) return;
 
-    if (user && config['tawk-property-id'] && config['tawk-client-id']) {
+    if (user && config['platform-tawk-property-id'] && config['platform-tawk-client-id']) {
       import('tawkto-react')
         .then(TawkTo => TawkTo.default)
         .then(TawkTo => {
-           new TawkTo(config['tawk-property-id'], config['tawk-client-id'])
+           new TawkTo(config['platform-tawk-property-id'], config['platform-tawk-client-id'])
         })
         .then(() => {
           setInjected({
