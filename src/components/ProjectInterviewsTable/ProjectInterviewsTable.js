@@ -65,41 +65,23 @@ const getColumns = ({ handleCompactMenuChoice, project, sort, order }) => ([
       const interviewEvaluations = []
 
       const aggregate = getInterviewAggregate(interview);
-      const aggregateKeys = Object.keys(aggregate);
 
-      for (let i = 0; i < aggregateKeys.length; i++) {
-        const key = aggregateKeys[i];
-
-        if (key == 'competency' || key == 'experience') {
-          const criteriaKeys = Object.keys(aggregate[key]);
-
-          for (let n = 0; n < criteriaKeys.length; n++) {
-            const cKey = criteriaKeys[n];
-
-            const score = aggregate[key][cKey].reduce(sumReducer, 0);
+      for (const key in aggregate) {
+        if (key == 'competency' || key == 'experience' || key == 'hard-skill') {
+          for (const cid in aggregate[key]) {
+            const score = aggregate[key][cid].reduce(sumReducer, 0);
 
             if (!score) {
               continue;
             }
 
-            const { criteria } = aggregate[key][cKey][0];
+            const { criteria } = aggregate[key][cid][0];
 
             interviewEvaluations.push({
-              id: cKey,
+              id: cid,
               name: criteria.name,
-              score: Math.round(score / aggregate[key][cKey].length),
+              score: Math.round(score / aggregate[key][cid].length),
               type: criteria.type
-            })
-          }
-        } else if (key == 'hard-skill') {
-          for (let n = 0; n < aggregate['hard-skill'].length; n++) {
-            const { score, criteria } = aggregate['hard-skill'][n]
-
-            interviewEvaluations.push({
-              id: `hs-${criteria.id}`,
-              name: ucFirst(criteria.name),
-              score: Math.round(score / aggregate[key].length),
-              type: 'hard-skill'
             })
           }
         } else {

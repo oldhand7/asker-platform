@@ -4,16 +4,12 @@ export const getInterviewAggregate = ({ evaluations }) => {
   const aggregate = {
     competency: {},
     experience: {},
-    'hard-skill': [],
+    'hard-skill': {},
     motivation: [],
     'culture-fit': []
   }
 
-  const evaluationKeys = Object.keys(evaluations);
-
-  for (let i = 0; i < evaluationKeys.length; i++) {
-    const eKey = evaluationKeys[i];
-
+  for (const eKey in evaluations) {
     const feature = features.find(f => {
       return f.id == eKey && f.metadata && f.metadata.criteria
     })
@@ -24,7 +20,7 @@ export const getInterviewAggregate = ({ evaluations }) => {
 
     const { metadata } = feature;
 
-    if (metadata.criteria == 'competency' || metadata.criteria == 'experience') {
+    if (['competency', 'experience', 'hard-skill'].indexOf(metadata.criteria) > -1) {
       const criteriaEvaluations = Object.values(evaluations[eKey]);
 
       for (let n = 0; n < criteriaEvaluations.length; n++) {
@@ -43,6 +39,7 @@ export const getInterviewAggregate = ({ evaluations }) => {
       ]
     }
   }
+
 
   return aggregate;
 }
