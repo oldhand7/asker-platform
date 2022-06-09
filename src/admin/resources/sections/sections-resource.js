@@ -9,6 +9,8 @@ import {
     ReferenceInput,
     SelectInput,
     TextInput,
+    FileInput,
+    FileField,
     TabbedShowLayout,
     Tab,
     RichTextField,
@@ -71,6 +73,10 @@ export const SectionsEdit = props => {
             <ImageInput source="images" multiple={true}>
               <ImageField source="src" title="title" />
             </ImageInput>
+
+            <FileInput source="files" label="Related files" multiple={true}>
+              <FileField source="src" title="title" />
+            </FileInput>
         </SimpleForm>
     </Edit>
 }
@@ -92,6 +98,10 @@ export const SectionsAdd = props => {
             <ImageInput source="images" multiple={true}>
               <ImageField source="src" title="title" />
             </ImageInput>
+
+            <FileInput source="files" label="Related files" multiple={true}>
+              <FileField source="src" title="title" />
+            </FileInput>
         </SimpleForm>
     </Create>
 }
