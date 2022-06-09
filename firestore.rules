@@ -60,6 +60,10 @@ service cloud.firestore {
       allow read: if true;
     }
 
+		match /partners/{partnerId} {
+			allow read: if true;
+		}
+
     match /companies/{companyId} {
       allow create: if false;
       allow update: if request.auth != null && (isCompanyAdmin() && companyId == request.auth.token.companyId);
