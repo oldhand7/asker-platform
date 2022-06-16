@@ -16,6 +16,8 @@ describe('Company presentation feature', () => {
       .find('button').click().parent()
       .contains('Edit').click()
 
+    cy.contains('Add stage').click()
+
     cy.get('[data-test-id="feature-company-presentation"]').drag('[data-test-id="stage-2"] .Droppable')
 
     cy.get('[data-test-id="stage-2"]')

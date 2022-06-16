@@ -50,10 +50,11 @@ export const allowedHtmlTags = ['ul', 'ol', 'li', 'strong', 'p', 'em', 'br']
 export const EVALUATION_SUBTYPES_NO_CRITERIA = ['culture-fit', 'motivation'];
 export const COLOR_MAP = {
   'competency': '#43B88C',
-  'experience': '#D8F75A',
-  'hard-skill': '#E5C673',
-  'motivation': '#D74E96',
-  'culture-fit': '#FF915D',
+  'experience': '#3D8976',
+  'hard-skill': '#36A1CC',
+  'motivation': '#FFBC5D',
+  'culture-fit': '#4A67CE',
   'other': '#CCC',
   'screening': '#7844B8'
 }
+export const DEFAULT_STAGE_TIME = 5;

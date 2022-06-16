@@ -38,7 +38,6 @@ describe('Templates', () => {
     cy.title().should('include', 'Create template')
 
     cy.get('form[data-test-id="template-form"]').within(() => {
-      cy.contains('Create a new template')
 
       cy.get('input[name="templateName"]').type('Demo TPL')
 
@@ -89,7 +88,7 @@ describe('Templates', () => {
       .within(() => {
         cy.get('input').first().type('Sample questione')
 
-        cy.find('table').first()
+        cy.get('table').first()
           .find('button[data-test-id="add-question"]').first()
           .click()
       })

@@ -1,35 +1,51 @@
 @import 'styles/vars';
 
 .feature-label {
-  cursor: pointer;
+  cursor: drag;
   display: inline-block;
   line-height: 56rem;
-  padding: 0 14rem;
+  padding: 0 16rem;
   min-width: 100%;
   font-weight: 500;
-  font-size: 16rem;
+  font-size: 14rem;
   background: rgba($brandish-tar, 0.1);
-  border: 1px solid $brandish-tar;
   box-sizing: border-box;
   border-radius: 6px;
   color: $brandish-tar;
   white-space: nowrap;
+  position: relative;
 
   &-other {}
 
   &-evaluation {
-    background: rgba($brandish-forest-green, 0.1);
-    border: 1px solid $brandish-forest-green;
+    background: rgba($brandish-dark-green, 0.1);
     box-sizing: border-box;
     border-radius: 6px;
     color: $brandish-forest-green;
   }
 
   &-attraction {
-    background: rgba($brandish-caramel, 0.1);
-    border: 1px solid $brandish-caramel;
+    background: rgba($brandish-green, 0.1);
     box-sizing: border-box;
     border-radius: 6px;
-    color: $brandish-caramel;
+    color: $brandish-green;
+  }
+
+  &-icon {
+    position: absolute;
+    right: 16rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &-stager {
+    background: #F6F6F6;
+    color: #5B5B5B;
+    border: 1px solid #CECECE;
+    font-weight: 500;
+  }
+
+  &-drag {
+    background: white;
   }
 }

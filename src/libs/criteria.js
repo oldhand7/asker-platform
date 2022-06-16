@@ -179,3 +179,23 @@ export const criteriaTypes = [
 export const getCriteriaTypeById = id => {
   return criteriaTypes.find(ct => ct.id == id);
 }
+
+export const flattenCriteriaTree = (criteria, key = 'weight') => {
+  const criteriaMap = {}
+
+  for (let i = 0; i < criteria.length; i++) {
+    const { type, children } = criteria[i];
+
+    if (children) {
+      for (let k = 0; k < children.length; k++) {
+        const { type } = children[k];
+
+        criteriaMap[type] = children[k][key];
+      }
+    } else {
+      criteriaMap[type] = criteria[i][key];
+    }
+  }
+
+  return criteriaMap;
+}

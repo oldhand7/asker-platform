@@ -7,14 +7,15 @@ describe('WYSIWYG', () => {
     cy.createDummyProject('Just some project')
     cy.tableFirstRowNavigate('Edit')
 
-    cy.get('[data-test-id="stage-1"]').click()
+    cy.get('[data-test-id="stage-1"]').click().wait(1000)
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
-        cy.get('[contenteditable="true"]').click()
+        cy.get('[contenteditable="true"]').click().wait(500)
+
         cy.get('button').eq(0).click()
 
-        cy.get('[contenteditable="true"]').click()
+        cy.get('[contenteditable="true"]').click().wait(500)
           .type('The world is bold.')
       })
 
@@ -35,16 +36,16 @@ describe('WYSIWYG', () => {
     cy.createDummyProject('Just some project')
     cy.tableFirstRowNavigate('Edit')
 
-    cy.get('[data-test-id="stage-1"]').click()
+    cy.get('[data-test-id="stage-1"]').click().wait(1000)
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
-        cy.get('[contenteditable="true"]').click()
+        cy.get('[contenteditable="true"]').click().wait(500)
           .type('List of cities:{enter}')
 
         cy.get('button').eq(1).click()
 
-        cy.get('[contenteditable="true"]').click()
+        cy.get('[contenteditable="true"]').click().wait(500)
           .type('Prague{enter}')
           .type('Berlin{enter}')
           .type('Lisbon{enter}')
@@ -74,16 +75,16 @@ describe('WYSIWYG', () => {
     cy.createDummyProject('Just some project')
     cy.tableFirstRowNavigate('Edit')
 
-    cy.get('[data-test-id="stage-1"]').click()
+    cy.get('[data-test-id="stage-1"]').click().wait(1000)
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
-        cy.get('[contenteditable="true"]').click()
+        cy.get('[contenteditable="true"]').click().wait(500)
           .type('List of animals:{enter}')
 
-        cy.get('button').eq(2).click()
+        cy.get('button').eq(2).click().wait(1000)
 
-        cy.get('[contenteditable="true"]').click()
+        cy.get('[contenteditable="true"]').click().wait(500)
           .type('Dog{enter}')
           .type('Cat{enter}')
           .type('Horse{enter}')

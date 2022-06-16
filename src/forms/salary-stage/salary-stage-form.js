@@ -30,6 +30,8 @@ const SalaryStageForm = ({ className, values, onValues, onError }) => {
   useEffect(() => {
     if (!errors) {
       onValues(formValues)
+    } else {
+      onError(new Error('Min max values incorrect or '))
     }
   }, [formValues, errors])
 
@@ -53,12 +55,6 @@ const SalaryStageForm = ({ className, values, onValues, onError }) => {
     })
   }
 
-  useEffect(() => {
-    if (errors) {
-      onError(new Error('Min max values incorrect or '))
-    }
-  }, [errors])
-
   const handleChange = (vals) => {
     control.input('config', false)
   }
@@ -70,7 +66,6 @@ const SalaryStageForm = ({ className, values, onValues, onError }) => {
       <TextInputField label='Absolute min' className={styles['salary-stage-form-field']} onChange={handleMin} name="min" value={formValues.range[0]} />
       <TextInputField label='Absolute max' className={styles['salary-stage-form-field']} onChange={handleMax} name="max" value={formValues.range[1]} />
     </FlexRow>
-
 
     <TextInputField label='Currency' error={errors && errors.currency} className={styles['salary-stage-form-field']} onChange={control.input('currency')} name="currency" value={formValues.currency} />
 

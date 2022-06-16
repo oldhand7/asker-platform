@@ -7,6 +7,8 @@ describe('Modal froms', () => {
     cy.createDummyProject('Test project')
     cy.tableFirstRowNavigate('Edit')
 
+    cy.contains('Add stage').click()
+
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
 
     cy.get('#feature-select-modal')
@@ -143,6 +145,8 @@ describe('Modal froms', () => {
   it('should create a Yes/No screening question using modal', () => {
     cy.createDummyProject('Test project')
     cy.tableFirstRowNavigate('Edit')
+
+    cy.contains('Add stage').click()
 
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
 

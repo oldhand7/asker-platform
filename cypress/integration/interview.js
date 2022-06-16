@@ -18,6 +18,8 @@ describe('Interview', () => {
     cy.contains('Add stage')
       .click()
       .click()
+      .click()
+      .click()
 
     cy.get('[data-test-id="stage-1"] [data-test-id="load-button"]').click()
     cy.get('#feature-select-modal').contains('Motivation').click().wait(2000)

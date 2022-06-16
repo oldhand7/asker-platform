@@ -137,6 +137,8 @@ describe('Screening questions', () => {
       cy.createDummyProject('Position X')
       cy.tableFirstRowNavigate('Edit')
 
+      cy.contains('Add stage').click()
+
       cy.get('[data-test-id="feature-screening-questions"]').drag('[data-test-id="stage-2"] .Droppable')
 
       cy.get('[data-test-id="stage-2"]')
@@ -320,6 +322,8 @@ describe('Screening questions', () => {
           })
 
         cy.contains('Complete interview').click()
+
+        cy.location('pathname').should('contain', '/overview/')
 
         cy.tableFirstRowNavigate('Edit response')
 

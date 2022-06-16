@@ -22,8 +22,8 @@
   }
 
   @media (max-width: 1440px) {
-    font-size: calc(0.95 * 100vw / 1440);
-    --container-width: 80%;
+    font-size: calc(1 * 100vw / 1440);
+    --container-width: 90%;
   }
 
   @media (max-width: 1200px) {

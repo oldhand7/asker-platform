@@ -11,28 +11,16 @@ import ScoringRulesModal from 'modals/scoring-rules/scoring-rules-modal';
 import { useModal } from 'libs/modal';
 import { getProjectEvaluationCriterias } from 'libs/project'
 
-const ajusted = (criteria, scoringRules) => {
-  return criteria.map(c => {
-    const altWeight = (scoringRules || {})[c.type || c.id];
-
-    if (scoringRules && scoringRules[c.type || c.id]) {
-      return {
-        ...c,
-        weight: fixWeight(altWeight)
-      }
-    }
-
-    return criteria
-  })
-}
-
 const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
   const [criteria, setCriteria] = useState([]);
   const [error, setError] = useState(null);
-  const openScoreAdjustmentModal = useModal(ScoringRulesModal, { values: project.scoringRules, criteria })
+  const openScoreAdjustmentModal = useModal(
+    ScoringRulesModal, { values: project.scoringRules, criteria })
 
   useEffect(() => {
-    setCriteria(getProjectEvaluationCriterias(project))
+    const criteria = getProjectEvaluationCriterias(project);
+
+    setCriteria(criteria)
   }, [project])
 
   useEffect(() => {
@@ -48,11 +36,14 @@ const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
   return criteria.length ? <div data-testid="project-evaluation-criteria" className={classNames(styles['project-evaluation-criteria'], className)}>
   <h2 className={styles['project-evaluation-criteria-title']}>Evaluation Criteria</h2>
 
-  <PieChart className={styles['project-evaluation-criteria-chart']} width={500} height={250} >
+  <PieChart className={styles['project-evaluation-criteria-chart']} width={300} height={250} >
     <Pie
       data={criteria}
-      innerRadius={70}
+      innerRadius={85}
       outerRadius={100}
+      startAngle={90}
+      endAngle={450}
+      cornerRadius={50}
       fill="#8884d8"
       paddingAngle={criteria.length == 1 ? 0 : 2}
            dataKey="weight"

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, forwardRef } from 'react'
 import classNames from 'classnames';
 
 import styles from './TextInput.module.scss';
@@ -7,7 +7,7 @@ const TextInput = ({ focus, className, name = '', type="text", onFocus, onBlur, 
   const [focused, setFocused] = useState(false)
 
   const ref = useRef();
-  
+
   useEffect(() => {
     if (focus && ref.current) {
       ref.current.focus()

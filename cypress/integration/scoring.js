@@ -12,8 +12,9 @@ describe('Scoring', () => {
 
     cy.createDummyProject('Some position')
 
-    // cy.visit('/')
     cy.tableFirstRowNavigate('Edit');
+
+    cy.contains('Add stage').click()
 
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
     cy.get('#feature-select-modal').contains('Competency').click().wait(2000)
@@ -22,6 +23,8 @@ describe('Scoring', () => {
       .first()
       .find('button')
       .click()
+
+    cy.contains('Add stage').click()
 
     cy.get('[data-test-id="stage-3"] [data-test-id="load-button"]').click()
     cy.get('#feature-select-modal').contains('Motivation').click().wait(2000)
@@ -32,8 +35,15 @@ describe('Scoring', () => {
       .click()
 
     cy.contains('Evaluation Criteria').parent()
-      .should('contain', '50% Motivation')
-      .should('contain', '50% ISO-90210')
+      .within(() => {
+        cy.contains('Motivation').parent().should('contain', '50%')
+        cy.contains('Competency').parent().should('contain', '50%').click()
+          .parent()
+          .find('ul').within(() => {
+            cy.get('li').should('have.length', 1);
+            cy.get('li').eq(0).should('contain', 'ISO-90210').should('contain', '50%')
+          })
+      })
       .contains('Edit')
       .click()
 
@@ -44,10 +54,18 @@ describe('Scoring', () => {
 
         cy.contains('Save').click()
       })
+      .wait(1000)
 
     cy.contains('Evaluation Criteria').parent()
-      .should('contain', '80% Motivation')
-      .should('contain', '20% ISO-90210')
+      .within(() => {
+        cy.contains('Motivation').parent().should('contain', '80%')
+        cy.contains('Competency').parent().should('contain', '20%').click()
+          .parent()
+          .find('ul').within(() => {
+            cy.get('li').should('have.length', 1);
+            cy.get('li').eq(0).should('contain', 'ISO-90210').should('contain', '20%')
+          })
+      })
 
     cy.contains('Save project').click()
 
@@ -105,6 +123,8 @@ describe('Scoring', () => {
 
     cy.tableFirstRowNavigate('Edit');
 
+    cy.contains('Add stage').click()
+
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
     cy.get('#feature-select-modal').contains('Competency').click().wait(2000)
     cy.get('[data-test-id="feature-form"]')
@@ -119,9 +139,16 @@ describe('Scoring', () => {
       })
 
     cy.contains('Evaluation Criteria').parent()
-      .should('contain', '40% XCM')
-      .should('contain', '40% XCR')
-      .should('contain', '20% XCS')
+        .within(() => {
+          cy.contains('Competency').parent().should('contain', '100%').click()
+            .parent()
+            .find('ul').within(() => {
+              cy.get('li').should('have.length', 3);
+              cy.get('li').eq(0).should('contain', 'XCM').should('contain', '40%')
+              cy.get('li').eq(1).should('contain', 'XCR').should('contain', '40%')
+              cy.get('li').eq(2).should('contain', 'XCS').should('contain', '20%')
+            })
+        })
       .contains('Edit')
       .click()
 
@@ -135,9 +162,16 @@ describe('Scoring', () => {
       })
 
     cy.contains('Evaluation Criteria').parent()
-    .should('contain', '50% XCR')
-    .should('contain', '30% XCM')
-    .should('contain', '20% XCS')
+      .within(() => {
+        cy.contains('Competency').parent().should('contain', '100%').click()
+          .parent()
+          .find('ul').within(() => {
+            cy.get('li').should('have.length', 3);
+            cy.get('li').eq(0).should('contain', 'XCR').should('contain', '50%')
+            cy.get('li').eq(1).should('contain', 'XCM').should('contain', '30%')
+            cy.get('li').eq(2).should('contain', 'XCS').should('contain', '20%')
+          })
+        })
 
     cy.contains('Save project').click()
 

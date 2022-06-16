@@ -1,0 +1,109 @@
+.criteria-legend {
+  width: 100%;
+
+  &-label {
+    font-size: 1em;
+    line-height: 21rem;
+    display: flex;
+    justify-content: space-between;
+
+    &-name {
+      font-weight: 500;
+      color: #494949;
+    }
+
+    &-value {
+      font-weight: 700;
+
+      &-inner {
+        color: #494949;
+      }
+    }
+
+  }
+
+
+  &-has-children &-label {
+    cursor: pointer;
+  }
+
+  &-details {
+    position: relative;
+    display: none;
+    width: 100%;
+    padding: 0;
+    list-style: none;
+    margin: 0;
+    padding-left: 10rem;
+    margin: 5rem 0;
+    font-size: 0.8em;
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      right: 0;
+      height: calc(100% + 5rem);
+      bottom: 0;
+      width: 1px;
+      background: currentColor;
+      transform: translateY(-9rem);
+    }
+
+    &-item {
+      position: relative;
+      display: flex;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 18rem;
+      justify-content: space-between;
+      padding-right: 10rem;
+
+      &::before {
+        content: '';
+        width: 4px;
+        height: 4px;
+        position: absolute;
+        background: #929292;;
+        border-radius: 50%;
+        left: 0%;
+        top: 50%;
+        transform: translate(calc(-100% - 5rem), -50%);
+      }
+
+      &::after {
+        content: '';
+        width: 7.5rem;
+        height: 2px;
+        position: absolute;
+        background: currentColor;
+        border-radius: 50%;
+        right: 0;
+        top: 50%;
+        transform: translate(0, -50%);
+      }
+
+      &-name {
+        color: #929292;
+      }
+
+      &-value {
+        color: #929292;
+      }
+    }
+  }
+
+  &-active &-details {
+    display: block;
+  }
+
+  &-active &-label-value {
+    border: 2px solid currentColor;
+    border-radius: 300px;
+    padding: 0 4rem;
+  }
+
+  &-progress {
+    margin-top: 10rem;
+  }
+}

@@ -11,7 +11,7 @@ const defaultValues = {
 }
 
 const rules = {
-  text: 'max:9000',
+  html: 'max:9000',
 }
 
 const messages = {

@@ -18,7 +18,7 @@ const FeatureSelectForm = ({ className, onValues }) => {
 
         return <div key={`feature-list-widget-${featureType.id}`} className={styles['feature-select-form-widget']}>
           <h3 className={styles['feature-select-form-widget-title']}>{featureType.name}</h3>
-          <FeatureList className={styles['feature-select-form-widget-body']} features={targetFeatures} onClick={onValues} />
+          <FeatureList className={styles['feature-select-form-widget-body']} features={targetFeatures} onClick={onValues} context='popup' />
         </div>
       })}
     </div>

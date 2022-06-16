@@ -3,10 +3,16 @@ import { render, screen, fireEvent, prettyDOM } from '@testing-library/react';
 import ScoringRulesForm from './scoring-rules-form';
 
 const dummyCriterias = [
-  { name: 'AAA', weight: 50, id: 'aaa' },
-  { name: 'BBB', weight: 25, id: 'bbb' },
-  { name: 'CCC', weight: 20, id: 'ccc', },
-  { name: 'DDD', weight: 5, id: 'ddd' }
+  {
+    name: 'Experience',
+    type: 'experience',
+    children: [
+      { name: 'AAA', weight: 50, type: 'aaa' },
+      { name: 'BBB', weight: 25, type: 'bbb' },
+      { name: 'CCC', weight: 20, type: 'ccc', },
+      { name: 'DDD', weight: 5, type: 'ddd' }
+    ]
+  }
 ]
 
 describe('Scoring rules form', () => {

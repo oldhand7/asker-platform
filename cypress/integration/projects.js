@@ -32,7 +32,6 @@ describe('Projects', () => {
     cy.title().should('include', 'Create project')
 
     cy.get('form[data-test-id="project-form"]').within(() => {
-      cy.contains('Create a new project')
 
       cy.get('input[name="name"]').type('Demo ABC')
 

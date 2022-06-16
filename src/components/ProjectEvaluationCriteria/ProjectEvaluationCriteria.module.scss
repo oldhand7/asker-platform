@@ -4,8 +4,7 @@
   border-radius: 9px;
   background: white;
   padding: 20rem;
-  text-align: center;
-  max-width: 490rem;
+  max-width: 320rem;
 
   div {
     max-width: 100%;
@@ -13,8 +12,9 @@
 
   &-title {
     font-weight: 500;
-    font-size: 24rem;
-    line-height: 36px;
+    font-size: 20rem;
+    line-height: 30rem;
+    color: #494949;
   }
 
   svg {
@@ -25,6 +25,7 @@
     margin-left: auto;
     margin-right: auto;
     display: block;
+    transform: scaleX(-1);
   }
 
   &-legend {

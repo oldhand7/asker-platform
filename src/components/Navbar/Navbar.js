@@ -59,30 +59,29 @@ const Navbar = ({ className, menu = [] }) => {
   const [open, setOpen] = useState(false);
   const [menuItemsLoad, setMenuItemsLoad] = useState([]);
 
-  const {
-    isScrollingUp,
-    isScrollingDown,
-    isScrolling
-  } = useScrollDirection()
-
-  useEffect(() => {
-    if (isScrollingUp && window.pageYOffset > 100) {
-      setMode('fixed')
-    }
-  }, [isScrollingUp])
-
-  useEffect(() => {
-    if (isScrollingDown && window.pageYOffset > 100) {
-      setMode('offset')
-    }
-  }, [isScrollingDown])
-
-  useEffect(() => {
-    if (window.pageYOffset == 0) {
-      setMode('normal')
-    }
-  }, [isScrolling])
-
+  // const {
+  //   isScrollingUp,
+  //   isScrollingDown,
+  //   isScrolling
+  // } = useScrollDirection()
+  //
+  // useEffect(() => {
+  //   if (isScrollingUp && window.pageYOffset > 100) {
+  //     setMode('fixed')
+  //   }
+  // }, [isScrollingUp])
+  //
+  // useEffect(() => {
+  //   if (isScrollingDown && window.pageYOffset > 100) {
+  //     setMode('offset')
+  //   }
+  // }, [isScrollingDown])
+  //
+  // useEffect(() => {
+  //   if (window.pageYOffset == 0) {
+  //     setMode('normal')
+  //   }
+  // }, [isScrolling])
 
   useEffect(() => {
     if (open) {
