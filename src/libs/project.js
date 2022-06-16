@@ -1,30 +1,42 @@
 import { projectStageQuestionsReducer, getSubtype, ucFirst } from 'libs/helper';
+import { flattenCriteriaTree } from 'libs/criteria';
+import { DEFAULT_STAGE_TIME } from 'libs/config'
+
 const fixWeight = val => Number.parseFloat(Number.parseFloat(val).toFixed(2))
 
-export const getProjectEvaluationCriterias = (project) => {
-  const { config, scoringRules } = project;
+const weightSort = function(ca, cb) {
+  if (ca.weight < cb.weight) return 1;
+  if (ca.weight > cb.weight) return -1;
 
-  if (!config) {
-    return [];
+  if (ca.name) {
+    if (ca.name < cb.name) return -1;
+    if (ca.name > cb.name) return 1;
   }
 
-  const questions = Object.values(config)
+  return 0;
+}
+
+export const getProjectEvaluationCriterias = (project) => {
+  const { stages, scoringRules } = project;
+
+  const questions = stages.filter(s => s && s.config).map(s => s.config)
     .reduce(projectStageQuestionsReducer, [])
     .filter(({ type }) => {
       return type != 'screening' && type != 'other';
     })
 
   const aggregate = {
-    'hard-skill': questions.filter(q => getSubtype(q) == 'hard-skill'),
     'motivation': questions.filter(q => getSubtype(q) == 'motivation'),
     'culture-fit': questions.filter(q => getSubtype(q) == 'culture-fit'),
+    'hard-skill': {},
     competency: {},
     experience: {},
   }
 
   const criteriaQuestions = [
     ...questions.filter(q => getSubtype(q) == 'competency'),
-    ...questions.filter(q => getSubtype(q) == 'experience')
+    ...questions.filter(q => getSubtype(q) == 'experience'),
+    ...questions.filter(q => getSubtype(q) == 'hard-skill')
   ]
 
   for (let i = 0; i < criteriaQuestions.length; i++) {
@@ -38,89 +50,91 @@ export const getProjectEvaluationCriterias = (project) => {
     }
   }
 
-  const criterias = [];
-
-  for (let i = 0; i < Object.values(criteriaQuestions).length; i++) {
-    const { criteria } = criteriaQuestions[i];
-    const subtype = getSubtype(criteriaQuestions[i]);
-
-    if (!aggregate[subtype][criteria.id]) {
-      continue;
-    }
-
-    const customP = scoringRules && scoringRules[criteria.id];
-    const p = aggregate[subtype][criteria.id].length * 100 / questions.length;
-
-    delete aggregate[subtype][criteria.id]
-
-    criterias.push({
-      ...criteria,
-      weight: fixWeight(customP || p)
-    })
-  }
-
   const categoryQuestions = [
     'culture-fit',
-    'hard-skill',
     'motivation'
   ]
 
-  for (let i = 0; i < categoryQuestions.length; i++) {
-    const subtype = categoryQuestions[i]
+  const result = []
 
-    if (!aggregate[subtype].length) {
-      continue;
+  for (const key in aggregate) {
+    if (categoryQuestions.indexOf(key) > -1) {
+      if (!aggregate[key].length) {
+        continue;
+      }
+
+      const customP = scoringRules && scoringRules[key];
+      const p = aggregate[key].length * 100 / questions.length;
+
+      result.push({
+        name: ucFirst(key),
+        type: key,
+        weight: fixWeight(customP || p),
+        questions: aggregate[key].length
+      })
+    } else {
+      if (!Object.values(aggregate[key]).length) {
+        continue;
+      }
+
+      const evaluationAggregate = {
+        name: ucFirst(key),
+        type: key,
+        weight: 0,
+        children: []
+      }
+
+      for (const subtype in aggregate[key]) {
+        const customP = scoringRules && scoringRules[subtype];
+        const p = aggregate[key][subtype].length * 100 / questions.length;
+
+        const w = fixWeight(customP || p);
+
+        evaluationAggregate.children.push({
+          name: aggregate[key][subtype][0].criteria.name,
+          type: subtype,
+          weight: w,
+          questions: aggregate[key][subtype].length
+        })
+
+        evaluationAggregate.weight += w;
+        evaluationAggregate.questions += aggregate[key][subtype].length;
+      }
+
+      evaluationAggregate.children.sort(weightSort)
+      evaluationAggregate.weight = fixWeight(evaluationAggregate.weight)
+
+      result.push(evaluationAggregate)
     }
-
-    const customP = scoringRules && scoringRules[subtype];
-    const p = aggregate[subtype].length * 100 / questions.length;
-
-    criterias.push({
-      name: ucFirst(subtype),
-      type: subtype,
-      weight: fixWeight(customP || p)
-    })
   }
 
-  criterias.sort(function(ca, cb) {
-    if (ca.weight < cb.weight) return 1;
-    if (ca.weight > cb.weight) return -1;
+  result.sort(weightSort);
 
-    return 0;
-  });
-
-  return criterias;
+  return result.filter(r => r.weight);
 }
 
 export const calcDefaultScoringRules = project => {
   const rules = {}
 
-  const criterias = getProjectEvaluationCriterias(project);
+  const criteriaTree = getProjectEvaluationCriterias(project);
 
-  for (let i = 0; i < criterias.length; i++) {
-    const { id, type, weight } = criterias[i]
-    rules[id || type] = weight;
-  }
-
-  return rules;
+  return flattenCriteriaTree(criteriaTree);
 }
 
-export const unpackQuestions = v => {
-  if (!v.questionsMap) {
-    return v;
-  }
+export const unpackQuestions = p => {
+  if (!p.questionsMap) return;
 
-  for (let i = 0; i < v.stages.filter(s => s).length; i++) {
-    const key = v.stages[i].id
+  for (let i = 0; i < p.stages.length; i++) {
+    if (!p.stages[i]) continue;
 
-    if (v.config && v.config[key] && v.config[key].questions) {
-      const questions = v.config[key].questions
-        .map(qid => {
-          return v.questionsMap[qid]
-        })
+    const { config } = p.stages[i]
+
+    if (config && config.questions) {
+      const questions = config.questions
+        .map(qid => p.questionsMap[qid])
         .filter(q => q)
 
-       v.config[key].questions = questions
+       config.questions = questions;
     }
   }
 }
@@ -128,13 +142,13 @@ export const unpackQuestions = v => {
 export const packQuestions = p => {
   const questionsMap = {}
 
-  const stageKeys = Object.keys(p.config);
+  for (let i = 0; i < p.stages.length; i++) {
+    if (!p.stages[i]) continue;
 
-  for (let i = 0; i < stageKeys.length; i++) {
-    const key = stageKeys[i];
+    const { config } = p.stages[i]
 
-    if (p.config[key] && p.config[key].questions) {
-      p.config[key].questions = p.config[key].questions.map(q => {
+    if (config && config.questions) {
+      config.questions = config.questions.map(q => {
         questionsMap[q.id] = q;
 
         return q.id;
@@ -143,4 +157,9 @@ export const packQuestions = p => {
   }
 
   p.questionsMap = questionsMap;
+}
+
+export const getProjectMinutes = project => {
+  return project.stages.filter(s => s)
+    .reduce((sum, s) => sum + (Number.parseInt(s.time) || DEFAULT_STAGE_TIME), 0)
 }

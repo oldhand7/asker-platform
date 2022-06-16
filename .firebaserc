@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "asker-3e929",
+    "default": "asker-test-98028",
     "asker-dev": "asker-dev",
     "asker-test": "asker-test-98028",
     "asker-beta": "asker-beta"
@@ -35,7 +35,7 @@
         ]
       }
     },
-    "asker-test": {
+    "asker-test-98028": {
       "storage": {
         "main": [
           "asker-test-98028.appspot.com"

@@ -18,17 +18,27 @@ const featureForms = {
 }
 
 const FeatureForm = (props) => {
-  const [FormComponent, setFormComponent] = useState(null);
+  const [FormComponent, setFormComponent] = useState(0);
   const [formComponentProps, setProps] = useState({});
 
   useEffect(() => {
     const { feature } = props;
 
     if (feature && featureForms[feature.id]) {
+      setFormComponent(0);
+    }
+  }, [props.feature])
+
+  useEffect(() => {
+    if (FormComponent !== 0) return;
+
+    const { feature } = props;
+
+    if (feature && featureForms[feature.id]) {
       setFormComponent(featureForms[feature.id]);
       setProps({ ...props });
     }
-  }, [props])
+  }, [props, FormComponent])
 
   return FormComponent ? <FormComponent {...formComponentProps} /> : null;
 }

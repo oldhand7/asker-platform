@@ -14,7 +14,7 @@ const TeamRolePresentationForm = ({ className, stage, project, last, nextId, con
   const [documents, setDocuments] = useState([]);
 
   useEffect(() => {
-    const values = project.config[stage.id];
+    const values = stage.config;
 
     setImages(values.files.filter(f => isImage(f.name)).map(i => i.url))
     setDocuments(values.files.filter(f => !isImage(f.name)))

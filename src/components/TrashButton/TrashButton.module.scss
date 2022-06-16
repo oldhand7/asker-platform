@@ -1,13 +1,9 @@
 .trash-button {
-  background: 0;
-  border: 0;
-  cursor: pointer;
+  color: red;
+  border: 1px solid #FAB7B7;
 
-  &:hover {
-    cursor: pointer;
-  }
-
-  &:hover &-icon {
-    stroke: red;
+  svg {
+    stroke: #5B5B5B;
+    fill: white !important;
   }
 }

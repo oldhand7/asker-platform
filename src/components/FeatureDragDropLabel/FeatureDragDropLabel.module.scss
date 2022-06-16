@@ -1,0 +1,10 @@
+.feature-drag-label {
+  &-drag-container {
+    width: 290rem;
+    height: 40rem; 
+    position: fixed;
+    left: -9999px;
+    top: 0;
+    z-index: 1000;
+  }
+}

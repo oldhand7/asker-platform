@@ -1,0 +1,25 @@
+.time-label {
+  white-space: nowrap;
+  display: inline-block;
+  line-height: inherit;
+
+  &-label {
+    color: #B7B7B7;
+    font-size: 12rem;
+    margin-right: 10rem;
+  }
+
+  &-icon {
+    fill: #969696;
+    margin-right: 10rem;
+    vertical-align: middle;
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  &-value {
+    color: #5B5B5B;
+    font-size: 16rem;
+    font-weight: 500;
+  }
+}

@@ -140,6 +140,8 @@ describe('Other questions', () => {
       cy.createDummyProject('Position Y')
       cy.tableFirstRowNavigate('Edit')
 
+      cy.contains('Add stage').click()
+
       cy.get('[data-test-id="feature-other-questions"]').drag('[data-test-id="stage-2"] .Droppable')
 
       cy.get('[data-test-id="stage-2"]')

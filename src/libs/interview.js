@@ -1,6 +1,6 @@
 import { features } from 'libs/features';
 
-export const getInterviewAggregate = ({ evaluations }) => {
+export const getInterviewAggregate = ({ evaluations, ...details }) => {
   const aggregate = {
     competency: {},
     experience: {},
@@ -10,8 +10,10 @@ export const getInterviewAggregate = ({ evaluations }) => {
   }
 
   for (const eKey in evaluations) {
+    const [stageId, stageUid] = eKey.split('_');
+
     const feature = features.find(f => {
-      return f.id == eKey && f.metadata && f.metadata.criteria
+      return f.id == stageId && f.metadata && f.metadata.criteria
     })
 
     if (!feature) {
@@ -39,7 +41,6 @@ export const getInterviewAggregate = ({ evaluations }) => {
       ]
     }
   }
-
 
   return aggregate;
 }

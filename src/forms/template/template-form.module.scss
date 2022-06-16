@@ -3,20 +3,24 @@
 .template-form {
   display: flex;
   position: relative;
+  flex-wrap: wrap;
 
   &-sidebar {
-    flex: 1 1 356rem;
+    flex: 0 0 25%;
     margin-right: 20rem;
     border-radius: 13px;
-    background: white;
-    padding: 40rem 40rem 20rem;
+    padding: 12rem;
+    box-sizing: border-box;
 
     &-widget {
+      margin-bottom: 20rem;
+
       &-title {
         color: $brandish-grey;
         font-weight: 500;
-        font-size: 20rem;
-        line-height: 30rem;
+        font-size: 14rem;
+        line-height: 20rem;
+        margin-bottom: 16rem;
       }
     }
 
@@ -26,11 +30,16 @@
   }
 
   &-details {
-    flex: 1 1 100%;
+    flex: 1 1 calc(75% - 40rem);
     background: white;
     border-radius: 13px;
-    padding: 40rem;
+    padding: 20rem 20rem 20rem 40rem;
+    box-sizing: border-box;
     position: relative;
+
+    h3 {
+      color: #B7B7B7;
+    }
   }
 
   &-details-inner {
@@ -50,11 +59,28 @@
   &-field {
     margin: 20rem 0 40rem;
 
+    &-name-edit {
+      background: #F6F6F6;
+      border: 1px solid #CECECE;
+      border-radius: 7px;
+      min-width: 350rem;
+
+      input {
+        background: 0 !important;
+        border: 0 !important;
+      }
+    }
+
     &-name input {
-      background: rgba($brandish-dark-green, 0.15);
+      background:  #F6F6F6;
+      border: 1px solid #CECECE;
+      font-weight: 500;
+      font-size: 20rem;
     }
 
     &-stages {
+      margin-top: 20rem;
+
       &-title {
         color: $brandish-dark-green;
         font-size: 20rem;
@@ -62,6 +88,10 @@
         font-weight: 500;
       }
     }
+  }
+
+  &-stager {
+    margin-top: 30rem !important;
   }
 
   &-submit {
@@ -81,8 +111,9 @@
     font-size: 14rem;
   }
 
-  &-feature-form {
-    margin-bottom: 30rem;
+  &-template {
+    font-size: 14rem;
+    color: $brandish-grey;
   }
 
   &-criteria {
@@ -110,5 +141,38 @@
 
   &-stage-error-report {
     margin-bottom: 20rem;
+  }
+
+  &-header {
+    background: white;
+    flex: 1 1 100%;
+    display: flex;
+    margin-bottom: 30rem;
+    padding: 12rem;
+    border-radius: 13px;
+    justify-content: space-between;
+    line-height: 56rem;
+
+    &-control {
+      display: flex;
+      align-items: center;
+      margin-left: 12rem;
+    }
+
+    input, button {
+      line-height: inherit;
+    }
+  }
+
+  &-total-time {
+    display: inline-block;
+    margin-right: 12rem;
+    border: 1px solid #ECECEC;
+    border-radius: 7px;
+    padding: 0 10rem;
+
+    @media (max-width: 540px) {
+      display: none;
+    }
   }
 }

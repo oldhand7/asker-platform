@@ -12,6 +12,7 @@ import StageInterviewForm from 'components/StageInterviewForm/StageInterviewForm
 import styles from './interview-form.module.scss';
 import { ctxError } from 'libs/helper';
 import { calcInterviewScore } from 'libs/scoring';
+import { getStageKey } from 'libs/stage';
 
 const rules = {}
 
@@ -59,18 +60,21 @@ const InterviewForm = ({ className, interview, project }) => {
     {error ? <Alert type="error">{error.message}</Alert> : null}
 
     <div className={styles['interview-form-stages']}>
-      {stages.map((stage, index) => (
-        <StageInterviewForm
-          onValues={control.input(stage.id, false)}
-          values={values[stage.id]}
+      {stages.map((stage, index) => {
+        const key = getStageKey(stage)
+
+        return <StageInterviewForm
+          onValues={control.input(key, false)}
+          values={values[key]}
           className={styles['interview-form-stage']}
-          key={stage.id}
+          key={key}
+          id={key}
           stage={stage}
           index={index}
           last={index == stages.length - 1}
-          nextId={index < stages.length - 1 ? `feature-form-${stages[index+1].id}` : null}
+          nextId={index < stages.length - 1 ? `feature-form-${getStageKey(stages[index+1])}` : null}
           project={project} />
-      ))}
+      })}
     </div>
     <p style={{textAlign: 'center'}}>
       <BrandishButton className={styles['interview-form-submit']}>{!loading ? 'Complete interview' : 'Loading...'}</BrandishButton>

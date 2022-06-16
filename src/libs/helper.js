@@ -235,3 +235,10 @@ export const projectStageQuestionsReducer = (questions, stage) => {
     ...(stage.questions ? stage.questions : [])
   ]
 }
+
+export const getTimeLabel = (minutes) => {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+
+  return h ? `${h} h ${m} min` : `${m} min`
+}

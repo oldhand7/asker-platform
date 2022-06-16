@@ -10,6 +10,8 @@ describe('Updating queestions', () => {
 
       cy.tableFirstRowNavigate('Edit');
 
+      cy.contains('Add stage').click()
+
       cy.get('[data-test-id="feature-screening-questions"]')
         .drag('[data-test-id="stage-2"] .Droppable')
         .wait(2000)
@@ -83,6 +85,8 @@ describe('Updating queestions', () => {
       cy.createDummyTemplate('Project ABC')
 
       cy.tableFirstRowNavigate('Edit');
+
+      cy.contains('Add stage').click()
 
       cy.get('[data-test-id="feature-screening-questions"]')
         .drag('[data-test-id="stage-2"] .Droppable')

@@ -45,6 +45,30 @@
     "indexes": "firestore.indexes.json"
   },
   "storage": [
-    { "rules": "storage.rules", "target": "main" }
-  ]
+    {
+      "rules": "storage.rules",
+      "target": "main"
+    }
+  ],
+  "emulators": {
+    "auth": {
+      "port": 9000
+    },
+    "functions": {
+      "port": 9010
+    },
+    "firestore": {
+      "port": 9020
+    },
+    "hosting": {
+      "port": 9030
+    },
+    "storage": {
+      "port": 9040
+    },
+    "ui": {
+      "enabled": true,
+      "port": 8000
+    }
+  }
 }

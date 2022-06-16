@@ -1,0 +1,30 @@
+.icon-button {
+  background: 0;
+  cursor: pointer;
+  border-radius: 5px;
+  position: relative;
+  width: 1em;
+  height: 1em;
+  font-size: 28rem;
+  color: #5B5B5B;
+  border: 1px solid #E7E7E7;
+
+  &-icon {
+    width: 0.5em;
+    height: 0.5em;
+    vertical-align: middle;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    fill: currentColor;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:hover {
+    border: 1px solid currentColor;
+  }
+}

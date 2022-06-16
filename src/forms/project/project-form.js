@@ -1,11 +1,11 @@
 import FeatureList from 'components/FeatureList/FeatureList';
 import classNames from 'classnames';
-import useForm from 'libs/use-form';
+import { useForm } from 'libs/form';
 import Button from 'components/Button/PlatformButton';
 import TextInputField from 'components/TextInputField/TextInputField'
 import ProjectFormStager from 'components/ProjectFormStager/ProjectFormStager';
 import ProjectFormInterviewers from 'components/ProjectFormInterviewers/ProjectFormInterviewers';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { features, featureTypes } from 'libs/features';
 import { addFlash } from 'libs/flash';
 import Alert from 'components/Alert/Alert';
@@ -17,9 +17,14 @@ import NewStageDroppable from 'components/NewStageDroppable/NewStageDroppable'
 import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField';
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
 import ErrorBox from 'components/ErrorBox/ErrorBox';
-import { ctxError} from 'libs/helper';
+import { ctxError, getTimeLabel } from 'libs/helper';
 import FeatureForm from 'components/FeatureForm/FeatureForm';
-import { calcDefaultScoringRules, packQuestions } from 'libs/project';
+import { calcDefaultScoringRules, packQuestions, getProjectMinutes } from 'libs/project';
+import TimeLabel from 'components/TimeLabel/TimeLabel';
+import { DEFAULT_STAGE_TIME } from 'libs/config'
+import { validate } from 'libs/validator';
+import EditInput from 'components/EditInput/EditInput'
+import { v4 as uuidv4 } from 'uuid';
 
 import styles from './project-form.module.scss';
 
@@ -45,18 +50,13 @@ const defaultValues = {
   interviewers: [],
   interviewersCount: 0,
   stages: [
-    { id: 'introduction', name: 'Introduction', type: 'other' },
+    { id: 'introduction', name: 'Introduction', type: 'other', config: { html: '' }},
     null,
     null
   ],
   scoringRules: null,
   stagesCount: 0,
   userId: null,
-  config: {
-    introduction: {
-      text: ''
-    }
-  },
   template: null,
   interviewsCount: 0,
   interviewsAwaitingCount: 0,
@@ -69,7 +69,8 @@ const rules = {
 }
 
 const messages = {
-  'min.interviewers': 'At least one interviewer is required.'
+  'min.interviewers': 'At least one interviewer is required.',
+  'required.name': 'Name is required.'
 }
 
 const ProjectForm = ({ project, className }) => {
@@ -79,24 +80,26 @@ const ProjectForm = ({ project, className }) => {
   const { user } = useUser();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [pristine, setPristine] = useState(true);
 
-  const [values, errors, control] = useForm({
+  const { values, errors, control, pristine, submitted } = useForm({
     values: project ? { ...defaultValues, ...project} : defaultValues,
     rules,
     messages
   })
 
-  const handleStageValues = (stageValues) => {
-    control.set('config', {
-      ...values.config,
-      [stage.id]: stageValues
-    })
+  const handleStageValues = useCallback(stageValues => {
+    const index = values.stages.indexOf(stage);
+
+    if (index > -1) {
+      values.stages[index].config = stageValues;
+
+      control.set('stages', values.stages)
+    }
 
     setStageErrors([
-      ...stageErrors.filter(error => error.stage.id != stage.id)
+      ...stageErrors.filter(error => error.stage.id != stage.id )
     ])
-  }
+  }, [values.stages, stage])
 
   const onStageError = (error) => {
     setStageErrors([
@@ -105,14 +108,16 @@ const ProjectForm = ({ project, className }) => {
     ])
   }
 
-  const handleSubmit = (values) => {
-    if (stageErrors.length) {
-      setPristine(false);
+  const handleSubmit = (values, e) => {
+    e.preventDefault();
+
+    const errors = validate(values, rules, messages)
+
+    if (errors) {
+      setErrors(errors);
 
       return;
     }
-
-    setPristine(false);
 
     if (stageErrors.length) {
       setError(new Error('Some stages are invalid.'))
@@ -120,13 +125,24 @@ const ProjectForm = ({ project, className }) => {
       return;
     }
 
+    values.stages = values.stages
+      .filter(s => s)
+      .map(s => {
+        if (!s.uid) {
+          s.uid = uuidv4()
+        }
+
+        return s;
+      })
+
+
     values.userId = user.id;
     values.companyId = user.companyId;
     values.stagesCount = values.stages.filter(s => s).length;
     values.interviewersCount = values.interviewers.length;
-
-    if (!values.scoringRules) {
-      values.scoringRules = calcDefaultScoringRules(values)
+    values.scoringRules = {
+      ...calcDefaultScoringRules(values),
+      ...(values.scoringRules || {})
     }
 
     packQuestions(values);
@@ -146,6 +162,7 @@ const ProjectForm = ({ project, className }) => {
       copy.user = {
         id: user.id,
         name: user.name,
+        avatar: user.images && user.images[0].src || null
       }
 
       tasks.push(saveCollectionDocument('templates', copy))
@@ -177,72 +194,35 @@ const ProjectForm = ({ project, className }) => {
     setLoading(false)
   }, [error])
 
-  const handleStages = (stages, newStage = null) => {
-    const stageValuesCopy = {
-      ...values.config
+  const handleStages = useCallback((stages, stage) => {
+    control.set('stages', stages);
+
+    if (stage) {
+      setStage(stage)
+    } else {
+      setStage(null)
     }
-
-    const keys = Object.keys(values.config)
-
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i];
-
-      if (!stages.find(stage => stage && key == stage.id)) {
-        delete stageValuesCopy[key]
-      }
-    }
-
-    control.setValues({
-      ...values,
-      stages,
-      config: stageValuesCopy
-    })
-
-    if (newStage) {
-      setStage(newStage)
-    }
-  }
+  }, [values.stages])
 
   const addStage = (stage = null) => {
-    control.set('stages', [
+    const uniqueStage = JSON.parse(JSON.stringify(stage));
+
+    const stages =  [
       ...values.stages,
-      stage
-    ])
+      uniqueStage
+    ]
+
+    control.set('stages', stages);
+
+    setStage(uniqueStage)
   }
 
   useEffect(() => {
-    if (stage && values.stages.indexOf(stage) === -1) {
-      setStage(null)
-    }
-  }, [stage, values.stages])
-
-  const handleSubmitFailure = () => {
-    if (errors) {
-      let errorEl = document.querySelector('.form-error')
-
-      if (!errorEl) {
-        errorEl = document.querySelector('.alert')
-      }
-
-      if (errorEl) {
-        errorEl.scrollIntoView({
-          block: 'center'
-        })
-      }
-    }
-  }
-
-  const handleStageSelect = (st) => {
-    if (stage == st) {
-      setStage(null);
-    } else {
-      setStage(st);
-    }
-  }
+    control.set('time', getProjectMinutes(values))
+  }, [values.stages])
 
   const handleAddDropStage = (stage) => {
     addStage(stage)
-    setStage(stage)
   }
 
   useEffect(() => {
@@ -258,56 +238,28 @@ const ProjectForm = ({ project, className }) => {
     }
   }, [stage])
 
-  return  <form data-test-id="project-form" onSubmit={control.submit(handleSubmit, handleSubmitFailure)} className={classNames(styles['project-form'], className)}>
+  return  <form data-test-id="project-form" onSubmit={control.submit(handleSubmit)} className={classNames(styles['project-form'], className)}>
+    <div className={styles['project-form-header']}>
+      {
+      values.id ?
+        <EditInput value={values.name} label={values.name}  onChange={control.input('name', false)} placeholder={'Project name'} className={classNames(styles['project-form-field-name'], styles['project-form-field-name-edit'])} /> :
+        <TextInputField value={values.name} onChange={control.input('name')} placeholder={'Project name'} error={errors && errors.name}  autoComplete='off' name='name' type='text' className={styles['project-form-field-name']} />
+      }
+      <div className={styles['project-form-header-control']}>
+        <TimeLabel className={styles['project-form-total-time']}>{getTimeLabel(values.time)}</TimeLabel>
+        <Button disabled={loading || errors} type="submit" className={styles['project-form-submit']}>
+          {!loading ? (project ? 'Save project' : 'Create project') : 'Loading...'}</Button>
+      </div>
+    </div>
+
     <ProjectFormSidebar className={styles['project-form-sidebar']} />
 
     <div className={styles['project-form-details']}>
       <div className={styles['project-form-details-inner']}>
-        <ProjectEvaluationCriteria project={values} onScoringRules={control.input('scoringRules', false)} className={styles['project-form-criteria']} />
-
-        <h2 className={styles['project-form-title']}>Create a new project</h2>
-
-        { project && !project.id && project.template ?
-        <h2 className={styles['project-form-template']}>Template: {project.template.name}</h2>
-        : null}
-
-        <TextInputField value={values.name} placeholder={'Name'} error={errors ? errors.name : null} onChange={control.input('name')} autoComplete='off' name='name' type='text' className={classNames(styles['project-form-field'], styles['project-form-field-name'])} />
-
-        <div className={classNames(styles['project-form-field'], styles['project-form-field-stages'])}>
-          <h3 className={styles['project-form-field-title']}>Interview Stages</h3>
-
-          <ProjectFormStager  onStages={handleStages} activeStage={stage} onStageSelect={handleStageSelect} stages={values.stages} className={styles['project-form-stages']}  />
-
-          <NewStageDroppable onStage={handleAddDropStage}>
-          <div style={{ padding: '15rem 0'}}>
-          {values.stages.length < 12 ? <button type="button" className={styles['project-form-add-stage']}onClick={() => addStage()}>Add stage +</button> : null}
-          </div>
-          </NewStageDroppable>
-
-          {stage ?
-          <div className={styles['project-form-stager-feature-form']} id="feature-form" data-test-id="feature-form">
-            <FeatureForm values={stage && values.config[stage.id]} onError={onStageError} onValues={handleStageValues} feature={stage} />
-          </div> : null}
-        </div>
-
-        <div className={classNames(styles['project-form-field'], styles['project-form-field-interviewers'])}>
-          <h3 className={styles['project-form-field-title']}>Assign interviewer</h3>
-
-          <ProjectFormInterviewers className={styles['project-form-interviewers']} interviewers={values.interviewers} onChange={control.input('interviewers', false)} />
-
-          {errors && errors['interviewers'] ? <p className="form-error">{errors['interviewers']}</p> : null}
-        </div>
-
         {error ? <Alert type="error">{error.message}</Alert> : null}
 
         {
-        !values.template ?
-        <CheckboxInputField checked={values.saveAsTemplate} className={styles['project-form-field']} onChange={control.toggle('saveAsTemplate')} label='Also save project as template' /> :
-        null
-        }
-
-        {
-          !pristine && stageErrors.length ?
+          submitted && stageErrors.length ?
           <ErrorBox className={styles['project-form-stage-error-report']}>
             <p>You can't save form, because some stages are invalid:</p>
             <ul>
@@ -316,7 +268,41 @@ const ProjectForm = ({ project, className }) => {
           </ErrorBox> : null
         }
 
-        <Button disabled={loading || errors} type="submit" className={styles['project-form-submit']}>{!loading ? (project ? 'Save project' : 'Create project') : 'Loading...'}</Button>
+        <ProjectEvaluationCriteria
+          project={values}
+          onScoringRules={sr => control.set('scoringRules', sr)} className={styles['project-form-criteria']} />
+
+        <div className={styles['project-form-field-stages']}>
+          <h3 className={styles['project-form-field-title']}>Interview Stages</h3>
+
+          <ProjectFormStager onStages={handleStages} activeStage={stage} onStageSelect={setStage} stages={values.stages} className={styles['project-form-stager']}   />
+
+          <NewStageDroppable onStage={handleAddDropStage}>
+          <div style={{ padding: '15rem 0'}}>
+          {values.stages.length < 12 ? <button type="button" className={styles['project-form-add-stage']} onClick={() => addStage()}>Add stage +</button> : null}
+          </div>
+          </NewStageDroppable>
+
+          {stage ?
+          <div className={styles['project-form-stager-feature-form']} id="feature-form" data-test-id="feature-form">
+            <FeatureForm values={stage.config} onError={onStageError} onValues={handleStageValues} feature={stage} />
+          </div> : null}
+        </div>
+
+        <div className={classNames(styles['project-form-field'], styles['project-form-field-interviewers'])}>
+          <h3 className={styles['project-form-field-title']}>Assign interviewer</h3>
+
+          <ProjectFormInterviewers className={styles['project-form-interviewers']} interviewers={values.interviewers} onChange={v => control.set('interviewers', v)} />
+
+          {errors && errors['interviewers'] ? <p className="form-error">{errors['interviewers']}</p> : null}
+        </div>
+
+        {
+        !values.template ?
+        <CheckboxInputField checked={values.saveAsTemplate} className={styles['project-form-field']} onChange={control.toggle('saveAsTemplate')} label='Also save project as template' /> :
+        null
+        }
+
       </div>
     </div>
     {loading ? <Preloader /> : null}

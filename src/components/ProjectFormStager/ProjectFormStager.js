@@ -7,6 +7,8 @@ import TrashButton from 'components/TrashButton/TrashButton'
 import { useModal } from 'libs/modal';
 import FeatureSelectModal from 'modals/feature-select/feature-select-modal';
 import LoadButton from 'components/LoadButton/LoadButton';
+import MinutesInput from 'components/MinutesInput/MinutesInput';
+import { DEFAULT_STAGE_TIME } from 'libs/config';
 
 import styles from './ProjectFormStager.module.scss';
 
@@ -74,6 +76,14 @@ const ProjectFormStager = ({ feature, featureValues, featureOnError, featureOnVa
     return;
   }
 
+  const handleStageTime = (index, time) => {
+    stages[index].time = Number.parseInt(time) || 1;
+
+    onStages([
+      ...stages
+    ])
+  }
+
   return isBrowser ? <DragDropContext onDragEnd={onDragEnd}>
     <Droppable droppableId='stager'>
     {(provided) => (
@@ -88,7 +98,7 @@ const ProjectFormStager = ({ feature, featureValues, featureOnError, featureOnVa
           ref={provided.innerRef}
           className={classNames(
             styles['project-form-stager-item'],
-            stage && activeStage == stage ? styles['project-form-stager-item-active'] : ''
+            activeStage && activeStage == stage ? styles['project-form-stager-item-active'] : ''
           )}
            >
             <h6 className={styles['project-form-stager-item-title']}>Stage {index + 1}</h6>
@@ -97,10 +107,21 @@ const ProjectFormStager = ({ feature, featureValues, featureOnError, featureOnVa
               <StageFeaturePlaceholder onDrop={(item) => handleFeatureDrop(item, index, stage)} className={styles['project-form-stager-item-placeholder']}>
                 {stage ? <FeatureDragDropLabel onClick={() => onStageSelect(stage)} className={styles['project-form-stager-item-feature']} feature={stage} context='stager' /> : null}
               </StageFeaturePlaceholder>
-              <div className={styles['project-form-stager-item-control']}>
+              <div className={classNames(styles['project-form-stager-item-control'], styles['project-form-stager-item-control-actions'])}>
                 <LoadButton onClick={(ev) => openFeatureSelectorModal(item => handleFeatureDrop(item, index, stage))}  />
-                <TrashButton onClick={(ev) => handleStageDelete(stage, index, ev)} className={styles['project-form-stager-item-control-button']} />
+                <TrashButton onClick={(ev) => handleStageDelete(stage, index, ev)}  />
+
+                {index == 0 ? <div className={styles['project-form-stager-item-control-info']}>
+                  <span>Actions</span>
+                </div>   : null}
               </div>
+              {stage ?
+              <div className={styles['project-form-stager-item-control']}>
+                <MinutesInput value={stage.time || DEFAULT_STAGE_TIME} onChange={v => handleStageTime(index, v)} />
+                {index == 0 ? <div className={styles['project-form-stager-item-control-info']}>
+                  <span>Time edit</span>
+                </div>   : null}
+              </div> : null}
             </div>
           </li>
         )}

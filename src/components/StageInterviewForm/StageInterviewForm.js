@@ -36,8 +36,8 @@ const StageInterviewForm = (props) => {
   return FormComponent ? <div className={classNames(
     styles['stage-interview-form'],
     props.last ? styles['stage-interview-form-last'] : ''
-  )} id={`feature-form-${props.stage.id}`} data-test-id="feature-form">
-    <FormComponent config={props.project.config[props.stage.id]} {...formComponentProps} />
+  )} id={`feature-form-${props.id}`} data-test-id="feature-form">
+    <FormComponent config={props.stage.config} {...formComponentProps} />
   </div> : null;
 }
 

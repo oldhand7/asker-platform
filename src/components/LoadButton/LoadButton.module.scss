@@ -1,15 +1,11 @@
 @import 'styles/vars';
 
 .load-button {
-  background: 0;
-  border: 0;
-  cursor: pointer;
-
   &:hover {
-    cursor: pointer;
+    border:1px solid rgba(#5B5B5B, 0.5)
   }
 
-  &:hover &-icon {
-    stroke: $brandish-grey;
+  svg {
+    font-size: 0.8em;
   }
 }

@@ -6,11 +6,9 @@ describe('Salary feature', () => {
   it('should create a project with salary feature and allow selection of min/max salary values during interview', () => {
     cy.createDummyProject('Sales manager')
 
-    cy.get('table tbody tr')
-      .first()
-      .find('td').last()
-      .find('button').click().parent()
-      .contains('Edit').click()
+    cy.tableFirstRowNavigate('Edit')
+
+    cy.contains('Add stage').click()
 
     cy.get('[data-test-id="feature-salary"]').drag('[data-test-id="stage-2"] .Droppable')
 
