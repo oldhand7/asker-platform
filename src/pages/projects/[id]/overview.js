@@ -5,7 +5,7 @@ import Head from 'next/head';
 import { getSingleDocument, filterManyDocuments } from 'libs/firestore-admin'
 import PlatformButton from 'components/Button/PlatformButton';
 import Preloader from 'components/Preloader/Preloader';
-import ProjectInterviewsTable from 'components/ProjectInterviewsTable2/ProjectInterviewsTable'
+import ProjectInterviewsTable from 'components/ProjectInterviewsTable/ProjectInterviewsTable'
 import CandidateModal from 'modals/candidate/candidate-modal';
 import { useModal } from 'libs/modal';
 import PlusIcon from 'components/Icon/PlusIcon';
