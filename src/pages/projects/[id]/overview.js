@@ -5,7 +5,7 @@ import Head from 'next/head';
 import { getSingleDocument, filterManyDocuments } from 'libs/firestore-admin'
 import PlatformButton from 'components/Button/PlatformButton';
 import Preloader from 'components/Preloader/Preloader';
-import ProjectInterviewsTable from 'components/ProjectInterviewsTable/ProjectInterviewsTable'
+import ProjectInterviewsTable from 'components/ProjectInterviewsTable2/ProjectInterviewsTable'
 import CandidateModal from 'modals/candidate/candidate-modal';
 import { useModal } from 'libs/modal';
 import PlusIcon from 'components/Icon/PlusIcon';
@@ -111,26 +111,38 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
       </Head>
 
       <div className={styles['project-overview-page-overview']}>
-        <h1 className={styles['project-overview-page-title']}>{project.name} <Link href={`/projects/${project.id}/edit`}><a className={styles['project-overview-page-title-edit-link']}>edit</a></Link></h1>
+        <div className={styles['project-overview-page-overview-head']}>
+          <h1 className={styles['project-overview-page-title']}>
+            {project.name} <Link href={`/projects/${project.id}/edit`}><a className={styles['project-overview-page-title-edit-link']}>edit</a></Link>
+          </h1>
+          <PlatformButton onClick={() => openCandidateModal(handleCandidate)} className={styles['project-overview-page-interviews-add-candidate']}>
+            <PlusIcon /> Add candidate</PlatformButton>
+        </div>
 
         {success ? <Alert type="success">{success}</Alert> : null}
+        {error ? <Alert type="error">{error.message}</Alert> : null}
 
+        <ProjectInterviewsTable
+          project={project}
+          onDelete={handleDeleteInterview}
+          className={styles['project-overview-page-interviews-table']}
+          data={_interviews}
+          emptyLabel='No interviews' />
+      </div>
+
+      <div className={styles['project-overview-page-sidebar']}>
         <ProjectEvaluationCriteria className={styles['project-overview-page-evaluation-criteria']} project={project} />
 
         <div data-test-id="interviewers" className={styles['project-overview-page-interviewers']}>
-          <h2 className={styles['project-overview-page-interviewers-title']}>Assigned Interviewer</h2>
+          <h2 className={styles['project-overview-page-interviewers-title']}>Assigned Interviewers</h2>
           <ul className={styles['project-overview-page-interviewers-list']}>
             {project.interviewers.map(interviewer => <li className={styles['project-overview-page-interviewers-list-item']} key={interviewer.id}>{interviewer.name}</li>)}
           </ul>
         </div>
       </div>
 
-      {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <div className={styles['project-overview-page-interviews']}>
-        <PlatformButton onClick={() => openCandidateModal(handleCandidate)} className={styles['project-overview-page-interviews-add-candidate']}><PlusIcon /> Add candidate</PlatformButton>
-        <ProjectInterviewsTable project={project} onDelete={handleDeleteInterview} className={styles['project-overview-page-interviews-table']} data={_interviews} />
-      </div>
+
       {loading ? <Preloader /> : null}
   </div>
 }

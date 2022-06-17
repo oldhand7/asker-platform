@@ -118,24 +118,25 @@
 
   &-criteria {
     position: fixed;
-    top: 25%;
-    transform: scale(0.8) translate(20%, -50%);
+    top: 250rem;
     right: 0;
-    width: 500rem;
+    width: 20vw;
     box-shadow: -3px 5px 33px rgba(0, 0, 0, 0.15);
     z-index: 1;
-
-    @media (max-height: 900px) {
-      top: 50%;
-    }
+    max-width: 390rem;
 
     @media (max-width: 1600px) {
-      width: 410rem;
       top: 50%;
+      transform: translate(0%, -50%);
     }
 
     @media (max-width: 1024px) {
       display: none;
+    }
+
+    @media (max-height: 900px) {
+      top: 60%;
+      transform: translate(0%, -50%);
     }
   }
 

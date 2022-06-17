@@ -69,14 +69,14 @@ describe('Company employees', () => {
           .within(() => {
             cy.contains('Confirm').click()
           })
-          .wait(5000)
+          .wait(1000)
 
         cy.logout()
 
         cy.simpleLogin('bob.miller@example.com', 'bob123', true)
 
         cy.logout()
-          .wait(2000)
+          .wait(1000)
 
         cy.simpleLogin('jane.miller@example.com', 'test123')
 

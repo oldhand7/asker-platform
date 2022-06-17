@@ -56,10 +56,11 @@ describe('Salary feature', () => {
       .contains('Interviews').click()
 
     cy.addProjectCandidate('Alice', 'alice@bobshouse.com')
-      .wait(2000)
+      .wait(1000)
 
-    cy.get('table tbody tr')
-      .first()
+
+    cy.contains('Alice')
+      .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
 

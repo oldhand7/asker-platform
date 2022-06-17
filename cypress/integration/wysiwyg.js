@@ -23,9 +23,12 @@ describe('WYSIWYG', () => {
 
     cy.tableFirstRowNavigate('Interviews')
 
-    cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(2000)
+    cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(1000)
 
-    cy.tableFirstRowNavigate('Start interview')
+    cy.contains('John')
+      .closest('[data-test-id="flex-table-row"]')
+      .contains('Start interview')
+      .click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .find('strong')
@@ -56,9 +59,12 @@ describe('WYSIWYG', () => {
 
     cy.tableFirstRowNavigate('Interviews')
 
-    cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(2000)
+    cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(1000)
 
-    cy.tableFirstRowNavigate('Start interview')
+    cy.contains('John')
+      .closest('[data-test-id="flex-table-row"]')
+      .contains('Start interview')
+      .click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'List of cities:')
@@ -95,9 +101,12 @@ describe('WYSIWYG', () => {
 
     cy.tableFirstRowNavigate('Interviews')
 
-    cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(2000)
+    cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(1000)
 
-    cy.tableFirstRowNavigate('Start interview')
+    cy.contains('John')
+      .closest('[data-test-id="flex-table-row"]')
+      .contains('Start interview')
+      .click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'List of animals:')

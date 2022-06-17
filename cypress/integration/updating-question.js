@@ -14,7 +14,7 @@ describe('Updating queestions', () => {
 
       cy.get('[data-test-id="feature-screening-questions"]')
         .drag('[data-test-id="stage-2"] .Droppable')
-        .wait(2000)
+        .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
@@ -39,7 +39,7 @@ describe('Updating queestions', () => {
 
       cy.tableFirstRowNavigate('Interviews');
 
-      cy.addProjectCandidate('Fernando', 'fernando@arerez.net').wait(2000)
+      cy.addProjectCandidate('Fernando', 'fernando@arerez.net').wait(1000)
 
       cy.contains('Start interview').click()
 
@@ -55,7 +55,7 @@ describe('Updating queestions', () => {
       cy.contains('Save question').click()
 
       cy.get('[data-test-id="alert-success"]')
-        .contains('Question saved').wait(2000)
+        .contains('Question saved').wait(1000)
 
       cy.visit('/projects')
 
@@ -90,7 +90,7 @@ describe('Updating queestions', () => {
 
       cy.get('[data-test-id="feature-screening-questions"]')
         .drag('[data-test-id="stage-2"] .Droppable')
-        .wait(2000)
+        .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
@@ -121,7 +121,7 @@ describe('Updating queestions', () => {
       cy.contains('Save question').click()
 
       cy.get('[data-test-id="alert-success"]')
-        .contains('Question saved').wait(2000)
+        .contains('Question saved').wait(1000)
 
       cy.visit('/templates')
 

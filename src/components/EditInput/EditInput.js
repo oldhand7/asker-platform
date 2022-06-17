@@ -5,7 +5,7 @@ import TextInput from 'components/TextInput/TextInput';
 
 import styles from './EditInput.module.scss';
 
-const EditInput = ({ className, label = 'Edit', value = '', onChange, placeholder=''}) => {
+const EditInput = ({ className, label = 'Edit', value = '', onChange, ...props}) => {
   const [mode, setMode] = useState('read');
   const [_value, setValue] = useState(value);
 
@@ -46,7 +46,7 @@ const EditInput = ({ className, label = 'Edit', value = '', onChange, placeholde
   )}>
     {
       mode == 'edit' ?
-      <TextInput focus={true} className={styles['edit-input-input']} value={_value} onChange={e => setValue(e.target.value)} placeholder={placeholder} /> :
+      <TextInput  focus={true} className={styles['edit-input-input']} value={_value} onChange={e => setValue(e.target.value)} {...props} /> :
       <>
         <span className={styles['edit-input-label']}>{label}</span>
         <EditFieldIcon className={styles['edit-input-icon']} />

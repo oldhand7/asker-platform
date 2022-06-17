@@ -235,9 +235,12 @@ describe('Screening questions', () => {
         cy.tableFirstRowNavigate('Interviews')
 
         cy.addProjectCandidate('Jimmy', 'jimmy.davis@yahoo.com')
-          .wait(2000)
+          .wait(1000)
 
-        cy.tableFirstRowNavigate('Start interview')
+        cy.contains('Jimmy')
+          .closest('[data-test-id="flex-table-row"]')
+          .contains('Start interview')
+          .click()
 
         cy.get('[data-test-id="feature-form"]').eq(1)
           .within(() => {
@@ -325,7 +328,10 @@ describe('Screening questions', () => {
 
         cy.location('pathname').should('contain', '/overview/')
 
-        cy.tableFirstRowNavigate('Edit response')
+        cy.contains('Jimmy')
+          .closest('[data-test-id="flex-table-row"]')
+          .find('[data-test-id="edit-button"]')
+          .click()
 
         cy.get('[data-test-id="feature-form"]').eq(1)
           .within(() => {

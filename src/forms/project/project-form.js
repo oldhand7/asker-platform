@@ -240,11 +240,8 @@ const ProjectForm = ({ project, className }) => {
 
   return  <form data-test-id="project-form" onSubmit={control.submit(handleSubmit)} className={classNames(styles['project-form'], className)}>
     <div className={styles['project-form-header']}>
-      {
-      values.id ?
-        <EditInput value={values.name} label={values.name}  onChange={control.input('name', false)} placeholder={'Project name'} className={classNames(styles['project-form-field-name'], styles['project-form-field-name-edit'])} /> :
-        <TextInputField value={values.name} onChange={control.input('name')} placeholder={'Project name'} error={errors && errors.name}  autoComplete='off' name='name' type='text' className={styles['project-form-field-name']} />
-      }
+      <TextInputField value={values.name} onChange={control.input('name')} placeholder={'Project name'} error={errors && errors.name}  autoComplete='off' name='name' type='text' className={styles['project-form-field-name']} />
+
       <div className={styles['project-form-header-control']}>
         <TimeLabel className={styles['project-form-total-time']}>{getTimeLabel(values.time)}</TimeLabel>
         <Button disabled={loading || errors} type="submit" className={styles['project-form-submit']}>

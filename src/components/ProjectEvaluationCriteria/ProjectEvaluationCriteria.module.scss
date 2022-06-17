@@ -4,7 +4,7 @@
   border-radius: 9px;
   background: white;
   padding: 20rem;
-  max-width: 320rem;
+  font-size: 12rem;
 
   div {
     max-width: 100%;
@@ -12,7 +12,7 @@
 
   &-title {
     font-weight: 500;
-    font-size: 20rem;
+    font-size: 1.5em;
     line-height: 30rem;
     color: #494949;
   }
@@ -33,6 +33,6 @@
   }
 
   &-edit {
-    font-size: 1.3em;
+    font-size: 1em;
   }
 }

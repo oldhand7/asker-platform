@@ -1,9 +1,9 @@
 @import 'styles/vars';
 
-.edit-button {
+.edit-button-labeled {
   background: 0;
-  border: 1px solid #FAB7B7;
-  
+  border: 0;
+
   cursor: pointer;
 
   &:hover {
@@ -12,5 +12,9 @@
 
   &:hover &-icon {
     stroke: $brandish-tar;
+  }
+
+  &-icon {
+    margin-right: 5rem;
   }
 }
