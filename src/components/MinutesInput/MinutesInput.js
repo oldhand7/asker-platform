@@ -12,6 +12,7 @@ const MinutesInput = ({ value = 5, onChange, className }) => (
     label={`${value} min.`}
     onChange={onChange}
     placeholder='Min.'
+    maxlength={2}
     />
 )
 

@@ -17,7 +17,7 @@ describe('Scoring', () => {
     cy.contains('Add stage').click()
 
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Competency').click().wait(2000)
+    cy.get('#feature-select-modal').contains('Competency').click().wait(1000)
     cy.get('[data-test-id="feature-form"]')
       .find('table tbody tr')
       .first()
@@ -27,7 +27,7 @@ describe('Scoring', () => {
     cy.contains('Add stage').click()
 
     cy.get('[data-test-id="stage-3"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Motivation').click().wait(2000)
+    cy.get('#feature-select-modal').contains('Motivation').click().wait(1000)
     cy.get('[data-test-id="feature-form"]')
       .find('table tbody tr')
       .first()
@@ -37,7 +37,7 @@ describe('Scoring', () => {
     cy.contains('Evaluation Criteria').parent()
       .within(() => {
         cy.contains('Motivation').parent().should('contain', '50%')
-        cy.contains('Competency').parent().should('contain', '50%').click()
+        cy.contains('Competency').parent().should('contain', '50%')
           .parent()
           .find('ul').within(() => {
             cy.get('li').should('have.length', 1);
@@ -59,7 +59,7 @@ describe('Scoring', () => {
     cy.contains('Evaluation Criteria').parent()
       .within(() => {
         cy.contains('Motivation').parent().should('contain', '80%')
-        cy.contains('Competency').parent().should('contain', '20%').click()
+        cy.contains('Competency').parent().should('contain', '20%')
           .parent()
           .find('ul').within(() => {
             cy.get('li').should('have.length', 1);
@@ -74,13 +74,14 @@ describe('Scoring', () => {
     cy.get('table tbody tr').first().click()
 
     cy.addProjectCandidate('John Smith', 'john.smith@hotmail.net')
-      .wait(4000)
+      .wait(1000)
+
+
 
     cy.contains('John Smith')
-      .closest('tr')
+      .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
-
 
     cy.get('[data-test-id="feature-form"]').eq(1)
       .should('contain', 'Competency')
@@ -95,10 +96,11 @@ describe('Scoring', () => {
 
     cy.contains('Complete interview').click()
 
-    cy.get('table tbody tr')
+    cy.get('[data-test-id="flex-table-row"]')
       .first()
+      .click()
       .within(() => {
-        cy.get('td').eq(1).should('contain', '20%')
+        cy.get('[data-test-id="flex-table-column"]').eq(1).should('contain', '20%')
 
         cy.get('[data-test-id="evaluation-score"]').eq(0)
           .should('have.attr', 'data-score', '5')
@@ -126,7 +128,7 @@ describe('Scoring', () => {
     cy.contains('Add stage').click()
 
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Competency').click().wait(2000)
+    cy.get('#feature-select-modal').contains('Competency').click().wait(1000)
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
         cy.get('input').first().type('X')
@@ -140,7 +142,7 @@ describe('Scoring', () => {
 
     cy.contains('Evaluation Criteria').parent()
         .within(() => {
-          cy.contains('Competency').parent().should('contain', '100%').click()
+          cy.contains('Competency').parent().should('contain', '100%')
             .parent()
             .find('ul').within(() => {
               cy.get('li').should('have.length', 3);
@@ -163,7 +165,7 @@ describe('Scoring', () => {
 
     cy.contains('Evaluation Criteria').parent()
       .within(() => {
-        cy.contains('Competency').parent().should('contain', '100%').click()
+        cy.contains('Competency').parent().should('contain', '100%')
           .parent()
           .find('ul').within(() => {
             cy.get('li').should('have.length', 3);
@@ -180,10 +182,10 @@ describe('Scoring', () => {
     cy.get('table tbody tr').first().click()
 
     cy.addProjectCandidate('John Smith', 'john.smith@hotmail.net')
-      .wait(4000)
+      .wait(1000)
 
     cy.contains('John Smith')
-      .closest('tr')
+      .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
 
@@ -204,10 +206,11 @@ describe('Scoring', () => {
 
     cy.contains('Complete interview').click()
 
-    cy.get('table tbody tr')
+    cy.get('[data-test-id="flex-table-row"]')
       .first()
+      .click()
       .within(() => {
-        cy.get('td').eq(1).should('contain', '46%')
+        cy.get('[data-test-id="flex-table-column"]').eq(1).should('contain', '46%')
 
         cy.get('[data-test-id="evaluation-score"]')
           .should('have.length', 3)

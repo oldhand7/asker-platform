@@ -46,32 +46,31 @@ describe('Project overview', () => {
       .should('contain', 'Jane Philips')
       .should('not.contain', 'Joe Philips')
 
-    cy.get('table thead tr')
-      .first()
+    cy.get('[data-test-id="flex-table-head"]')
       .within(() => {
-        cy.get('th').eq(0).should('contain', 'Name')
-        cy.get('th').eq(1).should('contain', 'Total interview score')
-        cy.get('th').eq(2).should('contain', 'Evaluations scores')
+        cy.get('div').eq(0).should('contain', 'Candidate')
+        cy.get('div').eq(1).should('contain', 'Total interview score')
+        cy.get('div').eq(2).should('contain', 'Date of interview')
       })
 
-    cy.get('table tbody')
+    cy.get('[data-test-id="flex-table-body"]')
       .within(() => {
-        cy.get('tr').should('have.length', 2)
+        cy.get('[data-test-id="flex-table-row"]').should('have.length', 2)
 
-        cy.get('tr')
+        cy.get('[data-test-id="flex-table-row"]')
           .eq(0)
           .within(() => {
-            cy.get('td').eq(0).should('contain', 'Candidate A')
-            cy.get('td').eq(1).should('contain', '40%')
-            cy.get('td').eq(2).should('not.contain', 'Start interview')
+            cy.get('[data-test-id="flex-table-column"]').eq(0).should('contain', 'Candidate A')
+            cy.get('[data-test-id="flex-table-column"]').eq(1).should('contain', '40%')
+            cy.get('[data-test-id="flex-table-column"]').eq(2).should('not.contain', 'Start interview')
           })
 
-        cy.get('tr')
+        cy.get('[data-test-id="flex-table-row"]')
           .eq(1)
           .within(() => {
-            cy.get('td').eq(0).should('contain', 'Candidate B')
-            cy.get('td').eq(1).should('not.contain', '%')
-            cy.get('td').eq(2).should('contain', 'Start interview')
+            cy.get('[data-test-id="flex-table-column"]').eq(0).should('contain', 'Candidate B')
+            cy.get('[data-test-id="flex-table-column"]').eq(1).should('not.contain', '%')
+            cy.get('[data-test-id="flex-table-column"]').eq(2).should('contain', 'Start interview')
           })
       })
   })
@@ -86,22 +85,22 @@ describe('Project overview', () => {
       .contains('Interviews').click()
 
     cy.addProjectCandidate('Dread Roberts', 'dread.roberts@gmail.com')
-      .wait(2000)
+      .wait(1000)
 
-    cy.get('table tbody')
+    cy.get('[data-test-id="flex-table"]')
       .within(() => {
-        cy.get('tr').should('have.length', 3)
+        cy.get('[data-test-id="flex-table-row"]').should('have.length', 3)
 
-        cy.get('tr')
+        cy.get('[data-test-id="flex-table-row"]')
           .eq(0)
           .within(() => {
-            cy.get('td').eq(0).should('contain', 'Dread Roberts')
-            cy.get('td').eq(1).should('not.contain', '%')
-            cy.get('td').eq(2).should('contain', 'Start interview')
+            cy.get('[data-test-id="flex-table-column"]').eq(0).should('contain', 'Dread Roberts')
+            cy.get('[data-test-id="flex-table-column"]').eq(1).should('not.contain', '%')
+            cy.get('[data-test-id="flex-table-column"]').eq(2).should('contain', 'Start interview')
           })
       })
 
-    cy.wait(10000)
+    cy.wait(1000)
 
     cy.visit('/projects/')
 

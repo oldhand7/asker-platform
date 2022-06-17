@@ -19,7 +19,7 @@ describe('Table sort', () => {
         cy.get('tr').eq(2).should('contain', 'BBB')
       })
 
-    cy.get('table thead tr th').first().find('a').click().wait(2000)
+    cy.get('table thead tr th').first().find('a').click().wait(1000)
 
     cy.get('table tbody')
       .within(() => {
@@ -28,7 +28,7 @@ describe('Table sort', () => {
         cy.get('tr').eq(2).should('contain', 'CCC')
       })
 
-    cy.get('table thead tr th').first().find('a').click().wait(2000)
+    cy.get('table thead tr th').first().find('a').click().wait(1000)
 
     cy.get('table tbody')
       .within(() => {
@@ -37,7 +37,7 @@ describe('Table sort', () => {
         cy.get('tr').eq(2).should('contain', 'AAA')
       })
 
-    cy.get('table thead tr th').last().find('a').click().wait(2000)
+    cy.get('table thead tr th').last().find('a').click().wait(1000)
 
     cy.get('table tbody')
       .within(() => {
@@ -63,7 +63,7 @@ describe('Table sort', () => {
         cy.get('tr').eq(2).should('contain', 'BBB')
       })
 
-    cy.get('table thead tr th').first().find('a').click().wait(2000)
+    cy.get('table thead tr th').first().find('a').click().wait(1000)
 
     cy.get('table tbody')
       .within(() => {
@@ -72,7 +72,7 @@ describe('Table sort', () => {
         cy.get('tr').eq(2).should('contain', 'CCC')
       })
 
-    cy.get('table thead tr th').first().find('a').click().wait(2000)
+    cy.get('table thead tr th').first().find('a').click().wait(1000)
 
     cy.get('table tbody')
       .within(() => {
@@ -81,7 +81,7 @@ describe('Table sort', () => {
         cy.get('tr').eq(2).should('contain', 'AAA')
       })
 
-    cy.get('table thead tr th').eq(2).find('a').click().wait(2000)
+    cy.get('table thead tr th').eq(2).find('a').click().wait(1000)
 
     cy.get('table tbody')
       .within(() => {
@@ -90,7 +90,7 @@ describe('Table sort', () => {
         cy.get('tr').eq(2).should('contain', 'CCC')
       })
 
-    cy.get('table thead tr th').eq(2).find('a').click().wait(2000)
+    cy.get('table thead tr th').eq(2).find('a').click().wait(1000)
 
     cy.get('table tbody')
       .within(() => {
@@ -116,7 +116,7 @@ describe('Table sort', () => {
         cy.get('tr').eq(2).should('contain', 'BBB')
       })
 
-    cy.get('table thead tr th').eq(2).find('a').click().wait(2000)
+    cy.get('table thead tr th').eq(2).find('a').click().wait(1000)
 
     cy.get('table tbody')
       .within(() => {
@@ -125,7 +125,7 @@ describe('Table sort', () => {
         cy.get('tr').eq(2).should('contain', 'CCC')
       })
 
-    cy.get('table thead tr th').eq(2).find('a').click().wait(2000)
+    cy.get('table thead tr th').eq(2).find('a').click().wait(1000)
 
     cy.get('table tbody')
       .within(() => {
@@ -134,7 +134,7 @@ describe('Table sort', () => {
         cy.get('tr').eq(2).should('contain', 'AAA')
       })
 
-    cy.get('table thead tr th').last().find('a').click().wait(2000)
+    cy.get('table thead tr th').last().find('a').click().wait(1000)
 
     cy.get('table tbody')
       .within(() => {

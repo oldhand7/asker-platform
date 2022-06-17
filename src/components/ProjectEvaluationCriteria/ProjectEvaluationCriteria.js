@@ -6,7 +6,7 @@ import { getSubtype } from 'libs/helper';
 import { COLOR_MAP } from 'libs/config';
 import ProjectEvaluationCriteriaLegend from 'components/ProjectEvaluationCriteriaLegend/ProjectEvaluationCriteriaLegend';
 import styles from './ProjectEvaluationCriteria.module.scss';
-import EditButton from 'components/EditButton/EditButton'
+import EditButtonLabeled from 'components/EditButtonLabeled/EditButtonLabeled'
 import ScoringRulesModal from 'modals/scoring-rules/scoring-rules-modal';
 import { useModal } from 'libs/modal';
 import { getProjectEvaluationCriterias } from 'libs/project'
@@ -56,7 +56,7 @@ const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
        </PieChart>
       <ProjectEvaluationCriteriaLegend className={styles['project-evaluation-criteria-legend']} criteria={criteria} />
       {error ? <p className="form-error">Criteria unbalanced!</p> : null}
-      {onScoringRules ? <EditButton text='Edit' className={styles['project-evaluation-criteria-edit']} onClick={() => openScoreAdjustmentModal(onScoringRules)} /> : null}
+      {onScoringRules ? <EditButtonLabeled text='Edit' className={styles['project-evaluation-criteria-edit']} onClick={() => openScoreAdjustmentModal(onScoringRules)} /> : null}
   </div> : null
 }
 

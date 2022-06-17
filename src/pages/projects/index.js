@@ -157,7 +157,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
 
   return <div className={styles['projects-page']}>
       <Head>
-        <title>Projects - Asker</title>
+        <title>Projects listing - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
       <div className={styles['projects-page-nav']}>

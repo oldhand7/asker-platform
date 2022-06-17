@@ -22,40 +22,40 @@ describe('Interview', () => {
       .click()
 
     cy.get('[data-test-id="stage-1"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Motivation').click().wait(2000)
+    cy.get('#feature-select-modal').contains('Motivation').click()
     cy.get('[data-test-id="feature-form"]')
       .find('table').first()
       .find('button[data-test-id="add-question"]').first()
       .click()
 
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Culture-fit').click().wait(2000)
+    cy.get('#feature-select-modal').contains('Culture-fit').click()
     cy.get('[data-test-id="feature-form"]')
       .find('table').first()
       .find('button[data-test-id="add-question"]').first()
       .click()
 
     cy.get('[data-test-id="stage-3"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Competency').click().wait(2000)
+    cy.get('#feature-select-modal').contains('Competency').click()
     cy.get('[data-test-id="feature-form"]')
       .find('table').first()
       .find('button[data-test-id="add-question"]').first()
       .click()
 
     cy.get('[data-test-id="stage-4"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Experience').click().wait(2000)
+    cy.get('#feature-select-modal').contains('Experience').click()
     cy.get('[data-test-id="feature-form"]')
       .find('table').first()
       .find('button[data-test-id="add-question"]').first()
       .click()
 
     cy.get('[data-test-id="stage-5"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Hard').click().wait(2000)
+    cy.get('#feature-select-modal').contains('Hard').click()
     cy.get('[data-test-id="feature-form"]')
       .find('table').first()
       .find('button[data-test-id="add-question"]').first()
       .click()
-      .wait(1000)
+
 
     cy.contains('Save project').click()
 
@@ -63,11 +63,13 @@ describe('Interview', () => {
 
     cy.get('table tbody tr').first().click()
 
+    cy.get('[data-test-id="flex-table"]').should('contain', 'No interviews');
+
     cy.addProjectCandidate('John Smith', 'john.smith@hotmail.net')
-      .wait(4000)
+
 
     cy.contains('John Smith')
-      .closest('tr')
+      .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
 
@@ -101,28 +103,30 @@ describe('Interview', () => {
 
     cy.contains('Complete interview').click()
 
-    cy.get('table tbody tr')
-      .first()
+    cy.get('[data-test-id="flex-table"]')
       .within(() => {
-        cy.get('[data-test-id="evaluation-score"]').eq(0)
-          .should('have.attr', 'data-score', '3')
-          .should('contain', 'ISO-90210')
+        cy.get('[data-test-id="flex-table-row"]').click()
+          .within(() => {
+            cy.get('[data-test-id="evaluation-score"]').eq(0)
+              .should('have.attr', 'data-score', '3')
+              .should('contain', 'ISO-90210')
 
-        cy.get('[data-test-id="evaluation-score"]').eq(1)
-          .should('have.attr', 'data-score', '2')
-          .should('contain', 'Culture-fit')
+            cy.get('[data-test-id="evaluation-score"]').eq(1)
+              .should('have.attr', 'data-score', '2')
+              .should('contain', 'Culture-fit')
 
-        cy.get('[data-test-id="evaluation-score"]').eq(2)
-          .should('have.attr', 'data-score', '4')
-          .should('contain', 'Traveling')
+            cy.get('[data-test-id="evaluation-score"]').eq(2)
+              .should('have.attr', 'data-score', '4')
+              .should('contain', 'Traveling')
 
-        cy.get('[data-test-id="evaluation-score"]').eq(3)
-          .should('have.attr', 'data-score', '5')
-          .should('contain', 'MS Word')
+            cy.get('[data-test-id="evaluation-score"]').eq(3)
+              .should('have.attr', 'data-score', '5')
+              .should('contain', 'MS Word')
 
-        cy.get('[data-test-id="evaluation-score"]').eq(4)
-          .should('have.attr', 'data-score', '1')
-          .should('contain', 'Motivation')
+            cy.get('[data-test-id="evaluation-score"]').eq(4)
+              .should('have.attr', 'data-score', '1')
+              .should('contain', 'Motivation')
+          })
       })
   })
 })

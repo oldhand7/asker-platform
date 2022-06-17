@@ -23,5 +23,10 @@
 
   &-edit {
     padding: 0;
+
+    input {
+      border: 0;
+      line-height: inherit;
+    }
   }
 }

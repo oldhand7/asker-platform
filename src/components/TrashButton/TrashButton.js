@@ -1,6 +1,5 @@
 import TrashIcon from 'components/Icon/TrashIcon';
 import IconButton from 'components/IconButton/IconButton';
-
 import classNames from 'classnames';
 
 import styles from './TrashButton.module.scss';

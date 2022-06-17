@@ -8,7 +8,7 @@ describe('Company presentation feature', () => {
 
     cy.on('window:confirm', confirmStub)
 
-    cy.createDummyProject('Sales manager').wait(2000)
+    cy.createDummyProject('Sales manager').wait(1000)
 
     cy.get('table tbody tr')
       .first()

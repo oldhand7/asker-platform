@@ -12,7 +12,7 @@ describe('Password reset', () => {
       cy.get('[data-test-id="alert-success"]')
         .should('contain', 'Password reset link sent')
 
-      cy.wait(5000)
+      cy.wait(1000)
 
       cy.location('pathname').should('eq', '/login/')
 

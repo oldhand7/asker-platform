@@ -132,7 +132,7 @@ const beforeRun = async () => {
   })
 
   //allow some time to pass for propagation of claims
-  await new Promise((resolve) => setTimeout(resolve, 5000))
+  await new Promise((resolve) => setTimeout(resolve, 3000))
 
   const projectId = await helpers.createProject({
     companyId: companyId2,

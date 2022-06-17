@@ -67,7 +67,7 @@ describe('User Jane', () => {
 
   it('should be abble to change password', () => {
     cy.visit('/profile/')
-      .wait(2000)
+      .wait(1000)
 
     cy.get('input[name="email"]').should('have.value', 'jane.doe@example.com')
     cy.contains('Change password').click()

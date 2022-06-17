@@ -50,13 +50,13 @@ Cypress.Commands.add('createEvaluationCriteriaQuestion', (type = 'competency', d
         cy.get('input[name="name"]').type(details.criteria || 'Math')
         cy.get('button[type="submit"]').click()
       })
-      .wait(2000);
+      .wait(1000);
   } else {
     cy.get('[data-test-id="criteria-option-input-field"]')
       .within(() => {
         cy.get('input')
           .type(`${details.criteria}`)
-          .wait(2000)
+          .wait(1000)
           .type(`{enter}`)
       })
   }

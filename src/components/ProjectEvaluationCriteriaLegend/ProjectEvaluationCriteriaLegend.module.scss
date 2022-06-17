@@ -1,13 +1,11 @@
 @import 'styles/vars';
 .project-evaluation-criteria-legend {
   display: flex;
-  font-size: 14rem;
   flex-wrap: wrap;
   line-height: 20rem;
   padding: 0 10rem 0 0;
 
   &-item {
-    font-size: 18rem; //@TODO: 14rem;
     margin-bottom: 10rem;
   }
 }
