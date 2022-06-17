@@ -1,8 +1,7 @@
 import { projectStageQuestionsReducer, getSubtype, ucFirst } from 'libs/helper';
 import { flattenCriteriaTree } from 'libs/criteria';
 import { DEFAULT_STAGE_TIME } from 'libs/config'
-
-const fixWeight = val => Number.parseFloat(Number.parseFloat(val).toFixed(2))
+import { fixFloat } from 'libs/helper'
 
 const weightSort = function(ca, cb) {
   if (ca.weight < cb.weight) return 1;
@@ -69,7 +68,7 @@ export const getProjectEvaluationCriterias = (project) => {
       result.push({
         name: ucFirst(key),
         type: key,
-        weight: fixWeight(customP || p),
+        weight: fixFloat(customP || p),
         questions: aggregate[key].length
       })
     } else {
@@ -88,7 +87,7 @@ export const getProjectEvaluationCriterias = (project) => {
         const customP = scoringRules && scoringRules[subtype];
         const p = aggregate[key][subtype].length * 100 / questions.length;
 
-        const w = fixWeight(customP || p);
+        const w = fixFloat(customP || p);
 
         evaluationAggregate.children.push({
           name: aggregate[key][subtype][0].criteria.name,
@@ -102,7 +101,7 @@ export const getProjectEvaluationCriterias = (project) => {
       }
 
       evaluationAggregate.children.sort(weightSort)
-      evaluationAggregate.weight = fixWeight(evaluationAggregate.weight)
+      evaluationAggregate.weight = fixFloat(evaluationAggregate.weight)
 
       result.push(evaluationAggregate)
     }

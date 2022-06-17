@@ -1,4 +1,4 @@
-import { render, screen, getByText } from '@testing-library/react'
+import { render, screen, getByText, getByRole } from '@testing-library/react'
 
 import ProjectEvaluationCriteriaLegend from './ProjectEvaluationCriteriaLegend'
 
@@ -18,11 +18,19 @@ describe('ProjectEvaluationCriteriaLegend', () => {
 
     expect(competency).toHaveTextContent('90%')
 
+    const competencyRoot = competency.closest('[data-test-id="criteria-legend"]')
+
+    expect(
+      getByText(competencyRoot, 'XXX', {exact: false}).closest('li')
+    ).toHaveTextContent('50%')
+
+    expect(
+      getByText(competencyRoot, 'YYY', {exact: false}).closest('li')
+    ).toHaveTextContent('40%')
+
     competency.click()
 
-    //@TODO: within
-    expect(screen.getByText('XXX').closest('li')).toHaveTextContent('50%')
-    expect(screen.getByText('YYY').closest('li')).toHaveTextContent('40%')
+    expect(getByRole(competencyRoot, 'list', { hidden: true })).not.toBeVisible()
 
     expect(screen.getByText('Motivation', {exact: false}).closest("div")).toHaveTextContent('10%')
   })
