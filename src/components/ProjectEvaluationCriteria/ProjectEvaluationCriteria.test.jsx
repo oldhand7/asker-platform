@@ -1,4 +1,4 @@
-import { render, screen, getByText } from '@testing-library/react'
+import { render, screen, getByText, getByRole } from '@testing-library/react'
 import ProjectEvaluationCriteria from './ProjectEvaluationCriteria'
 import { withModal } from 'libs/modal'
 
@@ -41,7 +41,12 @@ describe('ProjectEvaluationCriteria', () => {
 
     render(<ProjectEvaluationCriteriaWithModa project={demoProject} />)
 
-    expect(screen.getByText('Experience', {exact: false}).closest('div')).toHaveTextContent('60%')
+    const experienceCriteria = screen.getByText('Experience', {exact: false}).closest('div')
+    expect(experienceCriteria).toHaveTextContent('60%')
+    const experienceCriteriaRoot = experienceCriteria.closest('[data-test-id="criteria-legend"]')
+    expect(getByRole(experienceCriteriaRoot, 'listitem')).toHaveTextContent('Traveling')
+    expect(getByRole(experienceCriteriaRoot, 'listitem')).toHaveTextContent('60%')
+
     expect(screen.getByText('Motivation', {exact: false}).closest('div')).toHaveTextContent('20%')
     expect(screen.getByText('Culture-fit', {exact: false}).closest('div')).toHaveTextContent('20%')
   })

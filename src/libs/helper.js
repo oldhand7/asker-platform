@@ -242,3 +242,5 @@ export const getTimeLabel = (minutes) => {
 
   return h ? `${h} h ${m} min` : `${m} min`
 }
+
+export const fixFloat = (val, pr = 2) => Number.parseFloat(Number.parseFloat(val).toFixed(pr))
