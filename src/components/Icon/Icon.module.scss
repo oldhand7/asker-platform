@@ -20,4 +20,16 @@
   &-arrow-up {
     transform: rotate(180deg);
   }
+
+  &-carret-up {
+    & > svg {
+      transform: rotate(180deg) translateY(0.45em);
+    }
+  }
+
+  &-carret-down {
+    & > svg {
+      transform: translateY(-0.4em);
+    }
+  }
 }
