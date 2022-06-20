@@ -19,6 +19,10 @@ import InterviewDetails from 'components/InterviewDetails/InterviewDetails';
 import { dateFromTs} from 'libs/helper';
 import TrashButton from 'components/TrashButton/TrashButton';
 import EditButton from 'components/EditButton/EditButton';
+import { scoreMap } from 'libs/scoring'
+import InterviewDetailsRowScreening from 'components/InterviewDetailsRow/InterviewDetailsRowScreening';
+import InterviewDetailsRowEvaluation from 'components/InterviewDetailsRow/InterviewDetailsRowEvaluation';
+import { getStageKey } from 'libs/stage';
 
 import styles from './ProjectInterviewsTable.module.scss';
 
@@ -59,7 +63,10 @@ const getColumns = ({ handleAction, project, sort, order }) => ([
     dataIndex: 'updatedAt',
     render: (updatedAt, row) => {
       if (typeof row.score === 'undefined') {
-        return <PlatformButton className={styles['project-interviews-table-start-button']} href={`/interviews/${row.id}/conduct`}>
+        return <PlatformButton className={styles['project-interviews-table-start-button']} onClick={e => {
+          e.stopPropagation();
+          window.location = `/interviews/${row.id}/conduct`
+        }}>
           <PlayIcon /> Start interview</PlatformButton>
       }
 
@@ -72,7 +79,7 @@ const getColumns = ({ handleAction, project, sort, order }) => ([
     </a>,
     render: (_, row) => {
       return <div className={styles['project-interviews-table-actions']}>
-        {row.score !== 'undefined' ? <EditButton onClick={e => handleAction('edit', row, e)} /> : null}
+        {typeof row.score !== 'undefined' ? <EditButton onClick={e => handleAction('edit', row, e)} /> : null}
         <TrashButton onClick={e => handleAction('delete', row, e)} />
       </div>
     }
@@ -107,63 +114,80 @@ const ProjectInterviewsTable = ({ className, data = [], onDelete, project, ...pr
   const rowExtra = interview => {
     if (interview != rowOpen) return ;
 
-    const interviewEvaluations = []
+    const table = scoreMap(interview, project)
 
-    const aggregate = getInterviewAggregate(interview);
+    const otherQuestions = {
+        'screening-questions': [],
+        'other-questions': []
+    };
 
-    for (const key in aggregate) {
-      if (key == 'competency' || key == 'experience' || key == 'hard-skill') {
-        for (const cid in aggregate[key]) {
-          const score = aggregate[key][cid].reduce(sumReducer, 0);
+    for (let i = 0; i < project.stages.length; i++) {
+      if (['screening-questions', 'other-questions'].indexOf(project.stages[i].id) == -1) {
+        continue;
+      }
 
-          if (!score) {
-            continue;
+      const key = getStageKey(project.stages[i])
+
+      if (interview.evaluations && interview.evaluations[key]) {
+
+        for (const qid in interview.evaluations[key]) {
+          const { config } = project.stages[i];
+
+          const question = config.questions.find(q => q.id == qid)
+
+          if (question) {
+            otherQuestions[project.stages[i].id].push({
+              question: question,
+              answer: interview.evaluations[key][qid]
+            })
           }
-
-          const { criteria } = aggregate[key][cid][0];
-
-          interviewEvaluations.push({
-            id: cid,
-            name: criteria.name,
-            score: Math.round(score / aggregate[key][cid].length),
-            type: criteria.type
-          })
         }
-      } else {
-        const score = aggregate[key].reduce(sumReducer, 0);
-
-        if (!score) {
-          continue;
-        }
-
-        interviewEvaluations.push({
-          id: key,
-          name: ucFirst(key),
-          score: Math.round(score / aggregate[key].length),
-          type: key
-        })
       }
     }
 
-    interviewEvaluations.sort(function(a, b) {
-      if (a.type.toLowerCase() > b.type.toLowerCase()) return 1;
-      if (a.type.toLowerCase() < b.type.toLowerCase()) return -1;
-
-      if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-      if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-
-      return 0;
-    });
 
     return <InterviewDetails className={styles['project-interviews-table-details']} interview={interview}>
-        <div className={styles['project-interviews-table-evaluations']}>
-            {interviewEvaluations.length ? interviewEvaluations.map((e, index) => (
-                <EvaluationScore
-                  key={index}
-                  evaluation={e}
-                  className={styles['project-interviews-table-evaluations-evaluation']} />
-              )) : <NODATA /> }
-        </div>
+        {
+          table['competency'].score ?
+          <InterviewDetailsRowEvaluation evaluation={table['competency']} className={styles['project-interviews-table-details-row']} /> :
+          null
+        }
+
+        {
+          otherQuestions['screening-questions'].length ?
+        <InterviewDetailsRowScreening evaluations={otherQuestions['screening-questions']} className={styles['project-interviews-table-details-row']} /> :
+        null
+      }
+
+        {
+          table['hard-skill'].score ?
+          <InterviewDetailsRowEvaluation evaluation={table['hard-skill']} className={styles['project-interviews-table-details-row']} /> :
+          null
+        }
+
+        {
+          table['motivation'].score ?
+          <InterviewDetailsRowEvaluation evaluation={table['motivation']} className={styles['project-interviews-table-details-row']} /> :
+          null
+        }
+
+        {
+          table['culture-fit'].score ?
+          <InterviewDetailsRowEvaluation evaluation={table['culture-fit']} className={styles['project-interviews-table-details-row']} /> :
+          null
+        }
+
+        {
+          table['experience'].score ?
+          <InterviewDetailsRowEvaluation evaluation={table['experience']} className={styles['project-interviews-table-details-row']} /> :
+          null
+        }
+
+        {
+          otherQuestions['other-questions'].length ?
+        <InterviewDetailsRowScreening other={true} evaluations={otherQuestions['other-questions']} className={styles['project-interviews-table-details-row']} /> :
+        null
+      }
     </InterviewDetails>
   }
 

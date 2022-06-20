@@ -76,8 +76,6 @@ describe('Scoring', () => {
     cy.addProjectCandidate('John Smith', 'john.smith@hotmail.net')
       .wait(1000)
 
-
-
     cy.contains('John Smith')
       .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
@@ -99,16 +97,15 @@ describe('Scoring', () => {
     cy.get('[data-test-id="flex-table-row"]')
       .first()
       .click()
+      .contains('Competency')
+      .closest('[data-test-id="interview-details-row"]')
+      .should('contain', '20%')
+      .click()
       .within(() => {
-        cy.get('[data-test-id="flex-table-column"]').eq(1).should('contain', '20%')
-
-        cy.get('[data-test-id="evaluation-score"]').eq(0)
-          .should('have.attr', 'data-score', '5')
-          .should('contain', 'ISO-90210')
-
-        cy.get('[data-test-id="evaluation-score"]').eq(1)
-          .should('have.attr', 'data-score', '1')
-          .should('contain', 'Motivation')
+        cy.contains('ISO-90210')
+          .closest('li')
+          .find('[data-test-id="criteria-rating"]').invoke('text')
+          .should('contain', '5')
       })
   })
 
@@ -179,6 +176,7 @@ describe('Scoring', () => {
 
     cy.get('[data-test-id="alert-success"]').contains('Project saved')
 
+    cy.visit('/projects/')
     cy.get('table tbody tr').first().click()
 
     cy.addProjectCandidate('John Smith', 'john.smith@hotmail.net')
@@ -208,24 +206,30 @@ describe('Scoring', () => {
 
     cy.get('[data-test-id="flex-table-row"]')
       .first()
+      .should('contain', '46%')
+      .click()
+      .contains('Competency')
+      .closest('[data-test-id="interview-details-row"]')
+      .should('contain', '46%')
       .click()
       .within(() => {
-        cy.get('[data-test-id="flex-table-column"]').eq(1).should('contain', '46%')
-
-        cy.get('[data-test-id="evaluation-score"]')
+        cy.get('li')
           .should('have.length', 3)
 
-        cy.get('[data-test-id="evaluation-score"]').eq(0)
-          .should('have.attr', 'data-score', '4')
+        cy.get('li').eq(0)
           .should('contain', 'XCM')
+          .find('[data-test-id="criteria-rating"]').invoke('text')
+          .should('contain', '4')
 
-        cy.get('[data-test-id="evaluation-score"]').eq(1)
-          .should('have.attr', 'data-score', '3')
+        cy.get('li').eq(1)
           .should('contain', 'XCR')
+          .find('[data-test-id="criteria-rating"]').invoke('text')
+          .should('contain', '3')
 
-        cy.get('[data-test-id="evaluation-score"]').eq(2)
-          .should('have.attr', 'data-score', '2')
+        cy.get('li').eq(2)
           .should('contain', 'XCS')
+          .find('[data-test-id="criteria-rating"]').invoke('text')
+          .should('contain', '2')
       })
   })
 })

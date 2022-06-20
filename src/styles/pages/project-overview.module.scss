@@ -48,10 +48,13 @@
     @media (max-width: 1024px) {
       display: none;
     }
+    background: white;
+    padding: 15rem;
+    border-radius: 5px;
   }
 
   &-evaluation-criteria {
-    padding-left: 0;
+    padding: 0;
   }
 
   &-interviewers {
@@ -66,7 +69,6 @@
 
     &-list {
       margin: 0;
-      width: 400rem;
       padding-left: 20rem;
       color: #9F9F9F;
       font-size: 12rem;

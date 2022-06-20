@@ -6,6 +6,7 @@ describe('Interview', () => {
   it('should rate interview', () => {
     cy.on('window:confirm', () => true)
 
+    cy.createChoiceQuestion('Do you have drivers license?')
     cy.createEvaluationQuestion('motivation', { name : 'Does money motivate you?'});
     cy.createEvaluationQuestion('culture-fit', { name: 'Are you peoples person?'});
     cy.createEvaluationCriteriaQuestion('competency', { name: 'Are you familiar with ISO standards?', criteria: 'ISO-90210' });
@@ -16,6 +17,7 @@ describe('Interview', () => {
     cy.tableFirstRowNavigate('Edit');
 
     cy.contains('Add stage')
+      .click()
       .click()
       .click()
       .click()
@@ -56,6 +58,12 @@ describe('Interview', () => {
       .find('button[data-test-id="add-question"]').first()
       .click()
 
+    cy.get('[data-test-id="stage-6"] [data-test-id="load-button"]').click()
+    cy.get('#feature-select-modal').contains('Screening').click()
+    cy.get('[data-test-id="feature-form"]')
+      .find('table').first()
+      .find('button[data-test-id="add-question"]').first()
+      .click()
 
     cy.contains('Save project').click()
 
@@ -101,32 +109,82 @@ describe('Interview', () => {
       .should('contain', 'Comment MS Office experience')
       .contains('Master').click()
 
+    cy.get('[data-test-id="feature-form"]').eq(5)
+      .should('contain', 'Screening')
+      .should('contain', 'Do you have drivers license?')
+      .find('[data-test-id="question-answers"]')
+      .children()
+      .should('have.length', 2)
+      .parent()
+      .within(() => {
+        cy.get('li').eq(0)
+          .should('contain', 'Yes')
+          .find('input[type="radio"]')
+          .should('have.value', 'Yes')
+
+        cy.get('li').eq(1)
+          .should('contain', 'No')
+          .find('input[type="radio"]')
+          .should('have.value', 'No')
+          .click()
+      })
+
     cy.contains('Complete interview').click()
 
-    cy.get('[data-test-id="flex-table"]')
+    cy.get('[data-test-id="flex-table-row"]')
+      .first()
+      .should('contain', '50%')
+      .click()
       .within(() => {
-        cy.get('[data-test-id="flex-table-row"]').click()
+        cy.contains('Competency')
+          .closest('[data-test-id="interview-details-row"]')
+          .should('contain', '10%')
+          .click()
           .within(() => {
-            cy.get('[data-test-id="evaluation-score"]').eq(0)
-              .should('have.attr', 'data-score', '3')
+            cy.get('li').eq(0)
               .should('contain', 'ISO-90210')
-
-            cy.get('[data-test-id="evaluation-score"]').eq(1)
-              .should('have.attr', 'data-score', '2')
-              .should('contain', 'Culture-fit')
-
-            cy.get('[data-test-id="evaluation-score"]').eq(2)
-              .should('have.attr', 'data-score', '4')
-              .should('contain', 'Traveling')
-
-            cy.get('[data-test-id="evaluation-score"]').eq(3)
-              .should('have.attr', 'data-score', '5')
-              .should('contain', 'MS Word')
-
-            cy.get('[data-test-id="evaluation-score"]').eq(4)
-              .should('have.attr', 'data-score', '1')
-              .should('contain', 'Motivation')
+              .find('[data-test-id="criteria-rating"]').invoke('text')
+              .should('contain', '3')
           })
+
+        cy.contains('Culture-fit')
+          .closest('[data-test-id="interview-details-row"]')
+          .should('contain', '5%')
+
+        cy.contains('Experience')
+          .closest('[data-test-id="interview-details-row"]')
+          .should('contain', '15%')
+          .click()
+          .within(() => {
+            cy.get('li').eq(0)
+              .should('contain', 'Traveling')
+              .find('[data-test-id="criteria-rating"]').invoke('text')
+              .should('contain', '4')
+          })
+
+        cy.contains('Hard-skill')
+          .closest('[data-test-id="interview-details-row"]')
+          .should('contain', '20%')
+          .click()
+          .within(() => {
+            cy.get('li').eq(0)
+              .should('contain', 'MS Word')
+              .find('[data-test-id="criteria-rating"]').invoke('text')
+              .should('contain', '5')
+          })
+
+
+        cy.contains('Screening')
+          .closest('[data-test-id="interview-details-row"]')
+          .click()
+          .within(() => {
+            cy.get('li').eq(0)
+              .should('contain', 'Do you have drivers license?')
+              .find('[data-test-id="pill-label"]').invoke('text')
+              .should('contain', 'No')
+          })
+
       })
+
   })
 })

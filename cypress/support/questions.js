@@ -65,3 +65,30 @@ Cypress.Commands.add('createEvaluationCriteriaQuestion', (type = 'competency', d
 
   cy.get('[data-test-id="alert-success"]').should('contain', 'Question created')
 })
+
+Cypress.Commands.add('createChoiceQuestion', (name = 'Do you like fruits?', choices = ['Yes', 'No'], multichoice = false) => {
+  cy.visit('/questions/create/screening')
+
+  cy.contains('Yes/No').click()
+
+  cy.get('[data-test-id="screening-question-form"]')
+    .within(() => {
+      cy.get('input[name="name"]').first().type(name)
+
+      for (let i = 0; i < choices.length; i++) {
+        if (i > 1) {
+          cy.contains('Add answer').click()
+        }
+
+        cy.get('input[name="answers[]"]').eq(i).type(choices[i])
+      }
+
+      if (multichoice) {
+        cy.get('input[type="checkbox"]').click()
+      }
+
+      cy.contains('Create question').click()
+    })
+
+    cy.get('[data-test-id="alert-success"]').should('contain', 'Question created');
+})

@@ -5,7 +5,15 @@ import colorBetween from 'color-between';
 import styles from './InterviewScore.module.scss';
 
 const getColor = (score) => {
-  return colorBetween('#9AE23E', '#43B88C', score / 100, 'hex');
+  if (score < 25) {
+    return '#E77272';
+  }
+
+  if (score < 50) {
+    return '#DFD049';
+  }
+
+  return '#43B88C';
 }
 
 const CandidateScore = ({ className, score = 0 }) => {
