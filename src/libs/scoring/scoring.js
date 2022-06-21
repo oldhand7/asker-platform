@@ -99,26 +99,15 @@ export const scoreMap = (interview, { scoringRules }) => {
       for (let i = 0; i < aggregate[key].length; i++) {
         const { score } = aggregate[key][i];
 
-        const p = (scoringRules[subtype] || 0) / aggregate[key].length;
-        localScore += scoreTable[score-1] * (p / 100);
+        localScore += scoreTable[score-1]
       }
 
-      table[key].score = Math.round(localScore);
+      table[key].score = Math.round(localScore / aggregate[key].length)
     } else {
       let score = 0;
 
       for (const cid in aggregate[key]) {
         const { criteria } = aggregate[key][cid][0]
-
-        let localScore = 0;
-
-        for (let i = 0; i < aggregate[key][cid].length; i++) {
-            const { score } = aggregate[key][cid][i];
-
-            const p = (scoringRules[cid] || 0) / aggregate[key][cid].length;
-
-            localScore += scoreTable[score-1] * (p / 100);
-        }
 
         const cScore = Math.round(
           aggregate[key][cid].reduce(scoreReducer, 0) / aggregate[key][cid].length
@@ -131,12 +120,11 @@ export const scoreMap = (interview, { scoringRules }) => {
           type: criteria.type
         })
 
-        score += localScore;
+        score += scoreTable[cScore-1];
       }
 
-
       table[key].children.sort(nameSort);
-      table[key].score = Math.round(score);
+      table[key].score = Math.round(score / Object.keys(aggregate[key]).length);
     }
   }
 

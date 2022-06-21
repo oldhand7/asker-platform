@@ -138,7 +138,7 @@ describe('Interview', () => {
       .within(() => {
         cy.contains('Competency')
           .closest('[data-test-id="interview-details-row"]')
-          .should('contain', '10%')
+          .should('contain', '50%')
           .click()
           .within(() => {
             cy.get('li').eq(0)
@@ -149,11 +149,11 @@ describe('Interview', () => {
 
         cy.contains('Culture-fit')
           .closest('[data-test-id="interview-details-row"]')
-          .should('contain', '5%')
+          .should('contain', '25%')
 
         cy.contains('Experience')
           .closest('[data-test-id="interview-details-row"]')
-          .should('contain', '15%')
+          .should('contain', '75%')
           .click()
           .within(() => {
             cy.get('li').eq(0)
@@ -164,7 +164,7 @@ describe('Interview', () => {
 
         cy.contains('Hard-skill')
           .closest('[data-test-id="interview-details-row"]')
-          .should('contain', '20%')
+          .should('contain', '100%')
           .click()
           .within(() => {
             cy.get('li').eq(0)

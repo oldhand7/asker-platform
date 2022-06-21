@@ -17,15 +17,19 @@
     color: #494949;
   }
 
-  svg {
-    max-width: 100%;
-  }
 
   &-chart {
     margin-left: auto;
     margin-right: auto;
     display: block;
     transform: scaleX(-1);
+    margin-bottom: 20rem;
+
+    svg {
+      display: block;
+      margin: 30rem 0;
+    }
+
   }
 
   &-legend {
@@ -34,5 +38,6 @@
 
   &-edit {
     font-size: 1em;
+    width: auto;
   }
 }

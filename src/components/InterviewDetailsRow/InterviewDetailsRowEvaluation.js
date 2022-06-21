@@ -14,7 +14,7 @@ const InterviewDetailsRowEvaluation = ({ className, evaluation, ...props }) => (
   evaluation.children ?
   <ul className={styles['interview-details-row-list']}>
     {evaluation.children.map(c => {
-      return <li data-test-id="interview-evaluation" className={styles['interview-details-row-criteria']}>
+      return <li key={c.id} data-test-id="interview-evaluation" className={styles['interview-details-row-criteria']}>
         <span className={styles['interview-details-row-criteria-name']}>
           {c.name}
         </span>

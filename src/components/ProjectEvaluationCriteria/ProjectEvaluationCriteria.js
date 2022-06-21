@@ -36,11 +36,11 @@ const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
   return criteria.length ? <div data-testid="project-evaluation-criteria" className={classNames(styles['project-evaluation-criteria'], className)}>
   <h2 className={styles['project-evaluation-criteria-title']}>Evaluation Criteria</h2>
 
-  <PieChart className={styles['project-evaluation-criteria-chart']} width={300} height={250} >
+  <PieChart className={styles['project-evaluation-criteria-chart']} width={150} height={150} >
     <Pie
       data={criteria}
-      innerRadius={85}
-      outerRadius={100}
+      innerRadius={65}
+      outerRadius={75}
       startAngle={90}
       endAngle={450}
       cornerRadius={50}
