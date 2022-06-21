@@ -99,7 +99,7 @@ describe('Scoring', () => {
       .click()
       .contains('Competency')
       .closest('[data-test-id="interview-details-row"]')
-      .should('contain', '20%')
+      .should('contain', '100%')
       .click()
       .within(() => {
         cy.contains('ISO-90210')
@@ -210,7 +210,7 @@ describe('Scoring', () => {
       .click()
       .contains('Competency')
       .closest('[data-test-id="interview-details-row"]')
-      .should('contain', '46%')
+      .should('contain', '50%')
       .click()
       .within(() => {
         cy.get('li')

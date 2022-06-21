@@ -23,6 +23,7 @@ import { scoreMap } from 'libs/scoring'
 import InterviewDetailsRowScreening from 'components/InterviewDetailsRow/InterviewDetailsRowScreening';
 import InterviewDetailsRowEvaluation from 'components/InterviewDetailsRow/InterviewDetailsRowEvaluation';
 import { getStageKey } from 'libs/stage';
+import Tooltip from 'components/Tooltip/Tooltip';
 
 import styles from './ProjectInterviewsTable.module.scss';
 
@@ -44,7 +45,8 @@ const getColumns = ({ handleAction, project, sort, order }) => ([
       <a>Candidate {getSortArrowIcon('candidate.name', sort, order)}</a>
     </Link>,
     dataIndex: 'name',
-    render: (_, row) => row.candidate.name
+    render: (_, row) => <span className={styles['project-interviews-table-col-name']}>
+    {row.candidate.name}</span>
   },
   {
     title: <Link href={getSortLink('score', sort, order, project)}>
@@ -53,7 +55,7 @@ const getColumns = ({ handleAction, project, sort, order }) => ([
     dataIndex: 'score',
     key: 'score',
     render: (score) => {
-      return typeof score !== 'undefined' ? <InterviewScore score={score || 0} /> : <NODATA />;
+      return <InterviewScore className={styles['project-interviews-table-col-score']} score={score || 0} />;
     }
   },
   {
@@ -70,7 +72,8 @@ const getColumns = ({ handleAction, project, sort, order }) => ([
           <PlayIcon /> Start interview</PlatformButton>
       }
 
-      return dateFromTs(updatedAt)
+      return <span className={styles['project-interviews-table-col-date']}>
+        {dateFromTs(updatedAt)}</span>
     }
   },
   {
@@ -79,15 +82,15 @@ const getColumns = ({ handleAction, project, sort, order }) => ([
     </a>,
     render: (_, row) => {
       return <div className={styles['project-interviews-table-actions']}>
-        {typeof row.score !== 'undefined' ? <EditButton onClick={e => handleAction('edit', row, e)} /> : null}
-        <TrashButton onClick={e => handleAction('delete', row, e)} />
+        {typeof row.score !== 'undefined' ? <Tooltip text='Edit response'><EditButton onClick={e => handleAction('edit', row, e)} /></Tooltip> : null}
+        <Tooltip text='Delete candidate'><TrashButton onClick={e => handleAction('delete', row, e)} /></Tooltip>
       </div>
     }
   }
 ]);
 
 const ProjectInterviewsTable = ({ className, data = [], onDelete, project, ...props }) => {
-  const [rowOpen, setRowOpen] = useState(null);
+  const [rowsOpen, setRowsOpen] = useState([]);
 
   const router = useRouter()
 
@@ -108,11 +111,22 @@ const ProjectInterviewsTable = ({ className, data = [], onDelete, project, ...pr
     sort: router.query.sort || '', order: router.query.order || ''
   })
 
-  const handleRowSelect = (row, index) => {
-    setRowOpen(row == rowOpen ? null : row)
+  const handleRowSelect = (interview, index) => {
+    const exist = rowsOpen.indexOf(interview) > -1 ;
+
+    if (exist) {
+      setRowsOpen([
+        ...rowsOpen.filter(r => r != interview)
+      ])
+    } else {
+      setRowsOpen([
+        ...rowsOpen,
+        interview
+      ])
+    }
   }
   const rowExtra = interview => {
-    if (interview != rowOpen) return ;
+    if (rowsOpen.indexOf(interview) == -1) return;
 
     const table = scoreMap(interview, project)
 
@@ -194,7 +208,7 @@ const ProjectInterviewsTable = ({ className, data = [], onDelete, project, ...pr
   return <FlexTable
     rowKey={row => row.id}
     rowExtra={rowExtra}
-    sizes={['25%', '25%', '25%', '25%']}
+    sizes={['30', '25%', '25%', '20%']}
     className={classNames(
       styles['project-interviews-table'],
       className

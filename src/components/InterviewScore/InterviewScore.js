@@ -13,19 +13,19 @@ const getColor = (score) => {
     return '#DFD049';
   }
 
-  return '#43B88C';
+  return colorBetween('#9AE23E', '#43B88C', score / 100, 'hex');
 }
 
 const CandidateScore = ({ className, score = 0 }) => {
   return <div className={classNames(styles['interview-score'], className)}>
-    <PieChart width={90} height={90} >
+    <PieChart width={100} height={100} >
           <Pie
             data={[
               { name: '', value: 100-score },
               { name: 'Score', value: score }
             ]}
-            innerRadius={35}
-            outerRadius={40}
+            innerRadius={42}
+            outerRadius={50}
             fill="#8884d8"
             paddingAngle={false}
             startAngle={90}

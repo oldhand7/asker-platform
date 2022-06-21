@@ -69,7 +69,6 @@ describe('Project overview', () => {
           .eq(1)
           .within(() => {
             cy.get('[data-test-id="flex-table-column"]').eq(0).should('contain', 'Candidate B')
-            cy.get('[data-test-id="flex-table-column"]').eq(1).should('not.contain', '%')
             cy.get('[data-test-id="flex-table-column"]').eq(2).should('contain', 'Start interview')
           })
       })
@@ -95,7 +94,6 @@ describe('Project overview', () => {
           .eq(0)
           .within(() => {
             cy.get('[data-test-id="flex-table-column"]').eq(0).should('contain', 'Dread Roberts')
-            cy.get('[data-test-id="flex-table-column"]').eq(1).should('not.contain', '%')
             cy.get('[data-test-id="flex-table-column"]').eq(2).should('contain', 'Start interview')
           })
       })

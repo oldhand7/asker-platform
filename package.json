@@ -55,6 +55,7 @@
     "react-drag-and-drop": "^3.0.0",
     "react-dropzone": "^12.0.5",
     "react-js-pagination": "^3.0.3",
+    "react-popper-tooltip": "^4.4.1",
     "react-range": "^1.8.12",
     "react-stars": "^2.2.5",
     "react-tabs": "^4.2.0",

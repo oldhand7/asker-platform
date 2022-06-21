@@ -5,6 +5,7 @@
 @import 'format';
 @import './jodit-theme';
 @import './admin';
+@import 'react-popper-tooltip/dist/styles.css';
 
 // @import 'debug';
 
@@ -126,4 +127,33 @@ h1, h2, h3, h4, h5 {
   color: white;
   padding: 2px 4px;
   border-radius: 0px 4px 0px 0px;
+}
+
+.tooltip-arrow {
+  margin-top: -10rem !important;
+  height: 1em;
+  width: 1em;
+}
+
+.tooltip-container {
+  padding: 10rem;
+  border-radius: 7px;
+  font-size: 12rem;
+  line-height: 1.2;
+  border: 0;
+  margin-right: -10rem !important;
+}
+
+
+.tooltip-container[data-popper-placement*="bottom"] .tooltip-arrow::before {
+    border-width: 0 10rem 12rem 10rem;
+    border-color: transparent transparent white transparent;
+    position: absolute;
+    margin-left: -15rem;
+}
+
+.tooltip-container[data-popper-placement*="bottom"] .tooltip-arrow::after {
+    border-color: transparent transparent var(--tooltipBackground) transparent;
+    border-width: 0 11rem 11rem 11rem;
+    display: none;
 }

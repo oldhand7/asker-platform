@@ -25,7 +25,7 @@ const InterviewDetailsRowEvaluation = ({ className, evaluations = [], other = fa
   className={classNames(styles['interview-details-row-screening'], className)}>
   <ul className={styles['interview-details-row-list']}>
     {evaluations.map(({ question, answer }) => {
-      return <li className={classNames(
+      return <li key={question.id} className={classNames(
         styles['interview-details-row-criteria'],
         styles[`interview-details-row-criteria-${question.type}`],
         styles[`interview-details-row-criteria-${question.subtype}`]
@@ -36,8 +36,8 @@ const InterviewDetailsRowEvaluation = ({ className, evaluations = [], other = fa
 
         {question.subtype == 'choice' || question.subtype == 'multichoice'  ?
         <span className={styles['interview-details-row-criteria-value']}>
-          {answer.map(a =>
-            <PillLabel  className={styles['interview-details-row-criteria-pill']}  text={a} color={getAnswerColor(a)} />
+          {answer.map((a, index) =>
+            <PillLabel key={`a${index}`} className={styles['interview-details-row-criteria-pill']}  text={a} color={getAnswerColor(a)} />
           )}
         </span> : null}
 
