@@ -128,7 +128,7 @@ export const unpackQuestions = v => {
 export const packQuestions = p => {
   const questionsMap = {}
 
-  const stageKeys = Object.keys(p.config);
+  const stageKeys = Object.keys(p.config || {});
 
   for (let i = 0; i < stageKeys.length; i++) {
     const key = stageKeys[i];

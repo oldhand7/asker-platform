@@ -132,6 +132,15 @@ const TemplateForm = ({ template, className }) => {
       values.scoringRules = calcDefaultScoringRules(values)
     }
 
+    //Cleanup old stages
+    for (let key in (values.config || {})) {
+      const s = values.stages.find(s => s.id == key)
+
+      if (!s) {
+        delete values.config[key]
+      }
+    }
+
     packQuestions(values);
 
     setLoading(true)
