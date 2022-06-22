@@ -51,7 +51,7 @@ const EvaluationQuestionForm = ({ className, question, subtype, onValues }) => {
   const handleSubmit = values => {
     setLoading(true)
 
-    let clone = question && question.companyId == 'asker';
+    let clone = question && question.companyId == 'asker' && user.companyId != 'asker';
 
     if (clone) {
       delete values.id;
