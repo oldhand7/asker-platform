@@ -187,19 +187,19 @@ describe('Scoring', () => {
       .contains('Start interview')
       .click()
 
-    cy.contains('QM1').closest('[data-test-id="evaluation-question-int"]')
+    cy.contains('QM1').closest('[data-test-id="feature-form"]')
       .contains('Excellent').click()
 
-    cy.contains('QM2').closest('[data-test-id="evaluation-question-int"]')
+    cy.contains('QM2').closest('[data-test-id="feature-form"]')
       .contains('Good').click()
 
-    cy.contains('QR1').closest('[data-test-id="evaluation-question-int"]')
+    cy.contains('QR1').closest('[data-test-id="feature-form"]')
       .contains('Good').click()
 
-    cy.contains('QR2').closest('[data-test-id="evaluation-question-int"]')
+    cy.contains('QR2').closest('[data-test-id="feature-form"]')
       .contains('Fair').click()
 
-    cy.contains('QS1').closest('[data-test-id="evaluation-question-int"]')
+    cy.contains('QS1').closest('[data-test-id="feature-form"]')
       .contains('Fair').click()
 
     cy.contains('Complete interview').click()

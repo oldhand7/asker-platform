@@ -123,12 +123,13 @@ const TemplateForm = ({ template, className }) => {
     values.userId = user.id;
     values.companyId = user.companyId;
     values.stages = values.stages
+      .filter(s => s)
       .map(s => {
-        if (s && !s.uid) {
+        if (!s.uid) {
           s.uid = uuidv4()
         }
 
-        if (s && !s.time) {
+        if (!s.time) {
           s.time = DEFAULT_STAGE_TIME;
         }
 

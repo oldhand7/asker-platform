@@ -37,6 +37,10 @@
     line-height: inherit;
     max-width: 100%;
     cursor: pointer;
+
+    svg {
+      fill: currentColor;
+    }
   }
 
   &-col {

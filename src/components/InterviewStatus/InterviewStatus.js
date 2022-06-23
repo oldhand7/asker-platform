@@ -31,9 +31,9 @@ const InterviewStatus = ({ className, stats = []}) => {
                 </div>
                 <div className={styles['interview-status-item-summary']}>
                     <span className={styles['interview-status-item-status']}>
-                        {
-                            !stat.time ? 'Not started' : (
-                                stat.status == 'complete' ? 'Completed' : 'In progress'
+                        {   
+                            stat.status == 'complete' ? 'Completed' : (
+                                stat.time ? 'In progress' : 'Not started'
                             )
                         }
                     </span>

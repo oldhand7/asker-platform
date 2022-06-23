@@ -70,7 +70,7 @@ useEffect(() => {
   return FormComponent ? <div ref={ref} className={classNames(
     styles['stage-interview-form'],
     props.last ? styles['stage-interview-form-last'] : ''
-  )} id={`stage-${props.id}`} data-test-id="feature-form">
+  )} id={`stage-${props.id}`} data-test-id={!isMultistage ? "feature-form" : ''}>
     {
       !isMultistage ?
       <InterviewStageTimeLabel className={styles['stage-interview-form-timer']} time={props.stage.time || DEFAULT_STAGE_TIME} /> : 

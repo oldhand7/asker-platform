@@ -99,9 +99,21 @@ const InterviewForm = ({ className, interview, project }) => {
   const [stages, setStages] = useState([]);
   const [minutes, setMinutes] = useState(typeof interview.time !== 'undefined' ? interview.time : project.time)
   const [stats, setStats] = useState(createStats(project.stages, interview.stats))
+  const [stage, setStage] = useState(null);
 
-  const taxStageSecond = useCallback((stage, questionId) => {
-    const key = `${stage.id}_${stage.uid}`
+  const taxStageSecond = useCallback((_stage, questionId) => {
+    //Check if previous stages was nonStrict and mark complete
+    if (stage && stage != _stage && nonStrictStages.indexOf(stage.id) > -1) {
+      const key = `${stage.id}_${stage.uid}`
+      
+      const stat = stats.find(stat => stat.id == key)
+
+      if (stat) {
+        stat.status = 'complete';
+      }
+    }
+
+    const key = `${_stage.id}_${_stage.uid}`
 
     let stat;
 
@@ -116,7 +128,9 @@ const InterviewForm = ({ className, interview, project }) => {
 
       setStats([...stats])
     }
-  }, [interview])
+
+    setStage(_stage)
+  }, [stage, interview])
 
   const handleComplete = (stage, questionId) => {
     const key = `${stage.id}_${stage.uid}`
@@ -144,11 +158,13 @@ const InterviewForm = ({ className, interview, project }) => {
     interview.score = calcInterviewScore(interview, project)
     interview.time = minutes;
     interview.projectTime = project.time;
-    interview.stats = stats.map(stat => {
+    interview.stats = stats.map((stat, index) => {
       const parts = stat.id.split('_');
 
-      if (stat.time && nonStrictStages.indexOf(parts[0]) > -1) {
-        stat.status = 'complete';
+      if (nonStrictStages.indexOf(parts[0]) > -1) {
+        const last = stats.length - 1 == index;
+
+        stat.status = (stat.time >= 10 || last) ? 'complete' : stat.status;
       }
 
       return stat;
