@@ -4,7 +4,6 @@ import { useForm } from 'libs/form';
 import Button from 'components/Button/PlatformButton';
 import TextInputField from 'components/TextInputField/TextInputField'
 import ProjectFormStager from 'components/ProjectFormStager/ProjectFormStager';
-import ProjectFormInterviewers from 'components/ProjectFormInterviewers/ProjectFormInterviewers';
 import { useState, useEffect, useCallback } from 'react';
 import { features, featureTypes } from 'libs/features';
 import { addFlash } from 'libs/flash';
@@ -14,7 +13,6 @@ import { saveCollectionDocument } from 'libs/firestore'
 import { useRouter } from 'next/router';
 import Preloader from 'components/Preloader/Preloader'
 import NewStageDroppable from 'components/NewStageDroppable/NewStageDroppable'
-import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField';
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
 import ErrorBox from 'components/ErrorBox/ErrorBox';
 import { ctxError, getTimeLabel } from 'libs/helper';
@@ -23,7 +21,6 @@ import { calcDefaultScoringRules, packQuestions, getProjectMinutes } from 'libs/
 import TimeLabel from 'components/TimeLabel/TimeLabel';
 import { DEFAULT_STAGE_TIME } from 'libs/config'
 import { validate } from 'libs/validator';
-import EditInput from 'components/EditInput/EditInput'
 import { v4 as uuidv4 } from 'uuid';
 
 import styles from './template-form.module.scss';
@@ -129,6 +126,10 @@ const TemplateForm = ({ template, className }) => {
       .map(s => {
         if (s && !s.uid) {
           s.uid = uuidv4()
+        }
+
+        if (s && !s.time) {
+          s.time = DEFAULT_STAGE_TIME;
         }
 
         return s;
@@ -248,7 +249,7 @@ const TemplateForm = ({ template, className }) => {
 
           <NewStageDroppable onStage={handleAddDropStage}>
           <div style={{ padding: '15rem 0'}}>
-          {values.stages.length < 12 ? <button type="button" className={styles['template-form-add-stage']} onClick={() => addStage()}>Add stage +</button> : null}
+          {values.stages.length < 14 ? <button type="button" className={styles['template-form-add-stage']} onClick={() => addStage()}>Add stage +</button> : null}
           </div>
           </NewStageDroppable>
 

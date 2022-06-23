@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useUser } from 'libs/user';
 import UserCard from 'components/UserCard/UserCard';
 import Link from 'next/link';
-import CarretDown from 'components/Icon/CarretDown';
+import CarretDown from 'components/Icon/CarretDownIcon';
 import styles from './UserMenu.module.scss';
 
 const UserMenu = ({ className }) => {

@@ -1,8 +1,7 @@
 import { usePopperTooltip } from 'react-popper-tooltip';
-
 import styles from './Tooltip.module.scss';
 
-const Tooltip = ({ children, text = '???' }) => {
+const Tooltip = ({ children, text = '???', delay = 500 }) => {
   const {
     getArrowProps,
     getTooltipProps,
@@ -10,13 +9,11 @@ const Tooltip = ({ children, text = '???' }) => {
     setTriggerRef,
     visible,
   } = usePopperTooltip({
-    placement: 'bottom-end',
-    delayShow: 500
+    placement: 'bottom',
+    delayShow: delay
   });
 
-  return <><span className={styles['tooltip']} ref={setTriggerRef}>
-    {children}
-  </span>{visible && (
+  return <>{children(setTriggerRef)}{visible && (
        <div
          ref={setTooltipRef}
          {...getTooltipProps({ className: 'tooltip-container' })}

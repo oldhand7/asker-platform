@@ -1,7 +1,25 @@
 .interview-form {
+  padding-right: calc(25% + 10rem);
+  position: relative;
+  height: 100%;
+
+  &-title {
+    font-weight: 500;
+    font-size: 32rem;
+    line-height: 48rem;
+    color: #5B5B5B;
+    margin-bottom: 20rem;
+  }
 
   &-stage {
     text-align: left;
+    height: 100vh;
+    padding-top: 15rem;
+
+    &-last {
+      height: auto;
+      min-height: 30vh;
+    }
   }
 
   &-submit {
@@ -9,14 +27,56 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 50rem;
   }
 
 
   &-stages {
-
+    height: 100%;
+    overflow-y: auto;
+    padding-right: 10rem;
+    position: relative;
+    padding-top: 15rem;
+    padding-bottom: 100rem;
   }
 
-  &-stage {
-    margin: 40rem 0;
+
+  &-sidebar {
+    padding-top: 20rem;;
+    position: absolute;
+    width: calc(25% - 10rem);
+    top: 0;
+    right: 0;
+    height: 100%;
+    overflow-y: auto;
+
+    &-widget {
+      margin-bottom: 20rem;
+      background: white;
+      padding: 20rem;
+      border-radius: 10px;
+    }
+  }
+  &-nav {
+    margin-bottom: 20rem;
+    text-align: center;
+  }
+
+  &-back {
+    padding: 0;;
+    line-height: 1.5;
+    margin-right: 10rem;
+    cursor: pointer;
+    padding: 0 10rem;
+    color: #5B5B5B;
+
+    &-text {
+      vertical-align: middle;
+    }
+
+    &-icon {
+      vertical-align: middle;
+      margin-right: 5rem;;
+    }
   }
 }

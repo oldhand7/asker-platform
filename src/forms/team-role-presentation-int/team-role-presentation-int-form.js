@@ -9,7 +9,7 @@ import { allowedHtmlTags } from 'libs/config';
 
 import styles from './team-role-presentation-int-form.module.scss';
 
-const TeamRolePresentationForm = ({ className, stage, project, last, nextId, config }) => {
+const TeamRolePresentationForm = ({ className, stage, project, last, markComplete, nextId, config }) => {
   const [images, setImages] = useState([]);
   const [documents, setDocuments] = useState([]);
 
@@ -49,7 +49,10 @@ const TeamRolePresentationForm = ({ className, stage, project, last, nextId, con
           </li>))}
       </ul>
     </div> : null}
-    {!last ? <NextButton onClick={() => handleNext(nextId)} className={styles['team-role-int-form-next-button']} /> : null}
+    {!last ? <NextButton onClick={() => {
+      markComplete();
+      handleNext(nextId)
+    }} className={styles['team-role-int-form-next-button']} /> : null}
   </div>
 }
 

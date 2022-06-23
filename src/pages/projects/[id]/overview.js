@@ -115,8 +115,10 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
           <h1 className={styles['project-overview-page-title']}>
             {project.name} <Link href={`/projects/${project.id}/edit`}><a className={styles['project-overview-page-title-edit-link']}>edit</a></Link>
           </h1>
-          <PlatformButton onClick={() => openCandidateModal(handleCandidate)} className={styles['project-overview-page-interviews-add-candidate']}>
+          <div>
+          <PlatformButton onClick={() => openCandidateModal(handleCandidate)} className={styles['project-overview-page-add-candidate']}>
             <PlusIcon /> Add candidate</PlatformButton>
+          </div>
         </div>
 
         {success ? <Alert type="success">{success}</Alert> : null}

@@ -1,12 +1,24 @@
 @import 'styles/vars';
 
 .range-question-int-form {
+  font-weight: 400;
+  font-size: 14rem;
+  line-height: 1.5;
+  color: #5B5B5B;
+
+  &-title {
+    font-weight: 500;
+    font-size: 20rem;
+    line-height: 140%;
+    color: #5B5B5B;
+  }
+
   &-desc {
     font-size: 14rem;
     margin: 5rem 0;
 
     ul, ul {
-      padding-left: 40rem;
+      padding-left: 30rem;
     }
 
     p > br:first-child {
@@ -17,7 +29,7 @@
   &-slider {
     margin-top: 70rem;
     font-size: 14rem;
-    padding: 0 20rem;
+    padding: 0 20rem 0 35rem;
     margin-left: auto;
     margin-right: auto;
 

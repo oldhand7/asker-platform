@@ -21,10 +21,9 @@ import { ctxError, getTimeLabel } from 'libs/helper';
 import FeatureForm from 'components/FeatureForm/FeatureForm';
 import { calcDefaultScoringRules, packQuestions, getProjectMinutes } from 'libs/project';
 import TimeLabel from 'components/TimeLabel/TimeLabel';
-import { DEFAULT_STAGE_TIME } from 'libs/config'
 import { validate } from 'libs/validator';
-import EditInput from 'components/EditInput/EditInput'
 import { v4 as uuidv4 } from 'uuid';
+import { DEFAULT_STAGE_TIME } from 'libs/config';
 
 import styles from './project-form.module.scss';
 
@@ -130,6 +129,10 @@ const ProjectForm = ({ project, className }) => {
       .map(s => {
         if (!s.uid) {
           s.uid = uuidv4()
+        }
+
+        if (!s.time) {
+          s.time = DEFAULT_STAGE_TIME;
         }
 
         return s;
@@ -276,7 +279,7 @@ const ProjectForm = ({ project, className }) => {
 
           <NewStageDroppable onStage={handleAddDropStage}>
           <div style={{ padding: '15rem 0'}}>
-          {values.stages.length < 12 ? <button type="button" className={styles['project-form-add-stage']} onClick={() => addStage()}>Add stage +</button> : null}
+          {values.stages.length < 14 ? <button type="button" className={styles['project-form-add-stage']} onClick={() => addStage()}>Add stage +</button> : null}
           </div>
           </NewStageDroppable>
 

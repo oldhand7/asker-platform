@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import ChoiceQuestionIntForm from 'forms/choice-question-int/choice-question-int-form';
-import useForm from 'libs/use-form';
+import {useForm} from 'libs/form';
 import NextButton from 'components/Button/NextButton';
 import { useEffect } from 'react';
 import MultichoiceQuestionIntForm from 'forms/multichoice-question-int/multichoice-question-int-form';
@@ -19,8 +19,8 @@ const questionForms = {
 
 const rules = {}
 
-const ScreeningQuestionsIntForm = ({nextId, last = false, className, values, onValues, config }) => {
-  const [formValues, errors, control] = useForm({
+const ScreeningQuestionsIntForm = ({nextId, last = false, markComplete, className, values, onValues, config }) => {
+  const { values: formValues, errors, control} = useForm({
     values,
     rules
   })
@@ -29,7 +29,16 @@ const ScreeningQuestionsIntForm = ({nextId, last = false, className, values, onV
     onValues(formValues)
   }, [formValues])
 
+  useEffect(() => {
+    const complete = config.questions.every(q => formValues[q.id])
+
+    if (complete) {
+      markComplete();
+    }
+  }, [formValues, config.questions])
+
   return <div className={classNames(styles['screening-questions-int-form'], className)}>
+    <div className={styles['screening-questions-int-form-questions']}>
     {config.questions
       .map(q => {
         const QuestionFormCompnent = questionForms[q.subtype];
@@ -44,6 +53,7 @@ const ScreeningQuestionsIntForm = ({nextId, last = false, className, values, onV
         </div>
       })
     }
+    </div>
 
     {!last ? <NextButton onClick={() => handleNext(nextId)} className={styles['screening-questions-int-form-submit']}  /> : null}
   </div>

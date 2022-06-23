@@ -1,0 +1,40 @@
+.dismiss-alert {
+    background-color: white;
+    border-radius: 5px;
+    padding: 15rem 10rem;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.05));
+    color: #5B5B5B;
+
+    &-message {
+        font-weight: 500;
+        font-size: 12rem;
+        line-height: 140%;
+        line-height: 1.5em;
+        float: left;
+    }
+
+    &-icon {
+        float: left;
+        margin-right:  10rem;
+        fill: currentColor !important;
+        opacity: 0.5;
+        margin-top: 0.1em;
+    }
+
+    &-close {
+        float: right;
+        padding: 0 5rem;
+        background: 0;
+        border: 0;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 18px;
+        text-decoration-line: underline;
+        color: #43B88C;
+        cursor: pointer;
+        
+        &:hover {
+            color: #1E453E;
+        }
+    }
+}

@@ -1,8 +1,7 @@
 import classNames from 'classnames';
 import IconButton from 'components/IconButton/IconButton'
 import IconCarretUp from 'components/Icon/CarretUpIcon';
-import IconCarretDown from 'components/Icon/CarretDown';
-import CriteriaRating from 'components/CriteriaRating/CriteriaRating';
+import IconCarretDown from 'components/Icon/CarretDownIcon';
 import { useState } from 'react';
 
 import styles from './InterviewDetailsRow.module.scss';

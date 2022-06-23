@@ -1,0 +1,12 @@
+.interview-stage-time-label {
+    display: inline-block;
+
+    &-icon {
+        vertical-align: middle;
+    }
+
+    &-text {
+        vertical-align: middle;
+        margin-left: 5rem;
+    }
+}

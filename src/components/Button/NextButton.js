@@ -4,7 +4,7 @@ import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
 
 import styles from './Button.module.scss';
 
-const NextButton = ({ children, className, text = 'Next question',  ...props }) => {
+const NextButton = ({ children, className, text = 'Next step',  ...props }) => {
   return <Button {...props} type="button" className={classNames([
     styles['button-next'],
     className

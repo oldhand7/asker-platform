@@ -7,6 +7,7 @@ export const useForm = (options = {}) => {
   const [pristine, setPristine] = useState(typeof options.pristine !== 'undefined' ? options.pristine : true)
   const [errors, setErrors] = useState(null);
   const [submitted, setSubmitted] = useState(typeof options.submitted !== 'undefined' ? options.submitted : false)
+  const [liveValidation, setLiveValidation] = useState(typeof options.liveValidation !== 'undefined' ? options.liveValidation : false)
 
   const setValues = values => {
     valuesAbs.current = { ...values };
@@ -19,16 +20,17 @@ export const useForm = (options = {}) => {
         ...valuesAbs.current,
         [field]: dom ? val.target.value : val
       })
+      setPristine(false);
     }
   }
 
   useEffect(() => {
-    if (!pristine) {
+    if (submitted || liveValidation) {
       const errors = validate(valuesAbs.current, options.rules, options.messages);
 
       setErrors(errors)
     }
-  }, [pristine, values])
+  }, [liveValidation, submitted, values])
 
   const handleSubmit = (cb, onError, ev) => {
     return (ev) => {
