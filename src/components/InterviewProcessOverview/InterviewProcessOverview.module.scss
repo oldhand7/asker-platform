@@ -1,0 +1,59 @@
+.interview-process-overview {
+  &-head {
+    position: relative;
+    cursor: pointer;
+  }
+
+  &-title {
+    font-weight: 500;
+    font-size: 20rem;
+    line-height: 30rem;
+    color: #5B5B5B;
+    margin-bottom: 20rem;
+  }
+
+  &-subhead {
+    display: flex;
+    justify-content: space-between;
+    margin: 20rem 0;
+
+    &-title {
+      font-weight: 500;
+      font-size: 16rem;
+      line-height: 24rem;
+      color: #5B5B5B;
+    }
+
+    &-counter {
+      text-align: right;
+    }
+  }
+
+  &-question-count {
+    &-title {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      color: #969696;
+      margin-right: 5rem;
+    }
+
+    &-value {
+      font-weight: 500;
+      font-size: 22px;
+      line-height: 33px;
+      color: #5B5B5B;
+    }
+  }
+
+  &-status {
+
+  }
+
+  &-toggle {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

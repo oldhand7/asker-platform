@@ -1,5 +1,5 @@
 import { Range, getTrackBackground } from 'react-range';
-import useForm from 'libs/use-form'
+import {useForm} from 'libs/form'
 import { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import { handleNext } from 'libs/helper';
@@ -20,14 +20,13 @@ const rules = {
 
 }
 
-const SalaryIntForm = ({ last, nextId, className, values, onValues, config }) => {
-  const [formValues, errors, control] = useForm({
+const SalaryIntForm = ({ last, nextId, className, values, markComplete, onValues, config }) => {
+  const { values: formValues, errors, control, pristine } = useForm({
     values: values ? values : { ...defaultValues, range: [
       config.config ? config.config[0] : config.range[0],
       config.config ? config.config[1] : config.range[1]
     ]},
-    rules,
-    pristine: false
+    rules
   })
 
   useEffect(() => {
@@ -62,47 +61,60 @@ const SalaryIntForm = ({ last, nextId, className, values, onValues, config }) =>
   return <div className={classNames(styles['salary-int-form'], className)}>
     <h2 className={styles['salary-int-form-title']}>Salary</h2>
 
+    <FlexRow className={styles['salary-int-form-flex-row']}>
+      <div className={classNames(styles['salary-int-form-slider'])}>
+        <span className={styles['salary-int-form-slider-min']}>{config.currency}{config.range[0]} -</span>
+        <span className={styles['salary-int-form-slider-max']}>- {config.currency}{config.range[1]}</span>
+        <Range
+          step={100}
+          min={config.range[0]}
+          max={config.range[1]}
+          state={ { range: formValues.range }}
+          values={formValues.range}
+          onChange={range => {
+            control.set('range', range)
+            markComplete()
+          }}
+          renderTrack={({ props, children }) => (
+          <div
+            {...props}
+            style={{
+              ...props.style,
+              background
+            }}
+            className={styles['salary-int-form-slider-track']}
+          >
+            {children}
+          </div>
+        )}
+        renderThumb={({ props }) => {
+          return <div
+            {...props}
+            style={{
+              ...props.style
+            }}
+            className={clasNames(
+              styles['salary-int-form-slider-marker'],
+              // props.key == 0 && formValues.range[0] < config.config[0] || formValues.range[0] > config.config[1]  ? styles['salary-int-form-slider-marker-outside'] : '',
+              props.key == 1 && formValues.range[1] > config.config[1] ? styles['salary-int-form-slider-marker-outside'] : ''
+            )}
+          >
+          <span className={styles['salary-int-form-slider-marker-value']}>{config.currency}{formValues.range[props.key]}</span></div>
+        }}
+          />
+      </div>
+      <div className={styles['salary-int-form-notes']}>
+        <HtmlInputField className={styles['salary-int-form-notes-input']} value={formValues.notes || ''} onChange={control.input('notes', false)} placeholder='Notes about salary'  />
+      </div>
+    </FlexRow>
 
-    <div className={classNames(styles['salary-int-form-field'], styles['salary-int-form-slider'])}>
-      <span className={styles['salary-int-form-slider-min']}>{config.currency}{config.range[0]} -</span>
-      <span className={styles['salary-int-form-slider-max']}>- {config.currency}{config.range[1]}</span>
-      <Range
-        step={100}
-        min={config.range[0]}
-        max={config.range[1]}
-        state={ { range: formValues.range }}
-        values={formValues.range}
-        onChange={control.input('range', false)}
-        renderTrack={({ props, children }) => (
-         <div
-           {...props}
-           style={{
-             ...props.style,
-             background
-           }}
-           className={styles['salary-int-form-slider-track']}
-         >
-           {children}
-         </div>
-       )}
-       renderThumb={({ props }) => {
-         return <div
-           {...props}
-           style={{
-             ...props.style
-           }}
-           className={clasNames(
-             styles['salary-int-form-slider-marker'],
-             // props.key == 0 && formValues.range[0] < config.config[0] || formValues.range[0] > config.config[1]  ? styles['salary-int-form-slider-marker-outside'] : '',
-             props.key == 1 && formValues.range[1] > config.config[1] ? styles['salary-int-form-slider-marker-outside'] : ''
-           )}
-         >
-         <span className={styles['salary-int-form-slider-marker-value']}>{config.currency}{formValues.range[props.key]}</span></div>
-       }}
-        />
-    </div>
-    <HtmlInputField className={styles['salary-int-form-notes']} value={formValues.notes || ''} onChange={control.input('notes', false)} placeholder='Notes about salary'  />
-    {!last ? <NextButton onClick={() => handleNext(nextId)} className={styles['salary-int-form-next-button']} /> : null}
+    {!last ? <NextButton onClick={() => {
+      if (!pristine) {
+        markComplete()
+      }
+
+      handleNext(nextId)
+    }} className={styles['salary-int-form-next-button']} /> : null}
   </div>
 }
 

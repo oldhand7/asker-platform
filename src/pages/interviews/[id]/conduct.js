@@ -6,6 +6,7 @@ import InterviewForm from 'forms/interview/interview-form'
 import { unpackQuestions } from 'libs/project';
 
 import styles from 'styles/pages/interview-conduct.module.scss';
+import BlankLayout from 'layouts/blank/blank-layout';
 
 const InterviewConductPage = ({ interview, project }) => {
   return <div className={styles['interview-conduct-page']}>
@@ -14,7 +15,7 @@ const InterviewConductPage = ({ interview, project }) => {
         <meta name="robots" content="noindex" />
       </Head>
 
-      <InterviewForm interview={interview} project={project} />
+      <InterviewForm className={styles['interview-conduct-page-form']} interview={interview} project={project} />
   </div>
 }
 
@@ -48,5 +49,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     }
   }
 })
+
+InterviewConductPage.layout = BlankLayout
 
 export default InterviewConductPage;

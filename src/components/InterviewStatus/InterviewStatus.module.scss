@@ -1,0 +1,75 @@
+.interview-status {
+    list-style-type: none;
+    padding: 0;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        width: 1px;
+        height: calc(100% - 64rem);
+        background-color:  #D2D2D2;
+        top: 50%;
+        left: 21rem;
+        transform: translateY(-50%);
+    }
+
+    &-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15rem;
+        cursor: pointer;
+        
+        &-status {
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 18px;
+            color: #878787;
+        }
+
+        &-time {
+            font-weight: 600;
+            font-size: 14rem;
+            line-height: 21rem;
+            color: #878787;
+            min-height: 1.2em;
+            display: inline-block;
+        }
+    }
+
+    &-coin {
+        width: 32rem;
+        height: 32rem;
+        border-radius: 50%;
+        display: inline-block;
+        background: #F6F6F6;
+        position: relative;
+        text-align: center;
+        line-height: 32rem;
+        font-size: 16rem;
+        margin-right: 15rem;
+        border: 5rem solid white;
+        box-sizing: content-box;
+        
+        & > * {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    &-item-awaiting &-coin {
+        background: #59B4E8;
+        color: white;
+    }
+
+    &-item-complete &-coin {
+        background: #43B88C;
+        color: white;
+
+        svg {
+            fill: white;
+        }
+    }
+}

@@ -1,6 +1,12 @@
 .evaluation-questions-multiple {
-  &-question {
-    margin-bottom: 50rem;
-    min-height: 100vh;
-  }
+    position: relative;
+    &-form {
+        height: 100%;
+    }
+
+    &-timer {
+        position: absolute;
+        top: 10rem;
+        right: 10rem;
+    }
 }

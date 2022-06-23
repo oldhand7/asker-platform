@@ -141,7 +141,7 @@ h1, h2, h3, h4, h5 {
   font-size: 12rem;
   line-height: 1.2;
   border: 0;
-  margin-right: -10rem !important;
+  max-width: 420rem;
 }
 
 
@@ -149,11 +149,16 @@ h1, h2, h3, h4, h5 {
     border-width: 0 10rem 12rem 10rem;
     border-color: transparent transparent white transparent;
     position: absolute;
-    margin-left: -15rem;
 }
 
 .tooltip-container[data-popper-placement*="bottom"] .tooltip-arrow::after {
     border-color: transparent transparent var(--tooltipBackground) transparent;
     border-width: 0 11rem 11rem 11rem;
     display: none;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
 }

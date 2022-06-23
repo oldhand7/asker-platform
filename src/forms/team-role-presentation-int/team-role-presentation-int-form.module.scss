@@ -1,13 +1,17 @@
 .team-role-presentation-int-form {
   &-title {
+    margin: 10rem 0 20rem;
+    color: #B7B7B7;
     font-weight: 500;
-    font-size: 24rem;
-    line-height: 36rem;
+    font-size: 20rem;
+    line-height: 30rem;
   }
 
   &-text {
-    max-width: 600rem;
-    margin: 20rem 0;
+    font-weight: 400;
+    font-size: 14rem;
+    line-height: 1.5;
+    color: #5B5B5B;
   }
 
   &-slideshow {

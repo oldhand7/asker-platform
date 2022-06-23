@@ -1,20 +1,30 @@
 @import 'styles/vars';
 
 .screening-questions-int-form {
-  display: flex;
-  flex-wrap: wrap;
+
+  &-questions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
 
   &-question {
-    flex: 0 1 33.33333%;
-    margin-bottom: 25rem;
-    padding-right: 20rem;
+    flex: 1 1 33.33333%;
+    max-width: 420rem;
+    margin-bottom: 15rem;
+    padding-right: 15rem;
     box-sizing: border-box;
 
     &-title {
+      color: #B7B7B7;
       font-weight: 500;
-      font-size: 14px;
-      line-height: 30px;
-      color: $brandish-grey;
+      font-size: 15rem;
+      line-height: 30rem;
+      margin-bottom: 5rem;
     }
+  }
+
+  &-submit {
+    margin-top: 15rem;
   }
 }

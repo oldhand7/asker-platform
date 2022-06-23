@@ -9,7 +9,7 @@ import { allowedHtmlTags } from 'libs/config';
 
 import styles from './company-presentation-int-form.module.scss';
 
-const CompanyPresentationForm = ({ className, stage, project, last, nextId, config }) => {
+const CompanyPresentationForm = ({ className, stage, project, markComplete, last, nextId, config }) => {
   const [images, setImages] = useState([]);
   const [documents, setDocuments] = useState([]);
 
@@ -50,7 +50,10 @@ const CompanyPresentationForm = ({ className, stage, project, last, nextId, conf
       </ul>
     </div> : null}
 
-    {!last ? <NextButton onClick={() => handleNext(nextId)} className={styles['company-presentation-int-form-next-button']} /> : null}
+    {!last ? <NextButton onClick={() => {
+      markComplete();
+      handleNext(nextId);
+    }} className={styles['company-presentation-int-form-next-button']} /> : null}
   </div>
 }
 

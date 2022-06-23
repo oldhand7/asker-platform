@@ -1,24 +1,19 @@
 @import 'styles/vars';
 
 .candidate-questions-int-form {
-
   &-title {
+    margin: 10rem 0 20rem;
+    color: #B7B7B7;
     font-weight: 500;
     font-size: 20rem;
     line-height: 30rem;
-    margin-bottom: 20rem;
-    max-width: 500rem;
-
   }
 
   &-desc {
-    padding: 20rem;
-    background: #FFFFFF;
-    border-radius: 9px;
-    max-width: 500rem;
+    font-weight: 400;
+    font-size: 14rem;
+    line-height: 1.5;
+    color: #5B5B5B;
   }
 
-  &-next-button {
-    margin-top: 50rem;
-  }
 }

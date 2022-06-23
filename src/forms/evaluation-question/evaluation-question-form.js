@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import useForm from 'libs/use-form';
+import {useForm} from 'libs/form';
 import PlatformButton from 'components/Button/PlatformButton';
 import CriteriaOptionInputField from 'components/CriteriaOptionInputField/CriteriaOptionInputField';
 import QuestionScoreInputField from 'components/QuestionScoreInputField/QuestionScoreInputField';
@@ -8,12 +8,10 @@ import { useState } from 'react';
 import { saveCollectionDocument } from 'libs/firestore';
 import TextInputField from 'components/TextInputField/TextInputField';
 import Preloader from 'components/Preloader/Preloader';
-import TextareaInputField from 'components/TextareaInputField/TextareaInputField';
 import FollowupQuestionField from 'components/FollowupQuestionField/FollowupQuestionField';
 import Alert from 'components/Alert/Alert';
 import { addFlash } from 'libs/flash';
 import { useRouter } from 'next/router';
-import { error } from 'libs/helper';
 import HtmlInputField from 'components/HtmlInputField/HtmlInputField'
 
 import styles from './evaluation-question-form.module.scss';
@@ -38,8 +36,8 @@ const createValidationRules = type => ({
   criteria: EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(type.id) != -1 ? '' : 'required'
 })
 
-const EvaluationQuestionForm = ({ className, question, subtype, onValues }) => {
-  const [values, errors, control] = useForm({
+const EvaluationQuestionForm = ({ className, question, markComplete, subtype, onValues }) => {
+  const {values, errors, control } = useForm({
     values: question ? question : { ...defaultValues, rules: subtype.rules },
     rules: createValidationRules(subtype)
   })
@@ -51,7 +49,7 @@ const EvaluationQuestionForm = ({ className, question, subtype, onValues }) => {
   const handleSubmit = values => {
     setLoading(true)
 
-    let clone = question && question.companyId == 'asker';
+    let clone = question && question.companyId == 'asker' && user.companyId != 'asker';
 
     if (clone) {
       delete values.id;
@@ -119,7 +117,7 @@ const EvaluationQuestionForm = ({ className, question, subtype, onValues }) => {
 
       <TextInputField value={values.name}  error={errors && errors['name']} autoComplete="off" name="name" onChange={control.input('name')} label="Question" placeholder="Write your question here" className={styles['evaluation-question-form-input-field']} />
 
-       <HtmlInputField value={values.desc}  error={errors && errors['desc']} name="desc" onChange={control.input('desc', false)} label="Definition" placeholder="Notes for interviewer" className={styles['evaluation-question-form-input-field']} />
+      <HtmlInputField value={values.desc}  error={errors && errors['desc']} name="desc" onChange={control.input('desc', false)} label="Definition" placeholder="Notes for interviewer" className={styles['evaluation-question-form-input-field']} />
 
       <FollowupQuestionField questions={values.followup} onChange={control.input('followup', false)} className={styles['evaluation-question-form-input-field']} />
     </div>

@@ -1,18 +1,12 @@
-import Table from 'rc-table';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
-import NODATA from 'components/NODATA/NODATA';
 import InterviewScore from 'components/InterviewScore/InterviewScore';
 import PlatformButton from 'components/Button/PlatformButton';
 import PlayIcon from 'components/Icon/PlayIcon';
-import EvaluationScore from 'components/EvaluationScore/EvaluationScore';
 import FilterIcon from 'components/Icon/FilterIcon';
 import Link from 'next/link';
 import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
 import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
-import { EVALUATION_SUBTYPES_NO_CRITERIA } from 'libs/config';
-import { getSubtype, ucFirst } from 'libs/helper';
-import { getInterviewAggregate } from 'libs/interview';
 import FlexTable from 'components/FlexTable/FlexTable';
 import { useState } from 'react';
 import InterviewDetails from 'components/InterviewDetails/InterviewDetails';
@@ -82,8 +76,10 @@ const getColumns = ({ handleAction, project, sort, order }) => ([
     </a>,
     render: (_, row) => {
       return <div className={styles['project-interviews-table-actions']}>
-        {typeof row.score !== 'undefined' ? <Tooltip text='Edit response'><EditButton onClick={e => handleAction('edit', row, e)} /></Tooltip> : null}
-        <Tooltip text='Delete candidate'><TrashButton onClick={e => handleAction('delete', row, e)} /></Tooltip>
+        {typeof row.score !== 'undefined' ? <Tooltip text='Edit response'>{setRef => (
+          <EditButton ref={setRef} onClick={e => handleAction('edit', row, e)} />)}</Tooltip> : null}
+        <Tooltip text='Delete candidate'>{setRef => (
+          <TrashButton ref={setRef} onClick={e => handleAction('delete', row, e)} />)}</Tooltip>
       </div>
     }
   }
