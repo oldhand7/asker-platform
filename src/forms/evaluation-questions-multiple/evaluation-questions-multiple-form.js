@@ -30,7 +30,7 @@ const EvaluationQuestionsMultipleForm = ({ last = false, nextId = null, taxStage
 
   return <div className={styles['evaluation-questions-multiple']}>
     {stage.config.questions.map((q, _index) => (
-      <div data-test-id="evaluation-question-int" key={q.id}  id={`stage-${getStageKey(stage)}-${q.id}`} className={classNames(
+      <div data-test-id="feature-form" key={q.id}  id={`stage-${getStageKey(stage)}-${q.id}`} className={classNames(
         styles['evaluation-questions-multiple-question'],
         className
       )}>

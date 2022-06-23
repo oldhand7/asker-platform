@@ -185,6 +185,153 @@ describe('Interview', () => {
           })
 
       })
-
   })
+  
+  it('should have interview steps', () => {
+    cy.createEvaluationCriteriaQuestion('competency', { name: 'Are you familiar with ISO-111?', criteria: 'ISO-111' });
+    cy.createEvaluationCriteriaQuestion('competency', { name: 'Are you familiar with ISO-222?', criteria: 'ISO-222' });
+    
+    cy.createDummyProject('Some position')
+    cy.tableFirstRowNavigate('Edit');
+
+    cy.contains('Add stage')
+      .click()
+      .click()
+
+    cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
+    cy.get('#feature-select-modal').contains('Competency').click()
+    cy.get('[data-test-id="feature-form"]')
+      .find('table').first()
+      .within(() => {
+        cy.contains('ISO-111').closest('tr').find('[data-test-id="add-question"]').click()
+        cy.contains('ISO-222').closest('tr').find('[data-test-id="add-question"]').click()
+      })
+
+    cy.get('[data-test-id="stage-3"] [data-test-id="load-button"]').click()
+    cy.get('#feature-select-modal').contains('Summary').click()
+
+    cy.contains('Save project').click()
+
+
+    cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved');
+
+    cy.get('table tbody tr').first().click()
+
+    cy.addProjectCandidate('XOXO XIXI', 'xoxo.xixi@hotmail.net')
+
+    cy.contains('XOXO XIXI')
+      .closest('[data-test-id="flex-table-row"]')
+      .contains('Start interview')
+      .click()
+    
+    cy.location('pathname').should('contain', '/conduct/')
+    
+    cy.get('h1').should('contain', 'XOXO XIXI');
+
+    cy.get('[data-test-id="interview-timer"]')
+      .within(() => {
+        //@TODO: 20 min!
+        cy.get('button').should('contain', 'Start timer (15 min)').click()
+        cy.get('button').should('contain', 'Pause timer')
+
+        cy.contains('Project progress')
+          .closest('div')
+          .should('contain', '0%')
+      })
+    
+    cy.contains('Process overview')
+      .click()
+      .closest('div[data-test-id="interview-process-overview"]')
+      .within(() => {
+        cy.contains('Questions').closest('div')
+          .should('contain', 2)
+        
+        cy.get('ul')
+          .within(() => {
+            cy.get('li').eq(0)
+              .should('contain', 'In progress')
+              .should('contain', 'Introduction')
+
+            cy.get('li').eq(1)
+              .should('contain', 'Not started')
+              .should('contain', 'ISO-111')
+
+            cy.get('li').eq(2)
+              .should('contain', 'Not started')
+              .should('contain', 'ISO-222')
+
+            cy.get('li').eq(3)
+              .should('contain', 'Not started')
+              .should('contain', 'Summary')
+          })
+        })
+
+    
+    cy.get('[data-test-id="feature-form"]').eq(0)
+      .should('contain', 'Introduction')
+      .contains('Next step').click()
+
+    cy.get('[data-test-id="feature-form"]').eq(1)
+      .should('contain', 'Competency')
+      .should('contain', 'Are you familiar with ISO-111?')
+      .within(() => {
+        cy.contains('Good').click()
+        cy.contains('Next step').click()
+      })
+
+    cy.get('[data-test-id="feature-form"]').eq(2)
+      .should('contain', 'Competency')
+      .should('contain', 'Are you familiar with ISO-222?')
+      .within(() => {
+        cy.contains('Good').click()
+        cy.contains('Next step').click()
+      })
+
+    cy.get('[data-test-id="feature-form"]').eq(3)
+      .should('contain', 'Summary')
+
+    cy.contains('Project progress')
+      .closest('div')
+      .should('contain', '75%')
+
+    cy.contains('Process overview')
+      .closest('div[data-test-id="interview-process-overview"]')
+      .within(() => {
+        cy.contains('Questions').closest('div')
+          .should('contain', 0)
+        
+        cy.get('ul')
+          .within(() => {
+            cy.get('li').eq(0)
+              .should('contain', 'Completed')
+              .should('contain', 'Introduction')
+
+            cy.get('li').eq(1)
+              .should('contain', 'Completed')
+              .should('contain', 'ISO-111')
+
+            cy.get('li').eq(2)
+              .should('contain', 'Completed')
+              .should('contain', 'ISO-222')
+
+            cy.get('li').eq(3)
+              .should('contain', 'In progress')
+              .should('contain', 'Summary')
+          })
+      })
+
+    cy.contains('Complete interview').click()
+
+    cy.location('pathname').should('contain', '/overview/')
+
+    cy.contains('XOXO XIXI')
+      .closest('[data-test-id="flex-table-row"]')
+      .find('[data-test-id="edit-button"]')
+      .click()
+
+    cy.contains('Project progress')
+      .closest('div')
+      .should('contain', '100%')
+  })
+
 })

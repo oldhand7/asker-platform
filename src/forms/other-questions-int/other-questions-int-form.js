@@ -29,12 +29,16 @@ const OtherQuestionsIntForm = ({ last = false, nextId, className, markComplete, 
   }, [formValues])
 
   useEffect(() => {
+    if (!config || !config.questions) {
+      return;
+    }
+
     const complete = config.questions.every(q => formValues[q.id])
 
     if (complete) {
       markComplete();
     }
-  }, [formValues, config.questions])
+  }, [formValues, config])
 
   return <div className={classNames(styles['other-questions-int-form'], className)}>
     <div className={styles['other-questions-int-form-questions']}>

@@ -30,12 +30,16 @@ const ScreeningQuestionsIntForm = ({nextId, last = false, markComplete, classNam
   }, [formValues])
 
   useEffect(() => {
+    if (!config || !config.questions) {
+      return;
+    }
+
     const complete = config.questions.every(q => formValues[q.id])
 
     if (complete) {
       markComplete();
     }
-  }, [formValues, config.questions])
+  }, [formValues, config])
 
   return <div className={classNames(styles['screening-questions-int-form'], className)}>
     <div className={styles['screening-questions-int-form-questions']}>

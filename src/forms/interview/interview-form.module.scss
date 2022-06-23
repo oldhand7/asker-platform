@@ -13,8 +13,9 @@
 
   &-stage {
     text-align: left;
-    height: 100vh;
+    min-height: 100vh;
     padding-top: 15rem;
+    margin-bottom: 40rem;
 
     &-last {
       height: auto;
@@ -37,7 +38,7 @@
     padding-right: 10rem;
     position: relative;
     padding-top: 15rem;
-    padding-bottom: 100rem;
+    padding-bottom: 70rem;
   }
 
 

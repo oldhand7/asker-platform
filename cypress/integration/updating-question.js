@@ -10,7 +10,8 @@ describe('Updating queestions', () => {
 
       cy.tableFirstRowNavigate('Edit');
 
-      cy.contains('Add stage').click()
+      cy.contains('Add stage')
+        .click()
 
       cy.get('[data-test-id="feature-screening-questions"]')
         .drag('[data-test-id="stage-2"] .Droppable')
