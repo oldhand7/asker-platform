@@ -49,10 +49,6 @@ const TeamRolePresentationForm = ({ className, stage, project, last, markComplet
           </li>))}
       </ul>
     </div> : null}
-    {!last ? <NextButton onClick={() => {
-      markComplete();
-      handleNext(nextId)
-    }} className={styles['team-role-int-form-next-button']} /> : null}
   </div>
 }
 

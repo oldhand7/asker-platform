@@ -15,6 +15,7 @@ const nameSort = function(a, b) {
 }
 
 export const calcInterviewScore = (interview, { scoringRules }) => {
+
   const aggregate = getInterviewAggregate(interview)
 
   let interviewScore = 0;

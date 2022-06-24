@@ -1,12 +1,10 @@
 import classNames from 'classnames';
 import ChoiceQuestionIntForm from 'forms/choice-question-int/choice-question-int-form';
 import {useForm} from 'libs/form';
-import NextButton from 'components/Button/NextButton';
 import { useEffect } from 'react';
 import MultichoiceQuestionIntForm from 'forms/multichoice-question-int/multichoice-question-int-form';
 import RangeQuestionIntForm from 'forms/range-question-int/range-question-int-form';
 import TextQuestionIntForm from 'forms/text-question-int/text-question-int-form';
-import { handleNext } from 'libs/helper';
 import styles from './other-questions-int-form.module.scss';
 
 const questionForms = {
@@ -18,8 +16,8 @@ const questionForms = {
 
 const rules = {}
 
-const OtherQuestionsIntForm = ({ last = false, nextId, className, markComplete, values, onValues, config }) => {
-  const { values: formValues, errors, control } = useForm({
+const OtherQuestionsIntForm = ({ className, markComplete, values, onValues, config }) => {
+  const { values: formValues, control } = useForm({
     values,
     rules
   })
@@ -57,8 +55,6 @@ const OtherQuestionsIntForm = ({ last = false, nextId, className, markComplete, 
       })
     }
     </div>
-
-    {!last ? <NextButton  onClick={() => handleNext(nextId)} className={styles['other-questions-int-form-submit']}  /> : null}
   </div>
 }
 

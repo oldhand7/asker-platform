@@ -29,7 +29,7 @@ const updateFirebaseUserClaimsFromProfile = (uid, platformUser) => {
   return getAuth().setCustomUserClaims(uid, claims)
 }
 
-exports.stampCollections = functions.firestore.document('{collectionName}/{docId}')
+exports.stampCollections = functions.region('europe-west3').firestore.document('{collectionName}/{docId}')
   .onCreate(async (snap, context) => {
     const data = snap.data();
 
@@ -42,7 +42,7 @@ exports.stampCollections = functions.firestore.document('{collectionName}/{docId
     return null
 });
 
-exports.firebaseAccountCreate = functions.auth.user().onCreate(async (user) => {
+exports.firebaseAccountCreate = functions.region('europe-west3').auth.user().onCreate(async (user) => {
   await admin.firestore()
     .collection('users')
     .doc(user.uid)
@@ -61,7 +61,7 @@ exports.firebaseAccountCreate = functions.auth.user().onCreate(async (user) => {
    }
 });
 
-exports.interviewCreate = functions.firestore.document('interviews/{docId}')
+exports.interviewCreate = functions.region('europe-west3').firestore.document('interviews/{docId}')
   .onCreate(async (snap) => {
     const interview = snap.data();
 
@@ -85,7 +85,7 @@ exports.interviewCreate = functions.firestore.document('interviews/{docId}')
     }
 });
 
-exports.updateInterview = functions.firestore.document('interviews/{docId}')
+exports.updateInterview = functions.region('europe-west3').firestore.document('interviews/{docId}')
   .onUpdate(async (change) => {
     const interview = change.after.data();
     const interviewOld = change.before.data();
@@ -106,7 +106,7 @@ exports.updateInterview = functions.firestore.document('interviews/{docId}')
     }
 });
 
-exports.interviewDelete = functions.firestore.document('interviews/{docId}')
+exports.interviewDelete = functions.region('europe-west3').firestore.document('interviews/{docId}')
   .onDelete(async (snap) => {
     const interview = snap.data();
 
@@ -130,7 +130,7 @@ exports.interviewDelete = functions.firestore.document('interviews/{docId}')
     }
 });
 
-exports.platformAccountCreate = functions.firestore.document('users/{docId}')
+exports.platformAccountCreate = functions.region('europe-west3').firestore.document('users/{docId}')
   .onCreate(async (snap) => {
     const platformUser = snap.data();
 
@@ -143,7 +143,7 @@ exports.platformAccountCreate = functions.firestore.document('users/{docId}')
     }
   });
 
-exports.platformAccountUpdate = functions.firestore
+exports.platformAccountUpdate = functions.region('europe-west3').firestore
   .document('users/{docId}')
   .onUpdate(async (change) => {
     const platformUser = change.after.data();
@@ -157,7 +157,7 @@ exports.platformAccountUpdate = functions.firestore
     }
   });
 
-exports.platformAccountDelete = functions.firestore
+exports.platformAccountDelete = functions.region('europe-west3').firestore
   .document('users/{docId}')
   .onDelete(async (snap, context) => {
     try {
@@ -172,7 +172,7 @@ exports.platformAccountDelete = functions.firestore
     return snap
   });
 
-exports.firebaseAccountDelete = functions.auth.user().onDelete(async (user) => {
+exports.firebaseAccountDelete = functions.region('europe-west3').auth.user().onDelete(async (user) => {
     const snap = await admin.firestore()
       .collection('users')
       .doc(user.uid)
@@ -186,7 +186,7 @@ exports.firebaseAccountDelete = functions.auth.user().onDelete(async (user) => {
     }
   });
 
-exports.updateQuestion = functions.firestore.document('questions/{docId}')
+exports.updateQuestion = functions.region('europe-west3').firestore.document('questions/{docId}')
     .onUpdate(async (change) => {
       const question = change.after.data();
 

@@ -6,12 +6,12 @@ describe('Interview', () => {
   it('should rate interview', () => {
     cy.on('window:confirm', () => true)
 
-    cy.createChoiceQuestion('Do you have drivers license?')
-    cy.createEvaluationQuestion('motivation', { name : 'Does money motivate you?'});
-    cy.createEvaluationQuestion('culture-fit', { name: 'Are you peoples person?'});
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'Are you familiar with ISO standards?', criteria: 'ISO-90210' });
-    cy.createEvaluationCriteriaQuestion('experience', { name: 'Do you like traveling?', criteria: 'Traveling' });
-    cy.createEvaluationCriteriaQuestion('hard-skill', {name: 'Comment MS Office experience', criteria: 'MS Word'});
+    cy.createScreeningChoiceQuestion({ name: 'Do you have drivers license?'})
+    cy.createMotivationQuestion({ name : 'Does money motivate you?'});
+    cy.createCultureFitQuestion({ name: 'Are you peoples person?'});
+    cy.createCompetencyQuestion({ name: 'Are you familiar with ISO standards?', criteria: { name: 'ISO-90210'} });
+    cy.createExperienceQuestion({ name: 'Do you like traveling?', criteria: { name: 'Traveling'} });
+    cy.createHardSkillQuestion({name: 'Comment MS Office experience', criteria: { name: 'MS Word'}});
 
     cy.createDummyProject('Some position')
     cy.tableFirstRowNavigate('Edit');
@@ -188,8 +188,8 @@ describe('Interview', () => {
   })
   
   it('should have interview steps', () => {
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'Are you familiar with ISO-111?', criteria: 'ISO-111' });
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'Are you familiar with ISO-222?', criteria: 'ISO-222' });
+    cy.createCompetencyQuestion({ name: 'Are you familiar with ISO-111?', criteria: { name: 'ISO-111'} });
+    cy.createCompetencyQuestion({ name: 'Are you familiar with ISO-222?', criteria: { name: 'ISO-222'} });
     
     cy.createDummyProject('Some position')
     cy.tableFirstRowNavigate('Edit');
