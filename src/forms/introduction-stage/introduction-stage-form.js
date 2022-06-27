@@ -1,4 +1,4 @@
-import HtmlInputField from 'components/HtmlInputField/HtmlInputField'
+import HtmlInputField from 'components/HtmlInputField2/HtmlInputField'
 import useForm from 'libs/use-form';
 import { useEffect } from 'react';
 import classNames from 'classnames';
@@ -36,7 +36,8 @@ const IntroductionStageForm = ({ className, onValues, values, onError }) => {
 
 
   return <div className={classNames(className, styles['introduction-stage-form'])}>
-    <HtmlInputField value={formValues.html || formValues.text} error={errors && errors['html']} className={classNames(styles['introduction-stage-form-field'], styles['introduction-stage-form-text'])} name="html" onChange={control.input('html', false)} placeholder="Enter your introduction text" />
+    <h3 className={styles['introduction-stage-form-title']}>Introduction text</h3>
+    <HtmlInputField focus={true} value={formValues.html || formValues.text} error={errors && errors['html']} className={classNames(styles['introduction-stage-form-field'], styles['introduction-stage-form-text'])} name="html" onChange={control.input('html', false)} placeholder="Enter your introduction text" />
   </div>
 }
 

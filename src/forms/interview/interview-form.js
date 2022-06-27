@@ -86,7 +86,8 @@ const nonStrictStages = [
   'introduction',
   'team-role-presentation',
   'company-presentation',
-  'summary'
+  'summary',
+  'candidate-questions'
 ]
 
 const InterviewForm = ({ className, interview, project }) => {
@@ -218,7 +219,7 @@ const InterviewForm = ({ className, interview, project }) => {
           stage={stage}
           index={index}
           last={index == stages.length - 1}
-          nextId={index < stages.length - 1 ? `stage-${getStageKey(stages[index+1])}` : null}
+          nextId={index < stages.length - 1 ? `${getStageKey(stages[index+1])}` : null}
           project={project} />
       })}
 

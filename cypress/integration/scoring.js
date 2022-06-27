@@ -7,8 +7,8 @@ describe('Scoring', () => {
   it('should score with adjusted layer', () => {
     cy.on('window:confirm', () => true)
 
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'Are you familiar with ISO standards?', criteria: 'ISO-90210' });
-    cy.createEvaluationQuestion('motivation', { name : 'Does money motivate you?'});
+    cy.createCompetencyQuestion({ name: 'Are you familiar with ISO standards?', criteria: { name: 'ISO-90210'} });
+    cy.createMotivationQuestion({ name : 'Does money motivate you?'});
 
     cy.createDummyProject('Some position')
 
@@ -112,11 +112,11 @@ describe('Scoring', () => {
   it('should score with adjusted layer (46)', () => {
     cy.on('window:confirm', () => true)
 
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'QM1', criteria: 'XCM' });
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'QM2', criteria: 'XCM' }, false);
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'QR1', criteria: 'XCR' }, );
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'QR2', criteria: 'XCR' }, false);
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'QS1', criteria: 'XCS' });
+    cy.createCompetencyQuestion({ name: 'QM1', criteria: { name: 'XCM'} });
+    cy.createCompetencyQuestion({ name: 'QM2', criteria: { name: 'XCM', create: false } });
+    cy.createCompetencyQuestion({ name: 'QR1', criteria: { name: 'XCR'} }, );
+    cy.createCompetencyQuestion({ name: 'QR2', criteria: { name: 'XCR', create: false } });
+    cy.createCompetencyQuestion({ name: 'QS1', criteria: { name: 'XCS'} });
 
     cy.createDummyProject('Some position')
 

@@ -1,9 +1,7 @@
-import { Range, getTrackBackground } from 'react-range';
+import { Range } from 'react-range';
 import {useForm} from 'libs/form'
 import { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
-import { handleNext } from 'libs/helper';
-import NextButton from 'components/Button/NextButton';
 import HtmlInputField from 'components/HtmlInputField/HtmlInputField';
 import FlexRow from 'components/FlexRow/FlexRow';
 import clasNames from 'classnames';
@@ -107,14 +105,6 @@ const SalaryIntForm = ({ last, nextId, className, values, markComplete, onValues
         <HtmlInputField className={styles['salary-int-form-notes-input']} value={formValues.notes || ''} onChange={control.input('notes', false)} placeholder='Notes about salary'  />
       </div>
     </FlexRow>
-
-    {!last ? <NextButton onClick={() => {
-      if (!pristine) {
-        markComplete()
-      }
-
-      handleNext(nextId)
-    }} className={styles['salary-int-form-next-button']} /> : null}
   </div>
 }
 

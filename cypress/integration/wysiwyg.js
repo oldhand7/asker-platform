@@ -11,12 +11,10 @@ describe('WYSIWYG', () => {
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
-        cy.get('[contenteditable="true"]').click().wait(500)
+        cy.get('[contenteditable="true"]').click()
+          .type('The world is bold.{selectAll}')
 
         cy.get('button').eq(0).click()
-
-        cy.get('[contenteditable="true"]').click().wait(500)
-          .type('The world is bold.')
       })
 
     cy.contains('Save project').click()
@@ -31,7 +29,7 @@ describe('WYSIWYG', () => {
       .click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
-      .find('strong')
+      .find('b')
       .should('contain', 'The world is bold.')
   })
 
@@ -43,12 +41,12 @@ describe('WYSIWYG', () => {
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
-        cy.get('[contenteditable="true"]').click().wait(500)
+        cy.get('[contenteditable="true"]').click()
           .type('List of cities:{enter}')
 
         cy.get('button').eq(1).click()
 
-        cy.get('[contenteditable="true"]').click().wait(500)
+        cy.get('[contenteditable="true"]').click()
           .type('Prague{enter}')
           .type('Berlin{enter}')
           .type('Lisbon{enter}')
@@ -85,12 +83,12 @@ describe('WYSIWYG', () => {
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
-        cy.get('[contenteditable="true"]').click().wait(500)
+        cy.get('[contenteditable="true"]').click()
           .type('List of animals:{enter}')
 
-        cy.get('button').eq(2).click().wait(1000)
+        cy.get('button').eq(2).click()
 
-        cy.get('[contenteditable="true"]').click().wait(500)
+        cy.get('[contenteditable="true"]').click()
           .type('Dog{enter}')
           .type('Cat{enter}')
           .type('Horse{enter}')
