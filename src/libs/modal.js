@@ -52,7 +52,7 @@ export const useModal = (ModalComponent, options = {}) => {
   const { size = 'medium', ...props } = options;
   const [open, close] = useContext(ModalContext)
 
-  return (onResult)=>{
+  return (onResult, modalProps = {})=>{
     const handleResult = (result, autoclose = false) => {
       if (onResult) {
         onResult(result)
@@ -63,6 +63,6 @@ export const useModal = (ModalComponent, options = {}) => {
       }
     }
 
-    open(<ModalComponent onResult={handleResult} onClose={close} size={size} {...props} />)
+    open(<ModalComponent onResult={handleResult} onClose={close} size={size} {...props} {...modalProps} />)
   }
 }

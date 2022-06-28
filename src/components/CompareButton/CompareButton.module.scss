@@ -1,0 +1,17 @@
+.compare-button {
+  border: 1px solid #43B88C;
+
+  svg {
+    fill: #5B5B5B;
+    width: 0.6em;
+    height: 0.6em;
+  }
+
+  &-active {
+    background: #EFFFF9;
+
+    svg {
+      fill: #43B88C !important;
+    }
+  }
+}

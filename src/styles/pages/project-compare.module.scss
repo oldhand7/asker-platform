@@ -1,0 +1,38 @@
+@import 'styles/vars';
+
+
+.project-compare-page {
+  padding: 40rem 0rem;
+  position: relative;
+
+  &-title {
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 48px;
+    color: #494949;
+
+    &-edit-link {
+      color: $brandish-green;
+      font-size: 14rem;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &-head {
+    text-align: center;
+    width: 100%;
+    display: block;
+    margin-bottom: 50rem;
+    position: relative;
+  }
+
+  &-back {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

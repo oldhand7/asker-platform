@@ -6,8 +6,8 @@ import { useState } from 'react';
 
 import styles from './InterviewDetailsRow.module.scss';
 
-const InterviewDetailsRow = ({ name = '', className, evaluation, children, head = null }) => {
-  const [rowOpen, setRowOpen] = useState(false);
+const InterviewDetailsRow = ({ name = '', defaultOpen = false, className, evaluation, children, head = null, headerColumnWidth = 25 }) => {
+  const [rowOpen, setRowOpen] = useState(defaultOpen);
 
   const handleToggle = e => {
     e.preventDefault();
@@ -20,7 +20,7 @@ const InterviewDetailsRow = ({ name = '', className, evaluation, children, head 
     className
   )}>
     <div onClick={handleToggle} className={styles['interview-details-row-head']}>
-      <div className={styles['interview-details-row-label']}>{name}</div>
+      <div className={styles['interview-details-row-label']} style={{ flex: `0 1 ${headerColumnWidth}%`}}>{name}</div>
       {head}
       {
         children ?
