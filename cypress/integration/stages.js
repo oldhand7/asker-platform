@@ -114,7 +114,7 @@ describe('Stages', () => {
           cy.get('[data-test-id="file-upload-area"]')
             .find('input[type="file"]')
             .first()
-            .attachFile(['uploads/office.jpg'])
+            .attachFile(['uploads/office-copy.jpg'])
 
           cy.get('.form-success').should('exist').should('contain', 'Upload success.')
         })

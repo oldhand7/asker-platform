@@ -98,11 +98,17 @@ const beforeRun = async () => {
   const userId14Joe  = await helpers.createUser('Joe Barbara', 'joe.barbara@example.com', 'test123', companyId14, 'admin', false)
   const userId14Jane = await helpers.createUser('Jane Barbara', 'jane.barbara@example.com', 'test123', companyId14, 'hr', false)
 
-  //User 14
+  //User 15
   const companyId15 = await helpers.createCompany('Johnson & Co')
 
-  const userId15Joe  = await helpers.createUser('Joe Johnson', 'joe.johnson@example.com', 'test123', companyId14, 'admin', false)
-  const userId15Jane = await helpers.createUser('Jane Johnson', 'jane.johnson@example.com', 'test123', companyId14, 'hr', false)
+  const userId15Joe  = await helpers.createUser('Joe Johnson', 'joe.johnson@example.com', 'test123', companyId15, 'admin', false)
+  const userId15Jane = await helpers.createUser('Jane Johnson', 'jane.johnson@example.com', 'test123', companyId15, 'hr', false)
+
+  //User 16
+  const companyId16 = await helpers.createCompany('Gooney & Co')
+
+  const userId16Joe  = await helpers.createUser('Joe Gooney', 'joe.gooney@example.com', 'test123', companyId16, 'admin', false)
+  const userId16Jane = await helpers.createUser('Jane Gooney', 'jane.gooney@example.com', 'test123', companyId16, 'hr', false)
 
   await helpers.createQuestion({
     name: 'CQ1',

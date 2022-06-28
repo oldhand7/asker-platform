@@ -18,6 +18,7 @@ import InterviewDetailsRowScreening from 'components/InterviewDetailsRow/Intervi
 import InterviewDetailsRowEvaluation from 'components/InterviewDetailsRow/InterviewDetailsRowEvaluation';
 import { getStageKey } from 'libs/stage';
 import Tooltip from 'components/Tooltip/Tooltip';
+import CompareButton from 'components/CompareButton/CompareButton';
 
 import styles from './ProjectInterviewsTable.module.scss';
 
@@ -33,7 +34,7 @@ const sumReducer = (sum, { score }) => {
   return Number.parseInt(score) + sum;
 }
 
-const getColumns = ({ handleAction, project, sort, order }) => ([
+const getColumns = ({ handleAction, compare = [],  project, sort, order }) => ([
   {
     title: <Link href={getSortLink('candidate.name', sort, order, project)}>
       <a>Candidate {getSortArrowIcon('candidate.name', sort, order)}</a>
@@ -76,8 +77,14 @@ const getColumns = ({ handleAction, project, sort, order }) => ([
     </a>,
     render: (_, row) => {
       return <div className={styles['project-interviews-table-actions']}>
-        {typeof row.score !== 'undefined' ? <Tooltip text='Edit response'>{setRef => (
-          <EditButton ref={setRef} onClick={e => handleAction('edit', row, e)} />)}</Tooltip> : null}
+        
+        {typeof row.score !== 'undefined' ? <>
+        <Tooltip text='Compare candidate'>{setRef => (
+          <CompareButton active={compare.indexOf(row) > -1} ref={setRef} onClick={e => handleAction('compare', row, e)} />)}
+        </Tooltip>
+        <Tooltip text='Edit response'>{setRef => (
+          <EditButton ref={setRef} onClick={e => handleAction('edit', row, e)} />)}
+        </Tooltip></> : null}
         <Tooltip text='Delete candidate'>{setRef => (
           <TrashButton ref={setRef} onClick={e => handleAction('delete', row, e)} />)}</Tooltip>
       </div>
@@ -85,7 +92,7 @@ const getColumns = ({ handleAction, project, sort, order }) => ([
   }
 ]);
 
-const ProjectInterviewsTable = ({ className, data = [], onDelete, project, ...props }) => {
+const ProjectInterviewsTable = ({ className, data = [], onDelete, compare, onCompare, project, ...props }) => {
   const [rowsOpen, setRowsOpen] = useState([]);
 
   const router = useRouter()
@@ -100,11 +107,16 @@ const ProjectInterviewsTable = ({ className, data = [], onDelete, project, ...pr
     if (action == 'delete') {
       onDelete(rec)
     }
+
+    if (action == 'compare') {
+      onCompare(rec)
+    }
   }
 
   const columns = getColumns({
     handleAction, project,
-    sort: router.query.sort || '', order: router.query.order || ''
+    sort: router.query.sort || '', order: router.query.order || '',
+    compare
   })
 
   const handleRowSelect = (interview, index) => {

@@ -98,4 +98,17 @@
     cursor: pointer;
     vertical-align: middle;
   }
+
+  &-compare {
+    position: fixed;
+    bottom: 0;
+    left: 25%;
+    transform: translateX(-50%);
+    z-index: 99999999999;
+    background: white;
+    width: 320rem;
+    border: 1px solid #43B88C;
+    box-shadow: -3px 5px 33px rgba(0, 0, 0, 0.08);
+    border-radius: 5px 5px 0px 0px;
+  }
 }

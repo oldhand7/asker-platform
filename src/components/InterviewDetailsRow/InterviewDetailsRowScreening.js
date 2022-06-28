@@ -1,23 +1,9 @@
 import classNames from 'classnames';
-import EvaluationScoreBar from 'components/EvaluationScoreBar/EvaluationScoreBar';
-import { COLOR_MAP} from 'libs/config';
 import InterviewDetailsRow from './InterviewDetailsRow';
 import PillLabel from 'components/PillLabel/PillLabel';
-import striptags from 'striptags';
+import { getAnswerColor } from 'libs/answers';
 
 import styles from './InterviewDetailsRow.module.scss'
-
-const getAnswerColor = answer => {
-  if (answer.toLowerCase() == 'no') {
-    return 'red';
-  }
-
-  if (answer.toLowerCase() == 'yes') {
-    return 'green';
-  }
-
-  return 'inherit';
-}
 
 const InterviewDetailsRowEvaluation = ({ className, evaluations = [], other = false, ...props }) => (
   <InterviewDetailsRow
