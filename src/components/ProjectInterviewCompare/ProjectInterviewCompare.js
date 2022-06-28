@@ -159,6 +159,9 @@ const ProjectInterviewCompare = ({ className, compare = [], interviews = [], pro
                 </InterviewDetailsRow>
             }
 
+            const flexCompactStyle = {
+                flex: `0 0 ${100 / (interviews.length > compare.length ? compare.length + 1 : compare.length)}%`
+            }
 
             return <InterviewDetailsRow
             key={type}
@@ -166,14 +169,15 @@ const ProjectInterviewCompare = ({ className, compare = [], interviews = [], pro
             headerColumnWidth={20}
             defaultOpen={true}
             head={<div className={style['project-interview-compare-details-head']}>
-                {evaluations.map((evaluation, index) => <div key={`${type}-${index}`} style={{flex: `0 0 ${100 / compare.length}%`}}><EvaluationScoreBar
+                {evaluations.map((evaluation, index) => <div key={`${type}-${index}`} style={flexCompactStyle}><EvaluationScoreBar
                     className={style['project-interview-compare-details-head-bar']}
                     value={evaluation.score} color={COLOR_MAP[type]} /></div>)}
+                {interviews.length > compare.length ? <div style={flexCompactStyle}></div> : null}
             </div>}
             name={labels[type]}>
                 {type != 'motivation' && type != 'culture-fit' ?
                 <div className={style['project-interview-compare-details-body']}>
-                    {evaluations.map((evaluation, index) => <div className={style['project-interview-compare-details-column']} key={`${type}-${index}`} style={{flex: `0 0 ${100 / (interviews.length > compare.length ? compare.length + 1 : compare.length)}%`}}>
+                    {evaluations.map((evaluation, index) => <div className={style['project-interview-compare-details-column']} key={`${type}-${index}`} style={flexCompactStyle}>
                         <EvaluationCriteriaList className={style['project-interview-compare-details-criteria-list']} evaluation={evaluation} /></div>)}
                 </div> : null}            
             </InterviewDetailsRow>
