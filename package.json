@@ -6,6 +6,7 @@
     "dev": "export APP_ENV=development && next dev",
     "test-dev": "export APP_ENV=testing && next dev",
     "build": "next build",
+    "beta-dev": "export APP_ENV=beta && next dev",
     "beta-build": "export APP_ENV=beta && next build",
     "test-build": "export APP_ENV=testing && next build",
     "start": "next start",
