@@ -4,21 +4,25 @@
   position: relative;
   display: inline-block;
   color: $brandish-grey;
-  border: 1px solid #B7B7B7;
   box-sizing: border-box;
   border-radius: 5px;
 
-
-
   &-input {
-    line-height: 65rem;
-    height: 64rem;
-    padding: 0 20rem;
+    line-height: 56rem;
+    height: 56rem;
+    padding: 0 24rem;
     box-sizing: border-box;
-    color: $brandish-dark-green;
     border: 0;
     border-radius: 5px;
     width: 100%;
+    font-size: 16rem;
+    color: #226B5E;
+    font-weight: 400;
+
+    &::placeholder {
+      color: #226B5E;
+      opacity: 1;
+    }
 
     &:focus {
       outline: 0;
@@ -27,22 +31,23 @@
 
   &-icon {
     position: absolute;
-    width: 1em;
-    height: 1em;
-    right: 20rem;
+    right: 22rem;
     top: 50%;
     transform: translateY(-50%);
-    stroke: currentColor;
+    stroke: #226B5E;
     cursor: pointer;
 
     &-search {
-      width: 1.5em;
-      height: 1.5em;
+      width: 24rem;
+      height: 24rem;
     }
 
     &-close {
-      font-size: 1em;
+      font-size: 0.5em;
       fill: $brandish-grey;
+      stroke: none;
+
+      fill: #226B5E;
     }
   }
 }

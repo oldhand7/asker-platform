@@ -1,11 +1,12 @@
 .projects-page {
-  padding: 40rem 0;
+  padding: 94rem 0 87rem;
 
   &-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 38rem 0;
+    line-height: 56rem;
+    margin-bottom: 48rem;
 
     @media (max-width: 768px) {
       flex-direction: column-reverse;
@@ -17,8 +18,14 @@
     }
   }
 
-  &-table {
-    overflow-x: auto;
-    margin-bottom: 20rem;
+  &-search {
+    width: 352rem;
+  }
+
+  &-create-button {
+    width: 206rem;
+  }
+
+  &-list {
   }
 }

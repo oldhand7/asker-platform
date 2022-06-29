@@ -32,7 +32,7 @@ const CompactMenu = ({ options = [], onChoice, orientation = 'right', children, 
     onChoice(o)
   }
 
-  return <div onClick={e => e.stopPropagation()} ref={ref} className={classNames(styles['compact-menu'], className, styles[`compact-menu-${orientation}`])}>
+  return <div data-test-id="compact-menu" onClick={e => e.stopPropagation()} ref={ref} className={classNames(styles['compact-menu'], className, styles[`compact-menu-${orientation}`])}>
     <button onClick={() => setOpen(!open)} className={styles['compact-menu-button']}>
       <VerticalDotsIcon className={styles['compact-menu-button-icon']} />
     </button>

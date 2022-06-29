@@ -10,9 +10,11 @@ describe('Scoring', () => {
     cy.createCompetencyQuestion({ name: 'Are you familiar with ISO standards?', criteria: { name: 'ISO-90210'} });
     cy.createMotivationQuestion({ name : 'Does money motivate you?'});
 
-    cy.createDummyProject('Some position')
+    cy.createDummyProject('Some position X')
 
-    cy.tableFirstRowNavigate('Edit');
+    cy.contains('Some position X')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
 
     cy.contains('Add stage').click()
 
@@ -71,7 +73,7 @@ describe('Scoring', () => {
 
     cy.get('[data-test-id="alert-success"]').contains('Project saved')
 
-    cy.get('table tbody tr').first().click()
+    cy.contains('Some position X').closest('li').click()
 
     cy.addProjectCandidate('John Smith', 'john.smith@hotmail.net')
       .wait(1000)
@@ -118,9 +120,11 @@ describe('Scoring', () => {
     cy.createCompetencyQuestion({ name: 'QR2', criteria: { name: 'XCR', create: false } });
     cy.createCompetencyQuestion({ name: 'QS1', criteria: { name: 'XCS'} });
 
-    cy.createDummyProject('Some position')
+    cy.createDummyProject('Some position Y')
 
-    cy.tableFirstRowNavigate('Edit');
+    cy.contains('Some position Y')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
 
     cy.contains('Add stage').click()
 
@@ -176,8 +180,7 @@ describe('Scoring', () => {
 
     cy.get('[data-test-id="alert-success"]').contains('Project saved')
 
-    cy.visit('/projects/')
-    cy.get('table tbody tr').first().click()
+    cy.contains('Some position Y').closest('li').click()
 
     cy.addProjectCandidate('John Smith', 'john.smith@hotmail.net')
       .wait(1000)

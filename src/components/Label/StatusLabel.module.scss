@@ -3,26 +3,9 @@
 .status-label {
   color: $brandish-grey;
   position: relative;
-  padding-left: 20rem;
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 4rem;
-    height: 4rem;
-    background: $brandish-grey;
-    left: 12rem;
-    top: 50%;
-    transform: translateY(-50%);
-    border-radius: 50%;
-  }
 
   &-on {
     color: $brandish-green;
     background: rgba(125, 255, 146, 0.15);
-
-    &::before {
-      background: $brandish-green;
-    }
   }
 }

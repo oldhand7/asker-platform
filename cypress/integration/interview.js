@@ -13,8 +13,11 @@ describe('Interview', () => {
     cy.createExperienceQuestion({ name: 'Do you like traveling?', criteria: { name: 'Traveling'} });
     cy.createHardSkillQuestion({name: 'Comment MS Office experience', criteria: { name: 'MS Word'}});
 
-    cy.createDummyProject('Some position')
-    cy.tableFirstRowNavigate('Edit');
+    cy.createDummyProject('Some position X')
+
+    cy.contains('Some position X')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
 
     cy.contains('Add stage')
       .click()
@@ -69,12 +72,11 @@ describe('Interview', () => {
 
     cy.get('[data-test-id="alert-success"]').contains('Project saved')
 
-    cy.get('table tbody tr').first().click()
+    cy.contains('Some position X').closest('li').click()
 
     cy.get('[data-test-id="flex-table"]').should('contain', 'No interviews');
 
     cy.addProjectCandidate('John Smith', 'john.smith@hotmail.net')
-
 
     cy.contains('John Smith')
       .closest('[data-test-id="flex-table-row"]')
@@ -191,8 +193,11 @@ describe('Interview', () => {
     cy.createCompetencyQuestion({ name: 'Are you familiar with ISO-111?', criteria: { name: 'ISO-111'} });
     cy.createCompetencyQuestion({ name: 'Are you familiar with ISO-222?', criteria: { name: 'ISO-222'} });
     
-    cy.createDummyProject('Some position')
-    cy.tableFirstRowNavigate('Edit');
+    cy.createDummyProject('Some position Y')
+
+    cy.contains('Some position Y')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
 
     cy.contains('Add stage')
       .click()
@@ -212,10 +217,9 @@ describe('Interview', () => {
 
     cy.contains('Save project').click()
 
-
     cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved');
 
-    cy.get('table tbody tr').first().click()
+    cy.contains('Some position Y').closest('li').click()
 
     cy.addProjectCandidate('XOXO XIXI', 'xoxo.xixi@hotmail.net')
 

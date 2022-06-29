@@ -10,24 +10,25 @@ describe('Query filter', () => {
     cy.createDummyProject('Demo Project AAB')
     cy.createDummyProject('Demo Project ABB')
 
-    cy.get('table tbody tr')
+    cy.get('[data-test-id="project-list"]')
+      .children()
       .should('have.length', 3)
 
     cy.get('input[name="q"]').type('b').should('have.value', 'b')
 
-    cy.get('table tbody tr')
-      .should('have.length', 2)
-      .parent()
+    cy.get('[data-test-id="project-list"]')
       .should('not.contain', 'AAA')
+      .children()
+      .should('have.length', 2)
 
     cy.get('input[name="q"]').type('b').should('have.value', 'bb')
 
-    cy.get('table tbody tr')
-      .should('have.length', 1)
-      .parent()
+    cy.get('[data-test-id="project-list"]')
       .should('contain', 'ABB')
       .should('not.contain', 'AAB')
       .should('not.contain', 'AAA')
+      .children()
+      .should('have.length', 1)
 
     cy.get('input[name="q"]')
       .parent()
@@ -37,7 +38,8 @@ describe('Query filter', () => {
 
     cy.get('input[name="q"]').should('have.value', '')
 
-    cy.get('table tbody tr')
+    cy.get('[data-test-id="project-list"]')
+      .children()
       .should('have.length', 3)
   })
 
