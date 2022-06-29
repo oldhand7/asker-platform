@@ -8,7 +8,7 @@ const CheckboxInputField = ({ className, value = '1', checked, onChange, error, 
   return <div className={classNames(styles['checkbox-input-field'], className)}>
     <label className={styles['checkbox-input-field-label']}>
       <input className={styles['checkbox-input-field-input']} type="checkbox" value={value} checked={checked} onChange={onChange} />
-      <span className={styles['checkbox-input-field-label-text']}>{label ? label : children}</span>
+      <span className={styles['checkbox-input-field-label-text']}>{label ? label : null}</span>
     </label>
     {error ? <p className="form-error">{error}</p> : null}
   </div>
