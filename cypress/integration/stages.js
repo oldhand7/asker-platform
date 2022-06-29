@@ -58,7 +58,7 @@ describe('Stages', () => {
 
       cy.createDummyProject('Test project')
 
-      cy.tableFirstRowNavigate('Edit')
+      cy.contains('Test project').closest('ul').listFirstRowNavigate('Edit')
 
       cy.get('[data-test-id="stage-1"]').click()
   
@@ -215,6 +215,26 @@ describe('Stages', () => {
       })
 
       cy.contains('Save project').click()
+
+      cy.get('[data-test-id="alert-success"]').contains('Project saved')
+
+      cy.contains('Test project')
+        .closest('li')
+        .within(() => {
+          cy.get('[data-test-id="stage"]').eq(0).should('contain', 'Introduction')
+          cy.get('[data-test-id="stage"]').eq(1).should('contain', 'Team')
+          cy.get('[data-test-id="stage"]').eq(2).should('contain', 'Company')
+          cy.get('[data-test-id="stage"]').eq(3).should('contain', 'Salary')
+          cy.get('[data-test-id="stage"]').eq(4).should('contain', 'Candidate')
+          cy.get('[data-test-id="stage"]').eq(5).should('contain', 'Competency')
+          cy.get('[data-test-id="stage"]').eq(6).should('contain', 'Motivation')
+          cy.get('[data-test-id="stage"]').eq(7).should('contain', 'Screening')
+          cy.get('[data-test-id="stage"]').eq(8).should('contain', 'Experience')
+          cy.get('[data-test-id="stage"]').eq(9).should('contain', 'Hard-skill')
+          cy.get('[data-test-id="stage"]').eq(10).should('contain', 'Culture-fit')
+          cy.get('[data-test-id="stage"]').eq(11).should('contain', 'Other')
+          cy.get('[data-test-id="stage"]').eq(12).should('contain', 'Summary')
+        })
     })
   })
   

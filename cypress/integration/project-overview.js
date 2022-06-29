@@ -6,20 +6,17 @@ describe('Project overview', () => {
   it('cliking on project list project redirects to overview page', () => {
     cy.visit('/projects/')
 
-    cy.get('table tbody tr')
-      .last() //created first should be last
-      .within(() => {
-        cy.get('td').eq(0).should('contain', 'Philips Demo Project')
-        cy.get('td').eq(1).should('contain', 'Philips Engineer')
-        cy.get('td').eq(2).should('contain', 'Jane Philips').should('not.contain', 'Joe Philips')
-        cy.get('td').eq(3).should('contain', 'Introduction').should('contain', 'Questions').should('contain', 'Summary')
-        cy.get('td').eq(4)
-          .should('contain', '2 Number of candidates')
-          .should('contain', '1 Awaiting')
-          .should('contain', '1 Completed')
-      })
+    cy.wait(1000)
 
-    cy.tableLastRowNavigate('Interviews');
+    cy.get('[data-test-id="project-list"] > li')
+      .last()
+      .should('contain', 'Philips Demo Project')
+      .should('contain', 'Philips Engineer')
+      .should('contain', 'Jane Philips')
+      .should('contain', '15 min')
+      .should('contain', '1 Awaiting')
+      .should('contain', '1 Completed')
+      .click()
 
     cy.title().should('include', 'Philips Demo Project')
     cy.title().should('include', 'Project overview')
@@ -38,7 +35,9 @@ describe('Project overview', () => {
   it('project overview page contains project details and interview statistics', () => {
     cy.visit('/projects/')
 
-    cy.tableLastRowNavigate('Interviews')
+    cy.get('[data-test-id="project-list"] li')
+      .last()
+      .click()
 
     cy.get('h1').should('contain', 'Philips Demo Project')
 
@@ -77,11 +76,9 @@ describe('Project overview', () => {
   it('project overview allows adding new candidates', () => {
     cy.visit('/projects/')
 
-    cy.get('table tbody tr')
+    cy.get('[data-test-id="project-list"] li')
       .last()
-      .find('td').last()
-      .find('button').click().parent()
-      .contains('Interviews').click()
+      .click()
 
     cy.addProjectCandidate('Dread Roberts', 'dread.roberts@gmail.com')
       .wait(1000)
@@ -102,14 +99,9 @@ describe('Project overview', () => {
 
     cy.visit('/projects/')
 
-    cy.get('table tbody tr')
+    cy.get('[data-test-id="project-list"] li')
       .last()
-      .within(() => {
-        cy.get('td').eq(4)
-          .should('contain', '3 Number of candidates')
-          .should('contain', '2 Awaiting')
-          .should('contain', '1 Completed')
-      })
-
+      .should('contain', '2 Awaiting')
+      .should('contain', '1 Completed')
   })
 })

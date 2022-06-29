@@ -135,7 +135,10 @@ describe('Screening questions', () => {
             })
 
       cy.createDummyProject('Position X')
-      cy.tableFirstRowNavigate('Edit')
+
+      cy.contains('Position X')
+            .closest('ul')
+            .listFirstRowNavigate('Edit')
 
       cy.contains('Add stage').click()
 
@@ -232,7 +235,9 @@ describe('Screening questions', () => {
         cy.get('[data-test-id="alert-success"]')
           .should('contain', 'Project saved')
 
-        cy.tableFirstRowNavigate('Interviews')
+        cy.contains('Position X').closest('li').click()
+
+        cy.location('pathname').should('contain', '/overview/')
 
         cy.addProjectCandidate('Jimmy', 'jimmy.davis@yahoo.com')
           .wait(1000)

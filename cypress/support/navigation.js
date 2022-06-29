@@ -13,3 +13,17 @@ Cypress.Commands.add('tableLastRowNavigate', (code = 'Edit') => {
     .find('button').click().parent()
     .contains(code).click()
 })
+
+Cypress.Commands.add(
+  'listFirstRowNavigate',
+  {  prevSubject: true },
+  (subject, code = 'Edit') => {
+    cy.wrap(subject)
+      .within(() => {
+        cy.get('li')
+        .first()
+        .find('[data-test-id="compact-menu"]').click().parent()
+        .contains(code).click()
+      })
+
+})

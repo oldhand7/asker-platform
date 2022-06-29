@@ -138,7 +138,10 @@ describe('Other questions', () => {
             })
 
       cy.createDummyProject('Position Y')
-      cy.tableFirstRowNavigate('Edit')
+
+      cy.contains('Position Y')
+        .closest('ul')
+        .listFirstRowNavigate('Edit')
 
       cy.contains('Add stage').click()
 
@@ -235,7 +238,10 @@ describe('Other questions', () => {
         cy.get('[data-test-id="alert-success"]')
           .should('contain', 'Project saved')
 
-        cy.tableFirstRowNavigate('Interviews')
+
+        cy.contains('Position Y')
+          .closest('li')
+          .click()
 
         cy.addProjectCandidate('Jimmy', 'jimmy.davis@yahoo.com')
           .wait(1000)

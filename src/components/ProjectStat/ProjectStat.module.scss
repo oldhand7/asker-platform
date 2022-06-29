@@ -1,0 +1,72 @@
+@import 'styles/vars';
+
+.project-stat {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+
+  &-cell {
+    margin: 0 8rem 0 8rem;
+
+    & > * {
+      vertical-align: middle;
+    }
+  }
+
+  &-time {
+    position: relative;
+    padding-left: calc(1.5em + 2rem);
+
+    &-icon {
+      width: 1.5em;
+      height: 1.5em;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform:translateY(-50%);
+    }
+
+    &-value {
+      font-weight: 500;
+      font-size: rem;
+      line-height: 30rem;
+      display: flex;
+      align-items: center;
+      display: inline-block;
+      margin-right: 4rem;
+      color: #494949;
+    }
+  }
+
+  &-status {
+    color: #878787;
+
+    &-value {
+      font-weight: 500;
+      font-size: 20rem;
+      line-height: 30rem;
+      display: flex;
+      align-items: center;
+      display: inline-block;
+      margin-right: 4rem;
+    }
+
+    &-complete {
+      color: #43B88C;
+    }
+
+    &-complete &-label {
+      color: #43B88C;
+      background: rgba(125, 255, 146, 0.15);
+    }
+
+    &-label {
+      font-size: 10rem;
+      font-weight: 500;
+      position: relative;
+      line-height: 22rem;
+      vertical-align: middle;
+      color: #878787;
+    }
+  }
+}

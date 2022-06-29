@@ -152,6 +152,7 @@ const beforeRun = async () => {
     createdAt: 0,
     updatedAt: 0,
     name: 'Philips Demo Project',
+    time: 15,
     stages: [
       { id: 'introduction', name: 'Introduction', type: 'other' },
       { id: 'questions', name: 'Questions', type: 'other' },

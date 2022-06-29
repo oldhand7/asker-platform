@@ -4,8 +4,11 @@ describe('Modal froms', () => {
   })
 
   it('should create a competency question using modal', () => {
-    cy.createDummyProject('Test project')
-    cy.tableFirstRowNavigate('Edit')
+    cy.createDummyProject('Test project X')
+
+    cy.contains('Test project X')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
 
     cy.contains('Add stage').click()
 
@@ -143,8 +146,11 @@ describe('Modal froms', () => {
   })
 
   it('should create a Yes/No screening question using modal', () => {
-    cy.createDummyProject('Test project')
-    cy.tableFirstRowNavigate('Edit')
+    cy.createDummyProject('Test project Y')
+
+    cy.contains('Test project Y')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
 
     cy.contains('Add stage').click()
 

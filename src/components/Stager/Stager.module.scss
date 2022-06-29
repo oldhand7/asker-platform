@@ -1,12 +1,8 @@
 @import 'styles/vars';
 
 .stager {
-  max-width: 360rem;
-  overflow-y: hidden;
   overflow-x: auto;
   display: flex;
-  align-items: flex-end;
-  margin-bottom: 1.5em;
 
   &-inner {
       display: flex;
@@ -19,69 +15,80 @@
     align-items: center;
     text-align: center;
     position: relative;
-    min-width: 90rem;
+    width: 80rem;
     color: $brandish-grey;
     min-height: 0;
-    margin-top: 4em;
+    padding: 24rem 0;
+    margin-right: 2rem;
+    color: #BBC1C4;
 
-    &-mustard::after,
-    &-attraction::after  {
-      background: $brandish-mustard  !important;
+    &-attraction  {
+      color: #43B88C;
     }
 
-    &-mustard &-number,
-    &-attraction &-number {
-      background: $brandish-mustard  !important;
-    }
-
-    &-green::after,
     &-evaluation::after {
-      background: $brandish-dark-green !important;
+      color: #297466;
     }
 
-    &-green &-number,
-    &-evaluation &-number {
-      background: $brandish-dark-green;
+    &-green,
+    &-evaluation {
+      color: $brandish-dark-green;
     }
 
     &::after {
       content: '';
       display: block;
       width: 100%;
-      height: 2px;
-      background: $brandish-grey;
+      left: 0;
+      top: 50%;
+      height: 4rem;
+      background: currentColor;
       position: absolute;
-      transform: translateX(50%);
+      transform: translateY(-50%);
+      border-radius: 30px;
     }
 
-    &:last-child::after {
-      width: 0rem;
-    }
 
     &-label {
       position: absolute;
       display: inline-block;
-      top: 0%;
-      transform: translateY(-100%);
       font-weight: 500;
       font-size: 12rem;
-      line-height: 14rem;
-      color: $brandish-dark-green;
-      line-height: 1.5;
+      line-height: 1;
+      color:  #878787;
+      top: calc(50% + 30rem);
+      left: 50%;
+      white-space: nowrap;
+      transform: translate(-50%, -50%);
+      text-align: center;
     }
 
-    &-number {
-      width: 26rem;
-      height: 26rem;
+    &:nth-child(2n+1) &-label {
+      top: calc(50% - 30rem);
+    }
+
+    &-circle {
+      width: 32rem;
+      height: 32rem;
       border-radius: 50%;
-      background: $brandish-grey;
-      color: white;
       display: inline-block;
       position: relative;
       z-index: 1;
-      border: 4px solid white;
+      background:white;
+      border: 3rem solid currentColor;
       box-sizing: content-box;
-      line-height: 26rem;
+      line-height: 32rem;
+    }
+
+    &-value {
+      font-weight: 500;
+      font-size: 12rem;
+      color: #5B5B5B;
+      display: inline-block;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
     }
   }
 }

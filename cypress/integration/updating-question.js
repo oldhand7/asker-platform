@@ -8,7 +8,7 @@ describe('Updating queestions', () => {
 
       cy.createDummyProject('Project 123')
 
-      cy.tableFirstRowNavigate('Edit');
+      cy.contains('Project 123').closest('ul').listFirstRowNavigate('Edit')
 
       cy.contains('Add stage')
         .click()
@@ -34,11 +34,9 @@ describe('Updating queestions', () => {
 
       cy.contains('Save project').click()
 
-      cy.get('[data-test-id="alert-success"]')
-        .contains('Project saved')
+      cy.get('[data-test-id="alert-success"]').contains('Project saved')
 
-
-      cy.tableFirstRowNavigate('Interviews');
+      cy.contains('Project 123').closest('li').click()
 
       cy.addProjectCandidate('Fernando', 'fernando@arerez.net').wait(1000)
 
@@ -60,7 +58,7 @@ describe('Updating queestions', () => {
 
       cy.visit('/projects')
 
-      cy.tableFirstRowNavigate('Edit')
+      cy.contains('Project 123').closest('ul').listFirstRowNavigate('Edit')
 
       cy.get('[data-test-id="stage-2"]').click()
 
@@ -72,7 +70,7 @@ describe('Updating queestions', () => {
 
       cy.visit('/projects')
 
-      cy.tableFirstRowNavigate('Interviews');
+      cy.contains('Project 123').closest('li').click()
 
       cy.contains('Start interview').click()
 

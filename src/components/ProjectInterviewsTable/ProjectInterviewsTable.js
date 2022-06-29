@@ -119,17 +119,17 @@ const ProjectInterviewsTable = ({ className, data = [], onDelete, compare, onCom
     compare
   })
 
-  const handleRowSelect = (interview, index) => {
-    const exist = rowsOpen.indexOf(interview) > -1 ;
+  const handleRowSelect = (row, index) => {
+    const exist = rowsOpen.indexOf(row) > -1 ;
 
     if (exist) {
       setRowsOpen([
-        ...rowsOpen.filter(r => r != interview)
+        ...rowsOpen.filter(r => r != row)
       ])
     } else {
       setRowsOpen([
         ...rowsOpen,
-        interview
+        row
       ])
     }
   }

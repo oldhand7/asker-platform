@@ -4,8 +4,9 @@ describe('WYSIWYG', () => {
   })
 
   it('should create a bold text', () => {
-    cy.createDummyProject('Just some project')
-    cy.tableFirstRowNavigate('Edit')
+    cy.createDummyProject('Just some project X')
+
+    cy.contains('Just some project X').closest('ul').listFirstRowNavigate('Edit')
 
     cy.get('[data-test-id="stage-1"]').click().wait(1000)
 
@@ -19,7 +20,9 @@ describe('WYSIWYG', () => {
 
     cy.contains('Save project').click()
 
-    cy.tableFirstRowNavigate('Interviews')
+    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+
+    cy.contains('Just some project X').closest('li').click()
 
     cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(1000)
 
@@ -34,8 +37,8 @@ describe('WYSIWYG', () => {
   })
 
   it('should create an unordered list', () => {
-    cy.createDummyProject('Just some project')
-    cy.tableFirstRowNavigate('Edit')
+    cy.createDummyProject('Just some project Y')
+    cy.contains('Just some project Y').closest('ul').listFirstRowNavigate('Edit')
 
     cy.get('[data-test-id="stage-1"]').click().wait(1000)
 
@@ -55,7 +58,10 @@ describe('WYSIWYG', () => {
 
     cy.contains('Save project').click()
 
-    cy.tableFirstRowNavigate('Interviews')
+    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+
+
+    cy.contains('Just some project Y').closest('li').click()
 
     cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(1000)
 
@@ -76,8 +82,9 @@ describe('WYSIWYG', () => {
   })
 
   it('should create a numbered list', () => {
-    cy.createDummyProject('Just some project')
-    cy.tableFirstRowNavigate('Edit')
+    cy.createDummyProject('Just some project Z')
+
+    cy.contains('Just some project Z').closest('ul').listFirstRowNavigate('Edit')
 
     cy.get('[data-test-id="stage-1"]').click().wait(1000)
 
@@ -97,7 +104,9 @@ describe('WYSIWYG', () => {
 
     cy.contains('Save project').click()
 
-    cy.tableFirstRowNavigate('Interviews')
+    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+
+    cy.contains('Just some project Z').closest('li').click()
 
     cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(1000)
 

@@ -9,7 +9,7 @@ describe('Candidate compare', () => {
 
         cy.createDummyProject('Project X')
 
-        cy.tableFirstRowNavigate('Edit')
+        cy.get('[data-test-id="project-list"]').listFirstRowNavigate('Edit')
 
         cy.contains('Add stage')
           .click()
@@ -35,7 +35,7 @@ describe('Candidate compare', () => {
 
         cy.get('[data-test-id="alert-success"]').contains('Project saved')
 
-        cy.get('table tbody tr').first().click()
+        cy.contains('Project X').closest('li').click()
         
         cy.addProjectCandidate('John Best', 'john.best@example.com')
 
