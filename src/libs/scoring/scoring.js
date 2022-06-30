@@ -1,8 +1,14 @@
 import { getInterviewAggregate } from 'libs/interview';
+import { calcDefaultScoringRules } from 'libs/project';
 
 const scoreTable = [0, 25, 50, 75, 100]
 
-export const calcInterviewScore = (interview, { scoringRules }) => {
+export const calcInterviewScore = (interview, projectOrTemplate) => {
+  const scoringRules = {
+    ...calcDefaultScoringRules(projectOrTemplate),
+    ...(projectOrTemplate.scoringRules || {})
+  }
+  
   const aggregate = getInterviewAggregate(interview)
 
   let interviewScore = 0;

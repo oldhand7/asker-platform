@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "export APP_ENV=development && next dev",
     "test-dev": "export APP_ENV=testing && next dev",
+    "prod-dev": "export APP_ENV=production && next dev",
     "build": "next build",
     "beta-build": "export APP_ENV=beta && next build",
     "test-build": "export APP_ENV=testing && next build",
