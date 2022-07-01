@@ -8,7 +8,7 @@
 
   &-item {
     cursor: grab;
-    margin-bottom: 20rem;
+    margin-bottom: 26rem;
 
     &-title {
         font-size: 14rem;
@@ -16,7 +16,7 @@
         color: #5B5B5B;
         font-weight: 500;
         line-height: 21rem;
-        margin: 10rem 0;
+        margin: 0 0 8rem 0;
     }
 
     &-active &-title {
@@ -36,10 +36,12 @@
       display: flex;
       align-items: center;
       width: 100%;
+      line-height: 62rem;
+      overflow:visible;
     }
 
     &-placeholder {
-      flex: 0 0 500rem;
+      flex: 0 0 100%;
     }
 
     &-feature {
@@ -69,6 +71,7 @@
         left: 0;
         transform: translateY(-100%);
         font-size: 14rem;
+        line-height: 38rem;
       }
 
       &-actions &-info {

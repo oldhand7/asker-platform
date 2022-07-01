@@ -3,11 +3,11 @@
 .feature-label {
   cursor: drag;
   display: inline-block;
-  line-height: 56rem;
-  padding: 0 16rem;
+  width: 100%;
+  padding: 0 32rem 0 16rem;
+  box-sizing: border-box;
   min-width: 100%;
   font-weight: 500;
-  font-size: 14rem;
   background: rgba($brandish-tar, 0.1);
   box-sizing: border-box;
   border-radius: 6px;
@@ -36,6 +36,8 @@
     right: 16rem;
     top: 50%;
     transform: translateY(-50%);
+    width: 8rem;
+    fill: currentColor
   }
 
   &-drag {
