@@ -33,11 +33,13 @@
     cursor: pointer;
     border: 2px solid $brandish-tar;
     border-radius: 5px;
-    padding: 0 15rem;
-    line-height: calc(50rem - 4px);
+    padding: 0 11rem;
+    line-height: calc(56rem - 4px);
     background: 0;
     color: $brandish-tar;
     font-weight: 500;
+    font-size: 14rem;
+    letter-spacing: 0.01em;
 
     &-inner {
       line-height: 1;
@@ -50,17 +52,17 @@
 
     &-green {
       color: $brandish-green;
-      border: 2px solid $brandish-green;
+      border: 2px solid  #43B88C;
 
       &:hover {
-        background: rgba($brandish-green, 0.1);
+        background: rgba( #43B88C, 0.1);
       }
     }
 
     &-green[data-state="on"] {
       color: white;
-      background: $brandish-green;
-      border: 2px solid $brandish-green;
+      background:  #43B88C;
+      border: 2px solid  #43B88C;
     }
 
     &-grape {
@@ -76,6 +78,20 @@
       color: white;
       background: $brandish-grape;
       border: 2px solid $brandish-grape;
+    }
+
+    &-dark {
+      border: 2px solid #282828;
+
+      &:hover {
+        background: rgba(#282828, 0.1);
+      }
+    }
+
+    &-dark[data-state="on"] {
+      color: white;
+      background: #282828;
+      border: 2px solid #282828;
     }
   }
 

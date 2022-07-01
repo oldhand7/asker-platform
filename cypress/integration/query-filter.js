@@ -50,24 +50,25 @@ describe('Query filter', () => {
     cy.createDummyTemplate('Demo Template AAB')
     cy.createDummyTemplate('Demo Template ABB')
 
-    cy.get('table tbody tr')
+    cy.get('[data-test-id="template-list"]')
+      .children()
       .should('have.length', 3)
 
     cy.get('input[name="q"]').type('b').should('have.value', 'b')
 
-    cy.get('table tbody tr')
-      .should('have.length', 2)
-      .parent()
+    cy.get('[data-test-id="template-list"]')
       .should('not.contain', 'AAA')
+      .children()
+      .should('have.length', 2)
 
     cy.get('input[name="q"]').type('b').should('have.value', 'bb')
 
-    cy.get('table tbody tr')
-      .should('have.length', 1)
-      .parent()
+    cy.get('[data-test-id="template-list"]')
       .should('contain', 'ABB')
       .should('not.contain', 'AAB')
       .should('not.contain', 'AAA')
+      .children()
+      .should('have.length', 1)
 
     cy.get('input[name="q"]')
       .parent()
@@ -77,8 +78,9 @@ describe('Query filter', () => {
 
     cy.get('input[name="q"]').should('have.value', '')
 
-    cy.get('table tbody tr')
-      .should('have.length', 3)
+    cy.get('[data-test-id="template-list"]')
+        .children()
+        .should('have.length', 3)
   })
 
   it('should filter questions', () => {

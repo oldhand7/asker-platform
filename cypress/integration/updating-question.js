@@ -83,7 +83,9 @@ describe('Updating queestions', () => {
 
       cy.createDummyTemplate('Project ABC')
 
-      cy.tableFirstRowNavigate('Edit');
+      cy.contains('Project ABC')
+        .closest('ul')
+        .listFirstRowNavigate('Edit')
 
       cy.contains('Add stage').click()
 
@@ -124,7 +126,9 @@ describe('Updating queestions', () => {
 
       cy.visit('/templates')
 
-      cy.tableFirstRowNavigate('Edit')
+      cy.contains('Project ABC')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
 
       cy.get('[data-test-id="stage-2"]').click()
 

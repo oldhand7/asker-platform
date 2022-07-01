@@ -4,7 +4,7 @@ import ClockIcon from 'components/Icon/ClockIcon';
 
 import styles from './ProjectStat.module.scss';
 
-const ProjectStat = ({ project, className }) => {
+const ProjectStat = ({ project, className, template = false}) => {
   return <div className={classNames(styles['project-stat'], className)}>
     <div className={classNames(
       styles['project-stat-cell'],
@@ -14,6 +14,7 @@ const ProjectStat = ({ project, className }) => {
       <span className={styles['project-stat-time-value']}>{project.time || 0} min</span>
     </div>
 
+    {!template ? <>
     <div className={classNames(
       styles['project-stat-cell'],
       styles['project-stat-status'],
@@ -30,7 +31,7 @@ const ProjectStat = ({ project, className }) => {
     )}>
       <span className={styles['project-stat-status-value']}>{project.interviewsAwaitingCount || 0} </span>
       <StatusLabel className={styles['project-stat-status-label']}>Awaiting</StatusLabel>
-    </div>
+    </div></> : null}
   </div>
 }
 
