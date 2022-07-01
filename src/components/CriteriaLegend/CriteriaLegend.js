@@ -28,7 +28,9 @@ const CriteriaLegend = ({ criteria, className }) => {
       {criteria.children.map(c => (
         <li key={`${criteria.type}-${c.type}`} className={styles['criteria-legend-details-item']}>
           <span className={styles['criteria-legend-details-item-name']}>{c.name}</span>
-          <span className={styles['criteria-legend-details-item-value']}>{fixFloat(c.weight, 1)}%</span>
+          <span className={styles['criteria-legend-details-item-value']}>
+            <span>{fixFloat(c.weight, 1)}%</span>
+          </span>
         </li>
       ))}
     </ul> : null}

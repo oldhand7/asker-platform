@@ -278,7 +278,7 @@ const ProjectForm = ({ project, className }) => {
           <ProjectFormStager onStages={handleStages} activeStage={stage} onStageSelect={setStage} stages={values.stages} className={styles['project-form-stager']}   />
 
           <NewStageDroppable onStage={handleAddDropStage}>
-          <div style={{ padding: '15rem 0'}}>
+          <div>
           {values.stages.length < 14 ? <button type="button" className={styles['project-form-add-stage']} onClick={() => addStage()}>Add stage +</button> : null}
           </div>
           </NewStageDroppable>

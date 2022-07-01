@@ -2,7 +2,7 @@
   width: 100%;
 
   &-label {
-    font-size: 1em;
+    font-size: 14rem;
     line-height: 21rem;
     display: flex;
     justify-content: space-between;
@@ -19,7 +19,6 @@
         color: #494949;
       }
     }
-
   }
 
 
@@ -54,10 +53,12 @@
       position: relative;
       display: flex;
       font-weight: 500;
-      font-size: 12px;
+      font-size: 12rem;
       line-height: 18rem;
       justify-content: space-between;
       padding-right: 10rem;
+      margin-bottom: 8rem;
+      padding-left: 4rem;
 
       &::before {
         content: '';
@@ -88,7 +89,24 @@
       }
 
       &-value {
-        color: #929292;
+        position: relative;
+        padding-right: 2rem;
+
+        span {
+          color: #929292;
+        }
+        
+        &::after {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: -5rem;
+          content: '';
+          width: 4px;
+          height: 4px;
+          border-radius: 50%;
+          background: currentColor;
+        }
       }
     }
   }
@@ -104,6 +122,6 @@
   }
 
   &-progress {
-    margin-top: 10rem;
+    margin-top: 4rem;
   }
 }

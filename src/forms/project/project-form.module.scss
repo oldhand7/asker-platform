@@ -5,22 +5,24 @@
   position: relative;
   flex-wrap: wrap;
 
+
   &-sidebar {
-    flex: 0 0 25%;
-    margin-right: 20rem;
-    border-radius: 13px;
-    padding: 12rem;
+    flex: 0 0 290rem;
+    margin-right: 30rem;
     box-sizing: border-box;
+    overflow-x: hidden;
 
     &-widget {
-      margin-bottom: 20rem;
+      margin-bottom: 24rem;
+      font-size: 16rem;
+      width: 100%;
 
       &-title {
         color: $brandish-grey;
         font-weight: 500;
         font-size: 14rem;
-        line-height: 20rem;
-        margin-bottom: 16rem;
+        margin-bottom: 20rem;
+        line-height: 1;
       }
     }
 
@@ -30,24 +32,25 @@
   }
 
   &-details {
-    flex: 1 1 calc(75% - 40rem);
+    flex: 1;
     background: white;
     border-radius: 13px;
-    padding: 20rem 20rem 20rem 40rem;
+    padding: 40rem;
     box-sizing: border-box;
     position: relative;
+    margin-top: 32rem;
 
     h3 {
       color: #B7B7B7;
+      font-size: 20rem;
+      line-height: 30rem;
+      font-weight: 500;
+      margin: 0;
     }
   }
 
   &-details-inner {
-    max-width: 600rem;
-
-    @media (max-width: 1024px) {
-      max-width: 100%;
-    }
+    max-width: 505rem;
   }
 
   &-title {
@@ -76,22 +79,27 @@
       border: 1px solid #CECECE;
       font-weight: 500;
       font-size: 20rem;
+      border-radius: 7px;
+      line-height: calc(56rem - 2rem);
+      height: calc(56rem - 2rem);
+    }
+
+    &-name {
+      width: 360rem;
     }
 
     &-stages {
-      margin-top: 20rem;
 
-      &-title {
-        color: $brandish-dark-green;
-        font-size: 20rem;
-        line-height: 30rem;
-        font-weight: 500;
-      }
+
     }
   }
 
   &-stager {
-    margin-top: 30rem !important;
+    margin-top: 20rem !important;
+
+    &-feature-form {
+      margin-top: 24rem;
+    }
   }
 
   &-submit {
@@ -118,25 +126,17 @@
 
   &-criteria {
     position: fixed;
-    top: 250rem;
+    bottom: 100rem;
     right: 0;
-    width: 20vw;
     box-shadow: -3px 5px 33px rgba(0, 0, 0, 0.15);
     z-index: 1;
-    max-width: 390rem;
-
-    @media (max-width: 1600px) {
-      top: 50%;
-      transform: translate(0%, -50%);
-    }
+    width: 305rem;
+    z-index: 10;
+    max-height: calc(100vh - 320rem);
+    overflow-y: auto;
 
     @media (max-width: 1024px) {
       display: none;
-    }
-
-    @media (max-height: 900px) {
-      top: 60%;
-      transform: translate(0%, -50%);
     }
   }
 
@@ -148,7 +148,7 @@
     background: white;
     flex: 1 1 100%;
     display: flex;
-    margin-bottom: 30rem;
+    margin-bottom: 40rem;
     padding: 12rem;
     border-radius: 13px;
     justify-content: space-between;
@@ -170,7 +170,7 @@
     margin-right: 12rem;
     border: 1px solid #ECECEC;
     border-radius: 7px;
-    padding: 0 10rem;
+    padding: 0 24rem;
 
     @media (max-width: 540px) {
       display: none;
