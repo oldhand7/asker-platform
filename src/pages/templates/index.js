@@ -1,7 +1,6 @@
 import { getSettings } from 'libs/firestore-admin';
 import { useEffect, useState, useMemo, useCallback} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
-import TemplateTable from 'components/TemplateTable/TemplateTable';
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget'
 import Button from 'components/Button/PlatformButton';
 import Head from 'next/head';
@@ -18,6 +17,7 @@ import { ctxError } from 'libs/helper';
 import { useQueryState } from 'next-usequerystate'
 import FilterButton from 'components/Button/FilterButton';
 import { useUser } from 'libs/user';
+import TemplateList from 'components/TemplateList/TemplateList'
 
 import styles from 'styles/pages/templates.module.scss';
 
@@ -168,22 +168,19 @@ const TemplatesPage = ({ templates = [], companyId, total = 0 }) => {
         <meta name="robots" content="noindex" />
       </Head>
 
-      <div className={styles['templates-page-filter']}>
-        <div data-test-id="company-filter" className={styles['templates-page-filter-company']}>
-          <FilterButton className={styles['templates-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker templates</FilterButton>
-          <FilterButton className={styles['templates-page-filter-company-button']} theme="grape" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your templates</FilterButton>
-        </div>
-      </div>
-
       <div className={styles['templates-page-nav']}>
-          <LiveSearchWidget q={filter.q} onQuery={handleQuery} />
-          <Button href='/templates/create/'><PlusIcon /> Create new template</Button>
+        <div data-test-id="company-filter" className={styles['templates-page-filter-company']}>
+            <FilterButton className={styles['templates-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker templates</FilterButton>
+            <FilterButton className={styles['templates-page-filter-company-button']} theme="dark" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your templates</FilterButton>
+          </div>
+          <LiveSearchWidget className={styles['templates-page-search']} q={filter.q} onQuery={handleQuery} />
+          <Button className={styles['templates-page-create-button']} href='/templates/create/'><PlusIcon /> Create new template</Button>
       </div>
 
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <TemplateTable onDelete={deleteTemplate} emptyText="No templates to show." data={tableData} className={styles['templates-page-table']} />
+      <TemplateList onDelete={deleteTemplate} emptyText="No templates to show." data={tableData} className={styles['templates-page-table']} />
 
       <Pagination page={filter.page} className={styles['templates-page-pagination']} onChange={handlePageChange} total={relativeTotal} perPage={filter.perPage} />
 

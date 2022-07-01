@@ -36,7 +36,7 @@ const ProjectList = ({ className, data = [], onDelete, emptyText = 'No data', ..
         { id: 'edit', name: 'Edit' }
       ]
 
-      if (user && item.companyId == item.companyId) {
+      if (user && user.companyId == item.companyId) {
         options.push({
           id: 'delete',
           name: 'Delete'
@@ -71,8 +71,8 @@ const ProjectList = ({ className, data = [], onDelete, emptyText = 'No data', ..
             <div className={styles['project-list-details-body']}>
               <Stager className={styles['project-list-stager']} stages={item.stages} />
             </div>
+          <CompactMenu className={styles['project-list-item-control']} options={options} onChoice={c => handleCompactMenuChoice(c, item)} />
         </div>
-        <CompactMenu className={styles['project-list-item-control']} options={options} onChoice={c => handleCompactMenuChoice(c, item)} />
       </li>
     })}
     {!data.length ? <li>{emptyText}</li> : null}

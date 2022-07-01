@@ -1,4 +1,4 @@
-.project-list {
+.template-list {
   padding: 0;
   list-style: none;
 
@@ -10,6 +10,11 @@
     display: flex;
     cursor: pointer;
     position: relative;
+    box-shadow: inset 2px 0px 0px #282828;
+
+    &[data-company-id="asker"] {
+      box-shadow: inset 2px 0px 0px #43B88C;
+    }
 
     &-control {
       position: absolute;
@@ -19,7 +24,7 @@
     }
 
     &:hover {
-      box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+      box-shadow: inset 2px 0px 0px #282828, rgba(149, 157, 165, 0.2) 0 8px 24px;
     }
 
     &-title {
@@ -33,7 +38,8 @@
     &-column {
       &:first-child {
         flex: 0 0 163rem;
-
+        position: relative;
+        
         &::after {
           content: '';
           display: block;

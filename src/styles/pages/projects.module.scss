@@ -1,6 +1,10 @@
 .projects-page {
   padding: 94rem 0 87rem;
 
+  @media (max-width: 768px) {
+    padding: 40rem 0;
+  }
+
   &-nav {
     display: flex;
     justify-content: space-between;
@@ -10,10 +14,9 @@
 
     @media (max-width: 768px) {
       flex-direction: column-reverse;
-      margin: 10rem 0;
-
+      
       & > * {
-        margin-bottom: 20rem;
+        margin-bottom: 20rem !important;
       }
     }
   }

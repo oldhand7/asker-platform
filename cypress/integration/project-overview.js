@@ -99,7 +99,7 @@ describe('Project overview', () => {
 
     cy.visit('/projects/')
 
-    cy.get('[data-test-id="project-list"] li')
+    cy.get('[data-test-id="project-list"] > li')
       .last()
       .should('contain', '2 Awaiting')
       .should('contain', '1 Completed')
