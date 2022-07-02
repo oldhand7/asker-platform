@@ -16,6 +16,7 @@ import InterviewFormSidebar from 'components/InterviewFormSidebar/InterviewFormS
 import InterviewFormTimer from 'components/InterviewFormTimer/InterviewFormTimer';
 import InterviewProcessOverview from 'components/InterviewProcessOverview/InterviewProcessOverview';
 import { ucFirst } from 'libs/helper';
+import NextButton from 'components/Button/NextButton';
 
 const createStats = (stages = [], oldStats) => {
   const stats = [];
@@ -101,6 +102,7 @@ const InterviewForm = ({ className, interview, project }) => {
   const [minutes, setMinutes] = useState(typeof interview.time !== 'undefined' ? interview.time : project.time)
   const [stats, setStats] = useState(createStats(project.stages, interview.stats))
   const [stage, setStage] = useState(null);
+  const [nextElement, setNextElement] = useState(null);
 
   const taxStageSecond = useCallback((_stage, questionId) => {
     //Check if previous stages was nonStrict and mark complete
@@ -110,6 +112,19 @@ const InterviewForm = ({ className, interview, project }) => {
       const stat = stats.find(stat => stat.id == key)
 
       if (stat) {
+        stat.status = 'complete';
+      }
+    }
+
+    //Screening and Others have text subtype questions that should not 
+    if (stage && stage != _stage && (stage.id == 'screening-questions' || stage.id == 'other-questions')) {
+      const key = `${stage.id}_${stage.uid}`
+
+      const textQuestionsOnly = stage.config.questions.every(q => q.subtype == 'text')
+      
+      const stat = stats.find(stat => stat.id == key)
+
+      if (stat && textQuestionsOnly) {
         stat.status = 'complete';
       }
     }
@@ -160,11 +175,23 @@ const InterviewForm = ({ className, interview, project }) => {
     interview.time = minutes;
     interview.projectTime = project.time;
     interview.stats = stats.map((stat, index) => {
+      const last = stats.length - 1 == index;
+
+      if (last && stage.id == 'other-questions' || stage.id == 'screening-questions') {
+        //Consider last stage complete if it only has text questions
+
+        const textQuestionsOnly = stage.config.questions.every(q => q.subtype == 'text')
+      
+        if (textQuestionsOnly) {
+          stat.status = 'complete';
+
+          return stat;
+        }
+      }
+
       const parts = stat.id.split('_');
 
       if (nonStrictStages.indexOf(parts[0]) > -1) {
-        const last = stats.length - 1 == index;
-
         stat.status = (stat.time >= 10 || last) ? 'complete' : stat.status;
       }
 
@@ -191,41 +218,41 @@ const InterviewForm = ({ className, interview, project }) => {
   }, [project])
 
   return <form className={classNames(styles['interview-form'], className)} onSubmit={control.submit(handleSubmit)}>
+    <div className={styles['interview-form-stages-wrapper']}>
+      <div className={styles['interview-form-stages']}>
+        <h1 className={styles['interview-form-title']}>
+          <span>{interview.candidate.name}</span>
+        </h1>
 
+        {error ? <Alert type="error">{error.message}</Alert> : null}
 
-    <div className={styles['interview-form-stages']}>
-      <h1 className={styles['interview-form-title']}>
- 
-        <span>{interview.candidate.name}</span>
-      </h1>
+        {stages.map((stage, index) => {
+          const key = getStageKey(stage)
 
-      {error ? <Alert type="error">{error.message}</Alert> : null}
-
-      {stages.map((stage, index) => {
-        const key = getStageKey(stage)
-
-        return <StageInterviewForm
-          onValues={control.input(key, false)}
-          values={values[key]}
-          className={classNames(
-            styles['interview-form-stage'],
-            index == stages.length - 1 ? styles['interview-form-stage-last'] : ''
-          )}
-          key={key}
-          id={key}
-          stats={stats.filter(stat => stat.id == key)}
-          markComplete={questionId => handleComplete(stage, questionId)}
-          taxStageSecond={(questionId) => taxStageSecond(stage, questionId)}
-          stage={stage}
-          index={index}
-          last={index == stages.length - 1}
-          nextId={index < stages.length - 1 ? `${getStageKey(stages[index+1])}` : null}
-          project={project} />
-      })}
-
-      <p style={{textAlign: 'center'}}>
-        <BrandishButton className={styles['interview-form-submit']}>{!loading ? 'Complete interview' : 'Loading...'}</BrandishButton>
-      </p>
+          return <StageInterviewForm
+            onValues={control.input(key, false)}
+            values={values[key]}
+            className={classNames(
+              styles['interview-form-stage'],
+              index == stages.length - 1 ? styles['interview-form-stage-last'] : ''
+            )}
+            key={key}
+            id={key}
+            stats={stats.filter(stat => stat.id == key)}
+            markComplete={questionId => handleComplete(stage, questionId)}
+            taxStageSecond={(questionId) => taxStageSecond(stage, questionId)}
+            onFocusId={id => {
+              const el  = document.querySelector(`#${id}`)
+              
+              setNextElement(el.nextElementSibling)
+            }}
+            stage={stage}
+            index={index}
+            project={project} />
+        })}
+      </div>
+      {nextElement ? <NextButton className={styles['interview-form-next']} onClick={() => nextElement.scrollIntoView({ behavior: 'smooth'})} /> : null}
+      {!nextElement && stage ? <BrandishButton className={styles['interview-form-complete']}>{!loading ? 'Complete interview' : 'Loading...'}</BrandishButton> : null}
     </div>
 
     <InterviewFormSidebar className={styles['interview-form-sidebar']}>

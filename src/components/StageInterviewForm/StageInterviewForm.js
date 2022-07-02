@@ -5,8 +5,6 @@ import { useInView } from 'react-intersection-observer';
 import InterviewStageTimeLabel from 'components/InterviewStageTimeLabel/InterviewStageTimeLabel';
 import styles from './StageInterviewForm.module.scss';
 import { DEFAULT_STAGE_TIME } from 'libs/config';
-import NextButton from 'components/Button/NextButton';
-import { handleNext } from 'libs/helper';
 
 const stageForms = {
   'introduction': dynamic(() => import('forms/introduction-int/introduction-int-form')),
@@ -58,6 +56,12 @@ const StageInterviewForm = (props) => {
   }, [inView, props])
 
   useEffect(() => {
+    if (inView) {
+      props.onFocusId(`stage-${props.id}`)
+    }
+  }, [inView, props.id, props.onFocusId])
+
+  useEffect(() => {
     const { stage } = props;
 
     if (stage && stageForms[stage.id]) {
@@ -68,14 +72,6 @@ const StageInterviewForm = (props) => {
 
   if (isMultistage) {
     return props.stage.config.questions.map((q, qIndex) => {
-      let lastQuestion = props.stage.config.questions.length - 1 == qIndex;
-      
-      let nextId = props.nextId;
-
-      if (!lastQuestion) {
-        nextId = `${props.id}-${props.stage.config.questions[qIndex + 1].id}`
-      }
-
       return <StageInterviewForm
         key={q.id}
         {...props}
@@ -87,9 +83,7 @@ const StageInterviewForm = (props) => {
           })
         }}
         question={q}
-        last={props.last && lastQuestion}
-        id={qIndex == 0 ? props.id : `${props.id}-${q.id}`}
-        nextId={nextId}  
+        id={`${props.id}-${q.id}`}
       />
     })
   }
@@ -100,7 +94,6 @@ const StageInterviewForm = (props) => {
     data-test-id="feature-form"
     className={classNames(
       styles['stage-interview-form'],
-      props.last ? styles['stage-interview-form-last'] : '',
       props.className
     )} >
     {
@@ -108,11 +101,7 @@ const StageInterviewForm = (props) => {
       <>
       <InterviewStageTimeLabel className={styles['stage-interview-form-timer']} time={props.stage.time || DEFAULT_STAGE_TIME} />
       <FormComponent config={props.stage.config} {...formComponentProps} className={styles['stage-interview-form-form']} />
-      {!props.last ? <NextButton onClick={() => {
-        const key = `stage-${props.nextId}`;
-
-        handleNext(key)
-      }} /> : null}
+      
       </> : null
   }
   </div>

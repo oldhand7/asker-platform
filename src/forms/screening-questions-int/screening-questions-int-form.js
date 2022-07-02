@@ -32,7 +32,10 @@ const ScreeningQuestionsIntForm = ({ markComplete, className, values, onValues, 
       return;
     }
 
-    const complete = config.questions.every(q => formValues[q.id])
+    const complete = config.questions.every(q => {
+      //Consider text questions complete if they are among many
+      return formValues[q.id] || (config.questions.length > 1 && q.subtype == 'text')
+    })
 
     if (complete) {
       markComplete();
