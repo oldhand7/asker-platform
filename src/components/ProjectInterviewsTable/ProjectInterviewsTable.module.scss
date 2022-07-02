@@ -25,10 +25,9 @@
   }
 
   &-actions {
-    text-align: center;
 
     & > * {
-      margin: 0 5rem;
+      margin-right: 5rem;
       vertical-align: middle;
     }
   }
@@ -77,6 +76,7 @@
       width: 56rem;
       height: 56rem;
       line-height: 56rem;
+      margin-left: 30rem;
     }
   }
 }

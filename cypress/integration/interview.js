@@ -273,24 +273,28 @@ describe('Interview', () => {
     
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'Introduction')
-      .contains('Next step').click()
+    
+    cy.contains('Next step').click()
 
     cy.get('[data-test-id="feature-form"]').eq(1)
       .should('contain', 'Competency')
       .should('contain', 'Are you familiar with ISO-111?')
       .within(() => {
         cy.contains('Good').click()
-        cy.contains('Next step').click()
       })
+
+    cy.contains('Next step').click()
+
 
     cy.get('[data-test-id="feature-form"]').eq(2)
       .should('contain', 'Competency')
       .should('contain', 'Are you familiar with ISO-222?')
       .within(() => {
         cy.contains('Good').click()
-        cy.contains('Next step').click()
       })
 
+    cy.contains('Next step').click()
+    
     cy.get('[data-test-id="feature-form"]').eq(3)
       .should('contain', 'Summary')
 

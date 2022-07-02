@@ -148,7 +148,7 @@ describe('Other questions', () => {
       cy.get('[data-test-id="feature-other-questions"]').drag('[data-test-id="stage-2"] .Droppable')
 
       cy.get('[data-test-id="stage-2"]')
-        .contains('Others')
+        .contains('Other')
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {

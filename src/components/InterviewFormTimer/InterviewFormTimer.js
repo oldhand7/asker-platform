@@ -60,6 +60,7 @@ const InterviewFormTimer = ({ className, totalTime = 5, availableTime = 5, onTim
 
   return <div data-test-id="interview-timer" className={classNames(
     styles['interview-form-timer'],
+    playing ? styles['interview-form-timer-active'] : '',
     className
   )}>
     <h3 className={styles['interview-form-timer-title']}>
@@ -80,7 +81,7 @@ const InterviewFormTimer = ({ className, totalTime = 5, availableTime = 5, onTim
       null
     }
 
-    <div>
+    <div >
       <p>Project time: {
         !timeRemainingMinutes ? <span className={styles['interview-form-timer-overtime']}>time over</span> : null}</p>
 
@@ -107,7 +108,7 @@ const InterviewFormTimer = ({ className, totalTime = 5, availableTime = 5, onTim
               </PieChart>)}</Tooltip> : null}
     </div>
 
-      <div>
+      <div className={styles['interview-form-timer-progress-wrapper']}>
         <p>Project progress:</p>
 
         <div data-test-id="interview-timer" ref={ref} className={styles['interview-form-timer-progress']}>

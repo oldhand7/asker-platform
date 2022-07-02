@@ -19,26 +19,22 @@
 
     &-last {
       height: auto;
-      min-height: 30vh;
+      min-height: 50vh;
     }
-  }
-
-  &-submit {
-    cursor: pointer;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 50rem;
   }
 
 
   &-stages {
-    height: 100%;
+    height: calc(100% - 56rem);
     overflow-y: auto;
     padding-right: 10rem;
     position: relative;
     padding-top: 15rem;
     padding-bottom: 70rem;
+
+    &-wrapper {
+      height: 100%;
+    }
   }
 
 
@@ -78,6 +74,24 @@
     &-icon {
       vertical-align: middle;
       margin-right: 5rem;;
+    }
+  }
+
+  &-next,
+  &-complete {
+    width: calc(100% - 32rem);
+    margin: 0;
+    height: 56rem;
+    line-height: 56rem;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+    display: block;
+    background: #226B5E;
+    color: white;
+
+    &:hover {
+      background: #226B5E;
+      color: white;
     }
   }
 }

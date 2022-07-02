@@ -17,5 +17,5 @@ export const features = [
   { id: 'culture-fit-questions', name: 'Culture-fit based questions', shortName: 'Culture-fit questions', type: 'evaluation', metadata: { criteria: 'culture-fit' }  },
   { id: 'introduction', name: 'Introduction', type: 'other' },
   { id: 'summary', name: 'Summary', type: 'other' },
-  { id: 'other-questions', name: 'Others', type: 'other' }
+  { id: 'other-questions', name: 'Other', type: 'other' }
 ]

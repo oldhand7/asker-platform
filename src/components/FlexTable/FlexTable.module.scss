@@ -15,10 +15,6 @@
       text-align: left;
       padding-left: 20rem;
     }
-
-    & > *:last-child {
-      text-align: center;
-    }
   }
 
   &-body {
@@ -30,19 +26,22 @@
     border-radius: 5px;
     margin: 15rem 0;
     flex-wrap: wrap;
-
     align-items: center;
   }
 
   &-body &-column {
     line-height: 40rem;
-    padding: 10rem 10rem 10rem 20rem;
+    padding: 10rem;
   }
 
   &-column {
     flex: 1 1;
     position: relative;
     box-sizing: border-box;
+
+    &:first-child {
+      padding-left: 20rem;
+    }
   }
 
   &-empty-message {

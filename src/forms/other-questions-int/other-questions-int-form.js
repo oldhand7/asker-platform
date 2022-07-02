@@ -30,8 +30,11 @@ const OtherQuestionsIntForm = ({ className, markComplete, values, onValues, conf
     if (!config || !config.questions) {
       return;
     }
-
-    const complete = config.questions.every(q => formValues[q.id])
+ 
+    const complete = config.questions.every(q => {
+      //Consider text questions complete if they are among many
+      return formValues[q.id] || (config.questions.length > 1 && q.subtype == 'text')
+    })
 
     if (complete) {
       markComplete();
