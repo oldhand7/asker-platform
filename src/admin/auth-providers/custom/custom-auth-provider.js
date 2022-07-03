@@ -1,18 +1,8 @@
 import { FirebaseAuthProvider } from 'react-admin-firebase';
 import { createPairSession, logoutUser } from 'libs/api';
 
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import { connectAuthEmulator } from 'firebase/auth'
-
 const CustomAuthProvider = (config, options) => {
   const firebaseAuthOptions = options || {}
-
-  if (process.env['NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST']) {
-    const auth = firebase.auth()
-    connectAuthEmulator(auth, `http://${process.env['NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST']}`)
-    firebaseAuthOptions.app = auth.app;
-  }
 
   const authProvider = FirebaseAuthProvider(config, firebaseAuthOptions);
 

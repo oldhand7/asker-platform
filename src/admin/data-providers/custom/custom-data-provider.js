@@ -10,6 +10,8 @@ const CustomDataProvider = (config, options) => {
   if (process.env['NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST']) {
     firebase.initializeApp(config)
 
+    firebase.firestore().settings({ experimentalForceLongPolling: true });
+
     const db = firebase.firestore()
     const parts = process.env['NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST'].split(':');
     connectFirestoreEmulator(db, ...parts);

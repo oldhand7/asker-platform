@@ -217,6 +217,13 @@ const InterviewForm = ({ className, interview, project }) => {
     setStages(project.stages.filter(s => s))
   }, [project])
 
+  const scrollNext = () => {
+    nextElement.scrollIntoView({
+      behavior: process.env['NEXT_PUBLIC_TESTING'] ? 'auto' : 'smooth',
+      block: 'start'
+    })
+  }
+
   return <form className={classNames(styles['interview-form'], className)} onSubmit={control.submit(handleSubmit)}>
     <div className={styles['interview-form-stages-wrapper']}>
       <div className={styles['interview-form-stages']}>
@@ -251,7 +258,7 @@ const InterviewForm = ({ className, interview, project }) => {
             project={project} />
         })}
       </div>
-      {nextElement ? <NextButton className={styles['interview-form-next']} onClick={() => nextElement.scrollIntoView({ behavior: 'smooth'})} /> : null}
+      {nextElement  ? <NextButton className={styles['interview-form-next']} onClick={scrollNext} /> : null}
       {!nextElement && stage ? <BrandishButton className={styles['interview-form-complete']}>{!loading ? 'Complete interview' : 'Loading...'}</BrandishButton> : null}
     </div>
 

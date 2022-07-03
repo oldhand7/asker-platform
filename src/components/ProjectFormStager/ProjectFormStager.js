@@ -8,11 +8,11 @@ import { useModal } from 'libs/modal';
 import FeatureSelectModal from 'modals/feature-select/feature-select-modal';
 import LoadButton from 'components/LoadButton/LoadButton';
 import MinutesInput from 'components/MinutesInput/MinutesInput';
-import { DEFAULT_STAGE_TIME } from 'libs/config';
+import { getStageTime } from 'libs/stage'
 
 import styles from './ProjectFormStager.module.scss';
 
-const ProjectFormStager = ({ feature, featureValues, featureOnError, featureOnValues, className, onStages, stages = [], activeStage = null, onStageSelect, onStageDelete }) => {
+const ProjectFormStager = ({ className, onStages, stages = [], activeStage = null, onStageSelect }) => {
   const [isBrowser, setIsBrowser] = useState(false);
   const openFeatureSelectorModal = useModal(FeatureSelectModal, { size: 'small'});
 
@@ -117,7 +117,7 @@ const ProjectFormStager = ({ feature, featureValues, featureOnError, featureOnVa
               </div>
               {stage ?
               <div className={styles['project-form-stager-item-control']}>
-                <MinutesInput value={stage.time || DEFAULT_STAGE_TIME} onChange={v => handleStageTime(index, v)} />
+                <MinutesInput value={getStageTime(stage)} onChange={v => handleStageTime(index, v)} />
                 {index == 0 ? <div className={styles['project-form-stager-item-control-info']}>
                   <span>Time edit</span>
                 </div>   : null}

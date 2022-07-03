@@ -1,7 +1,7 @@
 import { projectStageQuestionsReducer, getSubtype, ucFirst } from 'libs/helper';
 import { flattenCriteriaTree } from 'libs/criteria';
-import { DEFAULT_STAGE_TIME } from 'libs/config'
 import { fixFloat } from 'libs/helper'
+import { getStageTime } from './stage';
 
 const weightSort = function(ca, cb) {
   if (ca.weight < cb.weight) return 1;
@@ -113,8 +113,6 @@ export const getProjectEvaluationCriterias = (project) => {
 }
 
 export const calcDefaultScoringRules = project => {
-  const rules = {}
-
   const criteriaTree = getProjectEvaluationCriterias(project);
 
   return flattenCriteriaTree(criteriaTree);
@@ -160,5 +158,5 @@ export const packQuestions = p => {
 
 export const getProjectMinutes = project => {
   return project.stages.filter(s => s)
-    .reduce((sum, s) => sum + (Number.parseInt(s.time) || DEFAULT_STAGE_TIME), 0)
+    .reduce((sum, s) => sum + getStageTime(s), 0)
 }
