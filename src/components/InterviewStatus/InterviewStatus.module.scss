@@ -10,21 +10,30 @@
         height: calc(100% - 64rem);
         background-color:  #D2D2D2;
         top: 50%;
-        left: 21rem;
+        left: 16rem;
         transform: translateY(-50%);
     }
 
     &-item {
         display: flex;
         align-items: center;
-        margin-bottom: 15rem;
+        margin-bottom: 12rem;
+        margin-left: -5rem;
         cursor: pointer;
         
         &-status {
             font-weight: 400;
-            font-size: 12px;
-            line-height: 18px;
+            font-size: 12rem;
+            line-height: 18rem;
             color: #878787;
+        }
+
+        &-name {
+            font-weight: 500;
+            font-size: 14rem;
+            line-height: 21rem;
+            color: #5B5B5B;
+            margin: 0;
         }
 
         &-time {
@@ -32,7 +41,6 @@
             font-size: 14rem;
             line-height: 21rem;
             color: #878787;
-            min-height: 1.2em;
             display: inline-block;
         }
     }
@@ -47,7 +55,7 @@
         text-align: center;
         line-height: 32rem;
         font-size: 16rem;
-        margin-right: 15rem;
+        margin-right: 7rem;
         border: 5rem solid white;
         box-sizing: content-box;
         

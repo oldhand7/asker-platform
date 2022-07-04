@@ -30,7 +30,7 @@ const InterviewProcessOverview = ({ className ='xx', interview, stats = []}) => 
       <h3 className={styles['interview-process-overview-title']}>
         Process overview
       </h3>
-      <UpDownButton className={styles['interview-process-overview-toggle']} />
+      <UpDownButton on={open} className={styles['interview-process-overview-toggle']} />
     </div>
 
     {
