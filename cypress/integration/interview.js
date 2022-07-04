@@ -189,7 +189,7 @@ describe('Interview', () => {
       })
   })
   
-  it('should have interview steps', () => {
+  it('should have interview steps',  { scrollBehavior: 'center' }, () => {
     cy.createCompetencyQuestion({ name: 'Are you familiar with ISO-111?', criteria: { name: 'ISO-111'} });
     cy.createCompetencyQuestion({ name: 'Are you familiar with ISO-222?', criteria: { name: 'ISO-222'} });
     
@@ -224,6 +224,7 @@ describe('Interview', () => {
     cy.addProjectCandidate('XOXO XIXI', 'xoxo.xixi@hotmail.net')
 
     cy.contains('XOXO XIXI')
+      .first()
       .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
@@ -234,8 +235,7 @@ describe('Interview', () => {
 
     cy.get('[data-test-id="interview-timer"]')
       .within(() => {
-        //@TODO: 20 min!
-        cy.get('button').should('contain', 'Start timer (15 min)').click()
+        cy.get('button').should('contain', 'Start timer (20 min)').click()
         cy.get('button').should('contain', 'Pause timer')
 
         cy.contains('Project progress')
@@ -285,7 +285,6 @@ describe('Interview', () => {
 
     cy.contains('Next step').click()
 
-
     cy.get('[data-test-id="feature-form"]').eq(2)
       .should('contain', 'Competency')
       .should('contain', 'Are you familiar with ISO-222?')
@@ -293,7 +292,7 @@ describe('Interview', () => {
         cy.contains('Good').click()
       })
 
-    cy.contains('Next step').click()
+    cy.contains('Next step').click().wait(1000)
     
     cy.get('[data-test-id="feature-form"]').eq(3)
       .should('contain', 'Summary')

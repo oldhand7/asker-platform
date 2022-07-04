@@ -19,9 +19,9 @@ import { ctxError, getTimeLabel } from 'libs/helper';
 import FeatureForm from 'components/FeatureForm/FeatureForm';
 import { calcDefaultScoringRules, packQuestions, getProjectMinutes } from 'libs/project';
 import TimeLabel from 'components/TimeLabel/TimeLabel';
-import { DEFAULT_STAGE_TIME } from 'libs/config'
 import { validate } from 'libs/validator';
 import { v4 as uuidv4 } from 'uuid';
+import { getStageTime } from 'libs/stage'
 
 import styles from './template-form.module.scss';
 
@@ -87,6 +87,8 @@ const TemplateForm = ({ template, className }) => {
       control.set('stages', values.stages)
     }
 
+    control.set('time', getProjectMinutes(values))
+
     setStageErrors([
       ...stageErrors.filter(error => error.stage.id != stage.id )
     ])
@@ -130,7 +132,7 @@ const TemplateForm = ({ template, className }) => {
         }
 
         if (!s.time) {
-          s.time = DEFAULT_STAGE_TIME;
+          s.time = getStageTime(s);
         }
 
         return s;
@@ -169,13 +171,21 @@ const TemplateForm = ({ template, className }) => {
     setLoading(false)
   }, [error])
 
-  const handleStages = useCallback((stages, stage) => {
+  const handleStages = useCallback((stages, _stage) => {
     control.set('stages', stages);
 
+    if (_stage) {
+      setStage(_stage)
+
+      return;
+    }
+
     if (stage) {
-      setStage(stage)
-    } else {
-      setStage(null)
+      const found = stages.find(s => s == stage)
+
+      if (!found) {
+        setStage(null);
+      }
     }
   }, [values.stages])
 

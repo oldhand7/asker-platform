@@ -23,7 +23,7 @@ import { calcDefaultScoringRules, packQuestions, getProjectMinutes } from 'libs/
 import TimeLabel from 'components/TimeLabel/TimeLabel';
 import { validate } from 'libs/validator';
 import { v4 as uuidv4 } from 'uuid';
-import { DEFAULT_STAGE_TIME } from 'libs/config';
+import { getStageTime } from 'libs/stage'
 
 import styles from './project-form.module.scss';
 
@@ -95,6 +95,8 @@ const ProjectForm = ({ project, className }) => {
       control.set('stages', values.stages)
     }
 
+    control.set('time', getProjectMinutes(values))
+
     setStageErrors([
       ...stageErrors.filter(error => error.stage.id != stage.id )
     ])
@@ -132,7 +134,7 @@ const ProjectForm = ({ project, className }) => {
         }
 
         if (!s.time) {
-          s.time = DEFAULT_STAGE_TIME;
+          s.time = getStageTime(s);
         }
 
         return s;
@@ -197,13 +199,21 @@ const ProjectForm = ({ project, className }) => {
     setLoading(false)
   }, [error])
 
-  const handleStages = useCallback((stages, stage) => {
+  const handleStages = useCallback((stages, _stage) => {
     control.set('stages', stages);
+    
+    if (_stage) {
+      setStage(_stage)
+
+      return;
+    }
 
     if (stage) {
-      setStage(stage)
-    } else {
-      setStage(null)
+      const found = stages.find(s => s == stage)
+
+      if (!found) {
+        setStage(null);
+      }
     }
   }, [values.stages])
 
@@ -219,7 +229,7 @@ const ProjectForm = ({ project, className }) => {
 
     setStage(uniqueStage)
   }
-
+  
   useEffect(() => {
     control.set('time', getProjectMinutes(values))
   }, [values.stages])

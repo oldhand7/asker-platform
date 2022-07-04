@@ -164,6 +164,10 @@ h1, h2, h3, h4, h5 {
 }
 
 .firebase-emulator-warning {
-  z-index: 1 !important;
-  max-width: 100rem;
+  width: 10px !important;
+  height: 10px !important;
+  font-size: 0;
+  background: red !important;
+  display: block;
+  top: 0;
 }

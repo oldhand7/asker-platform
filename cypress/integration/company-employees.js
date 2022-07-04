@@ -69,7 +69,7 @@ describe('Company employees', () => {
           .within(() => {
             cy.contains('Confirm').click()
           })
-          .wait(1000)
+          .wait(4000)
 
         cy.logout()
 

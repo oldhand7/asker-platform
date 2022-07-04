@@ -12,6 +12,10 @@ const EditInput = ({ className, label = 'Edit', value = '', onChange, ...props})
   const ref = useRef();
 
   useEffect(() => {
+    setValue(_value);
+  }, [value])
+
+  useEffect(() => {
     if (mode != 'edit') return;
 
     const handleOffClick = ev => {
