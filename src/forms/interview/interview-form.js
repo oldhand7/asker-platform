@@ -17,6 +17,7 @@ import InterviewFormTimer from 'components/InterviewFormTimer/InterviewFormTimer
 import InterviewProcessOverview from 'components/InterviewProcessOverview/InterviewProcessOverview';
 import { ucFirst } from 'libs/helper';
 import NextButton from 'components/Button/NextButton';
+import BackIcon from 'components/Icon/BackIcon';
 
 const createStats = (stages = [], oldStats) => {
   const stats = [];
@@ -263,16 +264,15 @@ const InterviewForm = ({ className, interview, project }) => {
     </div>
 
     <InterviewFormSidebar className={styles['interview-form-sidebar']}>
-      <div className={styles['interview-form-nav']}>
-        <button type="button" onClick={() => window.location = `/projects/${[project.id]}/overview`}  className={styles['interview-form-back']}>
-            <span className={styles['interview-form-back-text']}>Cancel interview</span>
-        </button>
-      </div>
       <InterviewFormTimer totalStages={stats.length} completeStages={stats.filter(s => s.status == 'complete').length}  className={styles['interview-form-sidebar-widget']} totalTime={project.time} availableTime={minutes} onTime={setMinutes} />
       <InterviewProcessOverview stats={stats} className={styles['interview-form-sidebar-widget']} />
     </InterviewFormSidebar>
 
     {loading ? <Preloader /> : null}
+
+    <button title="Cancel" type="button" onClick={() => window.location = `/projects/${[project.id]}/overview`}  className={styles['interview-form-back']}>
+      <BackIcon className={styles['interview-form-back-icon']} />
+    </button>
   </form>
 }
 
