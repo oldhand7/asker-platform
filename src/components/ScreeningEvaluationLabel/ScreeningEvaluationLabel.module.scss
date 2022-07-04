@@ -1,0 +1,30 @@
+.screening-evaluation-label {
+    display: flex;
+    flex: 0 0 180rem;
+    justify-content: space-between;
+    line-height: 2em;
+    font-weight: 500;
+    font-size: 12rem;
+
+    &-name {
+      color: #929292;
+      white-space: nowrap;
+      flex: 1 1;
+      margin-right: 5rem;
+    }
+
+    &-value {
+      ul, ol {
+        padding-left: 12rem;
+      }
+
+      p {
+        margin: 2rem 0;
+      }
+    }
+
+    &-pill {
+      margin: 0 5rem;
+      font-size: 10rem;
+    }
+}

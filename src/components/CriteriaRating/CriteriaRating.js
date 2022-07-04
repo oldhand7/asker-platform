@@ -10,8 +10,14 @@ const CriteriaRating = ({ className, value = 0, maxValue=4, color = '#CCC'}) => 
     [maxValue, value]
   );
 
-  return <div data-test-id='criteria-rating' style={{color}} className={classNames(styles['criteria-rating'], className)}>
-    <span className={styles['criteria-rating-value']} style={{left: `${left}%`}}>{value}</span>
+  return <div data-test-id='criteria-rating' style={{color}} className={classNames(
+    styles['criteria-rating'],
+    styles[`criteria-rating-${value}`],
+    className
+  )}>
+    <span className={styles['criteria-rating-value']} style={{left: `${left}%`}}>
+      <span className={styles['criteria-rating-value-inner']}>{value}</span>
+    </span>
   </div>
 }
 

@@ -90,10 +90,22 @@ describe('Candidate compare', () => {
 
         cy.contains('Compare')
           .should('contain.text', 'Compare (1/2)')
-          .click()
           .closest('[data-test-id="compare-box"]')
-          .contains('Show comparsion')
-          .click()
+          .within(() => {
+            cy.contains('John Best').closest('li')
+              .should('contain', '100%')
+              .find('input[type="checkbox"]')
+              .should('be.checked')
+
+            cy.contains('John Good').closest('li')
+              .should('contain', '75%')
+              .find('input[type="checkbox"]')
+              .should('not.be.checked')
+
+            cy.contains('Show comparsion')
+              .click()
+          })
+    
 
         cy.location('pathname').should('contain', '/compare/')
         
