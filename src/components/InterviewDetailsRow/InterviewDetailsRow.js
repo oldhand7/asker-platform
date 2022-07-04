@@ -1,10 +1,8 @@
 import classNames from 'classnames';
-import IconButton from 'components/IconButton/IconButton'
-import IconCarretUp from 'components/Icon/CarretUpIcon';
-import IconCarretDown from 'components/Icon/CarretDownIcon';
 import { useState } from 'react';
 
 import styles from './InterviewDetailsRow.module.scss';
+import UpDownButton from 'components/UpDownButton/UpDownButton';
 
 const InterviewDetailsRow = ({ name = '', defaultOpen = false, className, evaluation, children, head = null, headerColumnWidth = 25 }) => {
   const [rowOpen, setRowOpen] = useState(defaultOpen);
@@ -24,9 +22,7 @@ const InterviewDetailsRow = ({ name = '', defaultOpen = false, className, evalua
       {head}
       {
         children ?
-        <IconButton
-          className={styles['interview-details-row-toggle']}
-          Icon={rowOpen ? IconCarretUp : IconCarretDown} /> :
+        <UpDownButton on={rowOpen} className={styles['interview-details-row-head-toggle']} /> :
         null
       }
     </div>

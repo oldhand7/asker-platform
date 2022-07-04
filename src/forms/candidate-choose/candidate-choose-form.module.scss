@@ -1,4 +1,12 @@
 .candidate-choose-form {
+    &-title {
+        font-weight: 500;
+        font-size: 20rem;
+        line-height: 30rem;
+        color: #5B5B5B;
+        margin: 0 0 16rem 0;
+    }
+
     &-alert {
 
     }
@@ -6,10 +14,39 @@
     &-list {
         list-style: none;
         margin-bottom: 20rem;
-    }
+        padding: 0;
+        max-height: 320rem;
+        overflow-y: scroll;
+        padding-right: 12rem;
 
-    &-list-item {
+        &-item {
+            line-height: 32rem;
+
+            label {
+                display: inline-block;
+                cursor: pointer;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                background-attachment: grey;
+
+                & > span {
+                    flex: 1;
+                }
+            }
             
+            & &-label {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                &-name {
+                    flex: 1 0;
+                }
+
+   
+            }
+        }
     }
 
     &-submit {

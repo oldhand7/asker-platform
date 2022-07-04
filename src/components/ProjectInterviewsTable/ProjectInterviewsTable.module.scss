@@ -10,17 +10,14 @@
   }
 
   &-details {
-    padding: 10rem 10rem 10rem 20rem;
-    margin-top: 1px solid #D5D5D5;
-    max-width: 100%;
     flex: 1 0 100%;
+    max-width: 100%;
+    padding: 16rem 24rem 0rem 22rem;
 
     &-row {
       display: block;
-      margin-bottom: 5rem;
       border-top: 1px solid #D5D5D5;
-      padding-top: 15rem;
-      margin-bottom: 30rem;
+      padding: 16rem 0;
     }
   }
 

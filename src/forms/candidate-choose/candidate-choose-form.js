@@ -2,8 +2,22 @@ import Alert from 'components/Alert/Alert';
 import PlatformButton from 'components/Button/PlatformButton';
 import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField';
 import { useEffect, useState } from 'react';
+import colorBetween from 'color-between';
+import PillLabel from 'components/PillLabel/PillLabel';
 
-import style from './candidate-choose-form.module.scss';
+import styles from './candidate-choose-form.module.scss';
+
+const getColor = (score) => {
+    if (score < 25) {
+      return '#E77272';
+    }
+  
+    if (score < 50) {
+      return '#DFD049';
+    }
+  
+    return colorBetween('#9AE23E', '#43B88C', score / 100, 'hex');
+  }
 
 const CandidateChooseForm = ({ className, onValues, values = [], interviews = [] }) => {
     const [formValues, setValues] = useState(values || []);
@@ -33,17 +47,25 @@ const CandidateChooseForm = ({ className, onValues, values = [], interviews = []
         }
     }
 
-    return <div className={style['candidate-choose-form']}>
-        {error ? <Alert className={style['candidate-choose-form-alert']} /> : null}
+    return <div className={styles['candidate-choose-form']}>
+        <h5 className={styles['candidate-choose-form-title']}>Choose candidate</h5>
 
-        <ul className={style['candidate-choose-form-list']}>
+        {error ? <Alert className={styles['candidate-choose-form-alert']}>{error.message}</Alert> : null}
+
+        <ul className={styles['candidate-choose-form-list']}>
         {interviews.map(i => (
-            <li className={style['candidate-choose-form-list-item']} key={i.id}>
-                <CheckboxInputField label={i.candidate.name} className={style['candidate-choose-form-list-item-input-field']} checked={formValues.indexOf(i) > -1} onChange={() => toggleInterview(i)} />
+            <li className={styles['candidate-choose-form-list-item']} key={i.id}>
+                <CheckboxInputField label={<div className={styles['candidate-choose-form-list-item-label']}>
+                    <span className={styles['candidate-choose-form-list-item-label-name']}>{i.candidate.name}</span>
+
+                    <PillLabel color={getColor(i.score || 0)} className={styles['candidate-choose-form-list-item-label-score']}>
+                                {i.score || 0}%
+                            </PillLabel>
+                </div>} className={styles['candidate-choose-form-list-item-input-field']} checked={formValues.indexOf(i) > -1} onChange={() => toggleInterview(i)} />
             </li>
         ))}
         </ul>
-        <PlatformButton className={style['candidate-choose-form-submit']} disabled={!formValues.length} onClick={submit}>Choose candidates</PlatformButton>
+        <PlatformButton className={styles['candidate-choose-form-submit']} onClick={submit}>Choose candidates</PlatformButton>
     </div>
 }
 

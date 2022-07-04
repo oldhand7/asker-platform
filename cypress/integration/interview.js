@@ -178,14 +178,9 @@ describe('Interview', () => {
 
         cy.contains('Screening')
           .closest('[data-test-id="interview-details-row"]')
-          .click()
-          .within(() => {
-            cy.get('li').eq(0)
-              .should('contain', 'Do you have drivers license?')
-              .find('[data-test-id="pill-label"]').invoke('text')
-              .should('contain', 'No')
-          })
-
+          .should('contain', 'Do you have drivers license?')
+          .find('[data-test-id="pill-label"]').invoke('text')
+          .should('contain', 'No')
       })
   })
   
