@@ -192,7 +192,7 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
       <div className={styles['questions-page-filter']}>
         <div data-test-id="company-filter" className={styles['questions-page-filter-company']}>
           <FilterButton className={styles['questions-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker questions</FilterButton>
-          <FilterButton className={styles['questions-page-filter-company-button']} theme="grape" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your questions</FilterButton>
+          <FilterButton className={styles['questions-page-filter-company-button']} theme="dark" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your questions</FilterButton>
         </div>
         <QuestionFilter className={styles['questions-page-filter-question-filter']} selected={filter.questionTypes} onFilter={handleQuestionFilterOptions} />
       </div>

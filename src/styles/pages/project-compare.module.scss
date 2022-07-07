@@ -2,13 +2,13 @@
 
 
 .project-compare-page {
-  padding: 40rem 0rem;
+  padding: 50rem 0rem;
   position: relative;
 
   &-title {
     font-weight: 600;
-    font-size: 32px;
-    line-height: 48px;
+    font-size: 32rem;
+    line-height: 48rem;
     color: #494949;
 
     &-edit-link {
@@ -27,6 +27,7 @@
     display: block;
     margin-bottom: 50rem;
     position: relative;
+    line-height: 48rem;
   }
 
   &-back {
@@ -34,5 +35,20 @@
     left: 0;
     top: 50%;
     transform: translateY(-50%);
+    padding-left: 34rem;
+    line-height: 24rem;
+
+    &-icon {
+      margin-right: 14rem;
+      position: absolute;
+      font-size: 20rem;
+      left: 0;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+  }
+
+  &-table {
+    background: white;
   }
 }

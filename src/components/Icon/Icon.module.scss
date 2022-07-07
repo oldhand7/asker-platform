@@ -32,4 +32,8 @@
       transform: translateY(-0.4em);
     }
   }
+
+  &-arrow-sharp-left {
+    transform: rotate(180deg);
+  }
 }

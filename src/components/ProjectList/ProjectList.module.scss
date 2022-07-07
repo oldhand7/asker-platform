@@ -32,7 +32,10 @@
 
     &-column {
       &:first-child {
-        flex: 0 0 163rem;
+        width: 163rem;
+        flex-direction: column;
+        justify-content: space-between;
+        display: flex;
 
         &::after {
           content: '';
@@ -44,6 +47,10 @@
           right: 0;
           top: 50%;
           transform: translateY(-50%);
+        }
+
+        & > * {
+          margin: 0;
         }
       }
 

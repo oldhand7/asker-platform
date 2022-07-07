@@ -1,17 +1,10 @@
 import { getInterviewAggregate } from 'libs/interview';
-import { fixFloat } from 'libs/helper';
+import { nameSort } from 'libs/helper';
 
 const scoreTable = [0, 25, 50, 75, 100]
 
 const scoreReducer = (sum, { score }) => {
   return Number.parseInt(score || 0) + sum;
-}
-
-const nameSort = function(a, b) {
-  if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-  if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-
-  return 0;
 }
 
 export const calcInterviewScore = (interview, { scoringRules }) => {
