@@ -7,17 +7,19 @@ export const fetcher = (...args) => fetch(args[0], args[1] ? args[1] : {}).then(
     return
   }
 
+  let json;
+
   try {
-    const json = JSON.parse(text)
-
-    if (error && json.message) {
-      throw new Error(json.message)
-    }
-
-    return json;
+    json = JSON.parse(text)
   } catch (error) {
     throw new Error('Server error.')
   }
+
+  if (error && json.message) {
+    throw new Error(json.message)
+  }
+
+  return json;
 })
 
 export const getCookie = name => {

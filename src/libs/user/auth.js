@@ -88,7 +88,7 @@ export const useAuth = () => {
             userBoot(user);
             setWait(false);
           } catch (error) {
-            throw new Error("Pair session failed.")
+            throw new Error(error.message)
           }
         })
       })
