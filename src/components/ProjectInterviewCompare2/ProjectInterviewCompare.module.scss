@@ -1,0 +1,104 @@
+.project-interview-compare {
+    display: flex;
+    padding: 24rem;
+    position: relative;
+    
+    &-add-candidate {
+        background: 0;
+        border: 1px dashed #ACACAC;
+        border-radius: 5px;
+        font-weight: 500;
+        font-size: 13rem;
+        line-height: 15rem;
+        color: #9C9C9C;
+        display: inline-block;
+        padding: 12.5rem 16rem;
+        cursor: pointer;
+
+        &:hover {
+            border: 1px solid #ACACAC;
+        }
+    }
+
+    &-sidebar {
+        flex: 0 0 190rem;
+
+        &-head {
+            height: 108rem;
+            border-bottom: 1px solid #D5D5D5;
+        }
+
+        &-evaluation-label {
+            padding: 16rem 0;
+            font-weight: 500;
+            font-size: 14rem;
+            line-height: 21rem;
+            color: #494949;
+            border-bottom: 1px solid #D5D5D5;
+        }
+    }
+
+    &-column {
+        flex: 0 0 calc(25% - 3.5%);
+    }
+
+    &-main {
+        display: flex;
+        flex: 1 1;
+        overflow-x: hidden;
+        max-width: 100%;
+        position: relative;
+    }
+
+    &-has-children-left::before {
+        content: '';
+        display: block;
+        background: linear-gradient(to right, white, transparent);
+        height: 100%;
+        width: 50rem;
+        position: absolute;
+        top: 0;
+        transform: translateX(-25%);
+        left: 210rem;
+        z-index: 1;
+        border-left: 1px solid #D5D5D5;
+    }
+
+    &-has-children-right::after  {
+        content: '';
+        display: block;
+        background: linear-gradient(to right, transparent, white);
+        height: 100%;
+        width: 50rem;
+        position: absolute;
+        top: 0;
+        right: 10rem;
+        z-index: 1;
+    }
+
+    &-next,
+    &-prev {
+        width: 24rem;
+        height: 131rem;
+        box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
+        border: 0;
+        cursor: pointer;
+        position: absolute;
+        z-index: 5;
+        top: 0;
+        background-color: white;
+
+        &-icon {
+            fill: #43B88C;
+        }
+    }
+
+    &-prev {
+        left: 213rem;
+        transform: translateX(-100%);
+    }
+
+    &-next {
+        right: 0;
+    }
+}

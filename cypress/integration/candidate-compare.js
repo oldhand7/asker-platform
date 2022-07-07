@@ -122,51 +122,59 @@ describe('Candidate compare', () => {
         cy.contains('John Best')
           .closest('div')
           .should('contain', '100%')
+          .closest('[data-test-id="candidate-compare-column"]')
+          .within(() => {
+            cy.get('[data-test-id="candidate-compare-column-evaluation"]')
+              .first()
+              .within(() => {
+                cy.root().children().first()
+                  .click()
+                  .find('[data-test-id="evaluation-score-bar"]')
+                  .should('contain', '100%')
+    
+                 cy.root().children().last()
+                  .should('contain', 'CA')
+                  .find('[data-test-id="criteria-rating"]')
+                  .should('contain', '5')
+              })
+
+            cy.get('[data-test-id="candidate-compare-column-evaluation"]')
+              .last()
+              .within(() => {
+                cy.root().children().first()
+                  .should('contain', 'Do you have drivers license?')
+                  .should('contain', 'Yes')
+              })
+          })
+
 
         cy.contains('John Good')
           .closest('div')
           .should('contain', '75%')
-
-        cy.contains('Competencies')
-          .closest('[data-test-id="interview-details-row"]')
+          .closest('[data-test-id="candidate-compare-column"]')
           .within(() => {
-            cy.get('[data-test-id="evaluation-score-bar"]')
-              .eq(0)
-              .should('contain', '100%')
-            
-            cy.get('[data-test-id="evaluation-score-bar"]')
-              .eq(1)
-              .should('contain', '75%')
-              
-            cy.get('ul')
-              .eq(0)          
-              .contains('CA')
-              .closest('li') 
-              .get('[data-test-id="criteria-rating"]')
-              .should('contain', '5')
+            cy.get('[data-test-id="candidate-compare-column-evaluation"]')
+              .first()
+              .within(() => {
+                cy.root().children().first()
+                  .find('[data-test-id="evaluation-score-bar"]')
+                  .should('contain', '75%')
+    
+                  cy.root().children().last()
+                  .should('contain', 'CA')
+                  .find('[data-test-id="criteria-rating"]')
+                  .should('contain', '4')
+              })
 
-            cy.get('ul')
-              .eq(1)          
-              .contains('CA')
-              .closest('li') 
-              .get('[data-test-id="criteria-rating"]')
-              .should('contain', '4')
+            cy.get('[data-test-id="candidate-compare-column-evaluation"]')
+              .last()
+              .within(() => {
+                cy.root().children().first()
+                  .should('contain', 'Do you have drivers license?')
+                  .should('contain', 'No')
+              })
           })
 
-        cy.contains('Screening')
-          .closest('[data-test-id="interview-details-row"]')
-          .within(() => {
-            cy.get('ul')
-              .eq(0)
-              .should('contain', 'Do you have drivers license?')
-              .should('contain', 'Yes')
-
-            cy.get('ul')
-              .eq(1)
-              .should('contain', 'Do you have drivers license?')
-              .should('contain', 'No')
-          })
- 
         cy.get('[data-test-id="trash-button"]').first().click()
         
         cy.get('[data-test-id="project-interview-compare"]')

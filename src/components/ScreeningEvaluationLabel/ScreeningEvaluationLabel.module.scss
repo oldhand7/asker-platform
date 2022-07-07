@@ -2,15 +2,17 @@
     display: flex;
     flex: 0 0 180rem;
     justify-content: space-between;
+    align-items: center;
     line-height: 2em;
     font-weight: 500;
     font-size: 12rem;
 
     &-name {
       color: #929292;
-      white-space: nowrap;
       flex: 1 1;
       margin-right: 5rem;
+      max-width: 80%;
+      white-space: wrap;
     }
 
     &-value {

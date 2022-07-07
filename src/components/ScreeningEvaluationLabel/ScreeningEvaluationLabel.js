@@ -26,7 +26,7 @@ const ScreeningEvaluationLabel = ({ evaluation, className }) => {
 
         {question.subtype == 'range' ?
         <span className={styles['screening-evaluation-label-value']}>
-          between <PillLabel className={styles['screening-evaluation-label-pill']} text={`${answer[0]} ${question.unit}`} />  and <PillLabel  className={styles['screening-evaluation-label-pill']}  text={`${answer[1]} ${question.unit}`} />
+          <PillLabel className={styles['screening-evaluation-label-pill']} text={`${answer[0]} ${question.unit}`} /> - <PillLabel  className={styles['screening-evaluation-label-pill']}  text={`${answer[1]} ${question.unit}`} />
         </span> : null}
 
         {question.subtype == 'text' ?

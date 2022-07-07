@@ -9,3 +9,25 @@ export const getStageTime = stage => {
 
     return Number.parseInt(stage.time || DEFAULT_STAGE_TIME);
 }
+
+export const SHORT_NAMES = {
+    'team-role-presentation': 'Team & role',
+    'company-presentation': 'Company',
+    'salary': 'Salary',
+    'candidate-questions': 'Candidate',
+    'competency-questions': 'Competency',
+    'motivation-questions': 'Motivation',
+    'screening-questions': 'Screening',
+    'experience-questions': 'Experience',
+    'hard-skill-questions': 'Hard-skill',
+    'culture-fit-questions': 'Culture-fit',
+    'introduction': 'Introduction',
+    'summary': 'Summary',
+    'other-questions': 'Other'
+}
+
+export const featureTypes = [
+    { id: 'attraction', name: 'Attraction' },
+    { id: 'evaluation', name: 'Evaluation' },
+    { id: 'other', name: 'Other options' }
+  ]

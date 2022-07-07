@@ -7,9 +7,10 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { unpackQuestions } from 'libs/project';
 import BackIcon from 'components/Icon/BackIcon';
-import ProjectInterviewCompare from 'components/ProjectInterviewCompare/ProjectInterviewCompare';
+import ProjectInterviewCompare from 'components/ProjectInterviewCompare2/ProjectInterviewCompare';
 import { useEffect } from 'react';
 import {useModal} from 'libs/modal';
+import { scoreSort, buildSearchQuery } from 'libs/helper';
 
 import styles from 'styles/pages/project-compare.module.scss';
 import CandidateChooseModal from 'modals/candidate-choose/candidate-choose-modal';
@@ -19,16 +20,6 @@ const defaultSort = [
   ['status', 'desc'], // complete, awaiting
   ['createdAt', 'desc']
 ]
-
-const scoreSort = function(ca, cb) {
-  if (ca.score < cb.score) return 1;
-  if (ca.score > cb.score) return -1;
-
-  if (ca.candidate.name < cb.candidate.name) return -1;
-  if (ca.candidate.name > cb.candidate.name) return 1;
-
-  return 0;
-}
 
 const ProjectComparePage = ({ project, interviews = [] }) => {
   const router = useRouter();
@@ -56,6 +47,17 @@ const ProjectComparePage = ({ project, interviews = [] }) => {
 
   const openChooseCandidateModal = useModal(CandidateChooseModal)
 
+
+  useEffect(() => {
+    const { pathname } = window.location;
+
+    const query = {
+      interviews: compare.map(c => c.id).join('|')
+    }
+
+    router.push(`/${pathname}/?${buildSearchQuery(query)}`, null, { shallow: true })
+  }, [compare])
+
   return <div className={styles['project-compare-page']}>
       <Head>
         <title>{project.name} - Candidate compare - Asker</title>
@@ -64,7 +66,10 @@ const ProjectComparePage = ({ project, interviews = [] }) => {
 
       <div className={styles['project-compare-page-head']}>
         <Link href={`/projects/${project.id}/overview`}>
-            <a className={styles['project-compare-page-back']}><BackIcon /></a>
+            <a className={styles['project-compare-page-back']}>
+              <BackIcon className={styles['project-compare-page-back-icon']} />
+              <span className={styles['project-compare-page-back-text']}>Back</span>
+            </a>
         </Link>
 
         <h1 className={styles['project-compare-page-title']}>{project.name}</h1>
@@ -75,6 +80,7 @@ const ProjectComparePage = ({ project, interviews = [] }) => {
         interviews={completeInterviews}
         onCompareRemove={removeCompareInterview}
         project={project}
+        onCompare={setCompare}
         onCompareAdd={() => openChooseCandidateModal(
           compare => compare && setCompare(compare),
           {

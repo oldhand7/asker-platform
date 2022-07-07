@@ -4,6 +4,7 @@ import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField
 import { useEffect, useState } from 'react';
 import colorBetween from 'color-between';
 import PillLabel from 'components/PillLabel/PillLabel';
+import { scoreSort } from 'libs/helper';
 
 import styles from './candidate-choose-form.module.scss';
 
@@ -22,6 +23,16 @@ const getColor = (score) => {
 const CandidateChooseForm = ({ className, onValues, values = [], interviews = [] }) => {
     const [formValues, setValues] = useState(values || []);
     const [error, setError] = useState(null);
+
+    const [_interviews, setInterviews] = useState([]);
+
+    useEffect(() => {
+        const _interviews = [...interviews];
+
+        _interviews.sort(scoreSort)
+
+        setInterviews(_interviews)
+    }, [interviews])
 
     const submit = () => {
         if (!formValues.length) {
@@ -53,7 +64,7 @@ const CandidateChooseForm = ({ className, onValues, values = [], interviews = []
         {error ? <Alert className={styles['candidate-choose-form-alert']}>{error.message}</Alert> : null}
 
         <ul className={styles['candidate-choose-form-list']}>
-        {interviews.map(i => (
+        {_interviews.map(i => (
             <li className={styles['candidate-choose-form-list-item']} key={i.id}>
                 <CheckboxInputField label={<div className={styles['candidate-choose-form-list-item-label']}>
                     <span className={styles['candidate-choose-form-list-item-label-name']}>{i.candidate.name}</span>

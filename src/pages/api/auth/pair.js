@@ -44,6 +44,14 @@ handler.post(async (req, res) => {
         return;
       }
 
+      if (user.disabled) {
+        res.status(404).json({
+          message: "Your account has been deactivated. Please reach out to info@askertech.com if you want to reactivate your account."
+        });
+
+        return;
+      }
+
       req.session.user = {
         id: claims.uid,
         companyId: claims.companyId,

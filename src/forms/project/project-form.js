@@ -252,6 +252,10 @@ const ProjectForm = ({ project, className }) => {
   }, [stage])
 
   return  <form data-test-id="project-form" onSubmit={control.submit(handleSubmit)} className={classNames(styles['project-form'], className)}>
+    { project && !project.id && project.template ?
+        <p className={styles['project-form-template']}>Using template: <span>{project.template.name}</span></p>
+        : null}
+
     <div className={styles['project-form-header']}>
       <TextInputField value={values.name} onChange={control.input('name')} placeholder={'Project name'} error={errors && errors.name}  autoComplete='off' name='name' type='text' className={styles['project-form-field-name']} />
 
@@ -266,6 +270,8 @@ const ProjectForm = ({ project, className }) => {
 
     <div className={styles['project-form-details']}>
       <div className={styles['project-form-details-inner']}>
+
+
         {error ? <Alert type="error">{error.message}</Alert> : null}
 
         {

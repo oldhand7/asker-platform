@@ -32,7 +32,7 @@ const LoginForm  = ({ className, authFunction, onSuccess }) => {
             .then(onSuccess)
             .catch(error => {
                 setLoading(false);
-                setError(ctxError('Email or password invalid.', error));
+                setError(error);
             })
     }
 

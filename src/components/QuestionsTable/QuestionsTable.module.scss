@@ -13,12 +13,12 @@
     &::before {
       content: '';
       position: absolute;
-      width: 15rem;
+      width: 4rem;
       height: 100%;
       display: block;
       top: 0;
       left: 0;
-      background: $brandish-grape;
+      background: black;
       border-radius: 5px 0px 0px 5px;
     }
   }

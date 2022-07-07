@@ -7,17 +7,19 @@ export const fetcher = (...args) => fetch(args[0], args[1] ? args[1] : {}).then(
     return
   }
 
+  let json;
+
   try {
-    const json = JSON.parse(text)
-
-    if (error && json.message) {
-      throw new Error(json.message)
-    }
-
-    return json;
+    json = JSON.parse(text)
   } catch (error) {
     throw new Error('Server error.')
   }
+
+  if (error && json.message) {
+    throw new Error(json.message)
+  }
+
+  return json;
 })
 
 export const getCookie = name => {
@@ -258,4 +260,24 @@ export const secondsToTimeLabel = (seconds, labels = ['h', 'm', 's']) => {
   const mLabel = m ? `${m} ${labels[1]} ` : '';
 
   return `${hLabel}${mLabel}${s} ${labels[2]}`
+}
+
+export const nameSort = function(a, b) {
+  if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+  if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+
+  return 0;
+}
+export const scoreSort = function(ca, cb) {
+  if (ca.score < cb.score) return 1;
+  if (ca.score > cb.score) return -1;
+
+  if (ca.candidate.name < cb.candidate.name) return -1;
+  if (ca.candidate.name > cb.candidate.name) return 1;
+
+  return 0;
+}
+
+export const buildSearchQuery = (params) => {
+  return Object.keys(params).map(key => key + '=' + (params[key] === null ? '' : params[key])).join('&')
 }

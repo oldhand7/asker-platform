@@ -5,6 +5,8 @@ import Content from 'components/Content/Content';
 import { useSite } from 'libs/site';
 import { useState, useEffect } from 'react';
 import { useUser } from 'libs/user';
+import Alert from 'components/Alert/Alert';
+
 import styles from './default-layout.module.scss';
 
 const DefaultLayout = ({ children }) => {
@@ -50,7 +52,7 @@ const DefaultLayout = ({ children }) => {
   return (
     <Container className={styles['layout-container']}>
       <Navbar />
-      <Content>{children}</Content>
+      <Content>{user && user.disabled ? <Alert className={styles['layout-account-disabled']}>Your account has been deactivated. Please reach out to info@askertech.com if you want to reactivate your account.</Alert> : children}</Content>
       <Footer />
       {process.env.NEXT_PUBLIC_APP_ENV == 'beta' ? <span className="beta-label">Staging server</span> : null}
     </Container>
