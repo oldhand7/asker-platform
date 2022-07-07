@@ -6,9 +6,12 @@ import { withIronSessionSsr } from 'iron-session/next';
 export const sessionOptions = {
     cookieName: "__session",
     password: process.env.SESSION_SECRET,
-    cookieOptions: {
-      secure: process.env.APP_ENV === "production",
-    }
+    cookieOptions: (() => {
+      return {
+        secure: process.env.APP_ENV === "production",
+        domain: process.env.APP_ENV == "production" ? "askertech.com" : "localhost"
+      }
+    })()
 }
 
 export const withUserGuard = (handler, superadmin = false) => (req, res) => {
