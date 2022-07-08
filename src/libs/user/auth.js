@@ -91,6 +91,9 @@ export const useAuth = () => {
             throw new Error(error.message)
           }
         })
+        .catch(error => {
+          throw new Error('Email or password invalid.')
+        })
       })
   }
 
