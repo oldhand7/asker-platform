@@ -93,6 +93,9 @@ export const useAuth = () => {
           }
         })
       })
+      .catch(() => {
+        throw new Error('Email or password invalid.')
+      })
   }
 
   const logout = async () => {

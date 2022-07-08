@@ -8,6 +8,7 @@ import ArrowSharpLeftIcon from 'components/Icon/ArrowSharpLeftIcon';
 import ArrowSharpRightIcon from 'components/Icon/ArrowSharpRightIcon';
 
 import style from './ProjectInterviewCompare.module.scss';
+import UpDownButton from 'components/UpDownButton/UpDownButton';
 
 const labels = {
     'screening-questions': 'Screening',
@@ -20,12 +21,27 @@ const labels = {
     'experience': 'Experience'
 }
 
+const hasChildren = (type, evaluation) => {
+    const screeningType = type == 'screening-questions' || type == 'other-questions';
+
+    let exclude = null;
+
+    if (screeningType) {
+        exclude = evaluation.find(({question}) => question.subtype == 'choice')
+    }
+
+    const hasChildren = evaluation.children || (screeningType && (!exclude || exclude && evaluation.length -1 > 0))
+
+    return hasChildren
+}
+
 const ProjectInterviewCompare = ({ className, compare = [], project, onCompareAdd, onCompareRemove, onCompare }) => {
     const [details, setDetails] = useState([]);
     const [activeRows, setActiveRows] = useState({});
     const [heights, setHeights] = useState({});
     const [offset, setOffset] = useState(0);
     const [_compare, setCompare] = useState(compare);
+    const [childStat, setChildStat] = useState({})
 
     useLayoutEffect(() => {
         const details = []
@@ -167,6 +183,18 @@ const ProjectInterviewCompare = ({ className, compare = [], project, onCompareAd
         }
     }, [offset, _compare])
     
+    useEffect(() => {
+        const childStat = {}
+
+        for (let i = 0; i < details.length; i++) {
+            const { type, evaluations } = details[i];
+
+            childStat[type] = evaluations.some(evaluation => hasChildren(type, evaluation));
+        }
+
+        setChildStat(childStat)
+    }, [details])
+
     return <div data-test-id="project-interview-compare" className={classNames(
         style['project-interview-compare'],
         _compare.length - offset > 4 ? style['project-interview-compare-has-children-right'] : '',
@@ -179,8 +207,10 @@ const ProjectInterviewCompare = ({ className, compare = [], project, onCompareAd
             </div>
             <div className={style['project-interview-compare-sidebar-body']}>
             {details.map(({ type }) => {
-                return <div key={`${type}`} style={{ minHeight: `${heights[type]|| 0}px`}} className={style['project-interview-compare-sidebar-evaluation-label']}>
-                    {labels[type]}</div>
+                return <div onClick={() => handleRowToggle(type)} key={`${type}`} style={{ minHeight: `${heights[type]|| 0}px`}} className={style['project-interview-compare-sidebar-evaluation-label']}>
+                    <span>{labels[type]}</span>
+                    {childStat[type] ? <UpDownButton on={activeRows[type]} className={style['project-interview-compare-sidebar-arrow']} /> : ''}
+                    </div>
             })}
             </div>
         </div>

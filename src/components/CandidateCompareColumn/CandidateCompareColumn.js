@@ -21,7 +21,6 @@ function getAbsoluteHeight(el) {
   }
 
 const TinyTrashButton  = ({ onClick, className }) => (<button data-test-id="trash-button" onClick={onClick} className={className}>
-<span className={styles['candidate-compare-column-delete-text']}>Delete</span>
 <TrashIcon className={styles['candidate-compare-column-delete-icon']} />
 </button>)
 
@@ -74,7 +73,7 @@ return <div data-test-id="candidate-compare-column" className={classNames(
         {...dragProps.dragHandleProps}
     >
         <div className={styles['candidate-compare-column-head']}>
-            <h4 className={styles['candidate-compare-column-title']}>{compare.candidate.name}</h4>
+            <h4 className={styles['candidate-compare-column-title']} title={compare.candidate.name}>{compare.candidate.name}</h4>
             <InterviewScore className={styles['candidate-compare-column-score']} score={compare.score || 0} />
             <TinyTrashButton className={styles['candidate-compare-column-delete']} onClick={onDelete}/>
         </div>
