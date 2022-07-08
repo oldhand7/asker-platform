@@ -29,31 +29,48 @@ handler.post(async (req, res) => {
     return;
   }
 
+  let user;
+
   try {
-    const user = await getAuth(app)
+    user = await getAuth(app)
       .createUser({
         email: body.email,
         displayName: body.email, //this will help avoid update loops later
         password: body.password
       })
+    } catch (error) {
+      res.status(500).json({
+        message: "Creating user failed",
+        details: `E1: ${error.message}`
+      })
+    }
 
+    let company;
 
-    const company = await getSingleDocument(
-      'companies',
-      req.session.user.companyId || ' '
-    )
+    try {
+      company = await getSingleDocument(
+        'companies',
+        req.session.user.companyId || ' '
+      )
+    } catch (error) {
+      res.status(500).json({
+        message: "Creating user failed",
+        details: `E2: ${error.message}`
+      })
+    }
+  
+    try {
+      await sendInvitationEmail(body.email, body.password, company)
 
-    await sendInvitationEmail(body.email, body.password, company)
-
-    res.status(200).json({
-      uid: user.uid
-    })
-  } catch (error) {
-    res.status(500).json({
-      message: "Creating user failed.",
-      details: error.message
-    })
-  }
+      res.status(200).json({
+        uid: user.uid
+      })
+    } catch (error) {
+      res.status(500).json({
+        message: "Creating user failed",
+        details: `E3: ${error.message}`
+      })
+    }
 })
 
 handler.put((req, res) => {
