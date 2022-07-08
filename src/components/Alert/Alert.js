@@ -2,11 +2,15 @@ import { useState } from 'react';
 import classNames from 'classnames';
 import styles from './Alert.module.scss';
 
-const Alert = ({ type = 'danger' , children, className, close = true }) => {
+const Alert = ({ type = 'danger' , html = false, children, className, close = true }) => {
   const [open, setOpen] = useState(true);
 
   return open ? <div data-test-id={`alert-${type}`} className={classNames(styles['alert'], className, styles[`alert-${type}`])}>
+    {
+    html ?
+    <div className={styles['alert-message']} dangerouslySetInnerHTML={{__html: children}}></div> :
     <div className={styles['alert-message']}>{children}</div>
+    }
 
     {
       close ?

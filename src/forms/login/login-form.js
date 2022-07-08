@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import TextInputField from 'components/TextInputField/TextInputField';
 import PasswordInputField from 'components/PasswordInputField/PasswordInputField';
 import Button from 'components/Button/Button';
-import { ctxError } from 'libs/helper';
+import { ctxError, textToMailtoHtml } from 'libs/helper';
 import Link from 'next/link';
 
 import styles from './login-form.module.scss';
@@ -52,7 +52,7 @@ const LoginForm  = ({ className, authFunction, onSuccess }) => {
     }
 
     return <form data-test-id="login-form" className={getClassNames()} onSubmit={control.submit(handleFormValues)}>
-        {error ? <Alert type="danger">{error.message}</Alert> : null}
+        {error ? <Alert type="danger" html={true}>{textToMailtoHtml(error.message)}</Alert> : null}
 
         <TextInputField value={values.username} className={styles['login-form-input-field']} label="Email" name="email" error={errors && errors.username} placeholder="Email"  onChange={control.input('username')}  />
         <PasswordInputField value={values.password} className={styles['login-form-input-field']} label="Password" name="password" error={errors && errors.password} placeholder="Password"  onChange={control.input('password')}  />

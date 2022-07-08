@@ -237,3 +237,8 @@ export const projectStageQuestionsReducer = (questions, stage) => {
     ...(stage.questions ? stage.questions : [])
   ]
 }
+
+export const textToMailtoHtml = (text) => {
+  const html = text.replace(/([^\s]+@[^\s]+)/g, '<a href="mailto:$1">$1</a>')
+  return html
+}
