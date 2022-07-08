@@ -35,6 +35,12 @@
             line-height: 21rem;
             color: #494949;
             border-bottom: 1px solid #D5D5D5;
+            position: relative;
+        }
+
+        & &-arrow {
+            position: absolute;
+            right: 24rem
         }
     }
 
