@@ -38,39 +38,37 @@ handler.post(async (req, res) => {
         displayName: body.email, //this will help avoid update loops later
         password: body.password
       })
-    } catch (error) {
-      res.status(500).json({
-        message: "Creating user failed",
-        details: `E1: ${error.message}`
-      })
-    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Creating user failed",
+      details: error.message
+    })
 
-    let company;
+    return;
+  }
 
-    try {
-      company = await getSingleDocument(
-        'companies',
-        req.session.user.companyId || ' '
-      )
-    } catch (error) {
-      res.status(500).json({
-        message: "Creating user failed",
-        details: `E2: ${error.message}`
-      })
-    }
-  
-    try {
-      await sendInvitationEmail(body.email, body.password, company)
+  if (!user) {
+    res.status(500).json({
+      message: "Creating user failed"
+    })
+  }
 
-      res.status(200).json({
-        uid: user.uid
-      })
-    } catch (error) {
-      res.status(500).json({
-        message: "Creating user failed",
-        details: `E3: ${error.message}`
-      })
-    }
+  try {
+    const company = await getSingleDocument(
+      'companies',
+      req.session.user.companyId || ' '
+    )
+
+    await sendInvitationEmail(body.email, body.password, company)
+  } catch (error) {
+    console.log(error.message)
+
+    return;
+  }
+
+  res.status(200).json({
+    uid: user.uid
+  })
 })
 
 handler.put((req, res) => {

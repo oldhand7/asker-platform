@@ -29,11 +29,6 @@ export const sendCustomPasswordResetEmail = async (email, link) => {
 }
 
 export const sendInvitationEmail = async (email, password, company) => {
-  console.log('DEBUG: ' + process.env.SMTP_HOST)
-  console.log('DEBUG: ' + process.env.SMTP_PORT)
-  console.log('DEBUG: ' + process.env.SMTP_PORT)
-  console.log('DEBUG: ' + process.env.NEXT_PUBLIC_NOREPLY_EMAIL)
-
   let htmlMessage = '';
 
   if (company && company.id != 'asker') {
