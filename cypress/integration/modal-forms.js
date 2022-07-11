@@ -25,7 +25,7 @@ describe('Modal froms', () => {
     cy.get('[data-test-id="stage-2"]')
       .should('contain', 'Competency based questions')
 
-    cy.contains('Create new question').click().wait(1000)
+    cy.contains('Create').click().wait(1000)
 
     cy.get('#evaluation-question-modal')
       .should('exist')
@@ -164,7 +164,7 @@ describe('Modal froms', () => {
     cy.get('#feature-select-modal')
       .should('not.exist')
 
-    cy.contains('Create new question').click()
+    cy.contains('Create').click()
 
     cy.get('#screening-question-modal').should('exist')
 

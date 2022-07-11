@@ -22,9 +22,9 @@ describe('Updating queestions', () => {
           cy.get('table tbody').last()
             .should('not.contain', 'Question 123')
 
-          cy.get('table tbody').first()
+          cy.get('ul').first()
             .contains('Question 123')
-            .closest('tr')
+            .closest('li')
             .find('button')
             .click()
 
@@ -98,9 +98,9 @@ describe('Updating queestions', () => {
           cy.get('table tbody').last()
             .should('not.contain', 'Question ABC')
 
-          cy.get('table tbody').first()
+          cy.get('ul').first()
             .contains('Question ABC')
-            .closest('tr')
+            .closest('li')
             .find('button')
             .click()
 

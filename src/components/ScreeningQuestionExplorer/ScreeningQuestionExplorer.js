@@ -1,17 +1,25 @@
 import classNames from 'classnames';
 import { useState, useEffect } from 'react';
-import FilterButton from 'components/Button/FilterButton';
 import OutlineButton from 'components/Button/OutlineButton';
 import LiveSearch from 'components/LiveSearchWidget/LiveSearchWidget';
 import { useUser } from 'libs/user';
-import ScreeningQuestionsTable from 'components/ScreeningQuestionsTable/ScreeningQuestionsTable';
 import PlusIcon from 'components/Icon/PlusIcon';
 import { filterManyDocuments } from 'libs/firestore';
 import { getScreeningQuestionLabelBySubtype } from 'forms/screening-question/screening-question-form';
 import ScreeningQuestionModal from 'modals/screening-question/screening-question-modal';
 import { useModal } from 'libs/modal';
+import CheckboxButton from 'components/Button/CheckboxButton';
+import QuestionExplorerQuestionList from 'components/QuestionExplorerQuestionList/QuestionExplorerQuestionList';
+import QuestionExplorerOption from 'components/QuestionExplorerOption/QuestionExplorerOption';
 
 import styles from './ScreeningQuestionExplorer.module.scss';
+
+const CreateButton = (props) => (
+  <OutlineButton className={styles['screening-question-explorer-create']} {...props}>
+  <PlusIcon className={styles['screening-question-explorer-create-icon']} />
+  <span className={styles['screening-question-explorer-create-text']}>Create</span>
+</OutlineButton>
+)
 
 const ScreeningQuestionExplorer = ({ className, criteria, questions, onQuestions, label = '', type = 'screening' }) => {
   const { user } = useUser();
@@ -99,29 +107,32 @@ const ScreeningQuestionExplorer = ({ className, criteria, questions, onQuestions
       <h3 className={styles['screening-question-explorer-title']}>Search question</h3>
     }
 
-    <div className={styles['screening-question-explorer-widget']}>
-      <div className={styles['screening-question-explorer-widget-header']}>
-        <div className={styles['screening-question-explorer-controls']}>
-          <div className={styles['screening-question-explorer-company-filter']}>
-            <FilterButton className={styles['screening-question-explorer-company-filter-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker questions</FilterButton>
-            <FilterButton theme='grape' className={styles['screening-question-explorer-company-filter-button']} active={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user && user.companyId)}>Your questions</FilterButton>
-          </div>
+    <div className={styles['screening-question-explorer-wrapper']}>
+      <div className={styles['screening-question-explorer-head']}>
+        <div className={styles['screening-question-explorer-control']}>
+            <div className={styles['screening-question-explorer-company-filter']}>
+              <CheckboxButton theme='green' className={styles['screening-question-explorer-company-filter-button']} checked={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker questions</CheckboxButton>
+              <CheckboxButton theme='dark' className={styles['screening-question-explorer-company-filter-button']} checked={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user && user.companyId)}>Your questions</CheckboxButton>
+            </div>
 
-          <OutlineButton className={styles['screening-question-explorer-add-question']} onClick={() => openScreeningQuestionModal(handleNewQuestion)}><PlusIcon /> Create new question</OutlineButton>
+            <LiveSearch className={styles['screening-question-explorer-live-search']} q={filter.q} onQuery={q => setFilter({ ...filter, q})} />
+            <CreateButton onClick={() => openScreeningQuestionModal(handleNewQuestion)}/>
         </div>
 
         <div data-test-id="subtype-filter" className={styles['screening-question-explorer-type-filter']}>
-          <FilterButton theme='' className={styles['screening-question-explorer-type-filter-button']} active={filter.type.indexOf('choice') > -1} onClick={() => toggleType('choice')}>{getScreeningQuestionLabelBySubtype('choice')}</FilterButton>
-          <FilterButton theme='' className={styles['screening-question-explorer-type-filter-button']} active={filter.type.indexOf('multichoice') > -1} onClick={() => toggleType('multichoice')}>{getScreeningQuestionLabelBySubtype('multichoice')}</FilterButton>
-          <FilterButton theme='' className={styles['screening-question-explorer-type-filter-button']} active={filter.type.indexOf('range') > -1} onClick={() => toggleType('range')}>{getScreeningQuestionLabelBySubtype('range')}</FilterButton>
-          <FilterButton theme='' className={styles['screening-question-explorer-type-filter-button']} active={filter.type.indexOf('text') > -1} onClick={() => toggleType('text')}>{getScreeningQuestionLabelBySubtype('text')}</FilterButton>
+          <QuestionExplorerOption className={styles['screening-question-explorer-type-filter-option']} active={filter.type.indexOf('choice') > -1} onClick={() => toggleType('choice')}>{getScreeningQuestionLabelBySubtype('choice')}</QuestionExplorerOption>
+          <QuestionExplorerOption className={styles['screening-question-explorer-type-filter-option']} active={filter.type.indexOf('multichoice') > -1} onClick={() => toggleType('multichoice')}>{getScreeningQuestionLabelBySubtype('multichoice')}</QuestionExplorerOption>
+          <QuestionExplorerOption className={styles['screening-question-explorer-type-filter-option']} active={filter.type.indexOf('range') > -1} onClick={() => toggleType('range')}>{getScreeningQuestionLabelBySubtype('range')}</QuestionExplorerOption>
+          <QuestionExplorerOption className={styles['screening-question-explorer-type-filter-option']} active={filter.type.indexOf('text') > -1} onClick={() => toggleType('text')}>{getScreeningQuestionLabelBySubtype('text')}</QuestionExplorerOption>
         </div>
-
-        <LiveSearch className={styles['screening-question-explorer-live-search']} q={filter.q} onQuery={q => setFilter({ ...filter, q})} />
       </div>
 
-      <div className={styles['screening-question-explorer-widget-body']}>
-        <ScreeningQuestionsTable className={styles['screening-question-explorer-widget-table']} onQuestion={handleQuestionAdd} data={filteredQuestions} />
+      <div className={styles['screening-question-explorer-body']}>
+        {
+        filteredQuestions.length ?
+        <QuestionExplorerQuestionList className={styles['screening-question-explorer-list']} onQuestion={handleQuestionAdd} questions={filteredQuestions} /> :
+        <p className={styles['screening-question-explorer-empty']}>No questions.</p>
+        }
       </div>
     </div>
   </div>

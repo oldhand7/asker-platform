@@ -152,27 +152,27 @@ describe('Other questions', () => {
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
-          cy.get('h3').should('contain', 'Search other question')
+          cy.get('h3').should('contain', 'Other')
 
-          cy.get('table').first()
-            .find('tbody tr')
+          cy.get('ul').first()
+            .find('li')
             .should('have.length', 4)
             .parent()
             .within(() => {
               //Sorted by ABC
-              cy.get('tr').eq(0)
+              cy.get('li').eq(0)
                 .should('contain', 'Do you like fruits?')
                 .should('contain', 'Yes/No')
 
-              cy.get('tr').eq(1)
+              cy.get('li').eq(1)
                 .should('contain', 'How deep is Atlantic Ocean?')
                 .should('contain', 'Range')
 
-              cy.get('tr').eq(2)
+              cy.get('li').eq(2)
                 .should('contain', 'What is the meaning of life?')
                 .should('contain', 'Text')
 
-              cy.get('tr').eq(3)
+              cy.get('li').eq(3)
                 .should('contain', 'What music do you like?')
                 .should('contain', 'Multiple choice')
             })
@@ -180,8 +180,8 @@ describe('Other questions', () => {
           cy.get('[data-test-id="subtype-filter"] button').eq(0)
             .should('contain', 'Yes/No').click()
 
-          cy.get('table').first()
-            .find('tbody tr')
+          cy.get('ul').first()
+            .find('li')
             .should('have.length', 1)
             .first()
             .should('contain', 'Do you like fruits?')
@@ -192,8 +192,8 @@ describe('Other questions', () => {
           cy.get('[data-test-id="subtype-filter"] button').eq(1)
             .should('contain', 'Multiple choice').click()
 
-          cy.get('table').first()
-            .find('tbody tr')
+          cy.get('ul').first()
+            .find('li')
             .should('have.length', 1)
             .first()
             .should('contain', 'What music do you like?')
@@ -204,8 +204,8 @@ describe('Other questions', () => {
           cy.get('[data-test-id="subtype-filter"] button').eq(3)
             .should('contain', 'Text').click()
 
-          cy.get('table').first()
-            .find('tbody tr')
+          cy.get('ul').first()
+            .find('li')
             .should('have.length', 3)
             .first()
             .should('not.contain', 'Do you like fruits?')
@@ -213,17 +213,16 @@ describe('Other questions', () => {
           cy.get('[data-test-id="subtype-filter"] button').eq(0)
             .should('contain', 'Yes/No').click()
 
-          cy.get('table').first()
-            .find('tbody tr')
+          cy.get('ul').first()
+            .find('li')
             .should('have.length', 4)
 
-          cy.get('table').first()
-            .find('tbody')
+          cy.get('ul').first()
             .within(() => {
-              cy.get('tr').first().find('button').click()
-              cy.get('tr').first().find('button').click()
-              cy.get('tr').first().find('button').click()
-              cy.get('tr').first().find('button').click()
+              cy.get('li').first().find('button').click()
+              cy.get('li').first().find('button').click()
+              cy.get('li').first().find('button').click()
+              cy.get('li').first().find('button').click()
             })
 
           cy.get('table').last()

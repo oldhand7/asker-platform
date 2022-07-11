@@ -1,6 +1,4 @@
 import classNames from 'classnames';
-import { getScreeningQuestionLabelBySubtype } from 'forms/screening-question/screening-question-form';
-import TrashButton from 'components/TrashButton/TrashButton';
 import EvaluationQuestionsTable from 'components/EvaluationQuestionsTable/EvaluationQuestionsTable';
 import ScreeningQuestionsTable from 'components/ScreeningQuestionsTable/ScreeningQuestionsTable';
 

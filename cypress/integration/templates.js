@@ -77,9 +77,9 @@ describe('Templates', () => {
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
-        cy.get('input').first().type('Sample questione')
+        cy.get('input[name="q"]').first().type('Sample questione')
 
-        cy.get('table').first()
+        cy.get('ul').first()
           .find('button[data-test-id="add-question"]').first()
           .click()
       })

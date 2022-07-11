@@ -50,7 +50,6 @@
   }
 
   &-details-inner {
-    max-width: 505rem;
   }
 
   &-title {
@@ -87,19 +86,16 @@
     &-name {
       width: 360rem;
     }
-
-    &-stages {
-
-
-    }
   }
 
   &-stager {
     margin-top: 20rem !important;
-
-    &-feature-form {
-      margin-top: 24rem;
-    }
+    max-width: 505rem;
+  }
+  
+  &-feature-form {
+    margin-top: 24rem;
+    max-width: 650rem;
   }
 
   &-submit {

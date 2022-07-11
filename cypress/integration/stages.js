@@ -148,7 +148,7 @@ describe('Stages', () => {
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
-            cy.get('table').first()
+            cy.get('ul').first()
             .within(() => {
               cy.get('button').first().click()
               cy.get('button').first().click()
@@ -195,7 +195,7 @@ describe('Stages', () => {
       
       cy.get('[data-test-id="feature-form"]')
       .within(() => {
-          cy.get('table').first()
+          cy.get('ul').first()
           .within(() => {
             cy.get('button').first().click()
             cy.get('button').first().click()

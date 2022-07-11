@@ -39,8 +39,8 @@ const ScreeningQuestionStageForm = ({ className, values, onValues, feature, onEr
   }, [formValues, errors])
 
   return <div className={classNames(styles['screening-question-stage-form'], className)}>
-    <ScreeningQuestionExplorer label='Search screening question' questions={formValues.questions} onQuestions={control.input('questions', false)} type='screening' />
-    <SelectedQuestionsList feature={feature} questions={formValues.questions} onChange={control.input('questions', false)} />
+    <ScreeningQuestionExplorer className={styles['screening-question-stage-form-question-explorer']} label='Screening' questions={formValues.questions} onQuestions={control.input('questions', false)} type='screening' />
+    <SelectedQuestionsList className={styles['screening-question-stage-form-question-selection']} feature={feature} questions={formValues.questions} onChange={control.input('questions', false)} />
   </div>
 }
 

@@ -33,8 +33,8 @@ const OtherQuestionStageForm = ({ className, values, onValues, feature, onError 
   }, [formValues, errors])
 
   return <div className={classNames(styles['other-question-stage-form'], className)}>
-    <ScreeningQuestionExplorer label='Search other question' questions={formValues.questions} onQuestions={control.input('questions', false)} type='other' />
-    <SelectedQuestionsList feature={feature} questions={formValues.questions} onChange={control.input('questions', false)} />
+    <ScreeningQuestionExplorer className={styles['other-question-stage-form-question-explorer']} label='Other' questions={formValues.questions} onQuestions={control.input('questions', false)} type='other' />
+    <SelectedQuestionsList className={styles['other-question-stage-form-question-explorer']} feature={feature} questions={formValues.questions} onChange={control.input('questions', false)} />
   </div>
 }
 

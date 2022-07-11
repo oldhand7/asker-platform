@@ -64,7 +64,7 @@ describe('Interview', () => {
     cy.get('[data-test-id="stage-6"] [data-test-id="load-button"]').click()
     cy.get('#feature-select-modal').contains('Screening').click()
     cy.get('[data-test-id="feature-form"]')
-      .find('table').first()
+      .find('ul').first()
       .find('button[data-test-id="add-question"]').first()
       .click()
 

@@ -1,57 +1,93 @@
 @import 'styles/vars';
 
 .screening-question-explorer {
-  &-title {
-
+  & &-title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24rem;
+    line-height: 36rem;
+    color: #282828;
+    margin-bottom: 16rem;
   }
 
-  &-widget {
-    margin: 15rem 0;
-
-    &-header {
-      margin: 15rem 0;
-    }
-
-    &-body {
-      border-radius: 10px;
-      border: 1px solid $brandish-grey;
-      padding: 5rem;
-      max-height: 450rem;
-      overflow-y: scroll;
-    }
+  &-wrapper {
+    padding: 16rem 16rem 8rem 16rem;
+    border: 1px solid #43B88C;
+    border-radius: 7px;
   }
 
-  &-controls {
-    font-size: 14rem;
+  &-head {
+    margin-bottom: 0rem;
+  }
+
+  &-body {
+    max-height: 280rem;
+    overflow-y: scroll;
+  }
+
+  &-control {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10rem;
-    align-items: flex-end;
+    margin-bottom: 20rem;
+    align-items: center;
   }
 
   &-company-filter {
-    &-button {
-      margin-right: 5rem;
-    }
-  }
-
-  &-type-filter {
-    font-size: 14rem;
-    margin-bottom: 10rem;
+    display: flex;
+    margin-right: 8rem;
 
     &-button {
-      margin-right: 5rem;
-      line-height: 2;
+      margin-right: 8rem;
+      font-weight: 500;
+      font-size: 13rem;
+      line-height: 20rem;
+      height: 36rem;
     }
   }
 
   &-live-search {
     width: 100%;
+    line-height: 36rem;
+    height: 36rem;
+    margin-right: 16rem;
+
+    input {
+      background-color: #F6F6F6;
+      font-weight: 400;
+      font-size: 14rem;
+      line-height: 21rem;
+      padding: 0 32rem 0 16rem;
+      margin: 0;
+      border: 1px solid #DEDEDE;
+    }
   }
 
-  &-table {
-    table {
-      width: 100%;
+  &-create {
+    font-size: 12rem;
+    line-height: 18rem;
+    letter-spacing: 0.01em;
+    color: #282828;
+    line-height: 36rem;
+    padding: 0 12rem;
+    border: 1px solid #43B88C;
+
+    &-icon {
+      font-size: 0.8em;
     }
+  }
+
+  &-type-filter {
+    margin-bottom: 8rem;
+
+    &-option {
+      margin-right: 8rem;
+    }
+  }
+
+
+  &-empty {
+    margin-top: 8rem;
+    font-size: 14rem;
+    color: #5B5B5B;
   }
 }
