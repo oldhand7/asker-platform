@@ -31,7 +31,7 @@
 
 
   &-stages {
-    height: calc(100% - 56rem);
+    height: calc(100% - 48rem);
     overflow-y: auto;
     padding-right: 10rem;
     position: relative;
@@ -100,8 +100,8 @@
   &-complete {
     width: calc(100% - 32rem);
     margin: 0;
-    height: 56rem;
-    line-height: 56rem;
+    height: 48rem;
+    line-height: 48rem;
     border-radius: 5px 5px 0 0;
     cursor: pointer;
     display: block;

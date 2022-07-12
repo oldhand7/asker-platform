@@ -239,7 +239,6 @@ describe('Interview', () => {
       })
     
     cy.contains('Process overview')
-      .click()
       .closest('div[data-test-id="interview-process-overview"]')
       .within(() => {
         cy.contains('Questions').closest('div')
