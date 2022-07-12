@@ -4,7 +4,7 @@ import { withIronSessionSsr } from 'iron-session/next';
 // export const longTtl = 3600 * 24 * 30;
 
 export const sessionOptions = {
-    cookieName: `__session_${process.env.APP_ENV}`,
+    cookieName: '__session',
     password: process.env.SESSION_SECRET,
     cookieOptions: {
       secure: process.env.APP_ENV === "production",
