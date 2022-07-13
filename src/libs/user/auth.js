@@ -1,7 +1,7 @@
-import { getApp } from 'libs/firebase';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
+import { getAuth } from 'libs/firebase/auth';
+import { signInWithEmailAndPassword, onAuthStateChanged, signOut,
 updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider, browserLocalPersistence,
-setPersistence } from "firebase/auth";
+setPersistence, connectAuthEmulator } from "firebase/auth";
 import { useState, useEffect } from 'react';
 import { saveCollectionDocument } from 'libs/firestore';
 import { createPairSession } from 'libs/api';
@@ -65,7 +65,8 @@ export const useAuth = () => {
       return;
     }
 
-    const auth = getAuth(getApp())
+    const auth = getAuth()
+
     const unlisten = onAuthStateChanged(auth, userBoot)
 
     return () => unlisten();
@@ -75,7 +76,7 @@ export const useAuth = () => {
   const login = (email, password) => {
     setWait(true);
 
-    const auth = getAuth(getApp());
+    const auth = getAuth();
 
     return setPersistence(auth, browserLocalPersistence)
       .then(() => {
@@ -95,10 +96,13 @@ export const useAuth = () => {
           throw new Error('Email or password invalid.')
         })
       })
+      .catch(() => {
+        throw new Error('Email or password invalid.')
+      })
   }
 
   const logout = async () => {
-    const auth = getAuth(getApp());
+    const auth = getAuth();
 
     return signOut(auth)
   }

@@ -1,7 +1,22 @@
-import { getApp, getUser } from 'libs/firebase';
-import { getFirestore, collection, query, where, getDocs, setDoc, doc, Timestamp,
-orderBy, limit, deleteDoc, getDoc } from 'firebase/firestore/lite';
+import { getUser } from 'libs/firebase/auth';
+import { getApp } from 'libs/firebase/app';
+import { getFirestore as getFirestore1, collection, query, where, getDocs, setDoc, doc, Timestamp,
+orderBy, limit, deleteDoc, getDoc, connectFirestoreEmulator } from 'firebase/firestore/lite';
 import { snap2data } from 'libs/helper';
+
+let EMULATED = false;
+
+const getFirestore = app => {
+  const db = getFirestore1(app);
+
+  if (!EMULATED && process.env['NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST']) {
+    const parts = process.env['NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST'].split(':');
+    connectFirestoreEmulator(db, ...parts);
+    EMULATED = true;
+  }
+
+  return db;
+}
 
 export const saveCollectionDocument = (col, values = {})  => {
   const db = getFirestore(getApp());

@@ -1,12 +1,10 @@
 import classNames from 'classnames';
 import ChoiceQuestionIntForm from 'forms/choice-question-int/choice-question-int-form';
-import useForm from 'libs/use-form';
-import NextButton from 'components/Button/NextButton';
+import {useForm} from 'libs/form';
 import { useEffect } from 'react';
 import MultichoiceQuestionIntForm from 'forms/multichoice-question-int/multichoice-question-int-form';
 import RangeQuestionIntForm from 'forms/range-question-int/range-question-int-form';
 import TextQuestionIntForm from 'forms/text-question-int/text-question-int-form';
-import { handleNext } from 'libs/helper';
 import styles from './other-questions-int-form.module.scss';
 
 const questionForms = {
@@ -18,8 +16,8 @@ const questionForms = {
 
 const rules = {}
 
-const OtherQuestionsIntForm = ({ last = false, nextId, className, values, onValues, config }) => {
-  const [formValues, errors, control] = useForm({
+const OtherQuestionsIntForm = ({ className, markComplete, values, onValues, config }) => {
+  const { values: formValues, control } = useForm({
     values,
     rules
   })
@@ -28,7 +26,23 @@ const OtherQuestionsIntForm = ({ last = false, nextId, className, values, onValu
     onValues(formValues)
   }, [formValues])
 
+  useEffect(() => {
+    if (!config || !config.questions) {
+      return;
+    }
+ 
+    const complete = config.questions.every(q => {
+      //Consider text questions complete if they are among many
+      return formValues[q.id] || (config.questions.length > 1 && q.subtype == 'text')
+    })
+
+    if (complete) {
+      markComplete();
+    }
+  }, [formValues, config])
+
   return <div className={classNames(styles['other-questions-int-form'], className)}>
+    <div className={styles['other-questions-int-form-questions']}>
     {config.questions
       .map(q => {
         const QuestionFormCompnent = questionForms[q.subtype];
@@ -43,8 +57,7 @@ const OtherQuestionsIntForm = ({ last = false, nextId, className, values, onValu
         </div>
       })
     }
-
-    {!last ? <NextButton  onClick={() => handleNext(nextId)} className={styles['other-questions-int-form-submit']}  /> : null}
+    </div>
   </div>
 }
 

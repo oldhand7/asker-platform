@@ -5,6 +5,7 @@
 @import 'format';
 @import './jodit-theme';
 @import './admin';
+@import 'react-popper-tooltip/dist/styles.css';
 
 // @import 'debug';
 
@@ -14,6 +15,7 @@
 
   @media (max-width: 1920px) {
     font-size: calc(0.75 * 100vw / 1440);
+    --container-width: 70%;
   }
 
   @media (max-width: 1600px) {
@@ -22,8 +24,8 @@
   }
 
   @media (max-width: 1440px) {
-    font-size: calc(0.95 * 100vw / 1440);
-    --container-width: 80%;
+    font-size: calc(1 * 100vw / 1440);
+    --container-width: 1310rem;
   }
 
   @media (max-width: 1200px) {
@@ -125,4 +127,47 @@ h1, h2, h3, h4, h5 {
   color: white;
   padding: 2px 4px;
   border-radius: 0px 4px 0px 0px;
+}
+
+.tooltip-arrow {
+  margin-top: -10rem !important;
+  height: 1em;
+  width: 1em;
+}
+
+.tooltip-container {
+  padding: 10rem;
+  border-radius: 7px;
+  font-size: 12rem;
+  line-height: 1.2;
+  border: 0;
+  max-width: 420rem;
+}
+
+
+.tooltip-container[data-popper-placement*="bottom"] .tooltip-arrow::before {
+    border-width: 0 10rem 12rem 10rem;
+    border-color: transparent transparent white transparent;
+    position: absolute;
+}
+
+.tooltip-container[data-popper-placement*="bottom"] .tooltip-arrow::after {
+    border-color: transparent transparent var(--tooltipBackground) transparent;
+    border-width: 0 11rem 11rem 11rem;
+    display: none;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.firebase-emulator-warning {
+  width: 10px !important;
+  height: 10px !important;
+  font-size: 0;
+  background: red !important;
+  display: block;
+  top: 0;
 }

@@ -36,7 +36,7 @@ const CompanyPresentationStageForm = ({ values, className, onValues, onError }) 
 
   const handleFiles = (newFiles) => {
     control.set('files', [
-      ...values.files,
+      ...formValues.files,
       ...newFiles
     ])
   }

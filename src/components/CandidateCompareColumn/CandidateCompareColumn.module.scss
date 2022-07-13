@@ -1,0 +1,120 @@
+.candidate-compare-column {
+    overflow-x: hidden;
+
+    &-head {
+        height: 108rem;
+        border-bottom: 1px solid #D5D5D5;
+        padding-top: 5rem;
+        position: relative;
+        padding-left: 1px;
+    }
+
+    &-title {
+        font-size: 15rem;
+        font-weight: 500;
+        line-height: 24rem;
+        color: #5B5B5B;
+        max-width: calc(80% - 16rem);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow:ellipsis;
+    }
+
+    &-score {
+        width: 48rem;
+        height: 48rem;
+        font-size: 12rem;
+        margin-top: 8rem;
+    }
+
+    &-evaluation {
+        &-head {
+            padding: 16rem 0;
+            font-weight: 500;
+            font-size: 14rem;
+            color: #494949;
+            min-height: 53rem;
+        }
+
+        &-body {
+            padding-bottom: 16rem;
+        }
+
+        &-screening-popup-answer {
+            line-height: 1.2;
+            overflow-x: hidden;
+            max-width: 80%;
+        }
+
+        &-screening-answer {
+            flex-direction: column;
+            justify-content: flex-start !important;
+            align-items: flex-start !important;
+            margin-bottom: 10rem;
+        }
+
+        &-has-children {
+            cursor: pointer;
+        }
+
+        &-criteria-score {
+            width: 80%;
+
+            & > *:first-child {
+                flex: 1;
+            }
+        }
+
+        &-rating {
+            max-width: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 4rem 0 8rem;
+
+            &-name {
+                font-weight: 500;
+                font-size: 12rem;
+                line-height: 18rem;
+                color: #929292;
+            }
+
+            &-value {
+                width: 40rem;
+            }
+        }
+
+        border-bottom: 1px solid #D5D5D5;
+    }
+
+    &-delete {
+        font-size: 12rem;
+        line-height: 15rem;
+        font-weight: 500;
+        color: #929292;
+        position: absolute;
+        top: 8rem;
+        right: 20%; //@TODO: 20%
+        background: 0;
+        border: 0;
+        cursor: pointer;
+
+        &-text {
+            margin-right: 4rem;
+            vertical-align: middle;
+            display: none;
+        }
+
+        &-icon {
+            vertical-align: middle;
+        }
+
+        &:hover {
+            color: #E77272;
+
+            svg {
+                stroke: #E77272;
+            }
+        }
+    }
+}

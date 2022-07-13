@@ -40,9 +40,12 @@ const dataProvider = CustomDataProvider(firebaseConfig, {
      created_by: 'createdBy',
      updated_at: 'updatedAt',
      updated_by: 'updatedBy'
-   }
+   },
+   persistence: 'local'
 });
-const authProvider = CustomAuthProvider(firebaseConfig);
+const authProvider = CustomAuthProvider(firebaseConfig, {
+   persistence: 'local'
+});
 
 const AdminApp = () => {
     return <Admin  layout={Layout} theme={theme} authProvider={authProvider} dataProvider={dataProvider}>

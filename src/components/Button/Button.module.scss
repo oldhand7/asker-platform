@@ -5,7 +5,7 @@
   background: black;
   background: #000000;
   border-radius: 35px;
-  padding: 0 50rem;
+  padding: 0 20rem;
   border: 0;
   line-height: 3em;
   display: inline-block;
@@ -33,11 +33,13 @@
     cursor: pointer;
     border: 2px solid $brandish-tar;
     border-radius: 5px;
-    padding: 0 15rem;
-    line-height: calc(50rem - 4px);
+    padding: 0 11rem;
+    line-height: calc(56rem - 4px);
     background: 0;
     color: $brandish-tar;
     font-weight: 500;
+    font-size: 14rem;
+    letter-spacing: 0.01em;
 
     &-inner {
       line-height: 1;
@@ -50,17 +52,17 @@
 
     &-green {
       color: $brandish-green;
-      border: 2px solid $brandish-green;
+      border: 2px solid  #43B88C;
 
       &:hover {
-        background: rgba($brandish-green, 0.1);
+        background: rgba( #43B88C, 0.1);
       }
     }
 
     &-green[data-state="on"] {
       color: white;
-      background: $brandish-green;
-      border: 2px solid $brandish-green;
+      background:  #43B88C;
+      border: 2px solid  #43B88C;
     }
 
     &-grape {
@@ -77,15 +79,28 @@
       background: $brandish-grape;
       border: 2px solid $brandish-grape;
     }
+
+    &-dark {
+      border: 2px solid #282828;
+
+      &:hover {
+        background: rgba(#282828, 0.1);
+      }
+    }
+
+    &-dark[data-state="on"] {
+      color: white;
+      background: #282828;
+      border: 2px solid #282828;
+    }
   }
 
   &-outline {
     cursor: pointer;
     border: 1rem solid $brandish-tar;
-    line-height: calc(50rem - 2px);
+    line-height: calc(56rem - 2px);
     border-radius: 5px;
     padding: 0rem 15rem;
-    line-height: 48rem;
     background: 0;
     color: $brandish-tar;
     font-weight: 500;
@@ -111,21 +126,23 @@
   }
 
   &-next {
-    background: rgba($brandish-grey, 0.25);
+    background: #ECECEC;
     border-radius: 5px;
     width: 100%;
     display: block;
     color: $brandish-dark-green;
     cursor: pointer;
-    margin-top: 40rem;
+    margin-top: 30rem;
+    font-size: 14rem;
 
     &-icon {
       fill: currentColor;
       stroke: currentColor;
+      margin-left: 15rem;
     }
 
     &:hover {
-      background: rgba($brandish-grey, 0.15);
+      background: #eeeeee;
     }
   }
 

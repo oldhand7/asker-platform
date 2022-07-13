@@ -1,0 +1,32 @@
+.edit-input {
+  padding: 0 15rem;
+  white-space: nowrap;
+  min-width: 100rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &-input {
+
+  }
+
+  &-label {
+  }
+
+  &-icon {
+    margin-left: 5rem;
+  }
+
+  &-read {
+    cursor: pointer;
+  }
+
+  &-edit {
+    padding: 0;
+
+    input {
+      border: 0;
+      line-height: inherit;
+    }
+  }
+}

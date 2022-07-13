@@ -1,5 +1,5 @@
 import { getSettings } from 'libs/firestore-admin';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import Head from 'next/head';
 import { getSingleDocument, filterManyDocuments } from 'libs/firestore-admin'
@@ -19,6 +19,7 @@ import { ctxError } from 'libs/helper';
 import { unpackQuestions } from 'libs/project';
 
 import styles from 'styles/pages/project-overview.module.scss';
+import CompareBox from 'components/CompareBox/CompareBox';
 
 const defaultSort = [
   ['status', 'desc'], // complete, awaiting
@@ -33,6 +34,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
   const [error, setError] = useState(null);
   const flashSuccess = useFlash('success');
   const [success, setSuccess] = useState(null);
+  const [compare, setCompare] = useState([])
 
   useEffect(() => {
     if (flashSuccess) {
@@ -96,6 +98,19 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
         })
   }
 
+  const handleCompareInterview = (interview) => {
+    if (compare.indexOf(interview) > -1) {
+      setCompare([
+        ...compare.filter(c => c != interview)
+      ])
+    } else {
+      setCompare([
+        ...compare,
+        interview
+      ])
+    }
+  }
+
   useEffect(() => {
     if (success) {
       setTimeout(() => {
@@ -104,6 +119,11 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
     }
   }, [success])
 
+  const complateInterviews = useMemo(
+    () => _interviews.filter(i => i.status == 'complete'),
+    [_interviews]
+  ); 
+
   return <div className={styles['project-overview-page']}>
       <Head>
         <title>{project.name} - Project overview - Asker</title>
@@ -111,26 +131,57 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
       </Head>
 
       <div className={styles['project-overview-page-overview']}>
-        <h1 className={styles['project-overview-page-title']}>{project.name} <Link href={`/projects/${project.id}/edit`}><a className={styles['project-overview-page-title-edit-link']}>edit</a></Link></h1>
+        <div className={styles['project-overview-page-overview-head']}>
+          <h1 className={styles['project-overview-page-title']}>
+            {project.name} <Link href={`/projects/${project.id}/edit`}>
+              <a className={styles['project-overview-page-title-edit-link']}>edit</a></Link>
+          </h1>
+          <div>
+          <PlatformButton onClick={() => openCandidateModal(handleCandidate)} className={styles['project-overview-page-add-candidate']}>
+            <PlusIcon /> Add candidate</PlatformButton>
+          </div>
+        </div>
 
         {success ? <Alert type="success">{success}</Alert> : null}
+        {error ? <Alert type="error">{error.message}</Alert> : null}
 
+        <ProjectInterviewsTable
+          project={project}
+          onDelete={handleDeleteInterview}
+          className={styles['project-overview-page-interviews-table']}
+          data={_interviews}
+          emptyLabel='No interviews'
+          onCompare={handleCompareInterview}
+          compare={compare}
+          />
+      </div>
+
+      <div className={styles['project-overview-page-sidebar']}>
         <ProjectEvaluationCriteria className={styles['project-overview-page-evaluation-criteria']} project={project} />
 
         <div data-test-id="interviewers" className={styles['project-overview-page-interviewers']}>
-          <h2 className={styles['project-overview-page-interviewers-title']}>Assigned Interviewer</h2>
+          <h2 className={styles['project-overview-page-interviewers-title']}>Assigned Interviewers</h2>
           <ul className={styles['project-overview-page-interviewers-list']}>
             {project.interviewers.map(interviewer => <li className={styles['project-overview-page-interviewers-list-item']} key={interviewer.id}>{interviewer.name}</li>)}
           </ul>
         </div>
       </div>
 
-      {error ? <Alert type="error">{error.message}</Alert> : null}
+      <CompareBox
+        onCompare={handleCompareInterview}
+        onCompareAll={() => {
+         if (compare.length == complateInterviews.length) {
+          setCompare([])
+         } else {
+          setCompare([...complateInterviews])
+         }
+        }}
+        compare={compare}
+        interviews={complateInterviews}
+        className={styles['project-overview-page-compare']}
+        project={project}
+        />
 
-      <div className={styles['project-overview-page-interviews']}>
-        <PlatformButton onClick={() => openCandidateModal(handleCandidate)} className={styles['project-overview-page-interviews-add-candidate']}><PlusIcon /> Add candidate</PlatformButton>
-        <ProjectInterviewsTable project={project} onDelete={handleDeleteInterview} className={styles['project-overview-page-interviews-table']} data={_interviews} />
-      </div>
       {loading ? <Preloader /> : null}
   </div>
 }

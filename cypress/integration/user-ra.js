@@ -24,7 +24,7 @@ describe('User RA', () => {
       cy.get('#companyId').click()
       cy.contains('Dakota Holding').click()
       cy.get('input#password').type('test456')
-      cy.get('button[type="submit"]').click().wait(2000)
+      cy.get('button[type="submit"]').click().wait(1000)
 
       cy.hash().should('eq', '#/users')
 

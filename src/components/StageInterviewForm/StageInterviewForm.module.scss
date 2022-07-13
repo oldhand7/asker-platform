@@ -1,8 +1,9 @@
 .stage-interview-form {
-  min-height: 100vh;
-  padding-top: 40rem;
+  position: relative;
 
-  &-last {
-    min-height: 50vh;
+  &-timer {
+    position: absolute;
+    right: 10rem;
+    top: 5rem;
   }
 }

@@ -96,7 +96,7 @@ describe('scoring', () => {
         'Proactive': 15,
         'Problem Solving': 15,
         'motivation': 10,
-        'hard-skill': 5,
+        'CRM': 5,
         'Leadership experience': 20
       }
     }

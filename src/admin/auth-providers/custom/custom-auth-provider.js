@@ -2,7 +2,9 @@ import { FirebaseAuthProvider } from 'react-admin-firebase';
 import { createPairSession, logoutUser } from 'libs/api';
 
 const CustomAuthProvider = (config, options) => {
-  const authProvider = FirebaseAuthProvider(config, options);
+  const firebaseAuthOptions = options || {}
+
+  const authProvider = FirebaseAuthProvider(config, firebaseAuthOptions);
 
   const login = (params) => {
     return authProvider.login(params)

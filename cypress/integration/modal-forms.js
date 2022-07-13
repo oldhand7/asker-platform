@@ -4,8 +4,13 @@ describe('Modal froms', () => {
   })
 
   it('should create a competency question using modal', () => {
-    cy.createDummyProject('Test project')
-    cy.tableFirstRowNavigate('Edit')
+    cy.createDummyProject('Test project X')
+
+    cy.contains('Test project X')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
+
+    cy.contains('Add stage').click()
 
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
 
@@ -20,7 +25,7 @@ describe('Modal froms', () => {
     cy.get('[data-test-id="stage-2"]')
       .should('contain', 'Competency based questions')
 
-    cy.contains('Create new question').click().wait(2000)
+    cy.contains('Create new question').click().wait(1000)
 
     cy.get('#evaluation-question-modal')
       .should('exist')
@@ -44,14 +49,14 @@ describe('Modal froms', () => {
           .should('contain', 'Competency option')
           .within(() => {
             cy.get('input[name="name"]').type('Criteria A')
-            cy.get('button[type="submit"]').click().wait(3000)
+            cy.get('button[type="submit"]').click().wait(1000)
         })
 
         cy.get('@criteria')
           .should('contain', 'Criteria A')
           .find('button[data-test-id="trash-button"]')
           .click()
-          .wait(3000)
+          .wait(1500)
 
         cy.get('@criteria')
           .should('not.contain', 'Criteria A')
@@ -141,8 +146,13 @@ describe('Modal froms', () => {
   })
 
   it('should create a Yes/No screening question using modal', () => {
-    cy.createDummyProject('Test project')
-    cy.tableFirstRowNavigate('Edit')
+    cy.createDummyProject('Test project Y')
+
+    cy.contains('Test project Y')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
+
+    cy.contains('Add stage').click()
 
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
 

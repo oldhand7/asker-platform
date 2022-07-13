@@ -1,9 +1,16 @@
 .introduction-int-form {
-
-
   &-title {
-    margin-bottom: 20rem;
+    margin: 10rem 0 20rem;
+    color: #B7B7B7;
+    font-weight: 500;
+    font-size: 20rem;
+    line-height: 30rem;
   }
+
   &-text {
+    font-weight: 400;
+    font-size: 16rem;
+    line-height: 1.5;
+    color: #5B5B5B;
   }
 }

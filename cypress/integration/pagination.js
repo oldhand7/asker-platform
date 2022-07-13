@@ -12,7 +12,8 @@ describe('Pagination', () => {
     cy.createDummyProject('Demo Project 4')
     cy.createDummyProject('Demo Project 5')
 
-    cy.get('table tbody tr')
+    cy.get('[data-test-id="project-list"]')
+      .children()
       .should('have.length', 5)
 
     //Only arrows
@@ -20,10 +21,10 @@ describe('Pagination', () => {
 
     cy.visit('/projects/?perPage=4')
 
-    cy.get('table tbody tr')
-      .should('have.length', 4)
-      .parent()
+    cy.get('[data-test-id="project-list"]')
       .should('not.contain', 'Demo Project 1')
+      .children()
+      .should('have.length', 4)
 
     cy.get('[data-test-id="pagination"] ul li')
       .should('have.length', 6)
@@ -31,44 +32,44 @@ describe('Pagination', () => {
       .contains('2')
       .click()
 
-    cy.get('table tbody tr')
-      .should('have.length', 1)
-      .last()
+    cy.get('[data-test-id="project-list"]')
       .should('contain', 'Demo Project 1')
+      .children()
+      .should('have.length', 1)
 
     cy.visit('/projects/?perPage=2&page=2')
 
-    cy.get('table tbody tr')
-      .should('have.length', 2)
-      .parent()
+    cy.get('[data-test-id="project-list"]')
       .should('contain', 'Demo Project 3')
       .should('contain', 'Demo Project 2')
       .should('not.contain', 'Demo Project 5')
       .should('not.contain', 'Demo Project 4')
       .should('not.contain', 'Demo Project 1')
+      .children()
+      .should('have.length', 2)
 
     cy.get('[data-test-id="pagination"] ul li')
       .should('have.length', 7)
       .eq(1)
       .click()
 
-      cy.get('table tbody tr')
-        .should('have.length', 2)
-        .parent()
+      cy.get('[data-test-id="project-list"]')
         .should('contain', 'Demo Project 5')
         .should('contain', 'Demo Project 4')
         .should('not.contain', 'Demo Project 3')
         .should('not.contain', 'Demo Project 2')
         .should('not.contain', 'Demo Project 1')
+        .children()
+        .should('have.length', 2)
 
     cy.get('[data-test-id="pagination"] ul li')
       .last()
       .click()
 
-    cy.get('table tbody tr')
-      .should('have.length', 1)
-      .last()
+    cy.get('[data-test-id="project-list"]')
       .should('contain', 'Demo Project 1')
+      .children()
+      .should('have.length', 1)
   })
 
   it('should paginate templates', () => {
@@ -80,7 +81,7 @@ describe('Pagination', () => {
     cy.createDummyTemplate('Demo Template 4')
     cy.createDummyTemplate('Demo Template 5')
 
-    cy.get('table tbody tr')
+    cy.get('[data-test-id="template-list"] > li')
       .should('have.length', 5)
 
     //Only arrows
@@ -88,10 +89,10 @@ describe('Pagination', () => {
 
     cy.visit('/templates/?perPage=4')
 
-    cy.get('table tbody tr')
-      .should('have.length', 4)
-      .parent()
+    cy.get('[data-test-id="template-list"]')
       .should('not.contain', 'Demo Template 1')
+      .children()
+      .should('have.length', 4)
 
     cy.get('[data-test-id="pagination"] ul li')
       .should('have.length', 6)
@@ -99,44 +100,44 @@ describe('Pagination', () => {
       .contains('2')
       .click()
 
-    cy.get('table tbody tr')
-      .should('have.length', 1)
-      .last()
+    cy.get('[data-test-id="template-list"]')
       .should('contain', 'Demo Template 1')
+      .children()
+      .should('have.length', 1)
 
     cy.visit('/templates/?perPage=2&page=2')
 
-    cy.get('table tbody tr')
-      .should('have.length', 2)
-      .parent()
+    cy.get('[data-test-id="template-list"]')
       .should('contain', 'Demo Template 3')
       .should('contain', 'Demo Template 2')
       .should('not.contain', 'Demo Template 5')
       .should('not.contain', 'Demo Template 4')
       .should('not.contain', 'Demo Template 1')
+      .children()
+      .should('have.length', 2)
 
     cy.get('[data-test-id="pagination"] ul li')
       .should('have.length', 7)
       .eq(1)
       .click()
 
-      cy.get('table tbody tr')
-        .should('have.length', 2)
-        .parent()
-        .should('contain', 'Demo Template 5')
-        .should('contain', 'Demo Template 4')
-        .should('not.contain', 'Demo Template 3')
-        .should('not.contain', 'Demo Template 2')
-        .should('not.contain', 'Demo Template 1')
+    cy.get('[data-test-id="template-list"]')
+      .should('contain', 'Demo Template 5')
+      .should('contain', 'Demo Template 4')
+      .should('not.contain', 'Demo Template 3')
+      .should('not.contain', 'Demo Template 2')
+      .should('not.contain', 'Demo Template 1')
+      .children()
+      .should('have.length', 2)
 
     cy.get('[data-test-id="pagination"] ul li')
       .last()
       .click()
-
-    cy.get('table tbody tr')
-      .should('have.length', 1)
-      .last()
+    
+    cy.get('[data-test-id="template-list"]')
       .should('contain', 'Demo Template 1')
+      .children()
+      .should('have.length', 1)
   })
 
   it('should paginate questions', () => {

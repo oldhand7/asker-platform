@@ -135,7 +135,12 @@ describe('Screening questions', () => {
             })
 
       cy.createDummyProject('Position X')
-      cy.tableFirstRowNavigate('Edit')
+
+      cy.contains('Position X')
+            .closest('ul')
+            .listFirstRowNavigate('Edit')
+
+      cy.contains('Add stage').click()
 
       cy.get('[data-test-id="feature-screening-questions"]').drag('[data-test-id="stage-2"] .Droppable')
 
@@ -230,12 +235,17 @@ describe('Screening questions', () => {
         cy.get('[data-test-id="alert-success"]')
           .should('contain', 'Project saved')
 
-        cy.tableFirstRowNavigate('Interviews')
+        cy.contains('Position X').closest('li').click()
+
+        cy.location('pathname').should('contain', '/overview/')
 
         cy.addProjectCandidate('Jimmy', 'jimmy.davis@yahoo.com')
-          .wait(2000)
+          .wait(1000)
 
-        cy.tableFirstRowNavigate('Start interview')
+        cy.contains('Jimmy')
+          .closest('[data-test-id="flex-table-row"]')
+          .contains('Start interview')
+          .click()
 
         cy.get('[data-test-id="feature-form"]').eq(1)
           .within(() => {
@@ -321,7 +331,12 @@ describe('Screening questions', () => {
 
         cy.contains('Complete interview').click()
 
-        cy.tableFirstRowNavigate('Edit response')
+        cy.location('pathname').should('contain', '/overview/')
+
+        cy.contains('Jimmy')
+          .closest('[data-test-id="flex-table-row"]')
+          .find('[data-test-id="edit-button"]')
+          .click()
 
         cy.get('[data-test-id="feature-form"]').eq(1)
           .within(() => {

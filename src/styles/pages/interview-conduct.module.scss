@@ -1,3 +1,10 @@
 .interview-conduct-page {
-  padding: 40rem 0;
+  padding: 0;
+  height: 100vh;
+  margin-top: -100rem;
+  overflow: hidden;
+
+  &-form {
+    height: 100%;
+  }
 }

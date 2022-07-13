@@ -8,13 +8,13 @@ describe('Company presentation feature', () => {
 
     cy.on('window:confirm', confirmStub)
 
-    cy.createDummyProject('Sales manager').wait(2000)
+    cy.createDummyProject('Sales manager')
 
-    cy.get('table tbody tr')
-      .first()
-      .find('td').last()
-      .find('button').click().parent()
-      .contains('Edit').click()
+    cy.contains('Sales manager')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
+
+    cy.contains('Add stage').click()
 
     cy.get('[data-test-id="feature-company-presentation"]').drag('[data-test-id="stage-2"] .Droppable')
 

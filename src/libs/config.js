@@ -46,14 +46,15 @@ export const getFirebaseConfig = () => {
 export const UPLOAD_LIMIT_MB = getAppEnv() === 'testing' ? 1 : 50;
 export const BUNDLE_UPLOAD_LIMIT_MB = getAppEnv() === 'testing' ? 2 : UPLOAD_LIMIT_MB * 2;
 export const BUNDLE_MAX_FILES = getAppEnv() === 'testing' ? 3 : 5;
-export const allowedHtmlTags = ['ul', 'ol', 'li', 'strong', 'p', 'em', 'br']
+export const allowedHtmlTags = ['ul', 'ol', 'li', 'strong', 'p', 'em', 'br', 'b']
 export const EVALUATION_SUBTYPES_NO_CRITERIA = ['culture-fit', 'motivation'];
 export const COLOR_MAP = {
   'competency': '#43B88C',
-  'experience': '#D8F75A',
-  'hard-skill': '#E5C673',
-  'motivation': '#D74E96',
-  'culture-fit': '#FF915D',
+  'experience': '#3D8976',
+  'hard-skill': '#36A1CC',
+  'motivation': '#FFBC5D',
+  'culture-fit': '#4A67CE',
   'other': '#CCC',
   'screening': '#7844B8'
 }
+export const DEFAULT_STAGE_TIME = 5;

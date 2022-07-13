@@ -98,6 +98,18 @@ const beforeRun = async () => {
   const userId14Joe  = await helpers.createUser('Joe Barbara', 'joe.barbara@example.com', 'test123', companyId14, 'admin', false)
   const userId14Jane = await helpers.createUser('Jane Barbara', 'jane.barbara@example.com', 'test123', companyId14, 'hr', false)
 
+  //User 15
+  const companyId15 = await helpers.createCompany('Johnson & Co')
+
+  const userId15Joe  = await helpers.createUser('Joe Johnson', 'joe.johnson@example.com', 'test123', companyId15, 'admin', false)
+  const userId15Jane = await helpers.createUser('Jane Johnson', 'jane.johnson@example.com', 'test123', companyId15, 'hr', false)
+
+  //User 16
+  const companyId16 = await helpers.createCompany('Gooney & Co')
+
+  const userId16Joe  = await helpers.createUser('Joe Gooney', 'joe.gooney@example.com', 'test123', companyId16, 'admin', false)
+  const userId16Jane = await helpers.createUser('Jane Gooney', 'jane.gooney@example.com', 'test123', companyId16, 'hr', false)
+
   await helpers.createQuestion({
     name: 'CQ1',
     companyId: companyId2,
@@ -132,7 +144,7 @@ const beforeRun = async () => {
   })
 
   //allow some time to pass for propagation of claims
-  await new Promise((resolve) => setTimeout(resolve, 5000))
+  await new Promise((resolve) => setTimeout(resolve, 3000))
 
   const projectId = await helpers.createProject({
     companyId: companyId2,
@@ -140,6 +152,7 @@ const beforeRun = async () => {
     createdAt: 0,
     updatedAt: 0,
     name: 'Philips Demo Project',
+    time: 15,
     stages: [
       { id: 'introduction', name: 'Introduction', type: 'other' },
       { id: 'questions', name: 'Questions', type: 'other' },

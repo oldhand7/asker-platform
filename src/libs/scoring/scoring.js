@@ -1,7 +1,12 @@
 import { getInterviewAggregate } from 'libs/interview';
 import { calcDefaultScoringRules } from 'libs/project';
+import { nameSort } from 'libs/helper';
 
 const scoreTable = [0, 25, 50, 75, 100]
+
+const scoreReducer = (sum, { score }) => {
+  return Number.parseInt(score || 0) + sum;
+}
 
 export const calcInterviewScore = (interview, projectOrTemplate) => {
   const scoringRules = {
@@ -44,4 +49,83 @@ export const calcInterviewScore = (interview, projectOrTemplate) => {
   }
 
   return Math.round(interviewScore);
+}
+
+export const scoreMap = (interview, { scoringRules }) => {
+  const aggregate = getInterviewAggregate(interview)
+
+  const table = {
+    'competency': {
+      score: 0,
+      name: 'Competency',
+      children: [],
+      type: 'competency'
+    },
+    'experience': {
+      score: 0,
+      name: 'Experience',
+      children: [],
+      type: 'experience'
+    },
+    'hard-skill': {
+      score: 0,
+      name: 'Hard-skill',
+      children: [],
+      type: 'hard-skill'
+    },
+    'motivation': {
+      score: 0,
+      name: 'Motivation',
+      children: null,
+      type: 'motivation'
+    },
+    'culture-fit': {
+      score: 0,
+      name: 'Culture-fit',
+      children: null,
+      type: 'culture-fit'
+    }
+  }
+
+  for (const key in table) {
+    if (!table[key].children) {
+      if (!aggregate[key].length) continue;
+
+      const { subtype } = aggregate[key][0]
+
+      let localScore = 0;
+
+      for (let i = 0; i < aggregate[key].length; i++) {
+        const { score } = aggregate[key][i];
+
+        localScore += scoreTable[score-1]
+      }
+
+      table[key].score = Math.round(localScore / aggregate[key].length)
+    } else {
+      let score = 0;
+
+      for (const cid in aggregate[key]) {
+        const { criteria } = aggregate[key][cid][0]
+
+        const cScore = Math.round(
+          aggregate[key][cid].reduce(scoreReducer, 0) / aggregate[key][cid].length
+        )
+
+        table[key].children.push({
+          id: cid,
+          name: criteria.name,
+          score: cScore,
+          type: criteria.type
+        })
+
+        score += scoreTable[cScore-1];
+      }
+
+      table[key].children.sort(nameSort);
+      table[key].score = Math.round(score / Object.keys(aggregate[key]).length);
+    }
+  }
+
+  return table;
 }

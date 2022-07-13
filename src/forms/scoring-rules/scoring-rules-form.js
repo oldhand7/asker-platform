@@ -7,35 +7,29 @@ import { useState, useEffect, useMemo } from 'react';
 import { ctxError } from 'libs/helper';
 import Table from 'rc-table';
 import { validate } from 'libs/validator'
+import { flattenCriteriaTree } from 'libs/criteria';
 
 import styles from './scoring-rules-form.module.scss';
 
 const adjust = (values, criteria) => {
-  const adjustedValues = values || {}
+  const criteriaMap = flattenCriteriaTree(criteria || [])
 
-  for (let i = 0; i < criteria.length; i++) {
-    const key = criteria[i].id || criteria[i].type;
+  const oldCriteriaMap = values || {}
 
-    if (!adjustedValues[key]) {
-      adjustedValues[key] = criteria[i].weight;
+  for (let key in oldCriteriaMap) {
+    if (!criteriaMap[key]) {
+      delete oldCriteriaMap[key]
     }
   }
 
-  for (let prop in adjustedValues) {
-    const c = criteria.find(c => c.id == prop || c.type == prop)
-
-    if (!c) {
-      delete adjustedValues[prop]
-    }
-  }
-
-  return adjustedValues
+  return Object.assign(criteriaMap, oldCriteriaMap)
 }
 
 const ScoringRulesForm = ({ className, onValues, criteria = [], values, type }) => {
   const [formValues, errors, control] = useForm({ values: adjust(values, criteria) })
   const [error, setError] = useState(false);
   const [sumTotal, setSumTotal] = useState(null);
+  const [criteriaNameMap, setCriteriaNameMap] = useState({});
 
   const handleSubmit = () => {
     if (sumTotal == 100) {
@@ -52,17 +46,15 @@ const ScoringRulesForm = ({ className, onValues, criteria = [], values, type }) 
     setSumTotal(Math.round(sum));
   }, [formValues])
 
-
+  useEffect(() => {
+    setCriteriaNameMap(flattenCriteriaTree(criteria, 'name'))
+  }, [criteria])
 
   const columns = [
     {
       key: 'name',
       title: 'Name',
-      render: (_, key) => {
-        const c = criteria.find(c => c.id == key || c.type == key)
-
-        return c ?  c.name : '?'
-      }
+      render: (_, key) => criteriaNameMap[key] ? criteriaNameMap[key] : '?'
     },
     {
       key: 'weight',

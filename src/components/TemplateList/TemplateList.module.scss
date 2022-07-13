@@ -1,0 +1,103 @@
+.template-list {
+  padding: 0;
+  list-style: none;
+
+  &-item {
+    background: white;
+    padding: 16rem 24rem;
+    border-radius: 5px;
+    margin-bottom: 16rem;
+    display: flex;
+    cursor: pointer;
+    position: relative;
+    box-shadow: inset 2px 0px 0px #282828;
+
+    &[data-company-id="asker"] {
+      box-shadow: inset 2px 0px 0px #43B88C;
+    }
+
+    &-control {
+      position: absolute;
+      right: 24rem;
+      top: 20rem;
+      flex: 0;
+    }
+
+    &:hover {
+      box-shadow: inset 2px 0px 0px #282828, rgba(149, 157, 165, 0.2) 0 8px 24px;
+    }
+
+    &-title {
+      font-weight: 500;
+      font-size: 24rem;
+      line-height: 36rem;
+      color: #494949;
+      position: relative;
+    }
+
+    &-column {
+      &:first-child {
+        flex: 0 0 163rem;
+        position: relative;
+        
+        &::after {
+          content: '';
+          display: block;
+          position: absolute;
+          width: 1px;
+          height: 80%;
+          background: #F6F6F6;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+
+      &:last-child {
+        flex: 1;
+        padding-left: 38rem;
+      }
+    }
+  }
+
+  &-info {
+    &-name {
+      font-weight: 500;
+      font-size: 12rem;
+      line-height: 18rem;
+      color: #878787;
+      display: block;
+      margin-bottom: 3rem;
+    }
+
+    margin: 8rem 0 24rem;
+  }
+
+  &-interviewer-list {
+    padding-left: 0;
+    list-style: none;
+
+    &-item {
+      font-weight: 500;
+      font-size: 16rem;
+      line-height: 24rem;
+      color: #5B5B5B;
+    }
+  }
+
+  &-details {
+    width: 100%;
+
+    &-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      line-height: 36rem;
+      padding-right: 36rem;
+    }
+
+    &-body {
+      margin-top: 20rem;
+    }
+  }
+}

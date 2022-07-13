@@ -2,71 +2,78 @@
   &-evaluations {
       display: flex;
       justify-content: left;
-      max-width: 500rem;
       overflow-x: auto;
 
       &-evaluation {
-        margin-right: 40rem;
+        margin-right: 50rem;
       }
   }
 
-  table {
-    width: 100% ;
-    border-spacing:0px;
-    border-collapse:separate;
-    border-spacing: 0 20rem;
+  &-details {
+    flex: 1 0 100%;
+    max-width: 100%;
+    padding: 16rem 24rem 0rem 22rem;
 
-    td {
-    }
-
-    thead {
-      margin-bottom: 20rem;
-      background: white;
-      text-align: left;
-      border-radius: 5px;
-
-      th {
-        color:  #878787;
-        line-height: 18rem;
-        font-size: 12rem;
-        font-weight: 500;
-        line-height: 64rem;
-        padding: 0 20rem;
-
-        &:first-child {
-          padding-left: 30rem;
-        }
-      }
-    }
-
-    tbody tr {
-      margin-bottom: 20rem;
-      background: white;
-      border-radius: 5px;
-      transition: transform 0.250s 0s;
-
-      &:hover {
-        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-      }
-
-      td {
-        padding: 20rem;
-        height: 174rem;
-
-        &:first-child {
-          padding-left: 30rem;
-        }
-
-        &:last-child {
-          position: relative;
-        }
-      }
+    &-row {
+      display: block;
+      border-top: 1px solid #D5D5D5;
+      padding: 16rem 0;
     }
   }
 
-  &-control {
-    position: absolute;
-    right: 5rem;
-    top: 5rem;
+  &-actions {
+
+    & > * {
+      margin-right: 5rem;
+      vertical-align: middle;
+    }
+  }
+
+  &-start-button {
+    line-height: inherit;
+    max-width: 100%;
+    cursor: pointer;
+
+    svg {
+      fill: currentColor;
+    }
+  }
+
+  &-col {
+    &-name {
+      font-weight: 500;
+      font-size: 18rem;
+      line-height: 27rem;
+      color: #5B5B5B;
+      display: inline-block;
+      vertical-align: middle;
+      padding-right: 30rem;
+
+      &::after {
+        content: '';
+        height: 50%;
+        width: 1px;
+        background: #E7E7E7;
+        position: absolute;
+        right: 20rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+
+    &-date {
+      font-weight: 500;
+      font-size: 14rem;
+      line-height: 21rem;
+      color: #929292;
+    }
+
+    &-score {
+      font-size: 14rem;
+      width: 56rem;
+      height: 56rem;
+      line-height: 56rem;
+      margin-left: 30rem;
+    }
   }
 }

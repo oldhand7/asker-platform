@@ -7,33 +7,45 @@ describe('Scoring', () => {
   it('should score with adjusted layer', () => {
     cy.on('window:confirm', () => true)
 
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'Are you familiar with ISO standards?', criteria: 'ISO-90210' });
-    cy.createEvaluationQuestion('motivation', { name : 'Does money motivate you?'});
+    cy.createCompetencyQuestion({ name: 'Are you familiar with ISO standards?', criteria: { name: 'ISO-90210'} });
+    cy.createMotivationQuestion({ name : 'Does money motivate you?'});
 
-    cy.createDummyProject('Some position')
+    cy.createDummyProject('Some position X')
 
-    // cy.visit('/')
-    cy.tableFirstRowNavigate('Edit');
+    cy.contains('Some position X')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
+
+    cy.contains('Add stage').click()
 
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Competency').click().wait(2000)
+    cy.get('#feature-select-modal').contains('Competency').click().wait(1000)
     cy.get('[data-test-id="feature-form"]')
       .find('table tbody tr')
       .first()
       .find('button')
       .click()
+
+    cy.contains('Add stage').click()
 
     cy.get('[data-test-id="stage-3"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Motivation').click().wait(2000)
+    cy.get('#feature-select-modal').contains('Motivation').click().wait(1000)
     cy.get('[data-test-id="feature-form"]')
       .find('table tbody tr')
       .first()
       .find('button')
       .click()
 
-    cy.contains('Evaluation Criteria').parent()
-      .should('contain', '50% Motivation')
-      .should('contain', '50% ISO-90210')
+    cy.contains('Evaluation criteria').parent()
+      .within(() => {
+        cy.contains('Motivation').parent().should('contain', '50%')
+        cy.contains('Competency').parent().should('contain', '50%')
+          .parent()
+          .find('ul').within(() => {
+            cy.get('li').should('have.length', 1);
+            cy.get('li').eq(0).should('contain', 'ISO-90210').should('contain', '50%')
+          })
+      })
       .contains('Edit')
       .click()
 
@@ -44,25 +56,32 @@ describe('Scoring', () => {
 
         cy.contains('Save').click()
       })
+      .wait(1000)
 
-    cy.contains('Evaluation Criteria').parent()
-      .should('contain', '80% Motivation')
-      .should('contain', '20% ISO-90210')
+    cy.contains('Evaluation criteria').parent()
+      .within(() => {
+        cy.contains('Motivation').parent().should('contain', '80%')
+        cy.contains('Competency').parent().should('contain', '20%')
+          .parent()
+          .find('ul').within(() => {
+            cy.get('li').should('have.length', 1);
+            cy.get('li').eq(0).should('contain', 'ISO-90210').should('contain', '20%')
+          })
+      })
 
     cy.contains('Save project').click()
 
     cy.get('[data-test-id="alert-success"]').contains('Project saved')
 
-    cy.get('table tbody tr').first().click()
+    cy.contains('Some position X').closest('li').click()
 
     cy.addProjectCandidate('John Smith', 'john.smith@hotmail.net')
-      .wait(4000)
+      .wait(1000)
 
     cy.contains('John Smith')
-      .closest('tr')
+      .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
-
 
     cy.get('[data-test-id="feature-form"]').eq(1)
       .should('contain', 'Competency')
@@ -77,36 +96,40 @@ describe('Scoring', () => {
 
     cy.contains('Complete interview').click()
 
-    cy.get('table tbody tr')
+    cy.get('[data-test-id="flex-table-row"]')
       .first()
+      .click()
+      .contains('Competency')
+      .closest('[data-test-id="interview-details-row"]')
+      .should('contain', '100%')
+      .click()
       .within(() => {
-        cy.get('td').eq(1).should('contain', '20%')
-
-        cy.get('[data-test-id="evaluation-score"]').eq(0)
-          .should('have.attr', 'data-score', '5')
-          .should('contain', 'ISO-90210')
-
-        cy.get('[data-test-id="evaluation-score"]').eq(1)
-          .should('have.attr', 'data-score', '1')
-          .should('contain', 'Motivation')
+        cy.contains('ISO-90210')
+          .closest('li')
+          .find('[data-test-id="criteria-rating"]').invoke('text')
+          .should('contain', '5')
       })
   })
 
   it('should score with adjusted layer (46)', () => {
     cy.on('window:confirm', () => true)
 
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'QM1', criteria: 'XCM' });
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'QM2', criteria: 'XCM' }, false);
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'QR1', criteria: 'XCR' }, );
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'QR2', criteria: 'XCR' }, false);
-    cy.createEvaluationCriteriaQuestion('competency', { name: 'QS1', criteria: 'XCS' });
+    cy.createCompetencyQuestion({ name: 'QM1', criteria: { name: 'XCM'} });
+    cy.createCompetencyQuestion({ name: 'QM2', criteria: { name: 'XCM', create: false } });
+    cy.createCompetencyQuestion({ name: 'QR1', criteria: { name: 'XCR'} }, );
+    cy.createCompetencyQuestion({ name: 'QR2', criteria: { name: 'XCR', create: false } });
+    cy.createCompetencyQuestion({ name: 'QS1', criteria: { name: 'XCS'} });
 
-    cy.createDummyProject('Some position')
+    cy.createDummyProject('Some position Y')
 
-    cy.tableFirstRowNavigate('Edit');
+    cy.contains('Some position Y')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
+
+    cy.contains('Add stage').click()
 
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Competency').click().wait(2000)
+    cy.get('#feature-select-modal').contains('Competency').click().wait(1000)
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
         cy.get('input').first().type('X')
@@ -118,10 +141,17 @@ describe('Scoring', () => {
         cy.get('table tbody tr').first().find('button').click()
       })
 
-    cy.contains('Evaluation Criteria').parent()
-      .should('contain', '40% XCM')
-      .should('contain', '40% XCR')
-      .should('contain', '20% XCS')
+    cy.contains('Evaluation criteria').parent()
+        .within(() => {
+          cy.contains('Competency').parent().should('contain', '100%')
+            .parent()
+            .find('ul').within(() => {
+              cy.get('li').should('have.length', 3);
+              cy.get('li').eq(0).should('contain', 'XCM').should('contain', '40%')
+              cy.get('li').eq(1).should('contain', 'XCR').should('contain', '40%')
+              cy.get('li').eq(2).should('contain', 'XCS').should('contain', '20%')
+            })
+        })
       .contains('Edit')
       .click()
 
@@ -134,61 +164,75 @@ describe('Scoring', () => {
         cy.contains('Save').click()
       })
 
-    cy.contains('Evaluation Criteria').parent()
-    .should('contain', '50% XCR')
-    .should('contain', '30% XCM')
-    .should('contain', '20% XCS')
+    cy.contains('Evaluation criteria').parent()
+      .within(() => {
+        cy.contains('Competency').parent().should('contain', '100%')
+          .parent()
+          .find('ul').within(() => {
+            cy.get('li').should('have.length', 3);
+            cy.get('li').eq(0).should('contain', 'XCR').should('contain', '50%')
+            cy.get('li').eq(1).should('contain', 'XCM').should('contain', '30%')
+            cy.get('li').eq(2).should('contain', 'XCS').should('contain', '20%')
+          })
+        })
 
     cy.contains('Save project').click()
 
     cy.get('[data-test-id="alert-success"]').contains('Project saved')
 
-    cy.get('table tbody tr').first().click()
+    cy.contains('Some position Y').closest('li').click()
 
     cy.addProjectCandidate('John Smith', 'john.smith@hotmail.net')
-      .wait(4000)
+      .wait(1000)
 
     cy.contains('John Smith')
-      .closest('tr')
+      .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
 
-    cy.contains('QM1').closest('[data-test-id="evaluation-question-int"]')
+    cy.contains('QM1').closest('[data-test-id="feature-form"]')
       .contains('Excellent').click()
 
-    cy.contains('QM2').closest('[data-test-id="evaluation-question-int"]')
+    cy.contains('QM2').closest('[data-test-id="feature-form"]')
       .contains('Good').click()
 
-    cy.contains('QR1').closest('[data-test-id="evaluation-question-int"]')
+    cy.contains('QR1').closest('[data-test-id="feature-form"]')
       .contains('Good').click()
 
-    cy.contains('QR2').closest('[data-test-id="evaluation-question-int"]')
+    cy.contains('QR2').closest('[data-test-id="feature-form"]')
       .contains('Fair').click()
 
-    cy.contains('QS1').closest('[data-test-id="evaluation-question-int"]')
+    cy.contains('QS1').closest('[data-test-id="feature-form"]')
       .contains('Fair').click()
 
     cy.contains('Complete interview').click()
 
-    cy.get('table tbody tr')
+    cy.get('[data-test-id="flex-table-row"]')
       .first()
+      .should('contain', '46%')
+      .click()
+      .contains('Competency')
+      .closest('[data-test-id="interview-details-row"]')
+      .should('contain', '50%')
+      .click()
       .within(() => {
-        cy.get('td').eq(1).should('contain', '46%')
-
-        cy.get('[data-test-id="evaluation-score"]')
+        cy.get('li')
           .should('have.length', 3)
 
-        cy.get('[data-test-id="evaluation-score"]').eq(0)
-          .should('have.attr', 'data-score', '4')
+        cy.get('li').eq(0)
           .should('contain', 'XCM')
+          .find('[data-test-id="criteria-rating"]').invoke('text')
+          .should('contain', '4')
 
-        cy.get('[data-test-id="evaluation-score"]').eq(1)
-          .should('have.attr', 'data-score', '3')
+        cy.get('li').eq(1)
           .should('contain', 'XCR')
+          .find('[data-test-id="criteria-rating"]').invoke('text')
+          .should('contain', '3')
 
-        cy.get('[data-test-id="evaluation-score"]').eq(2)
-          .should('have.attr', 'data-score', '2')
+        cy.get('li').eq(2)
           .should('contain', 'XCS')
+          .find('[data-test-id="criteria-rating"]').invoke('text')
+          .should('contain', '2')
       })
   })
 })

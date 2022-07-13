@@ -3,20 +3,26 @@
 .template-form {
   display: flex;
   position: relative;
+  flex-wrap: wrap;
+
 
   &-sidebar {
-    flex: 1 1 356rem;
-    margin-right: 20rem;
-    border-radius: 13px;
-    background: white;
-    padding: 40rem 40rem 20rem;
+    flex: 0 0 290rem;
+    margin-right: 30rem;
+    box-sizing: border-box;
+    overflow-x: hidden;
 
     &-widget {
+      margin-bottom: 24rem;
+      font-size: 16rem;
+      width: 100%;
+
       &-title {
         color: $brandish-grey;
         font-weight: 500;
-        font-size: 20rem;
-        line-height: 30rem;
+        font-size: 14rem;
+        margin-bottom: 20rem;
+        line-height: 1;
       }
     }
 
@@ -26,19 +32,25 @@
   }
 
   &-details {
-    flex: 1 1 100%;
+    flex: 1;
     background: white;
     border-radius: 13px;
     padding: 40rem;
+    box-sizing: border-box;
     position: relative;
+    margin-top: 32rem;
+
+    h3 {
+      color: #B7B7B7;
+      font-size: 20rem;
+      line-height: 30rem;
+      font-weight: 500;
+      margin: 0;
+    }
   }
 
   &-details-inner {
-    max-width: 600rem;
-
-    @media (max-width: 1024px) {
-      max-width: 100%;
-    }
+    max-width: 505rem;
   }
 
   &-title {
@@ -50,17 +62,43 @@
   &-field {
     margin: 20rem 0 40rem;
 
+    &-name-edit {
+      background: #F6F6F6;
+      border: 1px solid #CECECE;
+      border-radius: 7px;
+      min-width: 350rem;
+
+      input {
+        background: 0 !important;
+        border: 0 !important;
+      }
+    }
+
     &-name input {
-      background: rgba($brandish-dark-green, 0.15);
+      background:  #F6F6F6;
+      border: 1px solid #CECECE;
+      font-weight: 500;
+      font-size: 20rem;
+      border-radius: 7px;
+      line-height: calc(56rem - 2rem);
+      height: calc(56rem - 2rem);
+    }
+
+    &-name {
+      width: 360rem;
     }
 
     &-stages {
-      &-title {
-        color: $brandish-dark-green;
-        font-size: 20rem;
-        line-height: 30rem;
-        font-weight: 500;
-      }
+
+
+    }
+  }
+
+  &-stager {
+    margin-top: 20rem !important;
+
+    &-feature-form {
+      margin-top: 24rem;
     }
   }
 
@@ -81,27 +119,21 @@
     font-size: 14rem;
   }
 
-  &-feature-form {
-    margin-bottom: 30rem;
+  &-template {
+    font-size: 14rem;
+    color: $brandish-grey;
   }
 
   &-criteria {
     position: fixed;
-    top: 25%;
-    transform: scale(0.8) translate(20%, -50%);
+    bottom: 100rem;
     right: 0;
-    width: 500rem;
     box-shadow: -3px 5px 33px rgba(0, 0, 0, 0.15);
     z-index: 1;
-
-    @media (max-height: 900px) {
-      top: 50%;
-    }
-
-    @media (max-width: 1600px) {
-      width: 410rem;
-      top: 50%;
-    }
+    width: 305rem;
+    z-index: 10;
+    max-height: calc(100vh - 320rem);
+    overflow-y: auto;
 
     @media (max-width: 1024px) {
       display: none;
@@ -110,5 +142,38 @@
 
   &-stage-error-report {
     margin-bottom: 20rem;
+  }
+
+  &-header {
+    background: white;
+    flex: 1 1 100%;
+    display: flex;
+    margin-bottom: 40rem;
+    padding: 12rem;
+    border-radius: 13px;
+    justify-content: space-between;
+    line-height: 56rem;
+
+    &-control {
+      display: flex;
+      align-items: center;
+      margin-left: 12rem;
+    }
+
+    input, button {
+      line-height: inherit;
+    }
+  }
+
+  &-total-time {
+    display: inline-block;
+    margin-right: 12rem;
+    border: 1px solid #ECECEC;
+    border-radius: 7px;
+    padding: 0 24rem;
+
+    @media (max-width: 540px) {
+      display: none;
+    }
   }
 }

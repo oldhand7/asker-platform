@@ -1,7 +1,6 @@
 import { getSettings } from 'libs/firestore-admin';
 import { useEffect, useState, useMemo, useCallback} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
-import ProjectTabe from 'components/ProjectTable/ProjectTable';
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget'
 import Head from 'next/head';
 import Alert from 'components/Alert/Alert';
@@ -18,6 +17,7 @@ import Preloader from 'components/Preloader/Preloader';
 import { ctxError } from 'libs/helper';
 import { useQueryState } from 'next-usequerystate'
 import { deleteSingle } from 'libs/firestore';
+import ProjectList from 'components/ProjectList/ProjectList';
 
 import styles from 'styles/pages/projects.module.scss';
 
@@ -138,10 +138,6 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
     setFilter({ ...filter, pristine: false, page: Number.parseInt(p) })
   }
 
-  const getRelativeTotal = () => {
-    return projects.length == total ? filteredProjects.length : total
-  }
-
   const handleQuery = useCallback(q => {
     setFilter({ ...filter, pristine: false, page: 1, q })
   }, [filter])
@@ -157,12 +153,12 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
 
   return <div className={styles['projects-page']}>
       <Head>
-        <title>Projects - Asker</title>
+        <title>Projects listing - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
       <div className={styles['projects-page-nav']}>
-          <LiveSearchWidget q={filter.q} onQuery={handleQuery} />
-          <DropDownButton onChoice={handleProjectCreate} options={[
+          <LiveSearchWidget className={styles['projects-page-search']} q={filter.q} onQuery={handleQuery} />
+          <DropDownButton className={styles['projects-page-create-button']} onChoice={handleProjectCreate} options={[
             { id: 'blank-project', name: 'Blank project' },
             { id: 'template-project', name: 'Use template' }
           ]}><PlusIcon /> Create new project</DropDownButton>
@@ -171,7 +167,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <ProjectTabe onDelete={deleteProject} emptyText="No projects to show." data={tableData} className={styles['projects-page-table']} />
+      <ProjectList onDelete={deleteProject} emptyText="No projects to show." data={tableData} className={styles['projects-page-list']} />
       <Pagination page={filter.page} className={styles['projects-page-pagination']} onChange={handlePageChange} total={relativeTotal} perPage={filter.perPage} />
 
       {loading ? <Preloader /> : null}

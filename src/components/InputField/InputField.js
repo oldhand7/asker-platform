@@ -1,8 +1,9 @@
 import classNames from 'classnames';
+import { forwardRef } from 'react';
 
 import styles from './InputField.module.scss';
 
-const InputField = ({ label = '', name = '', icon = null, children, error = null, className, component = null, ...props }) => {
+const InputField = ({ label = '', name = '', icon = null, children, error = null, className, component = null, ...props }, customRef) => {
   const InputComponent = component;
   const IconComponent = icon;
 
@@ -11,11 +12,11 @@ const InputField = ({ label = '', name = '', icon = null, children, error = null
 
     <div className={styles['input-field-wrapper']}>
       {IconComponent ? <IconComponent className={styles['input-field-icon']} /> : null}
-      {InputComponent ? <InputComponent className={styles['input-field-input']} {...props} name={name} /> : children}
+      {InputComponent ? <InputComponent className={styles['input-field-input']} {...props} name={name} ref={customRef} /> : children}
     </div>
 
     {error ? <p className={classNames(styles['input-field-error'], 'form-error')}>{error}</p> : null}
   </div>
 }
 
-export default InputField;
+export default forwardRef(InputField);

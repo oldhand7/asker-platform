@@ -15,20 +15,25 @@ describe('Clone Asker resources', () => {
   it('modified template should be saved as user owned copy', () => {
     cy.visit('/templates/')
 
-    cy.get('table tbody tr')
-      .should('have.length', 1)
-      .first()
+    cy.contains('Asker Public Template 123')
+      .closest('li')
       .should('contain', 'Asker Public Template 123')
       .should('contain', 'John Powers')
-      .tableFirstRowNavigate('Edit copy')
+      .should('have.attr', 'data-company-id', 'asker')
+      .closest('ul')
+      .listFirstRowNavigate('Edit copy')
 
     cy.contains('Save template').click()
 
-    cy.get('table tbody tr')
+    cy.get('[data-test-id="template-list"] > li')
       .should('have.length', 2)
       .first()
       .should('contain', 'Asker Public Template 123')
       .should('contain', 'Joe Spencer')
+      .should('have.attr', 'data-company-id')
+      .then(companyId => {
+        expect(companyId).to.not.eq('asker')
+      })
   })
 
   it('modified question should be saved as user owned copy', () => {
@@ -63,7 +68,7 @@ describe('Clone Asker resources', () => {
 
     cy.visit('/templates/')
 
-    cy.tableFirstRowNavigate('Delete');
+    cy.get('[data-test-id="template-list"]').listFirstRowNavigate('Delete')
 
     cy.get("[data-test-id='alert-success']").should('contain', 'Template deleted')
 

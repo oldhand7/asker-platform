@@ -17,15 +17,6 @@ describe('Templates', () => {
     cy.visit('/templates/')
     cy.title().should('include', 'Templates')
     cy.contains('No templates to show.')
-
-    cy.get('table thead tr')
-      .first()
-      .within(() => {
-        cy.get('th').eq(0).should('contain', 'Template name')
-        cy.get('th').eq(1).should('contain', 'Created by')
-        cy.get('th').eq(2).should('contain', 'Date created')
-        cy.get('th').eq(3).should('contain', 'Interview stages')
-      })
   })
 
   it('should create a 1 step template with introduction', () => {
@@ -38,7 +29,6 @@ describe('Templates', () => {
     cy.title().should('include', 'Create template')
 
     cy.get('form[data-test-id="template-form"]').within(() => {
-      cy.contains('Create a new template')
 
       cy.get('input[name="templateName"]').type('Demo TPL')
 
@@ -60,19 +50,14 @@ describe('Templates', () => {
     cy.location('pathname').should('eq', '/templates/')
     cy.contains('Template created')
 
-    cy.get('table tbody tr')
-      .first()
+    cy.contains('Demo TPL')
+      .closest('li')
+      .should('contain', 'Joe')
+      .should('contain', '15 min')
       .within(() => {
-        cy.get('td').eq(0).should('contain', 'Demo TPL')
-        cy.get('td').eq(1).should('contain', 'Joe')
-        cy.get('td').eq(2).should('contain', dateFormatedToday())
-        cy.get('td').eq(3)
-          .within(() => {
-              cy.get('[data-test-id="stage"]').should('have.length', 3)
-              cy.get('[data-test-id="stage"]').eq(0).should('contain', 'Introduction')
-              cy.get('[data-test-id="stage"]').eq(1).should('contain', 'Salary')
-              cy.get('[data-test-id="stage"]').eq(2).should('contain', 'Summary')
-          })
+          cy.get('[data-test-id="stage"]').eq(0).should('contain', 'Introduction')
+          cy.get('[data-test-id="stage"]').eq(1).should('contain', 'Salary')
+          cy.get('[data-test-id="stage"]').eq(2).should('contain', 'Summary')
       })
   })
 
@@ -81,7 +66,12 @@ describe('Templates', () => {
 
     cy.createDummyTemplate('Tmpl Test')
 
-    cy.tableFirstRowNavigate('Edit');
+    cy.contains('Tmpl Test')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
+
+    cy.contains('Add stage')
+      .click()
 
     cy.get('[data-test-id="feature-screening-questions"]').drag('[data-test-id="stage-2"] .Droppable')
 
@@ -89,7 +79,7 @@ describe('Templates', () => {
       .within(() => {
         cy.get('input').first().type('Sample questione')
 
-        cy.find('table').first()
+        cy.get('table').first()
           .find('button[data-test-id="add-question"]').first()
           .click()
       })
@@ -98,7 +88,9 @@ describe('Templates', () => {
 
     cy.get('[data-test-id="alert-success"]').should('contain', 'Template saved');
 
-    cy.tableFirstRowNavigate('Create project')
+    cy.contains('Tmpl Test')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
 
     cy.get('[data-test-id="stage-2"]').click()
 

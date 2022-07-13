@@ -60,7 +60,7 @@ const ScreeningQuestionForm = ({ className, question, type = 'screening', onValu
 
     setLoading(true)
 
-    let clone = question && question.companyId == 'asker' && user.companyId != 'asker'
+    let clone = question && question.companyId == 'asker' && user.companyId != 'asker';
 
     if (clone) {
       delete values.id;

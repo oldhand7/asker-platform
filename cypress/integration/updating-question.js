@@ -8,11 +8,14 @@ describe('Updating queestions', () => {
 
       cy.createDummyProject('Project 123')
 
-      cy.tableFirstRowNavigate('Edit');
+      cy.contains('Project 123').closest('ul').listFirstRowNavigate('Edit')
+
+      cy.contains('Add stage')
+        .click()
 
       cy.get('[data-test-id="feature-screening-questions"]')
         .drag('[data-test-id="stage-2"] .Droppable')
-        .wait(2000)
+        .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
@@ -31,13 +34,11 @@ describe('Updating queestions', () => {
 
       cy.contains('Save project').click()
 
-      cy.get('[data-test-id="alert-success"]')
-        .contains('Project saved')
+      cy.get('[data-test-id="alert-success"]').contains('Project saved')
 
+      cy.contains('Project 123').closest('li').click()
 
-      cy.tableFirstRowNavigate('Interviews');
-
-      cy.addProjectCandidate('Fernando', 'fernando@arerez.net').wait(2000)
+      cy.addProjectCandidate('Fernando', 'fernando@arerez.net').wait(1000)
 
       cy.contains('Start interview').click()
 
@@ -53,11 +54,11 @@ describe('Updating queestions', () => {
       cy.contains('Save question').click()
 
       cy.get('[data-test-id="alert-success"]')
-        .contains('Question saved').wait(2000)
+        .contains('Question saved').wait(1000)
 
       cy.visit('/projects')
 
-      cy.tableFirstRowNavigate('Edit')
+      cy.contains('Project 123').closest('ul').listFirstRowNavigate('Edit')
 
       cy.get('[data-test-id="stage-2"]').click()
 
@@ -69,7 +70,7 @@ describe('Updating queestions', () => {
 
       cy.visit('/projects')
 
-      cy.tableFirstRowNavigate('Interviews');
+      cy.contains('Project 123').closest('li').click()
 
       cy.contains('Start interview').click()
 
@@ -82,11 +83,15 @@ describe('Updating queestions', () => {
 
       cy.createDummyTemplate('Project ABC')
 
-      cy.tableFirstRowNavigate('Edit');
+      cy.contains('Project ABC')
+        .closest('ul')
+        .listFirstRowNavigate('Edit')
+
+      cy.contains('Add stage').click()
 
       cy.get('[data-test-id="feature-screening-questions"]')
         .drag('[data-test-id="stage-2"] .Droppable')
-        .wait(2000)
+        .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
@@ -117,11 +122,13 @@ describe('Updating queestions', () => {
       cy.contains('Save question').click()
 
       cy.get('[data-test-id="alert-success"]')
-        .contains('Question saved').wait(2000)
+        .contains('Question saved').wait(1000)
 
       cy.visit('/templates')
 
-      cy.tableFirstRowNavigate('Edit')
+      cy.contains('Project ABC')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
 
       cy.get('[data-test-id="stage-2"]').click()
 

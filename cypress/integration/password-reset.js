@@ -12,7 +12,7 @@ describe('Password reset', () => {
       cy.get('[data-test-id="alert-success"]')
         .should('contain', 'Password reset link sent')
 
-      cy.wait(5000)
+      cy.wait(1000)
 
       cy.location('pathname').should('eq', '/login/')
 
@@ -26,11 +26,8 @@ describe('Password reset', () => {
             .then($el => {
               const href = $el.attr('href')
 
-              cy.origin('https://asker-test-98028.firebaseapp.com', { args: { href }}, ({ href }) => {
-                cy.visit(href)
-                cy.get('input[name="newPassword"]').type('test111')
-                cy.get('button').click()
-                cy.root().should('contain', 'Password changed')
+              cy.origin(`https://${process.env['FIREBASE_AUTH_EMULATOR_HOST']}`, { args: { href }}, ({ href }) => {
+                cy.request(href + '&newPassword=test111')
               })
 
               cy.simpleLogin('joe.stevens@example.com', 'test111', true)

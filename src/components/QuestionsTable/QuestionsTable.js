@@ -80,7 +80,8 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user }) 
     title: <a href='#' onClick={handleSortOrder('name')}>
       Question {getSortArrowIcon('name')}</a>,
     dataIndex: 'name',
-    key: 'name'
+    key: 'name',
+    render: (name) => <div className={styles['questions-table-expand']}>{name}</div>
   },
   {
     title: <a href='#' onClick={handleSortOrder('followupCount')}>

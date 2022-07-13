@@ -1,35 +1,47 @@
 .templates-page {
-  padding: 40rem 0;
+  padding: 94rem 0 87rem;
 
-  &-filter {
-    &-company{
-      margin-bottom: 25rem;
-
-      &-button {
-        margin-right: 5rem;
-      }
-
-      @media (max-width: 768px) {
-        text-align: center;
-      }
-    }
-
+  @media (max-width: 768px) {
+    padding: 40rem 0;
   }
 
   &-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 38rem 0;
+    line-height: 56rem;
+    margin-bottom: 48rem;
 
     @media (max-width: 768px) {
       flex-direction: column-reverse;
-      margin: 10rem 0;
-
+      
       & > * {
-        margin-bottom: 20rem;
+        margin-bottom: 20rem !important;
       }
     }
+  }
+
+  &-filter-company {
+    &-button {
+      margin-right: 8rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      text-align: center;
+    }
+  }
+
+  &-search {
+    flex: 1;
+    margin: 0 48rem;
+  }
+
+  &-create-button {
+    flex: 0 1 206rem;
   }
 
   &-table {

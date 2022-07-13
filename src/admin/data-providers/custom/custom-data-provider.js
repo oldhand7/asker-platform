@@ -1,9 +1,25 @@
 import { FirebaseDataProvider } from 'react-admin-firebase';
-
 import { createFirebaseUser, updateFirebaseUserEmailAndPassword } from 'libs/api'
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import { connectFirestoreEmulator } from 'firebase/firestore'
 
 const CustomDataProvider = (config, options) => {
-  const dataProvider = FirebaseDataProvider(config, options);
+  const firebaseAuthOptions = options || {}
+
+  if (process.env['NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST']) {
+    firebase.initializeApp(config)
+
+    firebase.firestore().settings({ experimentalForceLongPolling: true });
+
+    const db = firebase.firestore()
+    const parts = process.env['NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST'].split(':');
+    connectFirestoreEmulator(db, ...parts);
+
+    firebaseAuthOptions.app = db.app;
+  }
+
+  const dataProvider = FirebaseDataProvider(config, firebaseAuthOptions);
 
   return {
     ...dataProvider,

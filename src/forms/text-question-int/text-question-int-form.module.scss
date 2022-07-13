@@ -1,4 +1,17 @@
 .text-question-int-form {
+  min-width: 400rem;
+  font-weight: 400;
+  font-size: 14rem;
+  line-height: 1.5;
+  color: #5B5B5B;
+
+  &-title {
+    font-weight: 500;
+    font-size: 20rem;
+    line-height: 140%;
+    color: #5B5B5B;
+  }
+  
   &-desc {
     font-size: 14rem;
     margin: 5rem 0;
@@ -14,7 +27,5 @@
   
   &-note {
     margin-top: 15rem;
-    width: 540rem;
-    max-width: 100%;
   }
 }

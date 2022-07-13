@@ -1,20 +1,19 @@
 import classNames from 'classnames';
 import PhotoSlideshow from 'components/PhotoSlideshow/PhotoSlideshow';
 import { useState, useEffect } from 'react';
-import { isImage, handleNext} from 'libs/helper';
+import { isImage} from 'libs/helper';
 import Link from 'next/link';
-import NextButton from 'components/Button/NextButton';
 import striptags from 'striptags';
 import { allowedHtmlTags } from 'libs/config';
 
 import styles from './company-presentation-int-form.module.scss';
 
-const CompanyPresentationForm = ({ className, stage, project, last, nextId, config }) => {
+const CompanyPresentationForm = ({ className, stage, project, config }) => {
   const [images, setImages] = useState([]);
   const [documents, setDocuments] = useState([]);
 
   useEffect(() => {
-    const values = project.config[stage.id];
+    const values = stage.config;
 
     setImages(values.files.filter(f => isImage(f.name)).map(i => i.url))
     setDocuments(values.files.filter(f => !isImage(f.name)))
@@ -49,8 +48,6 @@ const CompanyPresentationForm = ({ className, stage, project, last, nextId, conf
           </li>))}
       </ul>
     </div> : null}
-
-    {!last ? <NextButton onClick={() => handleNext(nextId)} className={styles['company-presentation-int-form-next-button']} /> : null}
   </div>
 }
 

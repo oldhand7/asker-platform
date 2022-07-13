@@ -7,6 +7,7 @@
     "test-dev": "export APP_ENV=testing && next dev",
     "prod-dev": "export APP_ENV=production && next dev",
     "build": "next build",
+    "beta-dev": "export APP_ENV=beta && next dev",
     "beta-build": "export APP_ENV=beta && next build",
     "test-build": "export APP_ENV=testing && next build",
     "start": "next start",
@@ -41,6 +42,7 @@
     "next-usequerystate": "^1.7.2",
     "node-cache": "^5.1.2",
     "nodemailer": "^6.7.5",
+    "pell": "^1.0.6",
     "printenv": "^1.0.0",
     "ra-data-json-server": "^3.19.10",
     "ra-data-simple-rest": "^3.19.10",
@@ -54,7 +56,9 @@
     "react-dom": "17.0.2",
     "react-drag-and-drop": "^3.0.0",
     "react-dropzone": "^12.0.5",
+    "react-intersection-observer": "^9.3.3",
     "react-js-pagination": "^3.0.3",
+    "react-popper-tooltip": "^4.4.1",
     "react-range": "^1.8.12",
     "react-stars": "^2.2.5",
     "react-tabs": "^4.2.0",
@@ -65,6 +69,7 @@
     "striptags": "^3.2.0",
     "tawkto-react": "^3.0.1",
     "uid": "^2.0.0",
+    "uuid": "^8.3.2",
     "validatorjs": "^3.22.1"
   },
   "devDependencies": {

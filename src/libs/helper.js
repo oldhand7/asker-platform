@@ -216,7 +216,9 @@ export const handleNext = id => {
   const nextEl = document.querySelector(`#${id}`)
 
   if (nextEl) {
-    nextEl.scrollIntoView()
+    nextEl.scrollIntoView({
+      behavior: 'smooth'
+    })
   }
 }
 
@@ -241,4 +243,46 @@ export const projectStageQuestionsReducer = (questions, stage) => {
 export const textToMailtoHtml = (text) => {
   const html = text.replace(/([^\s]+@[^\s]+)/g, '<a href="mailto:$1">$1</a>')
   return html
+}
+
+export const getTimeLabel = (minutes) => {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+
+  return h ? `${h} h ${m} min` : `${m} min`
+}
+
+export const fixFloat = (val, pr = 2) => Number.parseFloat(Number.parseFloat(val).toFixed(pr))
+
+export const createSumReducer = (key) => (acc, curr) => acc + curr[key]
+
+export const secondsToTimeLabel = (seconds, labels = ['h', 'm', 's']) => {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+
+  const hLabel = h ? `${h} ${labels[0]} ` : '';
+  const mLabel = m ? `${m} ${labels[1]} ` : '';
+
+  return `${hLabel}${mLabel}${s} ${labels[2]}`
+}
+
+export const nameSort = function(a, b) {
+  if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+  if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+
+  return 0;
+}
+export const scoreSort = function(ca, cb) {
+  if (ca.score < cb.score) return 1;
+  if (ca.score > cb.score) return -1;
+
+  if (ca.candidate.name < cb.candidate.name) return -1;
+  if (ca.candidate.name > cb.candidate.name) return 1;
+
+  return 0;
+}
+
+export const buildSearchQuery = (params) => {
+  return Object.keys(params).map(key => key + '=' + (params[key] === null ? '' : params[key])).join('&')
 }

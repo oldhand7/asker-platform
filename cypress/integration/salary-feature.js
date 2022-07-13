@@ -6,11 +6,11 @@ describe('Salary feature', () => {
   it('should create a project with salary feature and allow selection of min/max salary values during interview', () => {
     cy.createDummyProject('Sales manager')
 
-    cy.get('table tbody tr')
-      .first()
-      .find('td').last()
-      .find('button').click().parent()
-      .contains('Edit').click()
+    cy.contains('Sales manager')
+      .closest('ul')
+      .listFirstRowNavigate('Edit')
+
+    cy.contains('Add stage').click()
 
     cy.get('[data-test-id="feature-salary"]').drag('[data-test-id="stage-2"] .Droppable')
 
@@ -43,25 +43,23 @@ describe('Salary feature', () => {
 
     cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
 
-    cy.get('table tbody tr')
-      .first()
-      .find('td').eq(3)
+    cy.contains('Sales manager').closest('li')
+      .within(() => {
+        cy.get('[data-test-id="stage"]')
+          .should('have.length', 2)
+          .eq(1)
+          .should('contain', 'Salary')
+          .should('contain', '2')
+      }).click()
 
-      .find('[data-test-id="stage"]').eq(1)
-      .should('contain', 'Salary')
-      .should('contain', '2')
-
-    cy.get('table tbody tr')
-      .first()
-      .find('td').last()
-      .find('button').click().parent()
-      .contains('Interviews').click()
+    cy.location('pathname').should('contain', '/overview/')
+    
 
     cy.addProjectCandidate('Alice', 'alice@bobshouse.com')
-      .wait(2000)
+      .wait(1000)
 
-    cy.get('table tbody tr')
-      .first()
+    cy.contains('Alice')
+      .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
 

@@ -1,44 +1,37 @@
-import { render, screen, getByText } from '@testing-library/react'
+import { render, screen, getByText, getByRole } from '@testing-library/react'
 import ProjectEvaluationCriteria from './ProjectEvaluationCriteria'
 import { withModal } from 'libs/modal'
 
 const demoProject = {
   stages: [
-    { id: 'aaa' },
-    { id: 'bbb' },
-    { id: 'ccc' },
-    { id: 'ddd' },
-    { id: 'eee' }
-  ],
-  config: {
-    aaa: {
+    { id: 'aaa', config: {
       questions: [
         { type: 'screening', subtype: 'text' }
       ]
-    },
-    bbb: {
+    } },
+    { id: 'bbb', config: {
       questions: [
         { type: 'other', subtype: 'text' }
       ]
-    },
-    ccc: {
+    } },
+    { id: 'ccc', config: {
       questions: [
         { type: 'evaluation', subtype: 'motivation' }
       ]
-    },
-    ddd: {
+    } },
+    { id: 'ddd', config: {
       questions: [
         { type: 'evaluation', subtype: 'culture-fit' }
       ]
-    },
-    eee: {
+    } },
+    { id: 'eee', config: {
       questions: [
         { type: 'evaluation', subtype: 'experience', criteria: { id: 'trav', name: 'Traveling' } },
         { type: 'evaluation', subtype: 'experience', criteria: { id: 'trav', name: 'Traveling' } },
         { type: 'evaluation', subtype: 'experience', criteria: { id: 'trav', name: 'Traveling' } }
       ]
-    }
-  }
+    } }
+  ]
 }
 
 describe('ProjectEvaluationCriteria', () => {
@@ -48,8 +41,13 @@ describe('ProjectEvaluationCriteria', () => {
 
     render(<ProjectEvaluationCriteriaWithModa project={demoProject} />)
 
-    expect(screen.getByText('Traveling', {exact: false})).toHaveTextContent('60% Traveling')
-    expect(screen.getByText('Motivation', {exact: false})).toHaveTextContent('20% Motivation')
-    expect(screen.getByText('Culture-fit', {exact: false})).toHaveTextContent('20% Culture-fit')
+    const experienceCriteria = screen.getByText('Experience', {exact: false}).closest('div')
+    expect(experienceCriteria).toHaveTextContent('60%')
+    const experienceCriteriaRoot = experienceCriteria.closest('[data-test-id="criteria-legend"]')
+    expect(getByRole(experienceCriteriaRoot, 'listitem')).toHaveTextContent('Traveling')
+    expect(getByRole(experienceCriteriaRoot, 'listitem')).toHaveTextContent('60%')
+
+    expect(screen.getByText('Motivation', {exact: false}).closest('div')).toHaveTextContent('20%')
+    expect(screen.getByText('Culture-fit', {exact: false}).closest('div')).toHaveTextContent('20%')
   })
 })

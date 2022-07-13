@@ -1,1 +1,1 @@
-export { calcInterviewScore } from './scoring';
+export { calcInterviewScore, scoreMap } from './scoring';

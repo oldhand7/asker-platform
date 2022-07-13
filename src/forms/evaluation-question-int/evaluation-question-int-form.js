@@ -2,14 +2,19 @@ import { getCriteriaTypeById } from 'libs/criteria';
 import classNames from 'classnames';
 import QuestionScoreBoard from 'components/QuestionScoreBoard/QuestionScoreBoard';
 import { useEffect, useState } from 'react';
-import useForm from 'libs/use-form';
+import {useForm} from 'libs/form';
 import { calcScore, createDummyVotes } from 'libs/helper';
 import InterviewNotes from 'components/InterviewNotes/InterviewNotes';
 import { EVALUATION_SUBTYPES_NO_CRITERIA } from 'libs/config';
 import striptags from 'striptags';
-import { allowedHtmlTags } from 'libs/config';
-
 import styles from './evaluation-question-int-form.module.scss';
+import FlexRow from 'components/FlexRow/FlexRow';
+import DismissAlert from 'components/DismissAlert/DismissAlert';
+import Html from 'components/Html/Html'
+import Tooltip from 'components/Tooltip/Tooltip';
+import InfoIcon from 'components/Icon/InfoIcon'
+import QuestionIcon from 'components/Icon/QuestionIcon';
+import { useInView } from 'react-intersection-observer';
 
 const defaultValues = {
   notes: '',
@@ -33,8 +38,8 @@ const adjust = (values, question) => {
   return values;
 }
 
-const EvaluationQuestionIntForm = ({ className, question, stage, project, values, onValues, onError }) => {
-  const [formValues, errors, control] = useForm({
+const EvaluationQuestionIntForm = ({ className, question, values, markComplete, onValues, taxStageSecond, onError }) => {
+  const { values: formValues, errors, control, pristine } = useForm({
     values: adjust(
       values ? values : defaultValues,
       question
@@ -43,6 +48,22 @@ const EvaluationQuestionIntForm = ({ className, question, stage, project, values
     messages
   })
   const [criteria, setCriteria] = useState(null);
+
+  const { ref, inView } = useInView({
+    threshold: 0.7
+  });
+
+  useEffect(() => {
+    if (inView && taxStageSecond) {
+      const timeHandler = () => {
+        taxStageSecond(question.id)
+      }
+
+      const int = setInterval(timeHandler, 1000)
+
+      return () => clearInterval(int)
+    }
+  }, [inView, taxStageSecond, question])
 
   useEffect(() => {
     if (question) {
@@ -78,43 +99,62 @@ const EvaluationQuestionIntForm = ({ className, question, stage, project, values
       score: calcScore(votes),
       votes: votes
     })
+
+    const voted = votes.some(v => v.head);
+
+    if (voted) {
+      markComplete(question.id)
+    }
   }
 
-  return question ? <div className={classNames(styles['evaluation-question-int-form'], className)}>
-    <div className={styles['evaluation-question-int-form-block']}>
-      <h2 className={styles['evaluation-question-int-form-title']}>{criteria && `${criteria.altName || criteria.name} question`}</h2>
+  return question ? <div ref={ref} className={classNames(styles['evaluation-question-int-form'], className)}>
+    <h2 className={styles['evaluation-question-int-form-title']}>
+      {criteria && `${criteria.altName || criteria.name} question`}</h2>
 
-      {EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(question.subtype) == -1 ?
-        <div className={styles['evaluation-question-int-form-criteria']}>
-          <h2 className={styles['evaluation-question-int-form-criteria-name']}>{question && question.criteria.name}</h2>
-          <div
-            className={styles['evaluation-question-int-form-criteria-desc']}
-            dangerouslySetInnerHTML={{__html: striptags(
-              question && question.criteria && question.criteria.desc,
-              allowedHtmlTags)}}></div>
-        </div> : null}
+    <FlexRow className={styles['evaluation-question-int-form-flex-row']}>
+      <div className={styles['evaluation-question-int-form-formulation']}>
 
-      <h2 className={styles['evaluation-question-int-form-question-title']}>Question</h2>
-      <h2 className={styles['evaluation-question-int-form-question-name']}>{question.name}</h2>
+        {EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(question.subtype) == -1 ?
+          <div className={styles['evaluation-question-int-form-criteria']}>
+            {
+              question && question.criteria ?
+              <h2 className={styles['evaluation-question-int-form-criteria-name']}>
+                <span>{question && question.criteria.name}</span>
+                {
+                  question.criteria.desc ?
+                  <Tooltip delay={0} text={striptags(question.criteria.desc)}>{ref => (
+                    <span className={styles['evaluation-question-int-form-criteria-icon']} ref={ref}><InfoIcon /></span>
+                  )}</Tooltip> :
+                  null
+                }
+              </h2> :
+              null
+            }
+          </div> : null}
 
+        <h2 className={styles['evaluation-question-int-form-question-name']}>
+          <QuestionIcon className={styles['evaluation-question-int-form-question-name-icon']} />
+          <span>{question.name}</span>
+        </h2>
 
-      <ul className={styles['evaluation-question-int-form-question-questions']}>
-        {(question.followup || []).map((fq, index) => (
-          <li className={styles['evaluation-question-int-form-question-questions-question']} key={index}>{fq}</li>
-        ))}
-      </ul>
+        <ul className={styles['evaluation-question-int-form-question-questions']}>
+          {(question.followup || []).map((fq, index) => (
+            <li className={styles['evaluation-question-int-form-question-questions-question']} key={index}>{fq}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div className={styles['evaluation-question-int-form-notes']}>
+        <InterviewNotes className={styles['evaluation-question-int-form-notes-input']} value={formValues.notes} onChange={control.input('notes', false)} />
+            
+        {question && question.desc && !formValues.alertDismissed ?
+          <DismissAlert className={styles['evaluation-question-int-form-alert']} onDismiss={() => control.set('alertDismissed', true)}>
+            <Html>{question.desc}</Html>
+          </DismissAlert> : null}
     </div>
-    <div className={classNames(
-      styles['evaluation-question-int-form-block'],
-      styles['evaluation-question-int-form-block-notes']
-    )}>
-      <InterviewNotes className={styles['evaluation-question-int-form-notes']} value={formValues.notes} onChange={control.input('notes', false)} />
-      <div
-        className={styles['evaluation-question-int-form-question-desc']}
-        dangerouslySetInnerHTML={{__html: striptags(
-          question && question.desc, allowedHtmlTags)}}></div>
-    </div>
-    <QuestionScoreBoard score={formValues.score} votes={formValues.votes} onVotes={handleVotes} className={styles['evaluation-question-int-form-sb']} rules={question.rules} />
+    </FlexRow>
+
+    <QuestionScoreBoard score={formValues.score} votes={formValues.votes} onVotes={handleVotes} className={styles['evaluation-question-int-form-scoring-board']} rules={question.rules} />
   </div> : null
 }
 

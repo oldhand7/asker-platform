@@ -1,0 +1,87 @@
+.project-interview-compare {
+    overflow-x: auto;
+    &-head {
+        display: flex;
+        padding-left: 15%;
+        margin-bottom: 10rem;
+    }
+
+    &-candidate {
+        flex: 1 1;
+        position: relative;
+        padding: 10rem 20rem;
+
+        &-title {
+            font-size: 16rem;
+            font-weight: 500;
+            line-height: 24rem;
+        }
+
+        &-score {
+            width: 48rem;
+            height: 48rem;
+            margin-top: 10rem;
+        }
+
+        &-trash {
+            position: absolute;
+            right: 20rem;
+            top: 20rem;
+        }
+
+        &-dummy {
+            text-align: center;
+        }
+
+        &-compact {
+            max-width: 230rem;
+            position: relative;
+        }
+    }
+
+    &-add-candidate {
+        background: 0;
+        border: 1px dashed #ACACAC;
+        border-radius: 5px;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 16px;
+        color: #9C9C9C;
+        line-height: 48rem;
+        display: inline-block;
+        padding: 0 20rem;
+        cursor: pointer;
+
+        &:hover {
+            border: 1px solid #ACACAC;
+        }
+    }
+
+    &-details {
+        border-top: 1px solid #D5D5D5;
+        padding: 10rem 0;
+
+        &-head {
+            display: flex;
+            flex: 0 0 80%;
+            
+            &-bar {
+                width: 100%;
+                max-width: 230rem;
+            }
+        }
+
+        &-body {
+            padding-left: 15%;
+            display: flex;
+            margin-top: 10rem;
+        }
+
+        &-column {
+        }
+
+        &-criteria-list {
+            max-width: 230rem;
+        }
+    }
+}

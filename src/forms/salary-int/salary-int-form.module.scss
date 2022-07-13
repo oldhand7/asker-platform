@@ -4,31 +4,23 @@
   position: relative;
 
   &-title {
-    margin-bottom: 30rem
-  }
-
-  &-field {
-    margin-bottom: 40rem;
+    margin: 10rem 0 20rem;
+    color: #B7B7B7;
+    font-weight: 500;
+    font-size: 20rem;
+    line-height: 30rem;
   }
 
   &-notes {
-    width: 350rem;
-    position: absolute;
-    right: 0;
-    top: 50rem;
-
-    @media (max-width: 1024px) {
-      position: relative;
-      top: 20rem;
-      width: 100%;
-      max-width: 768rem;
-    }
+    flex: 1 1 50%;
   }
 
   &-slider {
-    margin: 100rem 0;
+    flex: 1 1 50%;
+    margin-top: 65rem;
     position: relative;
-    max-width: 500rem;
+    margin-bottom: 40rem;
+    padding-right: 15rem;
 
     &-min,
     &-max {
@@ -46,7 +38,7 @@
     }
 
     &-max {
-      right: -10rem;
+      right: 0rem;
       transform: translate(0, 100%);
     }
 

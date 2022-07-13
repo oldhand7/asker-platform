@@ -138,12 +138,17 @@ describe('Other questions', () => {
             })
 
       cy.createDummyProject('Position Y')
-      cy.tableFirstRowNavigate('Edit')
+
+      cy.contains('Position Y')
+        .closest('ul')
+        .listFirstRowNavigate('Edit')
+
+      cy.contains('Add stage').click()
 
       cy.get('[data-test-id="feature-other-questions"]').drag('[data-test-id="stage-2"] .Droppable')
 
       cy.get('[data-test-id="stage-2"]')
-        .contains('Others')
+        .contains('Other')
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
@@ -233,12 +238,18 @@ describe('Other questions', () => {
         cy.get('[data-test-id="alert-success"]')
           .should('contain', 'Project saved')
 
-        cy.tableFirstRowNavigate('Interviews')
+
+        cy.contains('Position Y')
+          .closest('li')
+          .click()
 
         cy.addProjectCandidate('Jimmy', 'jimmy.davis@yahoo.com')
           .wait(1000)
 
-        cy.tableFirstRowNavigate('Start interview')
+        cy.contains('Jimmy')
+          .closest('[data-test-id="flex-table-row"]')
+          .contains('Start interview')
+          .click()
 
         cy.get('[data-test-id="feature-form"]').eq(1)
           .within(() => {
@@ -324,7 +335,12 @@ describe('Other questions', () => {
 
         cy.contains('Complete interview').click()
 
-        cy.tableFirstRowNavigate('Edit response')
+        cy.location('pathname').should('contain', '/overview/')
+
+        cy.contains('Jimmy')
+          .closest('[data-test-id="flex-table-row"]')
+          .find('[data-test-id="edit-button"]')
+          .click()
 
         cy.get('[data-test-id="feature-form"]').eq(1)
           .within(() => {

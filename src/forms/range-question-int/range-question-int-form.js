@@ -19,9 +19,9 @@ const RangeQuestionIntForm = ({ className, question, values, onValues }) => {
 
     <div className={styles['range-question-int-form-slider']}>
       <Range
-        step={question.step}
-        min={question.min}
-        max={question.max}
+        step={Number.parseInt(question.step)}
+        min={Number.parseInt(question.min)}
+        max={Number.parseInt(question.max)}
         state={ { values: vor() }}
         values={vor()}
         onChange={onValues}

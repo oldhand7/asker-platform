@@ -1,22 +1,116 @@
+@import 'styles/vars';
+
 .interview-form {
+  padding-right: calc(25% + 10rem);
+  position: relative;
+  height: 100%;
+
+  @media (max-width: 768px) {
+    padding: 0rem 30rem;
+  }
+
+  &-title {
+    font-weight: 500;
+    font-size: 32rem;
+    line-height: 48rem;
+    color: #5B5B5B;
+    margin-bottom: 20rem;
+  }
 
   &-stage {
     text-align: left;
-  }
+    min-height: 100vh;
+    padding-top: 15rem;
+    margin-bottom: 40rem;
 
-  &-submit {
-    cursor: pointer;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    &-last {
+      height: auto;
+      min-height: 50vh;
+    }
   }
 
 
   &-stages {
+    height: calc(100% - 48rem);
+    overflow-y: auto;
+    padding-right: 10rem;
+    position: relative;
+    padding-top: 15rem;
+    padding-bottom: 70rem;
 
+    &-wrapper {
+      height: 100%;
+    }
   }
 
-  &-stage {
-    margin: 40rem 0;
+
+  &-sidebar {
+    padding-top: 20rem;;
+    position: absolute;
+    width: calc(25% - 10rem);
+    top: 0;
+    right: 0;
+    height: 100%;
+    overflow-y: auto;
+
+    &-widget {
+      margin-bottom: 20rem;
+      background: white;
+      border-radius: 10px;
+      padding: 24rem;
+    }
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+  &-nav {
+    margin-bottom: 20rem;
+    text-align: center;
+  }
+
+  &-back {
+    padding: 0;;
+    line-height: 1.5;
+    margin-right: 10rem;
+    cursor: pointer;
+    padding: 0 10rem;
+    color: #B7B7B7;
+    background: #E7E7E7;
+    border: 1px solid #B7B7B7;
+    height: 40rem;
+    width: 40rem;
+    line-height: 40rem;
+
+  &-text {
+      vertical-align: middle;
+    }
+
+    &-icon {
+      vertical-align: middle;
+      fill: #5B5B5B;
+    }
+
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
+
+  &-next,
+  &-complete {
+    width: calc(100% - 32rem);
+    margin: 0;
+    height: 48rem;
+    line-height: 48rem;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+    display: block;
+    background: #226B5E;
+    color: white;
+
+    &:hover {
+      background: #226B5E;
+      color: white;
+    }
   }
 }

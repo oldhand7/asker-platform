@@ -11,7 +11,7 @@ const defaultValues = {
 }
 
 const rules = {
-  text: 'max:9000',
+  html: 'max:9000',
 }
 
 const messages = {
@@ -36,7 +36,8 @@ const IntroductionStageForm = ({ className, onValues, values, onError }) => {
 
 
   return <div className={classNames(className, styles['introduction-stage-form'])}>
-    <HtmlInputField value={formValues.html || formValues.text} error={errors && errors['html']} className={classNames(styles['introduction-stage-form-field'], styles['introduction-stage-form-text'])} name="html" onChange={control.input('html', false)} placeholder="Enter your introduction text" />
+    <h3 className={styles['introduction-stage-form-title']}>Introduction text</h3>
+    <HtmlInputField focus={true} value={formValues.html || formValues.text} error={errors && errors['html']} className={classNames(styles['introduction-stage-form-field'], styles['introduction-stage-form-text'])} name="html" onChange={control.input('html', false)} placeholder="Enter your introduction text" />
   </div>
 }
 

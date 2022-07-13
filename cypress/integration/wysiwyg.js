@@ -4,38 +4,43 @@ describe('WYSIWYG', () => {
   })
 
   it('should create a bold text', () => {
-    cy.createDummyProject('Just some project')
-    cy.tableFirstRowNavigate('Edit')
+    cy.createDummyProject('Just some project X')
 
-    cy.get('[data-test-id="stage-1"]').click()
+    cy.contains('Just some project X').closest('ul').listFirstRowNavigate('Edit')
+
+    cy.get('[data-test-id="stage-1"]').click().wait(1000)
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
         cy.get('[contenteditable="true"]').click()
-        cy.get('button').eq(0).click()
+          .type('The world is bold.{selectAll}')
 
-        cy.get('[contenteditable="true"]').click()
-          .type('The world is bold.')
+        cy.get('button').eq(0).click()
       })
 
     cy.contains('Save project').click()
 
-    cy.tableFirstRowNavigate('Interviews')
+    cy.get('[data-test-id="alert-success"]').contains('Project saved')
 
-    cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(2000)
+    cy.contains('Just some project X').closest('li').click()
 
-    cy.tableFirstRowNavigate('Start interview')
+    cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(1000)
+
+    cy.contains('John')
+      .closest('[data-test-id="flex-table-row"]')
+      .contains('Start interview')
+      .click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
-      .find('strong')
+      .find('b')
       .should('contain', 'The world is bold.')
   })
 
   it('should create an unordered list', () => {
-    cy.createDummyProject('Just some project')
-    cy.tableFirstRowNavigate('Edit')
+    cy.createDummyProject('Just some project Y')
+    cy.contains('Just some project Y').closest('ul').listFirstRowNavigate('Edit')
 
-    cy.get('[data-test-id="stage-1"]').click()
+    cy.get('[data-test-id="stage-1"]').click().wait(1000)
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
@@ -53,11 +58,17 @@ describe('WYSIWYG', () => {
 
     cy.contains('Save project').click()
 
-    cy.tableFirstRowNavigate('Interviews')
+    cy.get('[data-test-id="alert-success"]').contains('Project saved')
 
-    cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(2000)
 
-    cy.tableFirstRowNavigate('Start interview')
+    cy.contains('Just some project Y').closest('li').click()
+
+    cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(1000)
+
+    cy.contains('John')
+      .closest('[data-test-id="flex-table-row"]')
+      .contains('Start interview')
+      .click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'List of cities:')
@@ -71,10 +82,11 @@ describe('WYSIWYG', () => {
   })
 
   it('should create a numbered list', () => {
-    cy.createDummyProject('Just some project')
-    cy.tableFirstRowNavigate('Edit')
+    cy.createDummyProject('Just some project Z')
 
-    cy.get('[data-test-id="stage-1"]').click()
+    cy.contains('Just some project Z').closest('ul').listFirstRowNavigate('Edit')
+
+    cy.get('[data-test-id="stage-1"]').click().wait(1000)
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
@@ -92,11 +104,16 @@ describe('WYSIWYG', () => {
 
     cy.contains('Save project').click()
 
-    cy.tableFirstRowNavigate('Interviews')
+    cy.get('[data-test-id="alert-success"]').contains('Project saved')
 
-    cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(2000)
+    cy.contains('Just some project Z').closest('li').click()
 
-    cy.tableFirstRowNavigate('Start interview')
+    cy.addProjectCandidate('John', 'john.kirby.junior@hotmail.net').wait(1000)
+
+    cy.contains('John')
+      .closest('[data-test-id="flex-table-row"]')
+      .contains('Start interview')
+      .click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'List of animals:')

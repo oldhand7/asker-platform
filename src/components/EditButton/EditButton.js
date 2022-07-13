@@ -1,12 +1,12 @@
-import PencilIcon from 'components/Icon/PencilIcon';
+import EditField from 'components/Icon/EditFieldIcon';
 import classNames from 'classnames';
+import IconButton from 'components/IconButton/IconButton';
+import { forwardRef} from 'react';
 
 import styles from './EditButton.module.scss';
 
-const EditButton = ({ className, text = '', ...props }) => (
-  <button data-test-id="edit-button" className={classNames(styles['edit-button'], className)} type="button" {...props}>
-    <PencilIcon className={styles['edit-button-icon']} /> {text}
-  </button>
+const EditButton = ({ className, ...props }, ref) => (
+  <IconButton ref={ref} data-test-id="edit-button" className={classNames(styles['trash-button'], className)} Icon={EditField} {...props}/>
 )
 
-export default EditButton;
+export default forwardRef(EditButton);
