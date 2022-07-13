@@ -7,10 +7,17 @@ export const sessionOptions = {
     cookieName: '__session',
     password: process.env.SESSION_SECRET,
     cookieOptions: (() => {
-      return {
-        secure: process.env.APP_ENV === "production",
-        domain: process.env.APP_ENV == "production" ? "askertech.com" : "localhost"
+      const PROD_ENV = process.env.NODE_ENV == "production" && process.env.APP_ENV == "production";
+
+      const options = {
+        secure: PROD_ENV,
       }
+
+      if (PROD_ENV) {
+        options.domain = "askertech.com";
+      }
+
+      return options;
     })()
 }
 
