@@ -44,7 +44,7 @@ const validateForm = values => {
 export const SettingsList = props => {
     const locale = useLocale();
 
-    return <List {...props}>
+    return <List {...props} perPage={25}>
         <Datagrid rowClick="edit">
             <TextField source="id" label="Name"  />
             <ImageField alwaysSingle={true} source="images" src="src" title="title" />

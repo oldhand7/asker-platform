@@ -47,7 +47,7 @@ const validateForm = values => {
 export const PagesList = props => {
     const locale = useLocale();
 
-    return <List {...props}>
+    return <List {...props} perPage={25}>
         <Datagrid rowClick="edit">
             <TextField source={`name.${locale}`} label="Name" />
             <TextField source={`title.${locale}`} label="Title" />
