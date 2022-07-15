@@ -4,11 +4,21 @@ import { withIronSessionSsr } from 'iron-session/next';
 // export const longTtl = 3600 * 24 * 30;
 
 export const sessionOptions = {
-    cookieName: "__session",
+    cookieName: '__session',
     password: process.env.SESSION_SECRET,
-    cookieOptions: {
-      secure: process.env.APP_ENV === "production",
-    }
+    cookieOptions: (() => {
+      const PROD_ENV = process.env.NODE_ENV == "production" && process.env.APP_ENV == "production";
+
+      const options = {
+        secure: PROD_ENV,
+      }
+
+      if (PROD_ENV) {
+        options.domain = "askertech.com";
+      }
+
+      return options;
+    })()
 }
 
 export const withUserGuard = (handler, superadmin = false) => (req, res) => {

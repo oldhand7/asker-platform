@@ -15,6 +15,18 @@ if (process.env.APP_ENV === 'beta') {
 	})
 }
 
+if (process.env.APP_ENV === 'production') {
+	require('dotenv').config({
+		path: './.env.production',
+		override: true
+	})
+
+	require('dotenv').config({
+		path: './.env.production.local',
+		override: true
+	})
+}
+
 module.exports = {
 	reactStrictMode: true,
 	trailingSlash: true,

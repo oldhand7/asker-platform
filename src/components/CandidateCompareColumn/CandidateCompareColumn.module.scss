@@ -48,8 +48,9 @@
 
         &-screening-answer {
             flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
+            justify-content: flex-start !important;
+            align-items: flex-start !important;
+            margin-bottom: 10rem;
         }
 
         &-has-children {

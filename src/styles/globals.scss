@@ -171,3 +171,16 @@ h1, h2, h3, h4, h5 {
   display: block;
   top: 0;
 }
+
+.maintenence-warning {
+  background: white;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  color: red;
+  width: 250px;
+  border: 1px solid red;
+  padding: 16rem;
+  font-size: 18rem;
+}

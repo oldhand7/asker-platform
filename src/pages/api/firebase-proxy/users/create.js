@@ -51,6 +51,8 @@ handler.post(async (req, res) => {
     res.status(500).json({
       message: "Creating user failed"
     })
+
+    return;
   }
 
   try {
@@ -62,8 +64,6 @@ handler.post(async (req, res) => {
     await sendInvitationEmail(body.email, body.password, company)
   } catch (error) {
     console.log(error.message)
-
-    return;
   }
 
   res.status(200).json({

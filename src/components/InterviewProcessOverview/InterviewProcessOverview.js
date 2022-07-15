@@ -13,8 +13,7 @@ const QuestionCount = ({ count = 0}) => (
   </div>)
 
 const InterviewProcessOverview = ({ className ='xx', interview, stats = []}) => {
-  // const [questionsRemaining, setQuestionsRemaining] = useState(10)
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const questionsRemaining = useMemo(
     () => stats.filter(stat => stat.status == 'awaiting').reduce(createSumReducer('questions'), 0),

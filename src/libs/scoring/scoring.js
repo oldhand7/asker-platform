@@ -1,4 +1,5 @@
 import { getInterviewAggregate } from 'libs/interview';
+import { calcDefaultScoringRules } from 'libs/project';
 import { nameSort } from 'libs/helper';
 
 const scoreTable = [0, 25, 50, 75, 100]
@@ -7,8 +8,12 @@ const scoreReducer = (sum, { score }) => {
   return Number.parseInt(score || 0) + sum;
 }
 
-export const calcInterviewScore = (interview, { scoringRules }) => {
-
+export const calcInterviewScore = (interview, projectOrTemplate) => {
+  const scoringRules = {
+    ...calcDefaultScoringRules(projectOrTemplate),
+    ...(projectOrTemplate.scoringRules || {})
+  }
+  
   const aggregate = getInterviewAggregate(interview)
 
   let interviewScore = 0;

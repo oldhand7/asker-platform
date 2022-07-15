@@ -4,11 +4,73 @@
   cursor: auto !important;
   position: relative;
 
+  &-placeholder {
+    color: #CECECE; 
+    position: absolute;
+    z-index: 0;
+    padding: 10rem 34rem 10rem 10rem !important;
+  }
+
   &-input {
+    z-index: 1;
     border-radius: 10px;
-    background: white;
+    background: rgba(255, 255, 255, 0.5);
     padding-right: 50rem !important;
-    padding: 10rem 40rem 10rem 10rem !important;
+    padding: 10rem 34rem 10rem 10rem !important;
     min-height: 120px !important;
+    border: 1px solid #CECECE;
+    position: relative;
+    cursor: text;
+
+    &-content {
+      font-size: 15rem;
+
+      ul, ol {
+        padding-left: 20rem;
+      }
+
+      p {
+        margin-bottom: 15rem;;
+      }
+
+      &[contenteditable]:focus {
+        outline: 0px solid transparent;
+      }    
+    }
+
+    &-actionbar {
+      font-size: 24rem;
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      right: 5rem;
+      top: 0;
+      height: 100%;
+      width: 24rem;
+      padding-top: 10rem;
+    }
+
+    &-button {
+      border: 0;
+      text-align: center;
+      width: 1em;
+      height: 1em;
+      line-height: 1;
+      margin-bottom: 5rem;
+      background: 0;
+      cursor: pointer;
+      position: relative;
+
+      svg {
+        width: 0.6em;
+        height: 0.6em;
+        display: inline-block;
+        vertical-align: middle;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
   }
 }

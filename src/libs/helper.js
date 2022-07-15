@@ -240,6 +240,11 @@ export const projectStageQuestionsReducer = (questions, stage) => {
   ]
 }
 
+export const textToMailtoHtml = (text) => {
+  const html = text.replace(/([^\s]+@[^\s]+)/g, '<a href="mailto:$1">$1</a>')
+  return html
+}
+
 export const getTimeLabel = (minutes) => {
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;

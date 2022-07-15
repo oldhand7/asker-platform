@@ -30,11 +30,7 @@ const ScreeningEvaluationLabel = ({ evaluation, className }) => {
         </span> : null}
 
         {question.subtype == 'text' ?
-        <span className={styles['screening-evaluation-label-value']}>
-           <PillLabel wrap={true} className={styles['screening-evaluation-label-pill']}>
-            <div dangerouslySetInnerHTML={{__html: answer[0]}}></div>
-           </PillLabel>
-        </span> : null}
+        <div className={styles['screening-evaluation-label-value']} dangerouslySetInnerHTML={{__html: answer[0]}}></div> : null}
     </div>
 }
 

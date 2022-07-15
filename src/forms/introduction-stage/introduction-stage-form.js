@@ -1,4 +1,4 @@
-import HtmlInputField from 'components/HtmlInputField2/HtmlInputField'
+import HtmlInputField from 'components/HtmlInputField/HtmlInputField'
 import useForm from 'libs/use-form';
 import { useEffect } from 'react';
 import classNames from 'classnames';

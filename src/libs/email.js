@@ -9,6 +9,7 @@ let transporter = nodemailer.createTransport({
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS
   },
+  connectionTimeout: 5000
 });
 
 export const sendCustomPasswordResetEmail = async (email, link) => {

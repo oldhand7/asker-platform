@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "export APP_ENV=development && next dev",
     "test-dev": "export APP_ENV=testing && next dev",
+    "prod-dev": "export APP_ENV=production && next dev",
     "build": "next build",
     "beta-dev": "export APP_ENV=beta && next dev",
     "beta-build": "export APP_ENV=beta && next build",
@@ -40,7 +41,6 @@
     "next-connect": "^0.12.2",
     "next-usequerystate": "^1.7.2",
     "node-cache": "^5.1.2",
-    "node-mailer": "^0.1.1",
     "nodemailer": "^6.7.5",
     "pell": "^1.0.6",
     "printenv": "^1.0.0",

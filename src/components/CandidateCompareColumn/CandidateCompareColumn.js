@@ -37,20 +37,21 @@ const calcHeights = () => {
                 
             }
         }
-
+        
         onHeights(heights)
     }
 }
 
-useEffect(calcHeights, [active])
-useEffect(calcHeights, [])
+useEffect(() => {
+    setTimeout(() => {
+        calcHeights()
+    }, 0)
+}, [active])
 
 const toggleRowLocal = (type) => {
     if (toggleRow) {
         toggleRow(type)
     }
-
-    calcHeights()
 }
 
 useEffect(() => {
