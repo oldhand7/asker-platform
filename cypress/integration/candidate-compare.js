@@ -17,16 +17,23 @@ describe('Candidate compare', () => {
             
         cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
         cy.get('#feature-select-modal').contains('Competency').click()
+
         cy.get('[data-test-id="feature-form"]')
-            .find('table').first()
-            .within(() => {
-                cy.contains('CA').closest('tr').find('[data-test-id="add-question"]').click()
-            })
+          .within(() => {
+            cy.get('[data-test-id="question-explorer"]')
+              .within(() => {
+                  cy.get('ul').contains('CA').closest('li').find('button').click()
+              })
+              .should('contain', 'No questions')
+
+            cy.get('[data-test-id="question-manager"] li').first().should('contain', 'CA')
+          })
 
         cy.get('[data-test-id="stage-3"] [data-test-id="load-button"]').click()
         cy.get('#feature-select-modal').contains('Screening').click()
+
         cy.get('[data-test-id="feature-form"]')
-            .find('table').first()
+            .find('ul').first()
             .find('button[data-test-id="add-question"]').first()
             .click()
             

@@ -25,7 +25,7 @@ describe('Modal froms', () => {
     cy.get('[data-test-id="stage-2"]')
       .should('contain', 'Competency based questions')
 
-    cy.contains('Create new question').click().wait(1000)
+    cy.contains('Create').click().wait(1000)
 
     cy.get('#evaluation-question-modal')
       .should('exist')
@@ -123,7 +123,7 @@ describe('Modal froms', () => {
         cy.get('button[type="submit"]').should('contain', 'Add question').click()
       })
 
-      cy.get('[data-test-id="selected-questions-list"]')
+      cy.get('[data-test-id="question-manager"]')
         .should('contain', 'Sample question')
 
       cy.contains('Save project').click()
@@ -164,7 +164,7 @@ describe('Modal froms', () => {
     cy.get('#feature-select-modal')
       .should('not.exist')
 
-    cy.contains('Create new question').click()
+    cy.contains('Create').click()
 
     cy.get('#screening-question-modal').should('exist')
 
@@ -196,7 +196,7 @@ describe('Modal froms', () => {
           cy.contains("Create question").click()
       })
 
-    cy.get('[data-test-id="selected-questions-list"]')
+    cy.get('[data-test-id="question-manager"]')
       .should('contain', 'Do you like fruits?')
 
     cy.contains('Save project').click()

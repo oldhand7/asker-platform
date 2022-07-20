@@ -13,6 +13,12 @@ import HtmlInputField from 'components/HtmlInputField/HtmlInputField'
 
 import styles from './criteria-option-form.module.scss';
 
+const CRITERIA_LABELS = {
+  'competency': 'Competency option',
+  'experience': 'Experience option',
+  'hard-skill': 'Hard-skill option'
+}
+
 const defaultValues = {
   name: '',
   desc: ''
@@ -30,7 +36,7 @@ const messages = {
 const CriteriaOptionForm = ({ className, onValues, values, type }) => {
   const [formValues, errors, control] = useForm({ values: values ? values : {
     ...defaultValues,
-    type: type.id
+    type
   }, rules, messages })
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -58,11 +64,11 @@ const CriteriaOptionForm = ({ className, onValues, values, type }) => {
   }, [error])
 
   return <form data-test-id="criteria-option-form" method="POST" noValidate className={classNames(styles['criteria-option-form'], className)} onSubmit={control.submit(handleSubmit)}>
-    <h2 className={styles['criteria-option-form-title']}>{type.name} option</h2>
+    <h2 className={styles['criteria-option-form-title']}>{CRITERIA_LABELS[type]}</h2>
     {error ? <Alert type="error">{error.message}</Alert> : null}
     <TextInputField value={formValues.name} placeholder={'Name'} error={errors ? errors.name : null} onChange={control.input('name')} autoComplete='off' name="name" className={styles['criteria-option-form-field']} />
     {
-      type.id == 'competency' ?
+      type == 'competency' ?
       <HtmlInputField value={formValues.desc} placeholder={'Definition (optional)'} error={errors ? errors.desc : null} onChange={control.input('desc', false)} name="desc" className={styles['criteria-option-form-field']} /> :
       null
     }

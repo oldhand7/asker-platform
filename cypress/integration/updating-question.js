@@ -19,17 +19,18 @@ describe('Updating queestions', () => {
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
-          cy.get('table tbody').last()
-            .should('not.contain', 'Question 123')
+          cy.get('[data-test-id="question-manager"]')
+          .should('not.contain', 'Question 123')
 
-          cy.get('table tbody').first()
+          cy.get('[data-test-id="question-explorer"] ul').last()
             .contains('Question 123')
-            .closest('tr')
+            .closest('li')
             .find('button')
             .click()
 
-          cy.get('table tbody').last()
+            cy.get('[data-test-id="question-manager"]')
             .should('contain', 'Question 123')
+  
         })
 
       cy.contains('Save project').click()
@@ -62,11 +63,8 @@ describe('Updating queestions', () => {
 
       cy.get('[data-test-id="stage-2"]').click()
 
-      cy.get('[data-test-id="feature-form"]')
-        .within(() => {
-          cy.get('table tbody').last()
-            .should('contain', 'Questione 111')
-        })
+      cy.get('[data-test-id="feature-form"] [data-test-id="question-manager"]')
+        .should('contain', 'Questione 111')
 
       cy.visit('/projects')
 
@@ -95,16 +93,16 @@ describe('Updating queestions', () => {
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
-          cy.get('table tbody').last()
+          cy.get('[data-test-id="question-manager"]')
             .should('not.contain', 'Question ABC')
 
-          cy.get('table tbody').first()
+          cy.get('[data-test-id="question-explorer"] ul').last()
             .contains('Question ABC')
-            .closest('tr')
+            .closest('li')
             .find('button')
             .click()
 
-          cy.get('table tbody').last()
+            cy.get('[data-test-id="question-manager"]')
             .should('contain', 'Question ABC')
         })
 
@@ -127,15 +125,12 @@ describe('Updating queestions', () => {
       cy.visit('/templates')
 
       cy.contains('Project ABC')
-      .closest('ul')
-      .listFirstRowNavigate('Edit')
+        .closest('ul')
+        .listFirstRowNavigate('Edit')
 
       cy.get('[data-test-id="stage-2"]').click()
 
-      cy.get('[data-test-id="feature-form"]')
-        .within(() => {
-          cy.get('table tbody').last()
-            .should('contain', 'Questione 222')
-        })
+      cy.get('[data-test-id="feature-form"] [data-test-id="question-manager"]')
+        .should('contain', 'Questione 222')
   })
 })

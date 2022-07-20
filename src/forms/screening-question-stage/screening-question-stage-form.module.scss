@@ -1,20 +1,10 @@
 .screening-question-stage-form {
+  max-width: 838px;
 
-  &-questions {
+  &-question-explorer {
+    margin-bottom: 24rem;
+  }
 
-    &-list {
-
-      &-item {
-        display: flex;
-
-        &-name {
-          flex: 1;
-        }
-
-        &-remove {
-          flex: 0;
-        }
-      }
-    }
+  &-question-manager {
   }
 }

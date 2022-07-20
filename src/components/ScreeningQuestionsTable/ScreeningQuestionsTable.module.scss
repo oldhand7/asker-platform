@@ -8,11 +8,15 @@
       text-align: left;
   }
 
-  thead th {
-    font-size: 12rem;
-    color: $brandish-grey;
-    font-weight: 500;
-    padding-left: 5rem;
+  thead {
+    display: none;
+
+    th {
+      font-size: 12rem;
+      color: $brandish-grey;
+      font-weight: 500;
+      padding-left: 5rem;
+    }
   }
 
   tbody tr[data-company-id] td:first-child {

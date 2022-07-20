@@ -77,11 +77,8 @@ describe('Templates', () => {
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
-        cy.get('input').first().type('Sample questione')
-
-        cy.get('table').first()
-          .find('button[data-test-id="add-question"]').first()
-          .click()
+        cy.get('input[name="q"]').type('Sample questione')
+        cy.get('button[data-test-id="add-question"]').first().click()
       })
 
     cy.contains('Save template').click()
@@ -94,11 +91,7 @@ describe('Templates', () => {
 
     cy.get('[data-test-id="stage-2"]').click()
 
-    cy.get('[data-test-id="feature-form"]')
-      .within(() => {
-        cy.get('table')
-          .last()
-          .should('contain', 'Sample questione')
-      })
+    cy.get('[data-test-id="feature-form"] [data-test-id="question-manager"]')
+      .should('contain', 'Sample questione')
   })
 })

@@ -1,0 +1,22 @@
+.question-explorer-option {
+    background: #F6F6F6;
+    border: 0;
+    border-radius: 100px;
+    padding: 8rem 16rem;
+    font-weight: 500;
+    font-size: 12rem;
+    line-height: 18rem;
+    display: inline-block;
+    cursor: pointer;
+    box-sizing: border-box;
+
+    &-active {
+        border: 1px solid #43B88C;
+        line-height: 16rem;
+        padding: 8rem 15rem;
+    }
+
+    &:hover {
+        background: darken(#F6F6F6, 2);
+    }
+}

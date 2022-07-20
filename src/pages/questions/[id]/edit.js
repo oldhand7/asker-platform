@@ -19,7 +19,7 @@ const QuestionEditPage = ({ question }) => {
 
     {question.type == 'other' ? <ScreeningQuestionForm type='other' question={question} className={styles['question-edit-page-form']} /> : null}
     {question.type == 'screening' ? <ScreeningQuestionForm question={question} className={styles['question-edit-page-form']} /> : null}
-    {question.type == 'evaluation' ? <EvaluationQuestionForm question={question} className={styles['question-edit-page-form']} subtype={criteriaTypes.find(c => c.id == question.subtype)}  /> : null}
+    {question.type == 'evaluation' ? <EvaluationQuestionForm question={question} className={styles['question-edit-page-form']} type={question.subtype}  /> : null}
   </div>
 }
 
