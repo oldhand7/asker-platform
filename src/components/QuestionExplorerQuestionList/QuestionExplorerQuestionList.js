@@ -13,7 +13,7 @@ const SelectButton = (props) => (<button data-test-id="add-question" type="butto
 
 const QuestionExplorerQuestionList = ({ className, questions = [], onQuestion }) => {
     //
-    return <ul className={classNames(
+    return <ul data-test-id="question-explorer-questions" className={classNames(
         styles['question-explorer-question-list'],
         className
     )}>
@@ -22,6 +22,8 @@ const QuestionExplorerQuestionList = ({ className, questions = [], onQuestion })
 
             if (q.type == 'screening' || q.type == 'other') {
                 type = getScreeningQuestionLabelBySubtype(q.subtype)
+            } else {
+                type = q.criteria && q.criteria.name
             }
 
             return <li data-company-id={q.companyId} key={q.id} className={styles['question-explorer-question-list-question']}>

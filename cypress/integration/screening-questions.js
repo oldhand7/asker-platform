@@ -5,140 +5,40 @@ describe('Screening questions', () => {
 
   it('creates 4 screening questions of 4 different types and assigns for project for interview', () => {
     //Question 1
-    cy.visit('/questions/create/screening')
+    cy.createScreeningChoiceQuestion({
+      name: 'Do you like fruits?',
+      desc: 'Fruits fruits fruits'
+    })
 
-    cy.contains('Yes/No').click()
+    //Question 2
+    cy.createScreeningChoiceQuestion({
+      name: 'What music do you like?',
+      desc: 'Music music music',
+      choices: ['Pop', 'Rock', 'Electronic', 'Classical', 'Other'],
+      multichoice: true
+    })
 
-    cy.get('[data-test-id="title"]')
-      .should('contain', 'Create a screening question')
-      .should('contain', 'Yes/No')
+    //Question 3
+    cy.createScreeningRangeQuestion({
+      name: 'How deep is Atlantic Ocean?',
+      desc: 'Ocean ocean ocean',
+      min: 1,
+      max: 100,
+      step: 1,
+      unit: 'km'
+    })
 
-    cy.get('[data-test-id="choice-question-form"]')
-      .within(() => {
-        cy.get('input[name="name"]').type('Do you like fruits?')
-        cy.get('[data-test-id="html-input-field"]').click()
-          .type('Fruits fruits fruits')
+    //Question 4
+    cy.createScreeningTextQuestion({
+      name: 'What is the meaning of life?',
+      desc: 'Meaning meaning meaning'
+    })
 
-        cy.get('[data-test-id="answers-form"]')
-          .find('ul')
-          .within(() => {
-            cy.get('li').eq(0).find('input[name="answers[]"]').type('Yes{enter}')
-            cy.get('li').eq(1).find('input[name="answers[]"]').type('No')
-          })
-          .children()
-          .should('have.length', 2)
-      })
+    cy.createDummyProject('Position X')
 
-      cy.contains("Create question").click()
-
-      cy.get('table').first()
-        .find('tbody tr')
-        .first()
-        .within(() => {
-          cy.get('td').eq(0).should('contain', 'Screening').should('contain', 'Yes/No')
-          cy.get('td').eq(2).contains('Do you like fruits?')
-        })
-
-
-      //Question 2
-      cy.visit('/questions/create/screening')
-
-      cy.contains('Multiple choice').click()
-
-      cy.get('[data-test-id="title"]')
-        .should('contain', 'Create a screening question')
-        .should('contain', 'Multiple choice')
-
-      cy.get('[data-test-id="choice-question-form"]')
-        .within(() => {
-          cy.get('input[name="name"]').type('What music do you like?')
-          cy.get('[data-test-id="html-input-field"]').click()
-            .type('Music music music')
-
-          cy.get('[data-test-id="answers-form"]')
-            .find('ul')
-            .within(() => {
-              cy.get('li').eq(0).find('input[name="answers[]"]').type('Pop{enter}')
-              cy.get('li').eq(1).find('input[name="answers[]"]').type('Rock{enter}')
-              cy.get('li').eq(2).find('input[name="answers[]"]').type('Electronic{enter}')
-              cy.get('li').eq(3).find('input[name="answers[]"]').type('Classical{enter}')
-              cy.get('li').eq(4).find('input[name="answers[]"]').type('Other')
-            })
-            .children()
-            .should('have.length', 5)
-        })
-
-        cy.contains("Create question").click()
-
-        cy.get('table').first()
-          .find('tbody tr')
-          .first()
-          .within(() => {
-            cy.get('td').eq(0).should('contain', 'Screening').should('contain', 'Multiple choice')
-            cy.get('td').eq(2).contains('What music do you like?')
-          })
-
-        //Question 3
-        cy.visit('/questions/create/screening')
-
-        cy.contains('Range').click()
-
-        cy.get('[data-test-id="title"]')
-          .should('contain', 'Create a screening question')
-          .should('contain', 'Range')
-
-        cy.get('[data-test-id="range-question-form"]')
-          .within(() => {
-            cy.get('input[name="name"]').type('How deep is Atlantic Ocean?')
-            cy.get('[data-test-id="html-input-field"]').click()
-              .type('Ocean ocean ocean')
-
-            cy.get('input[name="unit"]').type('km')
-            cy.get('input[name="min"]').type('1')
-            cy.get('input[name="max"]').type('100')
-          })
-
-          cy.contains("Create question").click()
-
-          cy.get('table').first()
-            .find('tbody tr')
-            .first()
-            .within(() => {
-              cy.get('td').eq(0).should('contain', 'Screening').should('contain', 'Range')
-              cy.get('td').eq(2).contains('How deep is Atlantic Ocean?')
-            })
-
-        //Question 4
-        cy.visit('/questions/create/screening')
-
-        cy.contains('Text').click()
-
-        cy.get('[data-test-id="title"]')
-          .should('contain', 'Create a screening question')
-          .should('contain', 'Text')
-
-        cy.get('[data-test-id="text-question-form"]')
-          .within(() => {
-            cy.get('input[name="name"]').type('What is the meaning of life?')
-            cy.get('[data-test-id="html-input-field"]').click()
-              .type('Meaning meaning meaning')
-          })
-
-          cy.contains("Create question").click()
-
-          cy.get('table').first()
-            .find('tbody tr')
-            .first()
-            .within(() => {
-              cy.get('td').eq(0).should('contain', 'Screening').should('contain', 'Text')
-              cy.get('td').eq(2).contains('What is the meaning of life?')
-            })
-
-      cy.createDummyProject('Position X')
-
-      cy.contains('Position X')
-            .closest('ul')
-            .listFirstRowNavigate('Edit')
+    cy.contains('Position X')
+          .closest('ul')
+          .listFirstRowNavigate('Edit')
 
       cy.contains('Add stage').click()
 
@@ -151,82 +51,79 @@ describe('Screening questions', () => {
         .within(() => {
           cy.get('h3').should('contain', 'Screening')
 
-          cy.get('ul').first()
-            .children()
-            .should('have.length', 4)
-            .parent()
+          cy.get('[data-test-id="question-explorer"]')
             .within(() => {
-              //Sorted by ABC
-              cy.get('li').eq(0)
-                .should('contain', 'Do you like fruits?')
-                .should('contain', 'Yes/No')
+              cy.get('ul')
+                .last()
+                .within(() => {
+                  cy.get('li').eq(0)
+                  .should('contain', 'Do you like fruits?')
+                  .should('contain', 'Yes/No')
+    
+                  cy.get('li').eq(1)
+                    .should('contain', 'How deep is Atlantic Ocean?')
+                    .should('contain', 'Range')
+    
+                  cy.get('li').eq(2)
+                    .should('contain', 'What is the meaning of life?')
+                    .should('contain', 'Text')
+    
+                  cy.get('li').eq(3)
+                    .should('contain', 'What music do you like?')
+                    .should('contain', 'Multiple choice')
+                })
 
-              cy.get('li').eq(1)
-                .should('contain', 'How deep is Atlantic Ocean?')
-                .should('contain', 'Range')
+                cy.get('button[data-test-id="question-explorer-option"]').eq(0)
+                  .should('contain', 'Yes/No').click()
 
-              cy.get('li').eq(2)
-                .should('contain', 'What is the meaning of life?')
-                .should('contain', 'Text')
+                cy.get('ul')
+                  .last()
+                  .should('contain', 'Do you like fruits?')
+                  .children()
+                  .should('have.length', 1)
 
-              cy.get('li').eq(3)
+               cy.get('button[data-test-id="question-explorer-option"]').eq(0)
+                .should('contain', 'Yes/No').click()
+
+               cy.get('button[data-test-id="question-explorer-option"]').eq(1)
+                .should('contain', 'Multiple choice').click()
+
+              cy.get('ul')
+                .last()
                 .should('contain', 'What music do you like?')
-                .should('contain', 'Multiple choice')
+                .children()
+                .should('have.length', 1)
+
+              
+              cy.get('button[data-test-id="question-explorer-option"]').eq(2)
+                .should('contain', 'Range').click()
+    
+              cy.get('button[data-test-id="question-explorer-option"]').eq(3)
+                .should('contain', 'Text').click()
+
+                  
+              cy.get('ul')
+                .last()
+                .children()
+                .should('have.length', 3)
+                .first()
+                .should('not.contain', 'Do you like fruits?')
+
+                cy.get('button[data-test-id="question-explorer-option"]').eq(0)
+                .should('contain', 'Yes/No').click()
+
+                cy.get('ul')
+                  .last()
+                  .find('button')
+                  .should('have.length', 4)
+                  .click({ multiple: true })
             })
 
-          cy.get('[data-test-id="subtype-filter"] button').eq(0)
-            .should('contain', 'Yes/No').click()
-
-          cy.get('ul').first()
-            .children()
-            .should('have.length', 1)
-            .first()
-            .should('contain', 'Do you like fruits?')
-
-          cy.get('[data-test-id="subtype-filter"] button').eq(0)
-            .should('contain', 'Yes/No').click()
-
-          cy.get('[data-test-id="subtype-filter"] button').eq(1)
-            .should('contain', 'Multiple choice').click()
-
-          cy.get('ul').first()
-            .children()
-            .should('have.length', 1)
-            .first()
-            .should('contain', 'What music do you like?')
-
-          cy.get('[data-test-id="subtype-filter"] button').eq(2)
-            .should('contain', 'Range').click()
-
-          cy.get('[data-test-id="subtype-filter"] button').eq(3)
-            .should('contain', 'Text').click()
-
-          cy.get('ul').first()
-            .children()
-            .should('have.length', 3)
-            .first()
-            .should('not.contain', 'Do you like fruits?')
-
-          cy.get('[data-test-id="subtype-filter"] button').eq(0)
-            .should('contain', 'Yes/No').click()
-
-          cy.get('ul').first()
-            .children()
-            .should('have.length', 4)
-
-          cy.get('ul').first()
-            .within(() => {
-              cy.get('li').first().find('button').click()
-              cy.get('li').first().find('button').click()
-              cy.get('li').first().find('button').click()
-              cy.get('li').first().find('button').click()
-            })
-
-          cy.get('table').last()
-            .should('contain', 'Do you like fruits?')
-            .should('contain', 'What music do you like?')
-            .should('contain', 'What is the meaning of life?')
-            .should('contain', 'How deep is Atlantic Ocean?')
+          cy.get('[data-test-id="question-manager"]')
+              .should('contain', 'Do you like fruits?')
+              .should('contain', 'What music do you like?')
+              .should('contain', 'What is the meaning of life?')
+              .should('contain', 'How deep is Atlantic Ocean?')
         })
 
         cy.contains('Save project').click()

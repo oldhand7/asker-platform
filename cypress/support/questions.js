@@ -69,7 +69,7 @@ const createEvaluationCriteriaQuestion = (domain = 'competency', details) => {
 }
 
 const createChoiceQuestion = (domain = 'screening', details) => {
-  const { name, choices = ['Yes', 'No'], multichoice } = details;
+  const { name, desc, choices = ['Yes', 'No'], multichoice } = details;
 
   cy.visit(`/questions/create/${domain}`)
 
@@ -78,6 +78,10 @@ const createChoiceQuestion = (domain = 'screening', details) => {
   cy.get(`[data-test-id="${domain}-question-form"]`)
     .within(() => {
       cy.get('input[name="name"]').first().type(name)
+
+      if (desc) {
+        cy.get('[data-test-id="html-input-field"]').click().type(desc)
+      }
 
       for (let i = 0; i < choices.length; i++) {
         if (i > 1) {

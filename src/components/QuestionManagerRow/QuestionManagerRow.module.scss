@@ -1,0 +1,64 @@
+.question-manager-row {
+    display: flex;
+    align-items: center;
+
+    &-head {
+        padding-right: 8rem;
+        flex: 0 1;
+    }
+
+    &-body {
+        padding: 8rem;
+        display: flex;
+        align-items: center;
+        flex: 1 1;
+        background: #FFFFFF;
+        border: 1px solid #E7E7E7;
+        border-radius: 7px;
+    }
+
+    &-drag-handle {
+        color: #D9D9D9;
+        fill: currentColor;
+    }
+
+    &-title {
+        font-weight: 500;
+        font-size: 16rem;
+        line-height: 24rem;
+        color: #000000;
+        flex: 0 0 400rem;
+        margin: 0;
+        padding: 0 16rem 0 8rem;
+
+        span {
+            max-width: 350rem;
+            display: inline-block;
+            overflow-x: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+    }
+
+    &-type {
+        font-size: 12rem;
+        padding-right: 16rem;
+        flex: 0 0 130rem;
+        white-space: nowrap;
+    }
+
+    &-control {
+        flex: 1 1;
+        display: flex;
+        justify-content: flex-end;
+
+        &-button {
+            margin-right: 8rem;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+}

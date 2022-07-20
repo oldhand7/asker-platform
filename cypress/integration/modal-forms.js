@@ -123,7 +123,7 @@ describe('Modal froms', () => {
         cy.get('button[type="submit"]').should('contain', 'Add question').click()
       })
 
-      cy.get('[data-test-id="selected-questions-list"]')
+      cy.get('[data-test-id="question-manager"]')
         .should('contain', 'Sample question')
 
       cy.contains('Save project').click()
@@ -196,7 +196,7 @@ describe('Modal froms', () => {
           cy.contains("Create question").click()
       })
 
-    cy.get('[data-test-id="selected-questions-list"]')
+    cy.get('[data-test-id="question-manager"]')
       .should('contain', 'Do you like fruits?')
 
     cy.contains('Save project').click()

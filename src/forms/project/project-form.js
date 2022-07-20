@@ -310,7 +310,7 @@ const ProjectForm = ({ project, className }) => {
         </div>
 
         {stage ?
-        <div className={styles['project-form-feature-form']} id="feature-form" data-test-id="feature-form">
+        <div className={styles['project-form-feature-form']} data-stage-id={stage.id} id="feature-form" data-test-id="feature-form">
           <FeatureForm values={stage.config} onError={onStageError} onValues={handleStageValues} feature={stage} />
         </div> : null}
 

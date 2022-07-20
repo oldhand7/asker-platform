@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { useEffect } from 'react';
 import useForm from 'libs/use-form';
-import ScreeningQuestionExplorer from 'components/ScreeningQuestionExplorer/ScreeningQuestionExplorer';
-import SelectedQuestionsList from 'components/SelectedQuestionsList/SelectedQuestionsList';
+import QuestionExplorer from 'components/QuestionExplorer/QuestionExplorer';
+import SelectedQuestionsManager from 'components/SelectedQuestionsManager/SelectedQuestionsManager';
 
 import styles from './other-question-stage-form.module.scss';
 
@@ -33,8 +33,8 @@ const OtherQuestionStageForm = ({ className, values, onValues, feature, onError 
   }, [formValues, errors])
 
   return <div className={classNames(styles['other-question-stage-form'], className)}>
-    <ScreeningQuestionExplorer className={styles['other-question-stage-form-question-explorer']} label='Other' questions={formValues.questions} onQuestions={control.input('questions', false)} type='other' />
-    <SelectedQuestionsList className={styles['other-question-stage-form-question-explorer']} feature={feature} questions={formValues.questions} onChange={control.input('questions', false)} />
+    <QuestionExplorer className={styles['other-question-stage-form-question-explorer']} label='Other' questions={formValues.questions} onQuestions={control.input('questions', false)} type='other' />
+    <SelectedQuestionsManager className={styles['other-question-stage-form-question-manager']} feature={feature} questions={formValues.questions} onChange={control.input('questions', false)} type='other' />
   </div>
 }
 

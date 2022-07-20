@@ -1,0 +1,20 @@
+@import 'styles/vars';
+
+.selected-questions-manager {
+  &-title {
+    font-weight: 500;
+    font-size: 16rem;
+    line-height: 24rem;
+    color: #5B5B5B;
+    margin-bottom: 0;
+  }
+
+  &-list {
+    margin-top: 16rem;
+    padding: 0;
+
+    &-item {
+      margin-bottom: 8rem;
+    }
+  }
+}

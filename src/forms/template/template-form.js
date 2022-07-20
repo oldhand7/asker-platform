@@ -266,7 +266,7 @@ const TemplateForm = ({ template, className }) => {
         </div>
 
         {stage ?
-          <div className={styles['template-form-feature-form']} id="feature-form" data-test-id="feature-form">
+          <div data-stage-id={stage.id} className={styles['template-form-feature-form']} id="feature-form" data-test-id="feature-form">
             <FeatureForm values={stage.config} onError={onStageError} onValues={handleStageValues} feature={stage} />
           </div> : null}
       </div>

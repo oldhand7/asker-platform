@@ -1,6 +1,10 @@
 .screening-question-stage-form {
+  max-width: 838px;
+
   &-question-explorer {
-    margin-bottom: 16rem;
-    max-width: 838px;
+    margin-bottom: 24rem;
+  }
+
+  &-question-manager {
   }
 }

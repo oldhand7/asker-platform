@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { useEffect } from 'react';
 import useForm from 'libs/use-form';
-import ScreeningQuestionExplorer from 'components/ScreeningQuestionExplorer/ScreeningQuestionExplorer';
-import SelectedQuestionsList from 'components/SelectedQuestionsList/SelectedQuestionsList';
+import QuestionExplorer from 'components/QuestionExplorer/QuestionExplorer';
+import SelectedQuestionsManager from 'components/SelectedQuestionsManager/SelectedQuestionsManager';
 
 import styles from './screening-question-stage-form.module.scss';
 
@@ -24,12 +24,6 @@ const ScreeningQuestionStageForm = ({ className, values, onValues, feature, onEr
     pristine: false
   })
 
-  const handleQuestionRemove = question => {
-    if (confirm('Are you sure?')) {
-      control.set('questions', [...formValues.questions.filter(q => q != question)])
-    }
-  }
-
   useEffect(() => {
     if (!errors) {
       onValues && onValues(formValues)
@@ -39,8 +33,8 @@ const ScreeningQuestionStageForm = ({ className, values, onValues, feature, onEr
   }, [formValues, errors])
 
   return <div className={classNames(styles['screening-question-stage-form'], className)}>
-    <ScreeningQuestionExplorer className={styles['screening-question-stage-form-question-explorer']} label='Screening' questions={formValues.questions} onQuestions={control.input('questions', false)} type='screening' />
-    <SelectedQuestionsList className={styles['screening-question-stage-form-question-selection']} feature={feature} questions={formValues.questions} onChange={control.input('questions', false)} />
+    <QuestionExplorer className={styles['screening-question-stage-form-question-explorer']} label='Screening' questions={formValues.questions} onQuestions={control.input('questions', false)} type='screening' />
+    <SelectedQuestionsManager className={styles['screening-question-stage-form-question-manager']} questions={formValues.questions} onChange={control.input('questions', false)} type='screening' />
   </div>
 }
 

@@ -110,6 +110,12 @@ const beforeRun = async () => {
   const userId16Joe  = await helpers.createUser('Joe Gooney', 'joe.gooney@example.com', 'test123', companyId16, 'admin', false)
   const userId16Jane = await helpers.createUser('Jane Gooney', 'jane.gooney@example.com', 'test123', companyId16, 'hr', false)
 
+  //User 17
+  const companyId17 = await helpers.createCompany('Goofey & Co')
+
+  const userId17Joe  = await helpers.createUser('Joe Goofey', 'joe.goofey@example.com', 'test123', companyId17, 'admin', false)
+  const userId17Jane = await helpers.createUser('Jane Goofey', 'jane.goofey@example.com', 'test123', companyId17, 'hr', false)
+
   await helpers.createQuestion({
     name: 'CQ1',
     companyId: companyId2,
