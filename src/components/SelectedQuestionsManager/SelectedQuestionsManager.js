@@ -10,7 +10,7 @@ import { useCallback } from 'react';
 import styles from './SelectedQuestionsManager.module.scss';
 
 const SelectedQuestionsManager = ({ title = 'Selected questions', className, questions, onChange, type }) => {
-  const [config, t] = useSite();
+  const { config, t } = useSite();
 
   const openScreeningQuestionModal = useModal(ScreeningQuestionModal, { size: 'medium'});
   const openEvaluationQuestionModal = useModal(EvaluationQuestionModal, { size: 'large'});
