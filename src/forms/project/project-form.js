@@ -307,12 +307,12 @@ const ProjectForm = ({ project, className }) => {
           {values.stages.length < 14 ? <button type="button" className={styles['project-form-add-stage']} onClick={() => addStage()}>Add stage +</button> : null}
           </div>
           </NewStageDroppable>
-
-          {stage ?
-          <div className={styles['project-form-stager-feature-form']} id="feature-form" data-test-id="feature-form">
-            <FeatureForm values={stage.config} onError={onStageError} onValues={handleStageValues} feature={stage} />
-          </div> : null}
         </div>
+
+        {stage ?
+        <div className={styles['project-form-feature-form']} data-stage-id={stage.id} id="feature-form" data-test-id="feature-form">
+          <FeatureForm values={stage.config} onError={onStageError} onValues={handleStageValues} feature={stage} />
+        </div> : null}
 
         <div className={classNames(styles['project-form-field'], styles['project-form-field-interviewers'])}>
           <h3 className={styles['project-form-field-title']}>Assign interviewer</h3>

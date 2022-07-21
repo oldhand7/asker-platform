@@ -12,18 +12,19 @@ import Separator from 'components/Separator/Separator'
 import FlexRow from 'components/FlexRow/FlexRow';
 import EditButton from 'components/EditButton/EditButton';
 import striptags from 'striptags';
+import { EVALUATION_CRITERIA_TYPES } from 'libs/criteria'
 
 import styles from './CriteriaOptionInputField.module.scss';
 
 const CriteriaOptionInputField = ({ error, className, value, onChange, type }) => {
   const [criteriaOptions, setCriteriaOptions] = useState([]);
-  const openCriteriaOptionModal = useModal(CriteriaOptionModal, { type, values: value })
+  const openCriteriaOptionModal = useModal(CriteriaOptionModal)
   const { user } = useUser();
 
   useEffect(() => {
     const filter = [
       ['companyId', 'in', [user.companyId, 'asker']],
-      ['type', '==', type.id]
+      ['type', '==', type]
     ]
 
     const sort = [
@@ -44,9 +45,13 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, type }) =
   const resetOption = () => {
     onChange(null)
   }
+  
+  const  handleOpenModal = () => {
+    openCriteriaOptionModal(onChange, { type, values: value });
+  }
 
   return <div data-test-id="criteria-option-input-field" className={classNames(styles['criteria-option-input-field'], className)}>
-    <span className={styles['criteria-option-input-field-label']}>{type.name}:</span>
+    <span className={styles['criteria-option-input-field-label']}>{EVALUATION_CRITERIA_TYPES[type].name}:</span>
 
     {
       !value ?
@@ -54,8 +59,8 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, type }) =
         <Autocomplete className={styles['criteria-option-input-field-autocomplete']} options={criteriaOptions} onSearch={handleCriteriaOption} />
         <FlexRow>
           <Separator background='' />
-          <OutlineButton type="button" onClick={() => openCriteriaOptionModal(onChange)} className={styles['criteria-option-input-field-button']} >
-            <PlusIcon /> Create new {type.name.toLowerCase()}
+          <OutlineButton type="button" onClick={handleOpenModal} className={styles['criteria-option-input-field-button']} >
+            <PlusIcon /> Create new {EVALUATION_CRITERIA_TYPES[type].name.toLowerCase()}
           </OutlineButton>
         </FlexRow>
       </> :

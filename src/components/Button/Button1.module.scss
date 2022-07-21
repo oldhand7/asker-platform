@@ -1,0 +1,45 @@
+@import 'styles/vars';
+
+.button {
+  
+  &-checkbox {
+    display: flex;
+    line-height: 1;
+    color: blue;
+    border-radius: 5px;
+    border: 0;
+    padding: 8rem;
+    background: currentColor;
+    font-weight: 500;
+    font-size: 13rem;
+    line-height: 20rem;
+    padding-left: calc(8rem + 1em + 12rem);
+    padding-right: 20rem;
+    position: relative;
+
+    &-green {
+      color: #43B88C;
+      fill: white;
+    }
+
+    &-dark {
+      color: #282828;
+      fill: white;
+    }
+
+    &-icon {
+      vertical-align: middle;
+      position: absolute;
+      top: 50%;
+      left: 8rem;
+      transform: translateY(-50%);
+      font-size: 1.25em;
+    }
+
+    &-text {
+      white-space: nowrap;
+      vertical-align: middle;
+      color: white;
+    }
+  }
+}

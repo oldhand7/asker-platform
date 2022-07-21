@@ -31,3 +31,13 @@ export const featureTypes = [
     { id: 'evaluation', name: 'Evaluation' },
     { id: 'other', name: 'Other options' }
   ]
+
+  export const SHORT_IDS = {
+    'competency-questions': 'competency',
+    'motivation-questions': 'motivation',
+    'experience-questions': 'experience',
+    'culture-fit-questions': 'culture-fit',
+    'hard-skill-questions': 'hard-skill',
+    'screening-questions': 'screening',
+    'other-questions': 'other'
+  }

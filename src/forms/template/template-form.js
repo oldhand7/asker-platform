@@ -263,12 +263,12 @@ const TemplateForm = ({ template, className }) => {
           {values.stages.length < 14 ? <button type="button" className={styles['template-form-add-stage']} onClick={() => addStage()}>Add stage +</button> : null}
           </div>
           </NewStageDroppable>
+        </div>
 
-          {stage ?
-          <div className={styles['template-form-stager-feature-form']} id="feature-form" data-test-id="feature-form">
+        {stage ?
+          <div data-stage-id={stage.id} className={styles['template-form-feature-form']} id="feature-form" data-test-id="feature-form">
             <FeatureForm values={stage.config} onError={onStageError} onValues={handleStageValues} feature={stage} />
           </div> : null}
-        </div>
       </div>
     </div>
     {loading ? <Preloader /> : null}

@@ -9,12 +9,12 @@ import { useRouter } from 'next/router';
 import { useUser } from 'libs/user';
 import Preloader from 'components/Preloader/Preloader';
 import MultichoiceIcon from 'components/Icon/MultichoiceIcon';
-import BoxesIcon from 'components/Icon/BoxesIcon';
-import DoubleCheckIcon from 'components/Icon/DoubleCheckIcon';
+import RangeIcon from 'components/Icon/RangeIcon';
 import TextIcon from 'components/Icon/TextIcon';
 import { ctxError }from 'libs/helper';
 
 import styles from './screening-question-form.module.scss';
+import YesNoIcon from 'components/Icon/YesNoIcon';
 
 const featureForms = {
   'choice': dynamic(() => import('forms/choice-question/choice-question-form')),
@@ -25,7 +25,7 @@ const featureForms = {
 
 export const getScreeningQuestionLabelBySubtype = (subtype) => {
   if (subtype == 'range') {
-    return <IconicLabel Icon={BoxesIcon}>Range</IconicLabel>;
+    return <IconicLabel Icon={RangeIcon}>Range</IconicLabel>;
   }
 
   if (subtype == 'text') {
@@ -33,7 +33,7 @@ export const getScreeningQuestionLabelBySubtype = (subtype) => {
   }
 
   return subtype == 'choice' ?
-    <IconicLabel Icon={DoubleCheckIcon}>Yes/No</IconicLabel> :
+    <IconicLabel Icon={YesNoIcon}>Yes/No</IconicLabel> :
     <IconicLabel Icon={MultichoiceIcon}>Multiple choice</IconicLabel>;
 }
 

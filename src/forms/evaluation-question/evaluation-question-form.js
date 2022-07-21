@@ -13,10 +13,34 @@ import Alert from 'components/Alert/Alert';
 import { addFlash } from 'libs/flash';
 import { useRouter } from 'next/router';
 import HtmlInputField from 'components/HtmlInputField/HtmlInputField'
+import { EVALUATION_CRITERIA_TYPES } from 'libs/criteria';
 
 import styles from './evaluation-question-form.module.scss';
 
 const EVALUATION_SUBTYPES_NO_CRITERIA = ['culture-fit', 'motivation'];
+
+const HEADLINES = {
+  'competency': {
+    edit: 'Edit competency question',
+    create: 'Create a new competency based question'
+  },
+  'experience': {
+    edit: 'Edit experience question',
+    create: 'Create a new experience based question'
+  },
+  'motivation': {
+    edit: 'Edit motivation question',
+    create: 'Create a new motivation based question'
+  },
+  'culture-fit': {
+    edit: 'Edit culture-fit question',
+    create: 'Create a new culture-fit based question'
+  },
+  'hard-skill': {
+    edit: 'Edit hard-skill question',
+    create: 'Create a new hard-skill based question'
+  },
+}
 
 const defaultValues = {
   name: '',
@@ -33,13 +57,13 @@ const createValidationRules = type => ({
   name: 'required|max:250',
   desc: 'max:9000',
   followup: 'max:10',
-  criteria: EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(type.id) != -1 ? '' : 'required'
+  criteria: EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(type) != -1 ? '' : 'required'
 })
 
-const EvaluationQuestionForm = ({ className, question, markComplete, subtype, onValues }) => {
+const EvaluationQuestionForm = ({ className, question, type, onValues }) => {
   const {values, errors, control } = useForm({
-    values: question ? question : { ...defaultValues, rules: subtype.rules },
-    rules: createValidationRules(subtype)
+    values: question ? question : { ...defaultValues, rules: EVALUATION_CRITERIA_TYPES[type].rules },
+    rules: createValidationRules(type)
   })
   const {user} = useUser();
   const [loading, setLoading] = useState(false);
@@ -60,7 +84,7 @@ const EvaluationQuestionForm = ({ className, question, markComplete, subtype, on
     values.followupCount = values.followup.length
 
     if (!values.subtype) {
-      values.subtype = subtype.id
+      values.subtype = type
     }
 
     saveCollectionDocument('questions', values)
@@ -106,12 +130,12 @@ const EvaluationQuestionForm = ({ className, question, markComplete, subtype, on
     {error ? <Alert type="error">{error.message}</Alert> : null}
 
     <div className={styles['evaluation-question-form-wrapper']}>
-      <h2 className={styles['evaluation-question-form-title']}>{question ? `Edit ${subtype.altName.toLowerCase()} question` : subtype.cta}</h2>
-      {!question ? <p className={styles['evaluation-question-form-desc']}>{subtype.desc}</p> : null}
+      <h2 className={styles['evaluation-question-form-title']}>{question ? HEADLINES[type].edit : HEADLINES[type].create}</h2>
+      {!question ? <p className={styles['evaluation-question-form-desc']}>{EVALUATION_CRITERIA_TYPES[type].desc}</p> : null}
 
       {
-        EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(subtype.id) == -1 ?
-        <CriteriaOptionInputField error={errors && errors['criteria']} value={values.criteria} type={subtype} onChange={control.input('criteria', false)} className={styles['evaluation-question-form-input-field']} /> :
+        EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(type) == -1 ?
+        <CriteriaOptionInputField error={errors && errors['criteria']} value={values.criteria} type={type} onChange={control.input('criteria', false)} className={styles['evaluation-question-form-input-field']} /> :
         null
       }
 

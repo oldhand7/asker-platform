@@ -18,7 +18,7 @@ const QuestionCreatePage = ({ questionType, questionSubtype }) => {
 
     { questionType.id == 'screening' ? <ScreeningQuestionForm className={styles['question-create-page-form']} /> : null}
     { questionType.id == 'other' ? <ScreeningQuestionForm type='other' className={styles['question-create-page-form']} /> : null}
-    { questionType.id == 'evaluation' ? <EvaluationQuestionForm className={styles['question-create-page-form']} subtype={questionSubtype || questionType.subtypes[0]} /> : null}
+    { questionType.id == 'evaluation' ? <EvaluationQuestionForm className={styles['question-create-page-form']} type={(questionSubtype || questionType.subtypes[0]).id} /> : null}
   </div>
 }
 
