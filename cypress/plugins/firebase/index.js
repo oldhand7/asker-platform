@@ -8,6 +8,7 @@ const beforeRun = async () => {
   await helpers.deleteCollection('questions');
   await helpers.deleteCollection('templates');
   await helpers.deleteCollection('criteriaOptions');
+  await helpers.deleteCollection('translations');
 
   //Creates superadmin
   await helpers.createRootCompany()
@@ -110,6 +111,12 @@ const beforeRun = async () => {
   const userId16Joe  = await helpers.createUser('Joe Gooney', 'joe.gooney@example.com', 'test123', companyId16, 'admin', false)
   const userId16Jane = await helpers.createUser('Jane Gooney', 'jane.gooney@example.com', 'test123', companyId16, 'hr', false)
 
+  //User 17
+  const companyId17 = await helpers.createCompany('Riley & Co')
+
+  const userId17Joe  = await helpers.createUser('Joe Riley', 'joe.riley@example.com', 'test123', companyId17, 'admin', false)
+  const userId17Jane = await helpers.createUser('Jane Riley', 'jane.riley@example.com', 'test123', companyId17, 'hr', false)
+
   await helpers.createQuestion({
     name: 'CQ1',
     companyId: companyId2,
@@ -195,6 +202,13 @@ const beforeRun = async () => {
     evaluations: [],
     createdAt: 2,
     updatedAt: 0,
+  })
+
+  await helpers.createTranslation({
+    text: 'Projects',
+    translation: {
+      se: "Projects_SE"
+    }
   })
 }
 

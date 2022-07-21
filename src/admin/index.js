@@ -55,7 +55,7 @@ const AdminApp = () => {
         <Resource name="sections" options={{domain: "landing", label: 'Sections'}} list={SectionsList} edit={SectionsEdit} create={SectionsAdd} />
         <Resource name="employees" options={{domain: "landing", label: 'Employees'}} list={EmployeesList} edit={EmployeesEdit} create={EmployeesAdd} />
         <Resource name="companies" options={{domain: "platform", label: 'Companies'}} list={CompaniesList} edit={CompaniesEdit} create={CompaniesAdd} />
-        <Resource name="translations" options={{domain: "landing", label: 'Translations'}} list={TranslationsList} edit={TranslationsEdit} create={TranslationsAdd} />
+        <Resource name="translations" options={{domain: "platform", label: 'Translations'}} list={TranslationsList} edit={TranslationsEdit} create={TranslationsAdd} />
         <Resource name="settings" options={{domain: 0, label: 'Settings', Icon: SettingsSharpIcon }} list={SettingsList} edit={SettingsEdit} create={SettingsAdd} />
         <Resource name="partners" options={{domain: "landing", label: 'Partners'}} list={PartnersList} edit={PartnersEdit} create={PartnersAdd} />
     </Admin>

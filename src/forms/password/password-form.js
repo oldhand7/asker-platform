@@ -1,8 +1,6 @@
 import useForm from 'libs/use-form';
 import classNames from 'classnames';
 import PasswordInputField from 'components/PasswordInputField/PasswordInputField';
-import Button from 'components/Button/Button';
-import { useSite } from 'libs/site';
 
 import styles from './password-form.module.scss';
 

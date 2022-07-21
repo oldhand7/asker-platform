@@ -56,7 +56,8 @@ handler.post(async (req, res) => {
         id: claims.uid,
         companyId: claims.companyId,
         superadmin: claims.superadmin,
-        type: claims.type
+        type: claims.type,
+        locale: user.locale || 'en'
       }
 
       await req.session.save()

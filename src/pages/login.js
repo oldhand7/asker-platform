@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import LoginForm from 'forms/login/login-form';
-import { getSettings } from 'libs/firestore-admin';
+import { getSettings, getTranslations } from 'libs/firestore-admin';
 import { useUser } from 'libs/user';
 import { useEffect} from 'react';
 import Head from 'next/head';
@@ -28,7 +28,8 @@ const LoginPage = () => {
 export const getServerSideProps = async ({ req, res}) => {
   return {
     props: {
-      config: await getSettings()
+      config: await getSettings(),
+      translations: await getTranslations()
     }
   }
 }

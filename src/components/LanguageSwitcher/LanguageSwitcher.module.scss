@@ -1,0 +1,52 @@
+.language-switcher {
+    position: relative;
+
+    &-head {
+        position: relative;
+        padding-right: 24rem;
+
+        &-carret {
+            vertical-align: middle;
+            position: relative;
+            position: absolute;
+            top: calc(50% + 4rem);
+            right: 4rem;
+            transform: translateY(-50%);
+            font-size: 12rem;
+        }
+    }
+
+    &-options {
+        position: absolute;
+        bottom: 0;
+        width: 100%;;
+        transform:translateY(100%);
+        display: none;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        background: white;
+        left: 0;
+    }
+
+    &-open &-options {
+        display: block;
+
+    }
+
+    &-item {
+        display: flex;
+        cursor: pointer;
+        padding: 2rem 4rem;
+
+        &-emoji {
+            display: inline-block;
+            margin-right: 4rem;
+        }
+
+        &-text {
+            text-transform: uppercase;
+            display: inline-block;
+        }
+    }
+}

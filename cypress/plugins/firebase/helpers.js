@@ -136,6 +136,14 @@ async function deleteQueryBatch(query, resolve) {
   });
 }
 
+const createTranslation = async (data) => {
+  const docRef = db.collection('translations').doc()
+
+  await docRef.set(data)
+
+  return docRef.id;
+}
+
 module.exports = {
   removeAllFirebaseUsers,
   createCompany,
@@ -145,5 +153,6 @@ module.exports = {
   createQuestion,
   createInterview,
   deleteCollection,
-  deleteQueryBatch
+  deleteQueryBatch,
+  createTranslation
 }
