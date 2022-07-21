@@ -9,7 +9,7 @@ const getUserLocale = (user) => {
     return;
   }
 
-  return user && user.locale || window.localStorage.getItem('user_locale');
+  return user && user.locale || window.localStorage.getItem('user_locale') || 'en';
 }
 
 const storeUserLocale = (locale, user) => {

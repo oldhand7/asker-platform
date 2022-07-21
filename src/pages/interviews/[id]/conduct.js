@@ -29,7 +29,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }
     }
   }
 
-  if (req.session.user.locale != locale) {
+  if (req.session.user.locale && req.session.user.locale != locale) {
     const destination = `/${req.session.user.locale}/interviews/${query.id}/conduct/`;
 
     return {

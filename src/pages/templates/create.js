@@ -25,7 +25,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ req, locale }) => {
     }
   }
 
-  if (req.session.user.locale != locale) {
+  if (req.session.user.locale && req.session.user.locale != locale) {
     let destination = `/${req.session.user.locale}/templates/create/`;
 
     return {

@@ -24,7 +24,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale})
     }
   }
 
-  if (req.session.user.locale != locale) {
+  if (req.session.user.locale && req.session.user.locale != locale) {
     let destination = `/${req.session.user.locale}/templates/${query.id}/edit/`;
 
     return {
