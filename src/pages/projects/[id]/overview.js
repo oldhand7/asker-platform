@@ -1,4 +1,4 @@
-import { getSettings } from 'libs/firestore-admin';
+import { getSettings, getTranslations } from 'libs/firestore-admin';
 import { useEffect, useState, useMemo } from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import Head from 'next/head';
@@ -20,6 +20,7 @@ import { unpackQuestions } from 'libs/project';
 
 import styles from 'styles/pages/project-overview.module.scss';
 import CompareBox from 'components/CompareBox/CompareBox';
+import { useSite } from 'libs/site';
 
 const defaultSort = [
   ['status', 'desc'], // complete, awaiting
@@ -35,6 +36,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
   const flashSuccess = useFlash('success');
   const [success, setSuccess] = useState(null);
   const [compare, setCompare] = useState([])
+  const { t} = useSite()
 
   useEffect(() => {
     if (flashSuccess) {
@@ -126,7 +128,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
 
   return <div className={styles['project-overview-page']}>
       <Head>
-        <title>{project.name} - Project overview - Asker</title>
+        <title>{project.name} - {t('Project overview')} - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
 
@@ -134,11 +136,11 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
         <div className={styles['project-overview-page-overview-head']}>
           <h1 className={styles['project-overview-page-title']}>
             {project.name} <Link href={`/projects/${project.id}/edit`}>
-              <a className={styles['project-overview-page-title-edit-link']}>edit</a></Link>
+              <a className={styles['project-overview-page-title-edit-link']}>{t('Edit')}</a></Link>
           </h1>
           <div>
           <PlatformButton onClick={() => openCandidateModal(handleCandidate)} className={styles['project-overview-page-add-candidate']}>
-            <PlusIcon /> Add candidate</PlatformButton>
+            <PlusIcon /> {t('Add candidate')}</PlatformButton>
           </div>
         </div>
 
@@ -160,7 +162,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
         <ProjectEvaluationCriteria className={styles['project-overview-page-evaluation-criteria']} project={project} />
 
         <div data-test-id="interviewers" className={styles['project-overview-page-interviewers']}>
-          <h2 className={styles['project-overview-page-interviewers-title']}>Assigned Interviewers</h2>
+          <h2 className={styles['project-overview-page-interviewers-title']}>{t('Assigned Interviewers')}</h2>
           <ul className={styles['project-overview-page-interviewers-list']}>
             {project.interviewers.map(interviewer => <li className={styles['project-overview-page-interviewers-list-item']} key={interviewer.id}>{interviewer.name}</li>)}
           </ul>
@@ -186,10 +188,22 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
   </div>
 }
 
-export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
+export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }) => {
   if (!req.session.user.companyId) {
     return {
       notFound: true
+    }
+  }
+
+  if (req.session.user.locale != locale) {
+    const destination = `/${req.session.user.locale}/projects/${query.id}/overview`;
+
+    return {
+      redirect: {
+        destination,
+        locale: false,
+        permanent: false,
+      }
     }
   }
 
@@ -216,7 +230,8 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     props: {
       project: JSON.parse(JSON.stringify(project)),
       interviews,
-      config: await getSettings()
+      config: await getSettings(),
+      translations: await getTranslations()
     }
   }
 })

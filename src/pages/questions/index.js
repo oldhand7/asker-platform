@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { getSettings } from 'libs/firestore-admin';
+import { getSettings, getTranslations } from 'libs/firestore-admin';
 import { useEffect, useState, useMemo, useCallback} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import QuestionsTable from 'components/QuestionsTable/QuestionsTable';
@@ -23,6 +23,7 @@ import { ctxError } from 'libs/helper';
 import { useQueryState } from 'next-usequerystate'
 
 import styles from 'styles/pages/questions.module.scss';
+import { useSite } from 'libs/site';
 
 const PER_PAGE = 15;
 const DEFAULT_SORT = 'createdAt';
@@ -53,7 +54,8 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [qMax, setMaxQ] = useQueryState('fl')
-
+  const { t } = useSite();
+  
   useEffect(() => {
     if (!filter.pristine) {
       setLoading(true)
@@ -185,14 +187,14 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
 
   return <div className={styles['questions-page']}>
       <Head>
-        <title>Questions listing - Asker</title>
+        <title>{t('Questions listing')} - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
 
       <div className={styles['questions-page-filter']}>
         <div data-test-id="company-filter" className={styles['questions-page-filter-company']}>
-          <FilterButton className={styles['questions-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker questions</FilterButton>
-          <FilterButton className={styles['questions-page-filter-company-button']} theme="dark" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your questions</FilterButton>
+          <FilterButton className={styles['questions-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>{t('Asker questions')}</FilterButton>
+          <FilterButton className={styles['questions-page-filter-company-button']} theme="dark" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>{t('Your questions')}</FilterButton>
         </div>
         <QuestionFilter className={styles['questions-page-filter-question-filter']} selected={filter.questionTypes} onFilter={handleQuestionFilterOptions} />
       </div>
@@ -203,7 +205,7 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
             ...criteriaTypes,
             ...questionTypes.filter(qt => qt.id != 'evaluation')
           ]}>
-            <PlusIcon /> Create new question
+            <PlusIcon /> {t('Create new question')}
           </DropDownButton>
       </div>
 
@@ -217,10 +219,22 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
   </div>
 }
 
-export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
+export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }) => {
   if (!req.session.user.companyId) {
     return {
       notFound: true
+    }
+  }
+
+  if (req.session.user.locale != locale) {
+    const destination = `/${req.session.user.locale}/questions/`;
+
+    return {
+      redirect: {
+        destination,
+        locale: false,
+        permanent: false,
+      }
     }
   }
 
@@ -254,6 +268,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
   return {
     props: {
       config: await getSettings(),
+      translations: await getTranslations(),
       companyId: req.session.user.companyId,
       questions,
       total

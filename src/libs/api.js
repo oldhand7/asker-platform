@@ -27,6 +27,20 @@ export const createPairSession = (uid, idToken) => {
   return fetcher(`/api/auth/pair`, options);
 }
 
+export const storeRemoteUserLocale = (locale) => {
+  const options = {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      locale
+    })
+  }
+
+  return fetcher(`/api/auth/localize`, options);
+}
+
 export const logoutUser = () => {
   const options = {
     method: 'GET',

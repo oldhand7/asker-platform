@@ -76,8 +76,8 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, type }) =
           }
         </div>
         {
-          value.companyId == user.companyId ?
-          <EditButton onClick={handleOpenModal} className={styles['criteria-option-input-field-card-button']} /> :
+          user && value.companyId == user.companyId ?
+          <EditButton onClick={() => openCriteriaOptionModal(onChange)} className={styles['criteria-option-input-field-card-button']} /> :
           null
         }
         <TrashButton onClick={resetOption} className={styles['criteria-option-input-field-card-button']} />

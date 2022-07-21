@@ -2,36 +2,18 @@ import {
     List,
     Datagrid,
     TextField,
-    ReferenceField,
-    EditButton,
     Edit,
     SimpleForm,
-    ReferenceInput,
-    SelectInput,
     TextInput,
-    TabbedShowLayout,
-    Tab,
-    RichTextField,
-    TranslatableInputs,
     Create,
-    UrlInput,
-    EmailField,
-    EmailInput,
-    ImageInput,
-    NumberInput,
     PasswordInput,
     SelectField,
-    BooleanField,
-    ChipField,
-    BooleanInput
+    BooleanInput,
+    useTranslate
 } from 'react-admin';
-import RichTextInput from 'ra-input-rich-text';
-import { dot2obj, localize } from 'libs/helper';
+import { dot2obj } from 'libs/helper';
 import { validate } from 'libs/validator';
-import ImageField from 'admin/fields/image/image-field';
 import { useUser } from 'libs/user';
-import AlarmOnIcon from '@material-ui/icons/AlarmOn';
-import AlarmOffIcon from '@material-ui/icons/AlarmOff';
 import ProfileUserToolbar from 'admin/components/ProfileUserToolbar/ProfileUserToolbar'
 import ProfileUserBulkActions from 'admin/components/ProfileUserBulkActions/ProfileUserBulkActions';
 import ProfileUserActions from 'admin/components/ProfileUserActions/ProfileUserActions';
@@ -60,19 +42,21 @@ const useStyles = makeStyles({
     }
   })
 
-export const CompanyUsersList = props => (
-    <List actions={<ProfileUserActions />} {...props} sort={{ field: 'createdAt', order: 'desc' }} perPage={25} bulkActionButtons={<ProfileUserBulkActions />}>
+export const CompanyUsersList = props => {
+    const translate = useTranslate();
+
+    return <List actions={<ProfileUserActions />} {...props} sort={{ field: 'createdAt', order: 'desc' }} perPage={25} bulkActionButtons={<ProfileUserBulkActions />}>
         <Datagrid rowClick="edit">
-            <TextField source="name" label="Name" />
-            <TextField source="email" label="Email" />
-            <TextField source="phone" label="Phone" />
-            <SelectField source="type" title="Type" choices={[
+            <TextField source="name" label={translate("Name")} />
+            <TextField source="email" label={translate("Email")} />
+            <TextField source="phone" label={translate("Phone")} />
+            <SelectField source="type" label={translate("Type")} choices={[
                { id: 'admin', name: 'Admin' },
                { id: 'hr', name: 'HR' },
             ]} sortable={false} />
         </Datagrid>
     </List>
-);
+};
 
 const languages = [
   { locale: 'en', title: 'English' }

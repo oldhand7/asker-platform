@@ -1,6 +1,6 @@
 import { criteriaTypes } from 'libs/criteria';
 import { withUserGuardSsr } from 'libs/iron-session';
-import { getSettings } from 'libs/firestore-admin';
+import { getSettings, getTranslations } from 'libs/firestore-admin';
 import { getSingleDocument } from 'libs/firestore-admin';
 import Head from 'next/head';
 import dynamic from 'next/dynamic'
@@ -9,11 +9,14 @@ const ScreeningQuestionForm = dynamic(() => import('forms/screening-question/scr
 const EvaluationQuestionForm = dynamic(() => import('forms/evaluation-question/evaluation-question-form'));
 
 import styles from 'styles/pages/question-edit.module.scss';
+import { useSite } from 'libs/site';
 
 const QuestionEditPage = ({ question }) => {
+  const { t } = useSite();
+  
   return <div className={styles['question-edit-page']}>
     <Head>
-      <title>{question.name} - {question.companyId === 'asker' ? 'Clone' : 'Edit'} question - Asker</title>
+      <title>{question.name} - {question.companyId === 'asker' ? t('Clone question') : t('Edit question')} - Asker</title>
       <meta name="robots" content="noindex" />
     </Head>
 
@@ -23,7 +26,19 @@ const QuestionEditPage = ({ question }) => {
   </div>
 }
 
-export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
+export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }) => {
+  if (req.session.user.locale != locale) {
+    const destination = `/${req.session.user.locale}/questions/${query.id}/edit/`;
+    
+    return {
+      redirect: {
+        destination,
+        locale: false,
+        permanent: false,
+      }
+    }
+  }
+
   const question = await getSingleDocument('questions', query.id)
 
   if (!question) {
@@ -35,7 +50,8 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
   return {
     props: {
       config: await getSettings(),
-      question: JSON.parse(JSON.stringify(question))
+      question: JSON.parse(JSON.stringify(question)),
+      translations: await getTranslations()
     }
   }
 })

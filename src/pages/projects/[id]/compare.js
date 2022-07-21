@@ -1,9 +1,9 @@
-import { getSettings } from 'libs/firestore-admin';
+import { getSettings, getTranslations } from 'libs/firestore-admin';
 import { useState, useMemo } from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import Head from 'next/head';
 import { getSingleDocument, filterManyDocuments } from 'libs/firestore-admin'
-import { useRouter } from 'next/router';
+import { useRouter, withRouter } from 'next/router';
 import Link from 'next/link';
 import { unpackQuestions } from 'libs/project';
 import BackIcon from 'components/Icon/BackIcon';
@@ -11,7 +11,7 @@ import ProjectInterviewCompare from 'components/ProjectInterviewCompare2/Project
 import { useEffect } from 'react';
 import {useModal} from 'libs/modal';
 import { scoreSort, buildSearchQuery } from 'libs/helper';
-
+import { useSite } from 'libs/site';
 import styles from 'styles/pages/project-compare.module.scss';
 import CandidateChooseModal from 'modals/candidate-choose/candidate-choose-modal';
 // import CompareBox from 'components/CompareBox/CompareBox';
@@ -24,6 +24,7 @@ const defaultSort = [
 const ProjectComparePage = ({ project, interviews = [] }) => {
   const router = useRouter();
   const [compare, setCompare] = useState([])
+  const { t } = useSite();
 
   const completeInterviews = useMemo(
     () => interviews.filter(i => i.status == 'complete'),
@@ -60,7 +61,7 @@ const ProjectComparePage = ({ project, interviews = [] }) => {
 
   return <div className={styles['project-compare-page']}>
       <Head>
-        <title>{project.name} - Candidate compare - Asker</title>
+        <title>{project.name} - {t('Candidate compare')} - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
 
@@ -68,7 +69,7 @@ const ProjectComparePage = ({ project, interviews = [] }) => {
         <Link href={`/projects/${project.id}/overview`}>
             <a className={styles['project-compare-page-back']}>
               <BackIcon className={styles['project-compare-page-back-icon']} />
-              <span className={styles['project-compare-page-back-text']}>Back</span>
+              <span className={styles['project-compare-page-back-text']}>{t('Back')}</span>
             </a>
         </Link>
 
@@ -93,10 +94,22 @@ const ProjectComparePage = ({ project, interviews = [] }) => {
   </div>
 }
 
-export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
+export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }) => {
   if (!req.session.user.companyId) {
     return {
       notFound: true
+    }
+  }
+
+  if (req.session.user.locale != locale) {
+    const destination = `/${req.session.user.locale}/projects/${query.id}/compare/?interviews=${query.interviews}`;
+
+    return {
+      redirect: {
+        destination,
+        locale: false,
+        permanent: false,
+      }
     }
   }
 
@@ -123,7 +136,8 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     props: {
       project: JSON.parse(JSON.stringify(project)),
       interviews,
-      config: await getSettings()
+      config: await getSettings(),
+      translations: await getTranslations()
     }
   }
 })

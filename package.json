@@ -22,6 +22,7 @@
     "jest": "jest --watch"
   },
   "dependencies": {
+    "@kolben/ra-language-swedish": "^3.14.4",
     "@splidejs/react-splide": "^0.6.20",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "classnames": "^2.3.1",
@@ -46,6 +47,7 @@
     "printenv": "^1.0.0",
     "ra-data-json-server": "^3.19.10",
     "ra-data-simple-rest": "^3.19.10",
+    "ra-i18n-polyglot": "^4.2.3",
     "ra-input-rich-text": "^3.19.10",
     "rc-table": "^7.24.1",
     "rc-upload": "^4.3.3",

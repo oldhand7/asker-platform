@@ -12,7 +12,7 @@ import CallUsButton from 'components/CallUsButton/CallUsButton';
 import styles from './Footer.module.scss';
 
 const Footer = () => {
-  const [config, t] = useSite();
+  const { config, t } = useSite();
   const openContactModal = useModal(ContactModal);
 
   return <><div className={styles['footer']}>
