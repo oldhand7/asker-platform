@@ -31,7 +31,7 @@ describe('Questions', () => {
         cy.get('li').eq(0).should('contain', 'Competency')
         cy.get('li').eq(1).should('contain', 'Experience')
         cy.get('li').eq(2).should('contain', 'Motivation')
-        cy.get('li').eq(3).should('contain', 'Culture-fit')
+        cy.get('li').eq(3).should('contain', 'Culture')
         cy.get('li').eq(4).should('contain', 'Hard skill')
         cy.get('li').eq(5).should('contain', 'Screening')
         cy.get('li').eq(6).should('contain', 'Other')
@@ -59,7 +59,7 @@ describe('Questions', () => {
         cy.get('li').eq(0).should('contain', 'Competency based')
         cy.get('li').eq(1).should('contain', 'Experience based')
         cy.get('li').eq(2).should('contain', 'Motivation based')
-        cy.get('li').eq(3).should('contain', 'Culture-fit based')
+        cy.get('li').eq(3).should('contain', 'Culture based')
         cy.get('li').eq(4).should('contain', 'Hard skill based')
         cy.get('li').eq(5).should('contain', 'Screening')
         cy.get('li').eq(6).should('contain', 'Other')
@@ -82,11 +82,11 @@ describe('Questions', () => {
     cy.get('form[data-test-id="evaluation-question-form"]')
       .should('contain', 'Create a new competency based question')
       .within(() => {
-        cy.get('input[name="name"]').first().type('Sample question')
+        cy.get('input[name="name.en"]').first().type('Sample question')
         cy.get('[data-test-id="html-input-field"]').first().click()
           .type('Sample question desc')
 
-        cy.get('[data-test-id="criteria-option-input-field"]').as('criteria')
+        cy.get('[data-test-id="criteria-option"]').as('criteria')
           .within(() => {
             cy.contains('Competency')
             cy.get('input[name="q"]').type("Criteria A")
@@ -98,7 +98,7 @@ describe('Questions', () => {
           .find('#criteria-option-modal')
           .should('contain', 'Competency option')
           .within(() => {
-            cy.get('input[name="name"]').type('Criteria A')
+            cy.get('input[name="name.en"]').type('Criteria A')
             cy.get('button[type="submit"]').click()
         })
 

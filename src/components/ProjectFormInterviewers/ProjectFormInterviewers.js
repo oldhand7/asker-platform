@@ -1,9 +1,10 @@
 import classNames from 'classnames';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Autocomplete from 'components/Autocomplete/Autocomplete';
 import { filterManyDocuments } from 'libs/firestore';
 import { useUser } from 'libs/user';
 import TrashButton from 'components/TrashButton/TrashButton'
+import { nameSort } from 'libs/helper';
 
 import styles from './ProjectFormInterviewers.module.scss';
 
@@ -22,16 +23,16 @@ const ProjectFormInterviewers = ({ className, interviewers = [], onChange }) => 
       return;
     }
 
-    if (user.companyId) {
-      filterManyDocuments('users', [
-        ['companyId', '==', user.companyId]
-      ])
-        .then(employees => {
-          setAutocompleteOptions(employees.map(employee2interviewer))
-        })
-    } else {
-      setAutocompleteOptions([employee2interviewer(user)])
-    }
+    filterManyDocuments('users', [
+      ['companyId', '==', user.companyId]
+    ])
+    .then(employees => {
+      const options = employees.map(employee2interviewer)
+
+      options.sort(nameSort)
+
+      setAutocompleteOptions(options)
+    })
   }, [user])
 
 
@@ -41,12 +42,12 @@ const ProjectFormInterviewers = ({ className, interviewers = [], onChange }) => 
     ])
   }
 
-  const handleSearch = (item, query) => {
+  const handleSearch = useCallback((item, query) => {
     onChange([
       ...interviewers,
       item
     ])
-  }
+  }, [onChange, interviewers])
 
   return <div data-test-id="interviewers" className={classNames(styles["project-form-interviewers"], className)}>
     <Autocomplete

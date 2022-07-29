@@ -15,7 +15,7 @@ const weightSort = function(ca, cb) {
   return 0;
 }
 
-export const getProjectEvaluationCriterias = (project) => {
+export const getProjectEvaluationCriterias = (project, t) => {
   const { stages, scoringRules } = project;
 
   const questions = stages.filter(s => s && s.config).map(s => s.config)
@@ -26,7 +26,7 @@ export const getProjectEvaluationCriterias = (project) => {
 
   const aggregate = {
     'motivation': questions.filter(q => getSubtype(q) == 'motivation'),
-    'culture-fit': questions.filter(q => getSubtype(q) == 'culture-fit'),
+    'culture': questions.filter(q => getSubtype(q) == 'culture'),
     'hard-skill': {},
     competency: {},
     experience: {},
@@ -49,15 +49,15 @@ export const getProjectEvaluationCriterias = (project) => {
     }
   }
 
-  const categoryQuestions = [
-    'culture-fit',
-    'motivation'
-  ]
+  const categoryQuestions = {
+    'culture': t ? t('Culture') : 'Culture',
+    'motivation': t ? t('Motivation') : 'Motivation'
+  }
 
   const result = []
 
   for (const key in aggregate) {
-    if (categoryQuestions.indexOf(key) > -1) {
+    if (categoryQuestions[key]) {
       if (!aggregate[key].length) {
         continue;
       }
@@ -66,7 +66,7 @@ export const getProjectEvaluationCriterias = (project) => {
       const p = aggregate[key].length * 100 / questions.length;
 
       result.push({
-        name: ucFirst(key),
+        name: categoryQuestions[key],
         type: key,
         weight: fixFloat(customP || p),
         questions: aggregate[key].length

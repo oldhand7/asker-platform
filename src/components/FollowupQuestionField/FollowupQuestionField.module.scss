@@ -15,5 +15,14 @@
   &-list {
     list-style-type: square;
 
+
+    &-item {
+      &-remove {
+        margin-left: 8rem;
+        vertical-align: middle;
+      }
+
+      margin-bottom: 8rem;
+    }
   }
 }

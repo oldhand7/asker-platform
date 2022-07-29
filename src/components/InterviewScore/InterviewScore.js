@@ -18,7 +18,7 @@ const getColor = (score) => {
 
 const CandidateScore = ({ className, score = 0 }) => {
   return <div className={classNames(styles['interview-score'], className)}>
-    <PieChart width={100} height={100} >
+    <PieChart id={1} width={100} height={100} >
           <Pie
             data={[
               { name: '', value: 100-score },

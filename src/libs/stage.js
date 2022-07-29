@@ -19,8 +19,8 @@ export const SHORT_NAMES = {
     'motivation-questions': 'Motivation',
     'screening-questions': 'Screening',
     'experience-questions': 'Experience',
-    'hard-skill-questions': 'Hard-skill',
-    'culture-fit-questions': 'Culture-fit',
+    'hard-skill-questions': 'Hard skill',
+    'culture-questions': 'Culture',
     'introduction': 'Introduction',
     'summary': 'Summary',
     'other-questions': 'Other'
@@ -36,7 +36,7 @@ export const featureTypes = [
     'competency-questions': 'competency',
     'motivation-questions': 'motivation',
     'experience-questions': 'experience',
-    'culture-fit-questions': 'culture-fit',
+    'culture-questions': 'culture',
     'hard-skill-questions': 'hard-skill',
     'screening-questions': 'screening',
     'other-questions': 'other'

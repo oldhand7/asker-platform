@@ -21,7 +21,7 @@ const ProfileUserToolbar = ({ handleSubmitWithRedirect, showDelete = true, ...pr
       <Button size='medium' onClick={() => router.back()} label="Back" variant="outlined">
         <ArrowBackIcon />
       </Button>
-      <SaveButton handleSubmitWithRedirect={handleSubmitWithRedirect} redirect="list" submitOnEnter={true} />
+      <SaveButton handleSubmitWithRedirect={handleSubmitWithRedirect} redirect="list" submitonenter={true} />
     </div>
     {showDelete ?
     <DeleteWithConfirmButton confirmTitle={`Are you sure?`} confirmContent={`Delete user ${record.name}`} /> : null}

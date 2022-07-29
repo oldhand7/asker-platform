@@ -8,10 +8,7 @@ describe('Language switcher', () => {
 
         cy.location('pathname').should('contain', '/en/projects/')
 
-        cy.get('[data-test-id="language-switcher"]').click()
-            .within(() => {
-                cy.contains('SE', { matchCase: false }).click()
-            })
+        cy.changeLanguage('SE')
             
         cy.contains('Projects_SE')
 

@@ -1,6 +1,5 @@
 import Table from 'rc-table';
 import classNames from 'classnames';
-import Stager from 'components/Stager/Stager';
 import NODATA from 'components/NODATA/NODATA';
 import { criteriaTypes } from 'libs/criteria';
 import CompactMenu from 'components/CompactMenu/CompactMenu';
@@ -8,14 +7,14 @@ import FilterIcon from 'components/Icon/FilterIcon';
 import { getScreeningQuestionLabelBySubtype } from 'forms/screening-question/screening-question-form';
 import ArrowDownIcon from 'components/Icon/ArrowDownIcon';
 import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
-import Link from 'next/link';
 import { useUser } from 'libs/user';
 import { useRouter } from 'next/router';
 import { useQueryStates, queryTypes } from 'next-usequerystate'
+import { useSite } from 'libs/site';
 
 import styles from './QuestionsTable.module.scss';
 
-const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user }) => {
+const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user, t, locale, i18nField }) => {
   const getSortArrowIcon = (name) => {
     return name == sortOrder.sort ? (sortOrder.order == 'asc' ? <ArrowUpIcon/> : <ArrowDownIcon/>) : '';
   }
@@ -40,7 +39,7 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user }) 
   return [
   {
     title: <a href='#' onClick={handleSortOrder('type')}>
-      Question type {getSortArrowIcon('type')}</a>,
+      {t('Question type')} {getSortArrowIcon('type')}</a>,
     key: 'type',
     render: (_, row) => {
       if (row.type == 'evaluation') {
@@ -50,46 +49,46 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user }) 
           return <NODATA />
         }
 
-        return ct.name
+        return t(ct.name)
       }
 
       if (row.type == 'screening') {
         const subtype = getScreeningQuestionLabelBySubtype(row.subtype);
 
-        return <>Screening<br/><small>{subtype}</small></>
+        return <>{t('Screening')}<br/><small>{subtype}</small></>
       }
 
       if (row.type == 'other') {
         const subtype = getScreeningQuestionLabelBySubtype(row.subtype);
 
-        return <>Other<br/><small>{subtype}</small></>
+        return <>{t('Other')}<br/><small>{subtype}</small></>
       }
 
       return <NODATA />
     }
   },
   {
-    title: <a href='#' onClick={handleSortOrder('criteria.name')}>
-      Criterion {getSortArrowIcon('criteria.name')}</a>,
+    title: <a href='#' onClick={handleSortOrder(`criteria.name.${locale}`)}>
+      {t('Criterion')} {getSortArrowIcon(`criteria.name.${locale}`)}</a>,
     key: 'criteria',
     render: (_, { criteria }) => {
-      return criteria ? criteria.name : <NODATA />
+      return criteria && i18nField(criteria.name) || <NODATA />
     }
   },
   {
     title: <a href='#' onClick={handleSortOrder('name')}>
-      Question {getSortArrowIcon('name')}</a>,
+      {t('Question')} {getSortArrowIcon('name')}</a>,
     dataIndex: 'name',
     key: 'name',
-    render: (name) => <div className={styles['questions-table-expand']}>{name}</div>
+    render: (name) => <div className={styles['questions-table-expand']}>{i18nField(name)}</div>
   },
   {
     title: <a href='#' onClick={handleSortOrder('followupCount')}>
-      Follow-up questions {getSortArrowIcon('followupCount')}</a>,
+      {t('Follow-up questions')} {getSortArrowIcon('followupCount')}</a>,
     dataIndex: 'followup',
     key: 'followup',
     render: (questions) => questions && questions.length ? <ul className={styles['questions-table-followup-questions']}>
-      {questions.map((q, index) => <li className={styles['questions-table-followup-questions-question']} key={`q${index}`}>{q}</li>)}
+      {questions.map((q, index) => <li className={styles['questions-table-followup-questions-question']} key={`q${index}`}>{i18nField(q)}</li>)}
     </ul> : <NODATA />
   },
   {
@@ -97,13 +96,13 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user }) 
     key: 'action',
     render: (_, row) => {
       const options = [
-        { id: 'edit', name: user && user.companyId == row.companyId ? 'Edit' : 'Edit copy' }
+        { id: 'edit', name: user && user.companyId == row.companyId ? t('Edit') : t('Edit copy') }
       ]
 
       if (user && user.companyId == row.companyId) {
         options.push({
           id: 'delete',
-          name: 'Delete'
+          name: t('Delete')
         })
       }
 
@@ -114,7 +113,8 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user }) 
 
 const QuestionsTable = ({ className, data = [], onDelete, ...props }) => {
   const router = useRouter()
-  const {user} = useUser()
+  const {user, locale} = useUser()
+  const { t, i18nField } = useSite()
 
   const [sortOrder, setSortOrder] = useQueryStates({
     sort: queryTypes.string.withDefault(router.query.sort || 'createdAt'),
@@ -145,7 +145,10 @@ const QuestionsTable = ({ className, data = [], onDelete, ...props }) => {
     handleCompactMenuChoice,
     sortOrder,
     setSortOrder,
-    user
+    user,
+    t,
+    locale,
+    i18nField
   })} data={data} {...props} />
 }
 

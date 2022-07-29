@@ -1,145 +1,189 @@
-export const COMPETENCY_RULES = [{
-    name: 'Unsatisfactory',
-    steps: ['', '', '']
+const EMPTY_INT = { en: ''}
+
+export const COMPETENCY_RULES_INT = [{
+  name: {
+    en: 'Unsatisfactory'
   },
-  {
-    name: 'Fair',
-    steps: null
+  steps: [EMPTY_INT, EMPTY_INT, EMPTY_INT]
+},
+{
+  name: {
+    en: 'Fair'
   },
-  {
-    name: 'Good',
-    steps: ['', '', '']
+  steps: []
+},
+{
+  name: {
+    en: 'Good'
   },
-  {
-    name: 'Great',
-    steps: null
+  steps: [EMPTY_INT, EMPTY_INT, EMPTY_INT]
+},
+{
+  name: {
+    en: 'Great'
   },
-  {
-    name: 'Excellent',
-    steps: ['', '', '']
-  }
+  steps: []
+},
+{
+  name: {
+    en: 'Excellent'
+  },
+  steps: [EMPTY_INT, EMPTY_INT, EMPTY_INT]
+}
 ]
 
-export const EXPERIENCE_RULES = [{
-    name: 'No experience',
-    steps: null
+export const EXPERIENCE_RULES_INT = [{
+  name: {
+    en: 'No experience'
   },
-  {
-    name: 'Little experience',
-    steps: null
+  steps: []
+},
+{
+  name: {
+    en: 'Little experience'
   },
-  {
-    name: 'Experienced',
-    steps: null
+  steps: []
+},
+{
+  name: {
+    en: 'Experienced'
   },
-  {
-    name: 'Very experienced',
-    steps: null
+  steps: []
+},
+{
+  name: {
+    en: 'Very experienced'
   },
-  {
-    name: 'Extensively experienced',
-    steps: null
-  }
+  steps: []
+},
+{
+  name: {
+    en: 'Extensively experienced'
+  },
+  steps: []
+}
 ]
 
-export const MOTIVATION_RULES = [{
-    name: 'Not motivated',
-    steps: null
+export const MOTIVATION_RULES_INT = [{
+  name: {
+    en: 'Not motivated'
   },
-  {
-    name: 'Slightly motivated',
-    steps: null
+  steps: []
+},
+{
+  name: {
+    en: 'Slightly motivated'
   },
-  {
-    name: 'Motivated',
-    steps: null
+  steps: []
+},
+{
+  name: {
+    en: 'Motivated'
   },
-  {
-    name: 'Highly motivated',
-    steps: null
+  steps: []
+},
+{
+  name: {
+    en: 'Highly motivated'
   },
-  {
-    name: 'Extremely motivated',
-    steps: null
-  }
+  steps: []
+},
+{
+  name: {
+    en: 'Extremely motivated'
+  },
+  steps: []
+}
 ]
 
-export const CULTURE_FIT_RULES = [{
-    name: 'Very low fit',
-    steps: null
+export const CULTURE_FIT_RULES_INT = [{
+  name: {
+    en: 'Very low fit'
   },
-  {
-    name: 'Low fit',
-    steps: null
+  steps: []
+},
+{
+  name: {
+    en: 'Low fit'
   },
-  {
-    name: 'Average fit',
-    steps: null
+  steps: []
+},
+{
+  name: {
+    en: 'Average fit'
   },
-  {
-    name: 'High fit',
-    steps: null
+  steps: []
+},
+{
+  name: {
+    en: 'High fit'
   },
-  {
-    name: 'Very high fit',
-    steps: null
-  }
+  steps: []
+},
+{
+  name: {
+    en: 'Very high fit'
+  },
+  steps: []
+}
 ]
 
-export const HARD_SKILL_RULES = [
-    {
-        name: 'Novice',
-        steps: [
-            `<ul>
+export const HARD_SKILL_RULES_INT = [
+  {
+      name: {
+        en: 'Novice'
+      },
+      steps: [
+        { en:  `<ul>
         <li>Limited understanding of skill.</li>
         <li>Lacks context and perspective</li>
         <li>Mainly theoretical and little real-life experience</li>
         <li>Makes decisions based on data only without consideration</li>
-      </ul>`
-        ]
-    },
-    {
-        name: 'Beginner',
-        steps: [
-            `<ul>
-        <li>Theoretical understanding of skill</li>
-        <li>Can use the context to advantage to some solve problems</li>
-        <li>Some real life experiences</li>
-        <li>May have a hard time knowing how to prioritize</li>
-      </ul>`
-        ]
-    },
-    {
-        name: 'Competent',
-        steps: [
-            `<ul>
-        <li>Great theoretical understanding</li>
-        <li>Use context to advantage to and applies relevant problem solving</li>
-        <li>Lots of experience</li>
-        <li>Plan and work deliberately on their own</li>
-      </ul>`
-        ]
-    },
-    {
-        name: 'Proficient',
-        steps: [
-            `<ul>
-        <li>Excellent theoretical understanding</li>
-        <li>Intuitively know how to solve problems</li>
-        <li>Great amount of experience</li>
-        <li>Holisitc view and can prioritize with ease</li>
-      </ul>`
-        ]
-    },
-    {
-        name: 'Master',
-        steps: [
-            `<ul>
-        <li>Immense theoretical understanding</li>
-        <li>Intuitively know what how prioritize to solve problems</li>
-        <li>Applies relevant pieces of skill regardless of context</li>
-        <li>Holistic view and intuitive decision making</li>
-      </ul>`
-        ]
-    }
+      </ul>`}
+      ]
+  },
+  {
+      name: { en: 'Beginner'},
+      steps: [
+          { en: `<ul>
+          <li>Theoretical understanding of skill</li>
+          <li>Can use the context to advantage to some solve problems</li>
+          <li>Some real life experiences</li>
+          <li>May have a hard time knowing how to prioritize</li>
+        </ul>`}
+      ]
+  },
+  {
+      name: { en: 'Competent'},
+      steps: [
+          { en: `<ul>
+          <li>Great theoretical understanding</li>
+          <li>Use context to advantage to and applies relevant problem solving</li>
+          <li>Lots of experience</li>
+          <li>Plan and work deliberately on their own</li>
+        </ul>`}
+      ]
+  },
+  {
+      name: { en: 'Proficient'},
+      steps: [
+          { en: `<ul>
+          <li>Excellent theoretical understanding</li>
+          <li>Intuitively know how to solve problems</li>
+          <li>Great amount of experience</li>
+          <li>Holisitc view and can prioritize with ease</li>
+        </ul>`}
+      ]
+  },
+  {
+      name: { en: 'Master'},
+      steps: [
+          { en: `<ul>
+          <li>Immense theoretical understanding</li>
+          <li>Intuitively know what how prioritize to solve problems</li>
+          <li>Applies relevant pieces of skill regardless of context</li>
+          <li>Holistic view and intuitive decision making</li>
+        </ul>`}
+      ]
+  }
 ]

@@ -14,7 +14,7 @@ const stageForms = {
   'experience-questions': dynamic(() => import('forms/evaluation-question-int/evaluation-question-int-form')),
   'motivation-questions': dynamic(() => import('forms/evaluation-question-int/evaluation-question-int-form')),
   'hard-skill-questions': dynamic(() => import('forms/evaluation-question-int/evaluation-question-int-form')),
-  'culture-fit-questions': dynamic(() => import('forms/evaluation-question-int/evaluation-question-int-form')),
+  'culture-questions': dynamic(() => import('forms/evaluation-question-int/evaluation-question-int-form')),
   'salary': dynamic(() => import('forms/salary-int/salary-int-form')),
   'candidate-questions': dynamic(() => import('forms/candidate-questions-int/candidate-questions-int-form')),
   'screening-questions': dynamic(() => import('forms/screening-questions-int/screening-questions-int-form')),
@@ -27,7 +27,7 @@ const evaluationQuestions = [
   'experience-questions',
   'hard-skill-questions',
   'motivation-questions',
-  'culture-fit-questions'
+  'culture-questions'
 ]
 
 const StageInterviewForm = (props) => {
@@ -100,7 +100,7 @@ const StageInterviewForm = (props) => {
       FormComponent ?
       <>
       <InterviewStageTimeLabel className={styles['stage-interview-form-timer']} time={props.stage.time || DEFAULT_STAGE_TIME} />
-      <FormComponent config={props.stage.config} {...formComponentProps} className={styles['stage-interview-form-form']} />
+      <FormComponent inView={inView} config={props.stage.config} {...formComponentProps} className={styles['stage-interview-form-form']} />
       
       </> : null
   }

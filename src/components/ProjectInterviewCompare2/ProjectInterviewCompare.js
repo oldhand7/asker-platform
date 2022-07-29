@@ -15,9 +15,9 @@ const labels = {
     'other-questions': 'Other',
     'competency': 'Competencies',
     'screening': 'Screening',
-    'hard-skill': 'Hard-skill',
+    'hard-skill': 'Hard skill',
     'motivation': 'Motivation',
-    'culture-fit': 'Culture-fit',
+    'culture': 'Culture',
     'experience': 'Experience'
 }
 
@@ -111,10 +111,10 @@ const ProjectInterviewCompare = ({ className, compare = [], project, onCompareAd
             })
         }
 
-        if (adjustedCompare.some(c => c.scoreMap['culture-fit'].score)) {
+        if (adjustedCompare.some(c => c.scoreMap['culture'].score)) {
             details.push({
-                type: 'culture-fit',
-                evaluations: adjustedCompare.map(c => c.scoreMap['culture-fit'])
+                type: 'culture',
+                evaluations: adjustedCompare.map(c => c.scoreMap['culture'])
             })
         }
 
@@ -122,13 +122,6 @@ const ProjectInterviewCompare = ({ className, compare = [], project, onCompareAd
             details.push({
                 type: 'experience',
                 evaluations: adjustedCompare.map(c => c.scoreMap['experience'])
-            })
-        }
-        
-        if (adjustedCompare.some(c => c.otherQuestions['other-questions'].length)) {
-            details.push({
-                type: 'other-questions',
-                evaluations: adjustedCompare.map(c => c.otherQuestions['other-questions'])
             })
         }
 

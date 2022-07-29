@@ -56,7 +56,7 @@ const ProjectComparePage = ({ project, interviews = [] }) => {
       interviews: compare.map(c => c.id).join('|')
     }
 
-    router.push(`/${pathname}/?${buildSearchQuery(query)}`, null, { shallow: true })
+    router.push(`${pathname}?${buildSearchQuery(query)}`, null, { shallow: true })
   }, [compare])
 
   return <div className={styles['project-compare-page']}>

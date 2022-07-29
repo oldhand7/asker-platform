@@ -73,7 +73,7 @@ const QuestionScoreBoard = ({ className, rules, votes = [], onVotes, onError }) 
     setLock(count == 3);
   }, [votes])
 
-  return <ul className={classNames(styles['question-score-board'], className)}>
+  return <ul data-test-id="question-score-board" className={classNames(styles['question-score-board'], className)}>
       {rules.map((rule, index) => <li data-test-id={votes && votes[index] && votes[index].head ? 'question-score-board-active' : undefined}  className={styles['question-score-board-column']} key={index}>
         <QuestionScoreBoardVertical
           lock={lock}

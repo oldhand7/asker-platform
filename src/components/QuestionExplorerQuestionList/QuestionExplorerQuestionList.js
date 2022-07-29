@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import PlusIcon from "components/Icon/PlusIcon";
 import { getScreeningQuestionLabelBySubtype } from 'forms/screening-question/screening-question-form';
+import { useSite } from "libs/site";
 
 import styles from './QuestionExplorerQuestionList.module.scss';
 
@@ -12,7 +13,8 @@ const SelectButton = (props) => (<button data-test-id="add-question" type="butto
 
 
 const QuestionExplorerQuestionList = ({ className, questions = [], onQuestion }) => {
-    //
+    const { i18nField }  = useSite();
+    
     return <ul data-test-id="question-explorer-questions" className={classNames(
         styles['question-explorer-question-list'],
         className
@@ -23,12 +25,12 @@ const QuestionExplorerQuestionList = ({ className, questions = [], onQuestion })
             if (q.type == 'screening' || q.type == 'other') {
                 type = getScreeningQuestionLabelBySubtype(q.subtype)
             } else {
-                type = q.criteria && q.criteria.name
+                type = q.criteria && i18nField(q.criteria.name)
             }
 
             return <li data-company-id={q.companyId} key={q.id} className={styles['question-explorer-question-list-question']}>
                 <h5 className={styles['question-explorer-question-list-question-name']}>
-                    {q.name}
+                    {i18nField(q.name)}
                 </h5>
                 <div className={styles['question-explorer-question-list-question-type']}>
                     {type}

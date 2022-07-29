@@ -4,24 +4,38 @@ import OutlineButton from 'components/Button/OutlineButton';
 import PlusIcon from 'components/Icon/PlusIcon';
 import { useEffect } from 'react';
 import TrashButton from 'components/TrashButton/TrashButton';
+import { useSite } from 'libs/site';
+import { useForm } from 'libs/react-hook-form';
+import { useUser } from 'libs/user';
+import { v4 as uuidv4 } from 'uuid';
 
 import styles from './answers-form.module.scss';
 
-const AnswersForm = ({ values = [], className, onValues, title = '' }) => {
+const createAnswer = () => ({ uid: uuidv4(), name: { en: '' } })
 
-  useEffect(() => {
-    if ((values || []).length < 2) {
-      onValues([
-        ...((values || [])),
-        ''
-      ])
+const defaultValues = [
+  createAnswer(),
+  createAnswer()
+]
+
+const AnswersForm = ({ values = [], className, onValues, title = '' }) => {
+  const { t } = useSite();
+  const { locale } = useUser();
+  const {
+    values: formValues,
+    setValue,
+    errors,
+    input
+  } = useForm({
+    values: {
+      items: values.length && values || defaultValues
     }
-  }, [values])
+  })
 
   const addAnswer  = () => {
-    onValues([
-      ...(values || []),
-      ''
+    setValue('items', [
+      ...formValues.items,
+      createAnswer()
     ])
 
     setTimeout(() => {
@@ -47,40 +61,34 @@ const AnswersForm = ({ values = [], className, onValues, title = '' }) => {
     }
   }
 
-  const handleAnswerChange = (index, value = '') => {
-    const newAnswers = [...(values || [])]
-    newAnswers[index] = value;
-    onValues(newAnswers)
-  }
-
   const handleAnswerDelete = (index) => {
     if (!confirm('Are you sure?')) {
       return;
     }
 
-    if ((values || []).length == 2) {
-        handleAnswerChange(index, '')
-
-        return;
-    }
-
-    onValues([
-      ...(values || []).slice(0, index),
-      ...(values || []).slice(index + 1)
+    setValue('items', [
+      ...formValues.items.slice(0, index),
+      ...formValues.items.slice(index + 1)
     ])
   }
 
+  useEffect(() => {
+    if (JSON.stringify(formValues.items) != JSON.stringify(values)) {
+      onValues(formValues.items)
+    }
+  }, [formValues])
+
   return <div data-test-id="answers-form" className={classNames(styles['answers-form'], className)}>
-    <h3>{title ? title : 'Answers'}</h3>
+    <h3>{title ? title : t('Answers')}</h3>
 
     <ul className={styles['answers-form-list']}>
-      {(values || []).map((answer, index) => (<li key={index} className={styles['answers-form-list-item']}>
-        <TextInputField value={answer} onEnter={handleFocusNext} className={styles['answers-form-list-item-input']} name="answers[]" autoComplete="off" onChange={(ev) => handleAnswerChange(index, ev.target.value)} placeholder={`Answer ${index + 1}`} />
+      {formValues.items.map((answer, index) => (<li key={index} className={styles['answers-form-list-item']}>
+        <TextInputField value={answer.name[locale]} onEnter={handleFocusNext} className={styles['answers-form-list-item-input']} name={`answers[${index}].name.${locale}`} autoComplete="off" onChange={input(`items.${index}.name.${locale}`)} placeholder={`${t('Answer')} ${index + 1}`} />
         <TrashButton type="button" onClick={() => handleAnswerDelete(index)} className={styles['answers-form-list-item-button']} />
       </li>))}
     </ul>
 
-    <OutlineButton onClick={addAnswer} type="button"><PlusIcon /> Add answer</OutlineButton>
+    <OutlineButton onClick={addAnswer} type="button"><PlusIcon /> {t('Add answer')}</OutlineButton>
   </div>
 }
 

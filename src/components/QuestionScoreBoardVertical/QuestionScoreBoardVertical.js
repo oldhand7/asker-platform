@@ -1,10 +1,13 @@
 import classNames from 'classnames';
 import striptags from 'striptags';
 import { allowedHtmlTags } from 'libs/config';
+import { useSite } from 'libs/site';
 
 import styles from './QuestionScoreBoardVertical.module.scss';
 
 const QuestionScoreBoardVertical = ({ className, index, rule, scores = [], lock = false, active, onScores, onHead }) => {
+  const { i18nField } = useSite();
+
   const toggleStep = (index) => {
     if (lock && !scores[index]) return;
 
@@ -23,7 +26,7 @@ const QuestionScoreBoardVertical = ({ className, index, rule, scores = [], lock 
   )}>
     <div onClick={onHead} className={styles['question-score-board-vertical-head']}>
       <h4 className={styles['question-score-board-vertical-head-title']}>{index}</h4>
-      <span className={styles['question-score-board-vertical-head-name']}>{rule.name}</span>
+      <span className={styles['question-score-board-vertical-head-name']}>{i18nField(rule.name)}</span>
     </div>
     <ul className={styles['question-score-board-vertical-steps']}>
       {(rule.steps || []).map((step, index) => (
@@ -31,7 +34,7 @@ const QuestionScoreBoardVertical = ({ className, index, rule, scores = [], lock 
           styles['question-score-board-vertical-steps-step'],
           'format',
           scores[index] ? styles['question-score-board-vertical-steps-step-active'] : ''
-        )} dangerouslySetInnerHTML={{__html: striptags(step, allowedHtmlTags)}}></li>
+        )} dangerouslySetInnerHTML={{__html: striptags(i18nField(step), allowedHtmlTags)}}></li>
       ))}
     </ul>
   </div>

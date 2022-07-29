@@ -3,9 +3,13 @@ import classNames from 'classnames';
 import { useRef } from 'react';
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget';
 import striptags from 'striptags'
+
 import styles from './Autocomplete.module.scss';
+import { useSite } from 'libs/site';
 
 const AutocompleteOptions = ({ options, index, className, onChoice }) => {
+  const { i18nField } = useSite();
+
   const optionProps = (option, optionIndex) => {
     const className = classNames(
       styles['autocomplete-options-item'],
@@ -22,8 +26,8 @@ const AutocompleteOptions = ({ options, index, className, onChoice }) => {
   {
     options.length ?
     options.map((option, index) => <li data-test-id="autocomplete-option" key={index} {...optionProps(option, index)}>
-      <span className={styles['autocomplete-options-item-name']}>{option.name}</span>
-      {option.desc ? <div className={styles['autocomplete-options-item-desc']} dangerouslySetInnerHTML={{ __html: striptags(option.desc)}}></div> : null}
+      <span className={styles['autocomplete-options-item-name']}>{i18nField(option.name)}</span>
+      <div className={styles['autocomplete-options-item-desc']} dangerouslySetInnerHTML={{ __html: striptags(i18nField(option.desc)) }}></div>
     </li>) :
     <li key="no-options-warn" className={classNames(styles['autocomplete-options-item'], styles['autocomplete-options-item-warning'])}>No results.</li>
   }
@@ -35,6 +39,7 @@ const Autocomplete = ({ onSearch, className, options = [] }) => {
   const [focusIndex, setFocusIndex] = useState(0);
   const [q, setQuery] = useState('');
   const [open, setOpen] = useState(false);
+  const { i18nField } = useSite();
 
   const ref = useRef();
 
@@ -131,8 +136,11 @@ const Autocomplete = ({ onSearch, className, options = [] }) => {
     const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
 
     setOptions(options.filter(o => {
-      const nameFilter = regex.test(o.name.toLowerCase());
-      const descFilter = o.desc && regex.test(o.desc.toLowerCase());
+      const nameInt = i18nField(o.name);
+      const descInt = i18nField(o.desc) || '';
+
+      const nameFilter = regex.test(nameInt.toLowerCase());
+      const descFilter = regex.test(descInt.toLowerCase());
 
       return nameFilter || descFilter;
     }))

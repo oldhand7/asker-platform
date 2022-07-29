@@ -4,7 +4,7 @@ require('./projects')
 require('./navigation')
 require('./templates')
 require('./questions')
-
+require('./interview')
 
 Cypress.Commands.add('login', (username, password, key = '') => {
   cy.session([username, password, key], () => {
@@ -17,7 +17,7 @@ Cypress.Commands.add('login', (username, password, key = '') => {
         .type(`{selectAll}{backspace}${password}`)
     }).submit()
 
-    cy.location('pathname').should('eq', '/projects/')
+    cy.location('pathname').should('contain', '/projects/')
   })
 })
 
@@ -32,15 +32,22 @@ Cypress.Commands.add('simpleLogin', (username, password, confirm = false) => {
   }).submit()
 
   if (confirm) {
-    cy.location('pathname').should('eq', '/projects/')
+    cy.location('pathname').should('contain', '/projects/')
   }
 })
 
 Cypress.Commands.add('logout', () => {
   cy.visit('/logout/')
-  cy.location('pathname').should('eq', '/login/')
+  cy.location('pathname').should('contain', '/login/')
 })
 
 Cypress.Commands.add('confirmLoggedInAs', (name) => {
   cy.get('[data-test-id="user-card"]').contains(name)
+})
+
+Cypress.Commands.add('changeLanguage', (lang = 'EN') => {
+  cy.get('[data-test-id="language-switcher"]').click()
+    .within(() => {
+        cy.contains(lang, { matchCase: false }).click()
+    })
 })

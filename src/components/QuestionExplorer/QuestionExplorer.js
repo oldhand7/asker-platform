@@ -16,29 +16,30 @@ import QuestionExplorerOption from 'components/QuestionExplorerOption/QuestionEx
 import styles from './QuestionExplorer.module.scss';
 import VerticalDotsIcon from 'components/Icon/VerticalDotsIcon';
 import LiveSelect from 'components/LiveSelect/LiveSelect';
+import { useSite } from 'libs/site';
 
 const countSort = function(a, b) {
   if (a.count < b.count) return -1;
   if (a.count > b.count) return 1;
 
-  if (a.criteria.name.toLowerCase() < a.criteria.name.toLowerCase()) return -1;
-  if (b.criteria.name.toLowerCase() > b.criteria.name.toLowerCase()) return 1;
-
   return 0;
 }
 
-const CreateButton = (props) => (
-  <OutlineButton className={styles['question-explorer-create']} {...props}>
+const CreateButton = (props) => {
+  const { t } = useSite();
+
+  return <OutlineButton className={styles['question-explorer-create']} {...props}>
   <PlusIcon className={styles['question-explorer-create-icon']} />
-  <span className={styles['question-explorer-create-text']}>Create</span>
+  <span className={styles['question-explorer-create-text']}>{t('Create')}</span>
 </OutlineButton>
-)
+}
 
 const QuestionExplorer = ({ className, questions, onQuestions, label = '', type = 'screening', subtype = '' }) => {
-  const { user } = useUser();
+  const { user, locale } = useUser();
   const [availableQuestions, setAvailableQuestions] = useState([]);
   const [filteredQuestions, setFilterdQuestions] = useState([])
   const [filter, setFilter] = useState({ company: ['asker', user.companyId], type: [] })
+  const { i18nField, t } = useSite();
 
   const openScreeningQuestionModal = useModal(ScreeningQuestionModal, { size: 'medium'});
   const openEvaluationQuestionModal = useModal(EvaluationQuestionModal, { size: 'large'});
@@ -68,7 +69,7 @@ const QuestionExplorer = ({ className, questions, onQuestions, label = '', type 
   }, [filterControlOpen])
 
   useEffect(() => {
-    if (type == 'evaluation' && subtype != 'motivation' && subtype != 'culture-fit') {
+    if (type == 'evaluation' && subtype != 'motivation' && subtype != 'culture') {
       const evaluationCriteriaStats = {}
 
       for (let i = 0; i < availableQuestions.length; i++) {
@@ -163,15 +164,18 @@ const QuestionExplorer = ({ className, questions, onQuestions, label = '', type 
       filteredQuestions = filteredQuestions.filter(q => {
         const { criteria } = q;
 
-        const nameQ = regex.test(q.name.toLowerCase());
-        const criteriaQ = criteria && regex.test(criteria.name.toLowerCase());
+        const nameInt = i18nField(q.name)
+        const criteraInt = criteria && i18nField(criteria.name) || '';
+
+        const nameQ = regex.test(nameInt.toLowerCase());
+        const criteriaQ = regex.test(criteraInt.toLowerCase());
 
         return nameQ || criteriaQ;
       })
     }
 
     setFilterdQuestions(filteredQuestions)
-  }, [filter, type, availableQuestions, questions])
+  }, [filter, locale, type, availableQuestions, questions])
 
   const handleNewQuestion = (question) => {
     if (question && question.name) {
@@ -220,36 +224,45 @@ const QuestionExplorer = ({ className, questions, onQuestions, label = '', type 
   {
       label ?
       <h3 className={styles['question-explorer-title']}>{label}</h3> :
-      <h3 className={styles['question-explorer-title']}>Search question</h3>
+      <h3 className={styles['question-explorer-title']}>{t('Search question')}</h3>
     }
 
     <div className={styles['question-explorer-wrapper']}>
       <div className={styles['question-explorer-head']}>
 
-        <div className={styles['question-explorer-control']}>
+       <div className={styles['question-explorer-control']}>
             <div className={styles['question-explorer-company-filter']}>
-              <CheckboxButton theme='green' className={styles['question-explorer-company-filter-button']} checked={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker questions</CheckboxButton>
-              <CheckboxButton theme='dark' className={styles['question-explorer-company-filter-button']} checked={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user && user.companyId)}>Your questions</CheckboxButton>
+              <CheckboxButton theme='green' className={styles['question-explorer-company-filter-button']} checked={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>{t('Asker questions')}</CheckboxButton>
+              <CheckboxButton theme='dark' className={styles['question-explorer-company-filter-button']} checked={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user && user.companyId)}>{t('Your questions')}</CheckboxButton>
             </div>
 
             <LiveSearch className={styles['question-explorer-live-search']} q={filter.q} onQuery={q => setFilter({ ...filter, q})} />
             <CreateButton onClick={handleCreateQuestion}/>
-        </div>
+  </div>
 
         {
-          type == 'screening' || type == 'other' ?
+          type == 'screening' ?
           <div data-test-id="subtype-filter" className={styles['question-explorer-type-filter']}>
             <div className={styles['question-explorer-type-filter-list']}>
               <QuestionExplorerOption className={styles['question-explorer-type-filter-option']} active={filter.type.indexOf('choice') > -1} onClick={() => toggleType('choice')}>{getScreeningQuestionLabelBySubtype('choice')}</QuestionExplorerOption>
               <QuestionExplorerOption className={styles['question-explorer-type-filter-option']} active={filter.type.indexOf('multichoice') > -1} onClick={() => toggleType('multichoice')}>{getScreeningQuestionLabelBySubtype('multichoice')}</QuestionExplorerOption>
               <QuestionExplorerOption className={styles['question-explorer-type-filter-option']} active={filter.type.indexOf('range') > -1} onClick={() => toggleType('range')}>{getScreeningQuestionLabelBySubtype('range')}</QuestionExplorerOption>
+            </div>
+          </div> : null
+        }
+        {
+          type == 'other' ?
+          <div data-test-id="subtype-filter" className={styles['question-explorer-type-filter']}>
+            <div className={styles['question-explorer-type-filter-list']}>
               <QuestionExplorerOption className={styles['question-explorer-type-filter-option']} active={filter.type.indexOf('text') > -1} onClick={() => toggleType('text')}>{getScreeningQuestionLabelBySubtype('text')}</QuestionExplorerOption>
             </div>
-          </div> :
+          </div> : null
+        }
+        { type == 'evaluation' ?
           <div data-test-id="subtype-filter" className={styles['question-explorer-type-filter']}>
             <div className={styles['question-explorer-type-filter-list']}>
               {evaluationCriterias.map(ec => (
-                <QuestionExplorerOption key={ec.id} className={styles['question-explorer-type-filter-option']} active={filter.type.indexOf(ec) > -1} onClick={() => toggleType(ec)}>{ec.name}</QuestionExplorerOption>
+                <QuestionExplorerOption key={ec.id} className={styles['question-explorer-type-filter-option']} active={filter.type.indexOf(ec) > -1} onClick={() => toggleType(ec)}>{i18nField(ec.name)}</QuestionExplorerOption>
               ))}
             </div>
 
@@ -268,15 +281,15 @@ const QuestionExplorer = ({ className, questions, onQuestions, label = '', type 
                 }
               </div> : null
             }
-          </div>
+          </div> : null
         }
       </div>
 
       <div className={styles['question-explorer-body']}>
-        {
+       {
         filteredQuestions.length ?
         <QuestionExplorerQuestionList className={styles['question-explorer-list']} onQuestion={handleQuestionAdd} questions={filteredQuestions} /> :
-        <p className={styles['question-explorer-empty']}>No questions.</p>
+        <p className={styles['question-explorer-empty']}>{t('No questions')}</p>
         }
       </div>
     </div>

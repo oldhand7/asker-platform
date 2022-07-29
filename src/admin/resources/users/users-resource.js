@@ -60,7 +60,7 @@ const useStyles = makeStyles({
 const userFilters = [
     <TextInput label="Name" source="name" alwaysOn />,
     <TextInput label="Email" source="email" alwaysOn />,
-    <ReferenceInput label="Company" source="companyId" reference="companies" alwaysOn>
+    <ReferenceInput label="Company" source="companyId" reference="companies" alwaysOn sort={{field: 'name', order: 'ASC'}}>
       <SelectInput optionText="name" />
      </ReferenceInput>,
      <SelectInput source="type" choices={[
@@ -107,7 +107,7 @@ export const UsersEdit = props => {
           <TextInput source="email" label="Email"  />
           <TextInput source="phone" label="Phone"  />
 
-          <ReferenceInput label="Company" source="companyId" reference="companies">
+          <ReferenceInput label="Company" source="companyId" reference="companies" sort={{field: 'name', order: 'ASC'}}>
             <SelectInput optionText="name" />
            </ReferenceInput>
 
@@ -138,7 +138,7 @@ export const UsersAdd = props => {
           <TextInput source="email" label="Email"  />
           <TextInput source="phone" label="Phone"  />
 
-          <ReferenceInput label="Company" source="companyId" reference="companies">
+          <ReferenceInput label="Company" source="companyId" reference="companies" sort={{field: 'name', order: 'ASC'}}>
             <SelectInput optionText="name" />
            </ReferenceInput>
 

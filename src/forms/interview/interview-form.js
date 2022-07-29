@@ -18,8 +18,11 @@ import InterviewProcessOverview from 'components/InterviewProcessOverview/Interv
 import { ucFirst } from 'libs/helper';
 import NextButton from 'components/Button/NextButton';
 import BackIcon from 'components/Icon/BackIcon';
+import { useSite } from 'libs/site';
 
-const createStats = (stages = [], oldStats) => {
+import { EVALUATION_CRITERIA_TYPES } from 'libs/criteria';
+
+const createStats = (stages = [], oldStats, t) => {
   const stats = [];
 
   const granularFeatures = [
@@ -27,7 +30,7 @@ const createStats = (stages = [], oldStats) => {
     'experience-questions',
     'hard-skill-questions',
     'motivation-questions',
-    'culture-fit-questions'
+    'culture-questions'
   ]
 
   for (let i = 0; i < stages.length; i++) {
@@ -49,7 +52,7 @@ const createStats = (stages = [], oldStats) => {
           stats.push({
             id: key,
             questionId: id,
-            name: criteria ? criteria.name : ucFirst(subtype),
+            name: criteria ? criteria.name : t(EVALUATION_CRITERIA_TYPES[subtype].name),
             hint: name,
             status: 'awaiting',
             questions: 1,
@@ -101,7 +104,8 @@ const InterviewForm = ({ className, interview, project }) => {
   const router = useRouter();
   const [stages, setStages] = useState([]);
   const [minutes, setMinutes] = useState(typeof interview.time !== 'undefined' ? interview.time : project.time)
-  const [stats, setStats] = useState(createStats(project.stages, interview.stats))
+  const { t } = useSite();
+  const [stats, setStats] = useState(createStats(project.stages, interview.stats, t))
   const [stage, setStage] = useState(null);
   const [nextElement, setNextElement] = useState(null);
 
@@ -201,12 +205,12 @@ const InterviewForm = ({ className, interview, project }) => {
 
     saveCollectionDocument('interviews', interview)
       .then(() => {
-        addFlash('Interview complete')
+        addFlash(t('Interview complete'))
 
         router.push(`/projects/${project.id}/overview`)
       })
       .catch(error => {
-        setError(ctxError('Server error', error))
+        setError(ctxError(t('Server error'), error))
       })
   }
 
@@ -259,8 +263,8 @@ const InterviewForm = ({ className, interview, project }) => {
             project={project} />
         })}
       </div>
-      {nextElement  ? <NextButton className={styles['interview-form-next']} onClick={scrollNext} /> : null}
-      {!nextElement && stage ? <BrandishButton className={styles['interview-form-complete']}>{!loading ? 'Complete interview' : 'Loading...'}</BrandishButton> : null}
+      {nextElement ? <NextButton className={styles['interview-form-next']} onClick={scrollNext} /> : null}
+      {!nextElement && stage ? <BrandishButton className={styles['interview-form-complete']}>{!loading ? t('Complete interview') : t('Loading...')}</BrandishButton> : null}
     </div>
 
     <InterviewFormSidebar className={styles['interview-form-sidebar']}>

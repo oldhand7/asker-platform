@@ -143,11 +143,11 @@ describe('Pagination', () => {
   it('should paginate questions', () => {
     cy.visit('/questions/')
 
-    cy.createTextQuestion('Demo Question 1')
-    cy.createTextQuestion('Demo Question 2')
-    cy.createTextQuestion('Demo Question 3')
-    cy.createTextQuestion('Demo Question 4')
-    cy.createTextQuestion('Demo Question 5')
+    cy.createOtherTextQuestion({ name: 'Demo Question 1' })
+    cy.createOtherTextQuestion({ name: 'Demo Question 2' })
+    cy.createOtherTextQuestion({ name: 'Demo Question 3' })
+    cy.createOtherTextQuestion({ name: 'Demo Question 4' })
+    cy.createOtherTextQuestion({ name: 'Demo Question 5' })
 
     cy.get('table tbody tr')
       .should('have.length', 5)

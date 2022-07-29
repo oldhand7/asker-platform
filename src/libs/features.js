@@ -13,8 +13,8 @@ export const features = [
   { id: 'motivation-questions', name: 'Motivation based questions', shortName: 'Motivation questions', type: 'evaluation', metadata: { criteria: 'motivation' } },
   { id: 'screening-questions', name: 'Screening questions', type: 'evaluation' },
   { id: 'experience-questions', name: 'Experience based questions', shortName: 'Experience questions', type: 'evaluation', metadata: { criteria: 'experience' } },
-  { id: 'hard-skill-questions', name: 'Hard skill based questions', shortName: 'Hard-skill questions', type: 'evaluation', metadata: { criteria: 'hard-skill' } },
-  { id: 'culture-fit-questions', name: 'Culture-fit based questions', shortName: 'Culture-fit questions', type: 'evaluation', metadata: { criteria: 'culture-fit' }  },
+  { id: 'hard-skill-questions', name: 'Hard skill based questions', shortName: 'Hard skill questions', type: 'evaluation', metadata: { criteria: 'hard-skill' } },
+  { id: 'culture-questions', name: 'Culture based questions', shortName: 'Culture questions', type: 'evaluation', metadata: { criteria: 'culture' }  },
   { id: 'introduction', name: 'Introduction', type: 'other' },
   { id: 'summary', name: 'Summary', type: 'other' },
   { id: 'other-questions', name: 'Other', type: 'other' }

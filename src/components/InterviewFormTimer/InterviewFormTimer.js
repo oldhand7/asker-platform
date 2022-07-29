@@ -86,7 +86,7 @@ const InterviewFormTimer = ({ className, totalTime = 5, availableTime = 5, onTim
         !timeRemainingMinutes ? <span className={styles['interview-form-timer-overtime']}>time over</span> : null}</p>
 
       {timeRemainingMinutes ?  <Tooltip text={timeLabelSeconds}>{(setRef, _ref) => (
-          <PieChart ref={ref => ref && setRef(ref.container)} className={styles['interview-form-timer-wheel']} width={100} height={100} >
+           <PieChart id={1} ref={ref => ref && setRef(ref.container)} className={styles['interview-form-timer-wheel']} width={100} height={100} >
                 <Pie
                   data={[
                     { name: '', value: (totalTime * 60)-timeRemainingSeconds },

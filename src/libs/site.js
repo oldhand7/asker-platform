@@ -26,9 +26,21 @@ export const withSite = (WrappedComponent) => (props) => {
       }
     }, [user])
 
+    const i18nField = (field) => {
+        const { locale } = router;
+    
+        const isObject = typeof field === "object";
+    
+        if (isObject && typeof field[locale] !== "undefined") return field[locale];
+        if (isObject && typeof field['en'] !== "undefined") return field['en'];
+    
+        return isObject ? '' : field;
+    }
+
     const tools = {
       config,
-      t
+      t,
+      i18nField
     }
 
     return (
