@@ -1,9 +1,11 @@
 export const getAnswerColor = answer => {
-    if (answer.toLowerCase() == 'no') {
+    const answerLabel = answer.name && answer.name.en || '';
+
+    if (answerLabel.toLowerCase() == 'no') {
       return 'red';
     }
   
-    if (answer.toLowerCase() == 'yes') {
+    if (answerLabel.toLowerCase() == 'yes') {
       return 'green';
     }
   

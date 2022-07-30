@@ -1,9 +1,12 @@
 import RuleInputField from 'components/RuleInputField/RuleInputField';
 import classNames from 'classnames';
+import { useSite } from 'libs/site';
 
 import styles from './QuestionScoreInputField.module.scss'
 
 const QuestionScoreInputField = ({ className='', rules = [], onChange }) => {
+  const { t} = useSite();
+
   const handleRulesChange = (val, index) => {
     const newRules = [
         ...rules
@@ -17,7 +20,7 @@ const QuestionScoreInputField = ({ className='', rules = [], onChange }) => {
   }
 
   return <div data-test-id="question-score-input-field" className={classNames(styles['question-score-input-field'], className)}>
-    <span className={styles['question-score-input-field-label']}>Score</span>
+    <span className={styles['question-score-input-field-label']}>{t('Score')}</span>
 
     <ul className={styles['question-score-input-field-rules']}>
       {rules.map((rule, index) => <li className={styles['question-score-input-field-rules-item']} key={index}>

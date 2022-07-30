@@ -13,13 +13,12 @@ describe('Screening question feature', () => {
 
     cy.get('ul[data-test-id="screening-question-options"]')
       .children()
-      .should('have.length', 4)
+      .should('have.length', 3)
       .parent()
       .within(() => {
         cy.get('li').eq(0).should('contain', 'Yes/No');
         cy.get('li').eq(1).should('contain', 'Multiple choice');
         cy.get('li').eq(2).should('contain', 'Range');
-        cy.get('li').eq(3).should('contain', 'Text');
       })
 
     cy.contains('Yes/No').click()
@@ -34,7 +33,7 @@ describe('Screening question feature', () => {
 
     cy.get('[data-test-id="choice-question-form"]')
       .within(() => {
-        cy.get('input[name="name"]').type('Some multichoice question')
+        cy.get('input[name="name.en"]').type('Some multichoice question')
         cy.get('[data-test-id="html-input-field"]').click()
           .type('Some multichoice question description')
 
@@ -44,9 +43,9 @@ describe('Screening question feature', () => {
           .should('have.length', 2)
           .parent()
           .within(() => {
-            cy.get('li').eq(0).find('input[name="answers[]"]').type('AAA{enter}')
-            cy.get('li').eq(1).find('input[name="answers[]"]').should('be.focused').type('BBB{enter}').wait(200)
-            cy.get('li').eq(2).find('input[name="answers[]"]').should('be.focused').type('CCC')
+            cy.get('li').eq(0).find('input[name="answers[0].name.en"]').type('AAA{enter}')
+            cy.get('li').eq(1).find('input[name="answers[1].name.en"]').should('be.focused').type('BBB{enter}').wait(200)
+            cy.get('li').eq(2).find('input[name="answers[2].name.en"]').should('be.focused').type('CCC')
           })
           .parent()
           .contains('Add answer').click().click()
@@ -91,7 +90,7 @@ describe('Screening question feature', () => {
           cy.get('input').eq(3).should('have.value', 'DDD')
       })
 
-    cy.get('input[name="name"]').type('{selectAll}{backspace}Some single choice question')
+    cy.get('input[name="name.en"]').type('{selectAll}{backspace}Some single choice question')
     cy.get('[data-test-id="html-input-field"]').click()
       .type('{selectAll}{backspace}Some single choice question description')
     cy.get('input[type="checkbox"]').uncheck()

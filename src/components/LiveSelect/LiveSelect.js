@@ -1,10 +1,12 @@
 import CheckboxInputField from "components/CheckboxInputField/CheckboxInputField";
+import { useSite } from "libs/site";
 import { useState, useEffect, useMemo, useCallback } from "react";
 
 import styles from './LiveSelect.module.scss';
 
 const LiveSelect = ({ selected = [], items = [], onSelect }) => {
     const [selectedItems, setSelectedItems] = useState(selected);
+    const { i18nField } = useSite();
 
     useEffect(() => {
         setSelectedItems(selected);
@@ -47,8 +49,8 @@ const LiveSelect = ({ selected = [], items = [], onSelect }) => {
                 {items.map(item => (
                     <li className={styles['live-select-item']} key={item.id} onClick={() => toggleSingle(item)}>
                         <input className={styles['live-select-item-checkbox']} type="checkbox" checked={selectedItems.indexOf(item) > -1}  readOnly />
-                        <span className={styles['live-select-item-name']}>{item.name}</span>
-                        <span className={styles['live-select-item-desc']} dangerouslySetInnerHTML={{__html: item.desc}}></span>
+                        <span className={styles['live-select-item-name']}>{i18nField(item.name)}</span>
+                        <span className={styles['live-select-item-desc']} dangerouslySetInnerHTML={{__html: i18nField(item.desc)}}></span>
                     </li>
                 ))}
             </ul>

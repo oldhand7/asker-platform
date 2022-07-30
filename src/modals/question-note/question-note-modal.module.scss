@@ -1,0 +1,11 @@
+.modal {
+  & > div {
+    padding: 24rem;
+    width: 100%;
+    max-width: 768px;
+
+    @media (max-width: 768px) {
+      border-radius: 20px;
+    }
+  }
+}

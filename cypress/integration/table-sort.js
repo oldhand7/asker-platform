@@ -6,9 +6,9 @@ describe('Table sort', () => {
   it('should sort questions by name', () => {
     cy.visit('/questions/')
 
-    cy.createTextQuestion('BBB')
-    cy.createTextQuestion('AAA')
-    cy.createTextQuestion('CCC')
+    cy.createOtherTextQuestion({ name: 'BBB' })
+    cy.createOtherTextQuestion({ name: 'AAA' })
+    cy.createOtherTextQuestion({ name: 'CCC' })
 
     cy.get('table tbody tr')
       .should('have.length', 3)

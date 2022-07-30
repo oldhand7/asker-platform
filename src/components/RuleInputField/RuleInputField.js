@@ -1,15 +1,42 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import TextInputField from 'components/TextInputField/TextInputField';
-import TextareaInputField from 'components/TextareaInputField/TextareaInputField';
 import PencilIcon from 'components/Icon/PencilIcon';
 import HtmlInputField from 'components/HtmlInputField/HtmlInputField';
 
 import styles from './RuleInputField.module.scss';
+import { useUser } from 'libs/user';
+import { useSite } from 'libs/site';
+import { useForm } from 'libs/react-hook-form';
+
+const defaultRule = { name: { en: ''}, step: [] }
 
 const RuleInputField = ({ className, rule, index = 1, onChange }) => {
   const [edit, setEdit] = useState(false);
-  const [errors, setErrors] = useState(null);
+  const { locale } = useUser();
+
+  const { t, i18nField } = useSite();
+
+  const validationRules = useMemo(() => ({
+    [`name.${locale}`]: 'required'
+  }), [locale])
+
+  const initialValue = useMemo(() => rule || defaultRule, [])
+
+  const {
+    values,
+    errors,
+    input
+  } = useForm({
+    values: rule,
+    rules: validationRules
+  });
+
+  useEffect(() => {
+    if (JSON.stringify(rule) != JSON.stringify(values)) {
+      onChange && onChange(values)
+    }
+  }, [rule, values])
 
   const headRef = useRef();
 
@@ -35,42 +62,24 @@ const RuleInputField = ({ className, rule, index = 1, onChange }) => {
     }
   }, [edit, headRef, editModeOff])
 
-  const handleStepValue = (val, index) => {
-    const newSteps = [
-        ...rule.steps
-    ]
-
-    newSteps[index] = val;
-
-    onChange({
-      ...rule,
-      steps: newSteps
-    })
-  }
-
-  const handleRename = (ev) => {
-    onChange({
-      ...rule,
-      name: ev.target.value
-    })
-  }
-
-  return <ul className={styles['rule-input-field']}>
+  return <ul className={classNames(styles['rule-input-field'], className)}>
     <li ref={headRef} className={classNames(styles['rule-input-field-item'], styles['rule-input-field-head'])}>
       {!edit ? <button onClick={() => setEdit(true)} className={styles['rule-input-field-head-edit-button']}>
         <PencilIcon className={styles['rule-input-field-head-edit-button-icon']} />
       </button> : null}
       <span className={styles['rule-input-field-head-index']}>{index}</span>
+
       {
         !edit ?
-        <span className={styles['rule-input-field-head-label']}>{rule.name}</span> :
-        <TextInputField focus={true} placeholder="Name" error={errors && errors.name} value={rule.name} onChange={handleRename} className={styles['rule-input-field-head-input']} onEnter={editModeOff}/>
+        <span className={styles['rule-input-field-head-label']}>{i18nField(values.name)}</span> :
+        <TextInputField focus={true} placeholder={t("Name")} error={errors && errors.name && errors.name[locale]} value={values.name[locale]} onChange={input(`name.${locale}`)} className={styles['rule-input-field-head-input']} onEnter={editModeOff}/>
       }
     </li>
+
     {
-      rule.steps ?
-      rule.steps.map((step, index) => <li key={`rs${index}`} className={styles['rule-input-field-item']}>
-        <HtmlInputField value={step.slice(0, 9000)} onChange={val => handleStepValue(val, index)} className={styles['rule-input-field-item-input']} placeholder="Write here" />
+      values.steps ?
+      values.steps.map((step, index) => <li key={`rs${index}-${locale}`} className={styles['rule-input-field-item']}>
+        <HtmlInputField value={step[locale]} diff={locale} onChange={input(`steps.${index}.${locale}`, false)} className={styles['rule-input-field-item-input']} placeholder={t("Write here")} />
       </li>) : null
     }
   </ul>

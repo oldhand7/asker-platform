@@ -6,7 +6,7 @@ export const getInterviewAggregate = ({ evaluations, ...details }) => {
     experience: {},
     'hard-skill': {},
     motivation: [],
-    'culture-fit': []
+    'culture': []
   }
 
   for (const eKey in evaluations) {

@@ -21,7 +21,7 @@ const demoProject = {
     } },
     { id: 'ddd', config: {
       questions: [
-        { type: 'evaluation', subtype: 'culture-fit' }
+        { type: 'evaluation', subtype: 'culture' }
       ]
     } },
     { id: 'eee', config: {
@@ -48,6 +48,6 @@ describe('ProjectEvaluationCriteria', () => {
     expect(getByRole(experienceCriteriaRoot, 'listitem')).toHaveTextContent('60%')
 
     expect(screen.getByText('Motivation', {exact: false}).closest('div')).toHaveTextContent('20%')
-    expect(screen.getByText('Culture-fit', {exact: false}).closest('div')).toHaveTextContent('20%')
+    expect(screen.getByText('Culture', {exact: false}).closest('div')).toHaveTextContent('20%')
   })
 })

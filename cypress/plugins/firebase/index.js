@@ -122,93 +122,21 @@ const beforeRun = async () => {
 
   const userId18Joe  = await helpers.createUser('Joe Riley', 'joe.riley@example.com', 'test123', companyId18, 'admin', false)
   const userId18Jane = await helpers.createUser('Jane Riley', 'jane.riley@example.com', 'test123', companyId18, 'hr', false)
+  
+  //User 19
+  const companyId19 = await helpers.createCompany('Woodkid & Co')
 
-  await helpers.createQuestion({
-    name: 'CQ1',
-    companyId: companyId2,
-    criteria: {
-      name: 'CA',
-      type: 'competency'
-    },
-    type: 'evaluation',
-    subtype: 'competency'
-  })
+  const userId19Joe  = await helpers.createUser('Joe Woodkid', 'joe.woodkid@example.com', 'test123', companyId19, 'admin', true)
+  const userId19Jane = await helpers.createUser('Jane Woodkid', 'jane.woodkid@example.com', 'test123', companyId19, 'hr', false)
 
-  await helpers.createQuestion({
-    name: 'CQ2',
-    companyId: companyId2,
-    criteria: {
-      name: 'CB',
-      type: 'competency'
-    },
-    type: 'evaluation',
-    subtype: 'competency'
-  })
+  //User 20
+  const companyId20 = await helpers.createCompany('Lubeck & Co')
 
-  await helpers.createQuestion({
-    name: 'CQ3',
-    companyId: companyId2,
-    criteria: {
-      name: 'CC',
-      type: 'competency'
-    },
-    type: 'evaluation',
-    subtype: 'competency'
-  })
+  const userId20Joe  = await helpers.createUser('Joe Woodkid', 'joe.lubeck@example.com', 'test123', companyId20, 'admin', true)
+  const userId20Jane = await helpers.createUser('Jane Woodkid', 'jane.lubeck@example.com', 'test123', companyId20, 'hr', false)
 
-  //allow some time to pass for propagation of claims
-  await new Promise((resolve) => setTimeout(resolve, 3000))
 
-  const projectId = await helpers.createProject({
-    companyId: companyId2,
-    userId: userId2Joe,
-    createdAt: 0,
-    updatedAt: 0,
-    name: 'Philips Demo Project',
-    time: 15,
-    stages: [
-      { id: 'introduction', name: 'Introduction', type: 'other' },
-      { id: 'questions', name: 'Questions', type: 'other' },
-      { id: 'summary', name: 'Summary', type: 'other' }
-    ],
-    config: {
-      introduction: {
-        text: 'This is Philips introduction.'
-      }
-    },
-    interviewers: [
-      { id: userId2Jane, name: 'Jane Philips'}
-    ],
-    template: {
-      id: 'philips-engineer',
-      name: 'Philips Engineer'
-    },
-    interviewsCount: 0,
-    interviewsAwaitingCount: 0
-  })
-
-  await helpers.createInterview({
-    companyId: companyId2,
-    userId: userId2Joe,
-    projectId: projectId,
-    candidate: { id: 'ca', name: 'Candidate A' },
-    score: 40,
-    status: 'complete',
-    evaluations: [],
-    createdAt: 1,
-    updatedAt: 0
-  })
-
-  await helpers.createInterview({
-    companyId: companyId2,
-    userId: userId2Joe,
-    projectId: projectId,
-    candidate: { id: 'cb', name: 'Candidate B' },
-    status: 'awaiting',
-    evaluations: [],
-    createdAt: 2,
-    updatedAt: 0,
-  })
+  //Translations
 
   await helpers.createTranslation({
     text: 'Projects',
@@ -216,6 +144,63 @@ const beforeRun = async () => {
       se: "Projects_SE"
     }
   })
+
+  await helpers.createTranslation({
+    text: 'Competency',
+    translation: {
+      se: "Competency_SE"
+    }
+  })
+
+  await helpers.createTranslation({
+    text: 'Hard skill',
+    translation: {
+      se: "Hard skill_SE"
+    }
+  })
+
+  await helpers.createTranslation({
+    text: 'Hard skill',
+    translation: {
+      se: "Hard skill_SE"
+    }
+  })
+
+  await helpers.createTranslation({
+    text: 'Experience',
+    translation: {
+      se: "Experience_SE"
+    }
+  })
+
+  await helpers.createTranslation({
+    text: 'Motivation',
+    translation: {
+      se: "Motivation_SE"
+    }
+  })
+
+  await helpers.createTranslation({
+    text: 'Culture',
+    translation: {
+      se: "Culture_SE"
+    }
+  })
+
+  await helpers.createTranslation({
+    text: 'Screening',
+    translation: {
+      se: "Screening (SE)"
+    }
+  })
+
+  await helpers.createTranslation({
+    text: 'Other',
+    translation: {
+      se: "Other (SE)"
+    }
+  })
+
 }
 
 module.exports = {

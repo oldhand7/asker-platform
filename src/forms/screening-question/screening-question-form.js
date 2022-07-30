@@ -39,7 +39,7 @@ export const getScreeningQuestionLabelBySubtype = (subtype) => {
 
 
 const ScreeningQuestionForm = ({ className, question, type = 'screening', onValues }) => {
-  const [subtype, setSubtype] = useState(null);
+  const [subtype, setSubtype] = useState(question && question.subtype);
   const [FormComponent, setFormComponent] = useState(null)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -120,10 +120,17 @@ const ScreeningQuestionForm = ({ className, question, type = 'screening', onValu
     {
       !question && !subtype ?
       <ul  data-test-id={`${type}-question-options`} className={styles['screening-question-form-options']}>
-        <li onClick={() => setSubtype('choice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('choice')}</li>
-        <li onClick={() => setSubtype('multichoice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('multichoice')}</li>
-        <li onClick={() => setSubtype('range')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('range')}</li>
-        <li onClick={() => setSubtype('text')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('text')}</li>
+        {
+          type == 'screening' ?
+          <>
+            <li onClick={() => setSubtype('choice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('choice')}</li>
+            <li onClick={() => setSubtype('multichoice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('multichoice')}</li>
+            <li onClick={() => setSubtype('range')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('range')}</li>
+          </> :
+          <>
+            <li onClick={() => setSubtype('text')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('text')}</li>
+          </>
+        }
       </ul> :
       null
     }
@@ -135,7 +142,7 @@ const ScreeningQuestionForm = ({ className, question, type = 'screening', onValu
       <FormComponent
         className={styles['screening-question-form-subform']}
         onValues={handleQuestion}
-        values={question || {}}
+        values={question}
         onCancel={() => !question && setSubtype(null)}
         loading={loading}
         multichoice={subtype == 'multichoice'}

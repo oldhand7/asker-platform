@@ -194,8 +194,8 @@ const ProjectInterviewsTable = ({ className, data = [], onDelete, compare, onCom
         }
 
         {
-          table['culture-fit'].score ?
-          <InterviewDetailsRowEvaluation evaluation={table['culture-fit']} className={styles['project-interviews-table-details-row']} /> :
+          table['culture'].score ?
+          <InterviewDetailsRowEvaluation evaluation={table['culture']} className={styles['project-interviews-table-details-row']} /> :
           null
         }
 
@@ -204,12 +204,6 @@ const ProjectInterviewsTable = ({ className, data = [], onDelete, compare, onCom
           <InterviewDetailsRowEvaluation evaluation={table['experience']} className={styles['project-interviews-table-details-row']} /> :
           null
         }
-
-        {
-          otherQuestions['other-questions'].length ?
-        <InterviewDetailsRowScreening other={true} evaluations={otherQuestions['other-questions']} className={styles['project-interviews-table-details-row']} /> :
-        null
-      }
     </InterviewDetails>
   }
 

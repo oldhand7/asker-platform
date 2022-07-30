@@ -19,12 +19,12 @@ import styles from './CriteriaOptionInputField.module.scss';
 const CriteriaOptionInputField = ({ error, className, value, onChange, type }) => {
   const [criteriaOptions, setCriteriaOptions] = useState([]);
   const openCriteriaOptionModal = useModal(CriteriaOptionModal)
-  const { user } = useUser();
+  const { user, locale } = useUser();
 
   useEffect(() => {
     const filter = [
       ['companyId', 'in', [user.companyId, 'asker']],
-      ['type', '==', type]
+    ['type', '==', type]
     ]
 
     const sort = [
@@ -47,10 +47,10 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, type }) =
   }
   
   const  handleOpenModal = () => {
-    openCriteriaOptionModal(onChange, { type, values: value });
+    openCriteriaOptionModal(onChange, { type });
   }
 
-  return <div data-test-id="criteria-option-input-field" className={classNames(styles['criteria-option-input-field'], className)}>
+  return <div data-test-id="criteria-option" className={classNames(styles['criteria-option-input-field'], className)}>
     <span className={styles['criteria-option-input-field-label']}>{EVALUATION_CRITERIA_TYPES[type].name}:</span>
 
     {
@@ -66,18 +66,18 @@ const CriteriaOptionInputField = ({ error, className, value, onChange, type }) =
       </> :
       <div className={styles['criteria-option-input-field-card']}>
         <div className={styles['criteria-option-input-field-card-label']}>
-          <span className={styles['criteria-option-input-field-card-label-name']}>{value.name}</span>
+          <span className={styles['criteria-option-input-field-card-label-name']}>{value.name[locale] || value.name.en}</span>
           {
             value.desc ?
             <div
               className={styles['criteria-option-input-field-card-label-desc']}
-              dangerouslySetInnerHTML={{ __html: striptags(value.desc) }}></div> :
+              dangerouslySetInnerHTML={{ __html: striptags(value.desc[locale] || value.desc.en) }}></div> :
             null
           }
         </div>
         {
           user && value.companyId == user.companyId ?
-          <EditButton onClick={() => openCriteriaOptionModal(onChange)} className={styles['criteria-option-input-field-card-button']} /> :
+          <EditButton onClick={() => openCriteriaOptionModal(onChange, { values: value, type })} className={styles['criteria-option-input-field-card-button']} /> :
           null
         }
         <TrashButton onClick={resetOption} className={styles['criteria-option-input-field-card-button']} />

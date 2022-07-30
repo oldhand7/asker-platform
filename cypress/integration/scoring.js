@@ -36,7 +36,7 @@ describe('Scoring', () => {
     .find('button')
     .click()
 
-    cy.contains('Evaluation criteria').parent()
+    cy.get('[data-test-id="project-evaluation-criteria"]')
       .within(() => {
         cy.contains('Motivation').parent().should('contain', '50%')
         cy.contains('Competency').parent().should('contain', '50%')
@@ -58,7 +58,7 @@ describe('Scoring', () => {
       })
       .wait(1000)
 
-    cy.contains('Evaluation criteria').parent()
+    cy.get('[data-test-id="project-evaluation-criteria"]')
       .within(() => {
         cy.contains('Motivation').parent().should('contain', '80%')
         cy.contains('Competency').parent().should('contain', '20%')
@@ -136,7 +136,7 @@ describe('Scoring', () => {
         cy.get('ul li button').click({multiple: true})
       })
 
-    cy.contains('Evaluation criteria').parent()
+    cy.get('[data-test-id="project-evaluation-criteria"]')
         .within(() => {
           cy.contains('Competency').parent().should('contain', '100%')
             .parent()
@@ -159,7 +159,7 @@ describe('Scoring', () => {
         cy.contains('Save').click()
       })
 
-    cy.contains('Evaluation criteria').parent()
+    cy.get('[data-test-id="project-evaluation-criteria"]')
       .within(() => {
         cy.contains('Competency').parent().should('contain', '100%')
           .parent()

@@ -54,7 +54,7 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [qMax, setMaxQ] = useQueryState('fl')
-  const { t } = useSite();
+  const { t, i18nField } = useSite();
   
   useEffect(() => {
     if (!filter.pristine) {
@@ -84,9 +84,11 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
     if (q && filteredQuestions.length) {
       const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
 
-      filteredQuestions = filteredQuestions.filter(data => {
-        const criteriaName = data.criteria && data.criteria.name || '';
-        return regex.test(data.name.toLowerCase()) || regex.test(criteriaName.toLowerCase())
+      filteredQuestions = filteredQuestions.filter(q => {
+        const questionIntName = i18nField(q.name);
+        const criteriaIntName = q.criteria && i18nField(q.criteria) || '';
+
+        return regex.test(questionIntName.toLowerCase()) || regex.test(criteriaIntName.toLowerCase())
       })
     }
 

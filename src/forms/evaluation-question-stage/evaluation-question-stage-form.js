@@ -37,7 +37,7 @@ const EvaluationQuestionStageForm = ({ className, values, onValues, feature, onE
 
   return <div className={classNames(styles['evaluation-question-stage-from'], className)}>
     <QuestionExplorer type={'evaluation'} subtype={SHORT_IDS[feature.id]} label={SHORT_NAMES[feature.id]} className={styles['evaluation-question-stage-form-question-explorer']} questions={formValues.questions} onQuestions={control.input('questions', false)} />
-    <SelectedQuestionsManager type={'evaluation'} subtype={SHORT_IDS[feature.id]} className={styles['evaluation-question-stage-form-question-explorer']}  questions={formValues.questions} onChange={control.input('questions', false)} />
+    <SelectedQuestionsManager notes={formValues.notes} onNotes={control.input('notes', false)} type={'evaluation'} subtype={SHORT_IDS[feature.id]} className={styles['evaluation-question-stage-form-question-explorer']}  questions={formValues.questions} onChange={control.input('questions', false)} />
   </div>
 }
 

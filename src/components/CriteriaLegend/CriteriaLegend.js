@@ -2,12 +2,14 @@ import ProgressBar from 'components/ProgressBar/ProgressBar';
 import { COLOR_MAP } from 'libs/config';
 import { useState } from 'react';
 import classNames from 'classnames';
-import { fixFloat } from 'libs/helper'
+import { fixFloat } from 'libs/helper';
+import { useSite } from 'libs/site';
 
 import styles from './CriteriaLegend.module.scss';
 
 const CriteriaLegend = ({ criteria, className }) => {
   const [active, setActive] = useState(true);
+  const { i18nField } = useSite();
 
   const toggleOpen = () => criteria.children && setActive(!active)
 
@@ -18,7 +20,7 @@ const CriteriaLegend = ({ criteria, className }) => {
     criteria.children ? styles['criteria-legend-has-children'] : ''
   )}>
     <div className={styles['criteria-legend-label']}>
-      <span className={styles['criteria-legend-label-name']}>{criteria.name}</span>
+      <span className={styles['criteria-legend-label-name']}>{i18nField(criteria.name)}</span>
       <span className={styles['criteria-legend-label-value']}>
         <span className={styles['criteria-legend-label-value-inner']}>{fixFloat(criteria.weight, 1)}%</span>
       </span>
@@ -27,7 +29,7 @@ const CriteriaLegend = ({ criteria, className }) => {
     {criteria.children ? <ul style={!active ? { display: 'none' } : {}} className={styles['criteria-legend-details']}>
       {criteria.children.map(c => (
         <li key={`${criteria.type}-${c.type}`} className={styles['criteria-legend-details-item']}>
-          <span className={styles['criteria-legend-details-item-name']}>{c.name}</span>
+          <span className={styles['criteria-legend-details-item-name']}>{i18nField(c.name)}</span>
           <span className={styles['criteria-legend-details-item-value']}>
             <span>{fixFloat(c.weight, 1)}%</span>
           </span>

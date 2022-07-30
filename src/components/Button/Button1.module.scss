@@ -42,4 +42,25 @@
       color: white;
     }
   }
+
+  &-themed {
+    background: #B7B7B7;
+    color: #FFFFFF;
+    padding: 4rem 16rem;
+    line-height: 1.5em;
+    font-weight: 500;
+    font-size: 14rem;
+    letter-spacing: 0.01em;
+    border-radius: 5px;
+    border: 0;
+    cursor: pointer;
+
+    &-green {
+      background: #43B88C;
+    }
+
+    &-red {
+      background: #FAB7B7;
+    }
+  }
 }

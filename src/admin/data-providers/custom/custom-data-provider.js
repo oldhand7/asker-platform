@@ -51,6 +51,52 @@ const CustomDataProvider = (config, options) => {
       }
 
       return dataProvider.update(resource, params)
+    },
+    getList: async (resource, params) => {
+      const { filter } = params;
+
+
+      if (typeof filter.companyId === "object" && filter.companyId.length) {
+
+        const uniqueCompanyId = filter.companyId.filter((v, i, a) => a.indexOf(v) === i)
+
+        const data = await Promise.all([
+          ...uniqueCompanyId.map(companyId => dataProvider.getList(resource, {
+            ...params,
+            filter: {
+              ...params.filter,
+              companyId
+            }
+          }))
+        ])  
+
+        const finalData = data.reduce((data, d) => [...data, ...d.data], []).map(d => {
+          if (d.companyId == 'asker') {
+            d.name.en = d.name.en + ' (A)'
+          }
+
+          return d;
+        })
+
+        finalData.sort((a, b) => {
+          if (a.name.en < b.name.en) {
+            return 1;
+          }
+          if (a.name.en > b.name.en) {
+            return -1;
+          }
+          return 0;
+        })
+
+        const result = {
+          data: finalData,
+          total: data.reduce((sum, d) => sum + d.total, 0)
+        }
+
+        return Promise.resolve(result)
+      }
+
+      return dataProvider.getList(resource, params);
     }
   }
 }

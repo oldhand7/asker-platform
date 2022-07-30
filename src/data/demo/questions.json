@@ -131,7 +131,7 @@
     "criteria": {
       "id": 6,
       "name": "MCNP",
-      "type": "culture-fit"
+      "type": "culture"
     },
     "followup": null,
     "rules": null
@@ -185,7 +185,7 @@
     "criteria": {
       "id": 9,
       "name": "DMF",
-      "type": "culture-fit"
+      "type": "culture"
     },
     "followup": ["Phyllanthus acuminatus Vahl", "Dendromecon rigida Benth. ssp. rigida", "Stachytarpheta Vahl"],
     "rules": [{
@@ -241,7 +241,7 @@
     "criteria": {
       "id": 11,
       "name": "Undercover",
-      "type": "culture-fit"
+      "type": "culture"
     },
     "followup": ["Grindelia nuda Alph. Wood", "Tradescantia occidentalis (Britton) Smyth var. scopulorum (Rose) E.S. Anderson & Woodson", "Leavenworthia aurea Torr. var. texana (Mahler) Rollins"],
     "rules": [{
@@ -269,7 +269,7 @@
     "criteria": {
       "id": 12,
       "name": "Cinematography",
-      "type": "culture-fit"
+      "type": "culture"
     },
     "followup": ["Townsendia incana Nutt.", "Pinus balfouriana Balf.", "Tulbaghia L."],
     "rules": [{

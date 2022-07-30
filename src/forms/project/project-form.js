@@ -26,6 +26,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getStageTime } from 'libs/stage'
 
 import styles from './project-form.module.scss';
+import { useSite } from 'libs/site';
 
 const ProjectFormSidebar = ({ className }) => {
   return <div className={classNames(styles['project-form-sidebar'], className)}>
@@ -79,6 +80,7 @@ const ProjectForm = ({ project, className }) => {
   const { user } = useUser();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const { t } = useSite()
 
   const { values, errors, control, pristine, submitted } = useForm({
     values: project ? { ...defaultValues, ...project} : defaultValues,
@@ -121,7 +123,7 @@ const ProjectForm = ({ project, className }) => {
     }
 
     if (stageErrors.length) {
-      setError(new Error('Some stages are invalid.'))
+      setError(new Error(t('Some stages are invalid.')))
 
       return;
     }
@@ -191,16 +193,16 @@ const ProjectForm = ({ project, className }) => {
 
     Promise.all(tasks)
       .then(() => {
-        if (project) {
-          addFlash('Project saved', 'success')
+        if (project && project.id) {
+          addFlash(t('Project saved'), 'success')
         } else {
-          addFlash('Project created', 'success')
+          addFlash(t('Project created'), 'success')
         }
 
         router.push('/projects/')
       })
       .catch(error => {
-        setError(ctxError('Server error', error))
+        setError(ctxError(t('Server error'), error))
       })
   }
 
@@ -262,16 +264,16 @@ const ProjectForm = ({ project, className }) => {
 
   return  <form data-test-id="project-form" onSubmit={control.submit(handleSubmit)} className={classNames(styles['project-form'], className)}>
     { project && !project.id && project.template ?
-        <p className={styles['project-form-template']}>Using template: <span>{project.template.name}</span></p>
+        <p className={styles['project-form-template']}>{t('Using template:')} <span>{project.template.name}</span></p>
         : null}
 
     <div className={styles['project-form-header']}>
-      <TextInputField value={values.name} onChange={control.input('name')} placeholder={'Project name'} error={errors && errors.name}  autoComplete='off' name='name' type='text' className={styles['project-form-field-name']} />
+      <TextInputField value={values.name} onChange={control.input('name')} placeholder={t('Project name')} error={errors && errors.name}  autoComplete='off' name='name' type='text' className={styles['project-form-field-name']} />
 
       <div className={styles['project-form-header-control']}>
         <TimeLabel className={styles['project-form-total-time']}>{getTimeLabel(values.time)}</TimeLabel>
         <Button disabled={loading || errors} type="submit" className={styles['project-form-submit']}>
-          {!loading ? (project ? 'Save project' : 'Create project') : 'Loading...'}</Button>
+          {!loading ? (project && project.id ? t('Save project') : t('Create project')) : t('Loading...')}</Button>
       </div>
     </div>
 
@@ -286,7 +288,7 @@ const ProjectForm = ({ project, className }) => {
         {
           submitted && stageErrors.length ?
           <ErrorBox className={styles['project-form-stage-error-report']}>
-            <p>You can't save form, because some stages are invalid:</p>
+            <p>{t('You can\'t save form, because some stages are invalid:')}</p>
             <ul>
               {stageErrors.map(({ stage, error}) => <li key={stage.id}>{stage.name}</li>)}
             </ul>
@@ -298,13 +300,13 @@ const ProjectForm = ({ project, className }) => {
           onScoringRules={sr => control.set('scoringRules', sr)} className={styles['project-form-criteria']} />
 
         <div className={styles['project-form-field-stages']}>
-          <h3 className={styles['project-form-field-title']}>Interview Stages</h3>
+          <h3 className={styles['project-form-field-title']}>{t('Interview Stages')}</h3>
 
           <ProjectFormStager onStages={handleStages} activeStage={stage} onStageSelect={setStage} stages={values.stages} className={styles['project-form-stager']}   />
 
           <NewStageDroppable onStage={handleAddDropStage}>
           <div>
-          {values.stages.length < 14 ? <button type="button" className={styles['project-form-add-stage']} onClick={() => addStage()}>Add stage +</button> : null}
+          {values.stages.length < 14 ? <button type="button" className={styles['project-form-add-stage']} onClick={() => addStage()}>{t('Add stage +')}</button> : null}
           </div>
           </NewStageDroppable>
         </div>
@@ -315,7 +317,7 @@ const ProjectForm = ({ project, className }) => {
         </div> : null}
 
         <div className={classNames(styles['project-form-field'], styles['project-form-field-interviewers'])}>
-          <h3 className={styles['project-form-field-title']}>Assign interviewer</h3>
+          <h3 className={styles['project-form-field-title']}>{t('Assign interviewer')}</h3>
 
           <ProjectFormInterviewers className={styles['project-form-interviewers']} interviewers={values.interviewers} onChange={v => control.set('interviewers', v)} />
 
@@ -324,7 +326,7 @@ const ProjectForm = ({ project, className }) => {
 
         {
         !values.template ?
-        <CheckboxInputField checked={values.saveAsTemplate} className={styles['project-form-field']} onChange={control.toggle('saveAsTemplate')} label='Also save project as template' /> :
+        <CheckboxInputField checked={values.saveAsTemplate} className={styles['project-form-field']} onChange={control.toggle('saveAsTemplate')} label={t('Also save project as template')} /> :
         null
         }
 

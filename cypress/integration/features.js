@@ -4,6 +4,10 @@ describe('Competency feature', () => {
   })
 
   it('form should allow filtering and selecting competency questions', () => {
+    cy.createCompetencyQuestion({ name: 'CQ1', criteria: { name: 'CA' } })
+    cy.createCompetencyQuestion({ name: 'CQ2', criteria: { name: 'CB' } })
+    cy.createCompetencyQuestion({ name: 'CQ3', criteria: { name: 'CC' } })
+
     cy.visit('/projects/create/')
     cy.title().should('contain', 'Create project')
 

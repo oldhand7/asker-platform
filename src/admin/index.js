@@ -12,6 +12,7 @@ import { Layout } from 'admin/components/AdminLayout/AdminLayout';
 import SettingsSharpIcon from '@material-ui/icons/SettingsSharp';
 import { CriteriaOptionsList, CriteriaOptionsEdit, CriteriaOptionsAdd } from 'admin/resources/criteria-options/criteria-options-resource';
 import { PartnersList, PartnersEdit, PartnersAdd } from 'admin/resources/partners/partners-resource';
+import { QuestionsList, QuestionsEdit, QuestionsAdd } from 'admin/resources/questions/questions-resource';
 
 import CustomAuthProvider from 'admin/auth-providers/custom/custom-auth-provider';
 import CustomDataProvider from 'admin/data-providers/custom/custom-data-provider';
@@ -58,6 +59,8 @@ const AdminApp = () => {
         <Resource name="translations" options={{domain: "platform", label: 'Translations'}} list={TranslationsList} edit={TranslationsEdit} create={TranslationsAdd} />
         <Resource name="settings" options={{domain: 0, label: 'Settings', Icon: SettingsSharpIcon }} list={SettingsList} edit={SettingsEdit} create={SettingsAdd} />
         <Resource name="partners" options={{domain: "landing", label: 'Partners'}} list={PartnersList} edit={PartnersEdit} create={PartnersAdd} />
+
+        <Resource name="questions" options={{domain: "platform", label: 'Questions'}} list={QuestionsList} edit={QuestionsEdit} create={QuestionsAdd} />
     </Admin>
 }
 

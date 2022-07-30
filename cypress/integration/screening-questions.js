@@ -28,11 +28,6 @@ describe('Screening questions', () => {
       unit: 'km'
     })
 
-    //Question 4
-    cy.createScreeningTextQuestion({
-      name: 'What is the meaning of life?',
-      desc: 'Meaning meaning meaning'
-    })
 
     cy.createDummyProject('Position X')
 
@@ -65,10 +60,6 @@ describe('Screening questions', () => {
                     .should('contain', 'Range')
     
                   cy.get('li').eq(2)
-                    .should('contain', 'What is the meaning of life?')
-                    .should('contain', 'Text')
-    
-                  cy.get('li').eq(3)
                     .should('contain', 'What music do you like?')
                     .should('contain', 'Multiple choice')
                 })
@@ -98,14 +89,11 @@ describe('Screening questions', () => {
               cy.get('button[data-test-id="question-explorer-option"]').eq(2)
                 .should('contain', 'Range').click()
     
-              cy.get('button[data-test-id="question-explorer-option"]').eq(3)
-                .should('contain', 'Text').click()
-
                   
               cy.get('ul')
                 .last()
                 .children()
-                .should('have.length', 3)
+                .should('have.length', 2)
                 .first()
                 .should('not.contain', 'Do you like fruits?')
 
@@ -115,14 +103,13 @@ describe('Screening questions', () => {
                 cy.get('ul')
                   .last()
                   .find('button')
-                  .should('have.length', 4)
+                  .should('have.length', 3)
                   .click({ multiple: true })
             })
 
           cy.get('[data-test-id="question-manager"]')
               .should('contain', 'Do you like fruits?')
               .should('contain', 'What music do you like?')
-              .should('contain', 'What is the meaning of life?')
               .should('contain', 'How deep is Atlantic Ocean?')
         })
 
@@ -158,12 +145,10 @@ describe('Screening questions', () => {
               cy.get('li').eq(0)
                 .should('contain', 'Yes')
                 .find('input[type="radio"]')
-                .should('have.value', 'Yes')
 
               cy.get('li').eq(1)
                 .should('contain', 'No')
                 .find('input[type="radio"]')
-                .should('have.value', 'No')
                 .click()
             })
 
@@ -186,13 +171,6 @@ describe('Screening questions', () => {
 
             //Q3
             cy.get('[data-test-id="screening-question-int"]').eq(2)
-              .should('contain', 'Screening question')
-              .should('contain', 'What is the meaning of life?')
-              .should('contain', 'Meaning meaning meaning')
-              .get('[data-test-id="html-input-field"]').click().type('42')
-
-            //Q4
-            cy.get('[data-test-id="screening-question-int"]').eq(3)
             .should('contain', 'Screening question')
             .should('contain', 'What music do you like?')
             .should('contain', 'Music music music')
@@ -238,14 +216,10 @@ describe('Screening questions', () => {
           .within(() => {
             //Q1A
             cy.get('[data-test-id="screening-question-int"]').eq(0)
-              .find('input[type="radio"][checked]').should('have.value', 'No')
-
-            //Q4A
-            cy.get('[data-test-id="screening-question-int"]').eq(2)
-              .find('[data-test-id="html-input-field"]').should('contain', '42')
+              .find('input[type="radio"][checked]').parent().should('contain', 'No')
 
             //Q2A
-            cy.get('[data-test-id="screening-question-int"]').eq(3)
+            cy.get('[data-test-id="screening-question-int"]').eq(2)
               .within(() => {
                 cy.get('input[type="checkbox"][checked]')
                   .should('have.length', 2)
