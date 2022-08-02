@@ -11,43 +11,32 @@ import styles from './default-layout.module.scss';
 
 const DefaultLayout = ({ children }) => {
   const [config] = useSite();
-  const [injected, setInjected] = useState({});
   const { user } = useUser();
 
   useEffect(() => {
-    if (injected.chat) return;
-
-    if (user && config['platform-tawk-property-id'] && config['platform-tawk-client-id']) {
+    if (config['platform-tawk-property-id'] && config['platform-tawk-client-id']) {
       import('tawkto-react')
         .then(TawkTo => TawkTo.default)
         .then(TawkTo => {
            new TawkTo(config['platform-tawk-property-id'], config['platform-tawk-client-id'])
         })
-        .then(() => {
-          setInjected({
-            ...injected,
-            chat: true
-          })
-        })
     }
-  }, [config, user, injected])
-
-  useEffect(() => {
-    if (injected.ga) return;
-
+    
     if (config['google-analytics-platform-id']) {
       import('ga-gtag')
         .then(gtag => {
           gtag.install(config['google-analytics-platform-id']);
         })
-        .then(() => {
-          setInjected({
-            ...injected,
-            ga: true
-          })
+    }
+
+    if (config['hotjar-id'] && config['hotjar-version']) {
+      import('react-hotjar')
+        .then(({ hotjar}) => {
+          console.log('hotjar')
+          return hotjar.initialize(config['hotjar-id'], config['hotjar-version']);
         })
     }
-  }, [config, injected])
+  }, [config])
 
   return (
     <Container className={styles['layout-container']}>

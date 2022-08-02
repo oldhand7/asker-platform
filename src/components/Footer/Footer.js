@@ -26,11 +26,6 @@ const Footer = () => {
         <ContactMenu email={config && config['company-email']} address={config && config['company-address']} />
       </div>
 
-      <div className={styles['footer-contact-widget']}>
-        <MessageUsButton onClick={openContactModal} className={styles['footer-quick-button']} />
-        <CallUsButton href={`tel:${config && config['company-tel']}`} className={styles['footer-quick-button']} />
-      </div>
-
       <div className={styles['footer-footer']}>
           <Copyright className={styles['footer-copyright']} />
 
