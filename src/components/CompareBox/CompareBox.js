@@ -13,11 +13,11 @@ const getColor = (score) => {
     if (score < 25) {
       return '#E77272';
     }
-  
+
     if (score < 50) {
       return '#DFD049';
     }
-  
+
     return colorBetween('#9AE23E', '#43B88C', score / 100, 'hex');
   }
 
@@ -61,7 +61,7 @@ const CompareBox = ({ compare = [], className, interviews = [], project, onCompa
                         onChange={() => onCompare(i)}
                         className={styles['compare-box-interviews-item']}
                         label={<div className={styles['compare-box-interviews-item-label']}>
-                            <span className={styles['compare-box-interviews-item-label-name']}>{i.candidate.name}</span>
+                            <span className={styles['compare-box-interviews-item-label-name']}>{project.anonimize ? i.candidate.alias : i.candidate.name}</span>
                             <PillLabel color={getColor(i.score || 0)} className={styles['compare-box-interviews-item-label-score']}>
                                 {i.score || 0}%
                             </PillLabel>
