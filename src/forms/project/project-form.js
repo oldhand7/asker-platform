@@ -59,7 +59,8 @@ const defaultValues = {
   template: null,
   interviewsCount: 0,
   interviewsAwaitingCount: 0,
-  saveAsTemplate: false
+  saveAsTemplate: false,
+  anonimize: false
 }
 
 const rules = {
@@ -210,7 +211,7 @@ const ProjectForm = ({ project, className }) => {
 
   const handleStages = useCallback((stages, _stage) => {
     control.set('stages', stages);
-    
+
     if (_stage) {
       setStage(_stage)
 
@@ -238,7 +239,7 @@ const ProjectForm = ({ project, className }) => {
 
     setStage(uniqueStage)
   }
-  
+
   useEffect(() => {
     control.set('time', getProjectMinutes(values))
   }, [values.stages])

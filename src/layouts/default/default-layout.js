@@ -21,7 +21,7 @@ const DefaultLayout = ({ children }) => {
            new TawkTo(config['platform-tawk-property-id'], config['platform-tawk-client-id'])
         })
     }
-    
+
     if (config['google-analytics-platform-id']) {
       import('ga-gtag')
         .then(gtag => {
@@ -32,7 +32,6 @@ const DefaultLayout = ({ children }) => {
     if (config['hotjar-id'] && config['hotjar-version']) {
       import('react-hotjar')
         .then(({ hotjar}) => {
-          console.log('hotjar')
           return hotjar.initialize(config['hotjar-id'], config['hotjar-version']);
         })
     }

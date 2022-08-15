@@ -1,0 +1,15 @@
+.project-anonimize-toggle {
+    display: inline-block;
+    
+    * {
+      vertical-align: middle;
+    }
+
+    &-input {
+      margin-right: 8rem;
+    }
+
+    &-label {
+      cursor: pointer;
+    }
+}

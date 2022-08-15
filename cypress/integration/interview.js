@@ -183,11 +183,11 @@ describe('Interview', () => {
           .should('contain', 'No')
       })
   })
-  
+
   it('should have interview steps',  { scrollBehavior: 'center' }, () => {
     cy.createCompetencyQuestion({ name: 'Are you familiar with ISO-111?', criteria: { name: 'ISO-111'} });
     cy.createCompetencyQuestion({ name: 'Are you familiar with ISO-222?', criteria: { name: 'ISO-222'} });
-    
+
     cy.createDummyProject('Some position Y')
 
     cy.contains('Some position Y')
@@ -223,9 +223,9 @@ describe('Interview', () => {
       .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
-    
+
     cy.location('pathname').should('contain', '/conduct/')
-    
+
     cy.get('h1').should('contain', 'XOXO XIXI');
 
     cy.get('[data-test-id="interview-timer"]')
@@ -237,13 +237,13 @@ describe('Interview', () => {
           .closest('div')
           .should('contain', '0%')
       })
-    
+
     cy.contains('Process overview')
       .closest('div[data-test-id="interview-process-overview"]')
       .within(() => {
         cy.contains('Questions').closest('div')
           .should('contain', 2)
-        
+
         cy.get('ul')
           .within(() => {
             cy.get('li').eq(0)
@@ -264,10 +264,10 @@ describe('Interview', () => {
           })
         })
 
-    
+
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'Introduction')
-    
+
     cy.contains('Next step').click()
 
     cy.get('[data-test-id="feature-form"]').eq(1)
@@ -287,7 +287,7 @@ describe('Interview', () => {
       })
 
     cy.contains('Next step').click().wait(1000)
-    
+
     cy.get('[data-test-id="feature-form"]').eq(3)
       .should('contain', 'Summary')
 
@@ -300,7 +300,7 @@ describe('Interview', () => {
       .within(() => {
         cy.contains('Questions').closest('div')
           .should('contain', 0)
-        
+
         cy.get('ul')
           .within(() => {
             cy.get('li').eq(0)
@@ -328,6 +328,7 @@ describe('Interview', () => {
     cy.contains('XOXO XIXI')
       .closest('[data-test-id="flex-table-row"]')
       .find('[data-test-id="edit-button"]')
+      .last()
       .click()
 
     cy.contains('Project progress')

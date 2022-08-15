@@ -53,21 +53,21 @@ const ProjectInterviewCompare = ({ className, compare = [], project, onCompareAd
                 'screening-questions': [],
                 'other-questions': []
             };
-        
+
             for (let i = 0; i < project.stages.length; i++) {
               if (['screening-questions', 'other-questions'].indexOf(project.stages[i].id) == -1) {
                 continue;
               }
-        
+
               const key = getStageKey(project.stages[i])
-        
+
               if (c.evaluations && c.evaluations[key]) {
-        
+
                 for (const qid in c.evaluations[key]) {
                   const { config } = project.stages[i];
-        
+
                   const question = config.questions.find(q => q.id == qid)
-        
+
                   if (question) {
                     otherQuestions[project.stages[i].id].push({
                       question: question,
@@ -124,7 +124,7 @@ const ProjectInterviewCompare = ({ className, compare = [], project, onCompareAd
                 evaluations: adjustedCompare.map(c => c.scoreMap['experience'])
             })
         }
-        
+
         if (adjustedCompare.some(c => c.otherQuestions['other-questions'].length)) {
             details.push({
                 type: 'other-questions',
@@ -182,7 +182,7 @@ const ProjectInterviewCompare = ({ className, compare = [], project, onCompareAd
             el.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest'})
         }
     }, [offset, _compare])
-    
+
     useEffect(() => {
         const childStat = {}
 
@@ -200,7 +200,7 @@ const ProjectInterviewCompare = ({ className, compare = [], project, onCompareAd
         _compare.length - offset > 4 ? style['project-interview-compare-has-children-right'] : '',
         offset > 0 ? style['project-interview-compare-has-children-left'] : '',
         className
-    )}> 
+    )}>
         <div className={style['project-interview-compare-sidebar']}>
             <div className={style['project-interview-compare-sidebar-head']}>
                 <button onClick={onCompareAdd} className={style['project-interview-compare-add-candidate']}>+ Add candidate</button>
@@ -225,6 +225,7 @@ const ProjectInterviewCompare = ({ className, compare = [], project, onCompareAd
                         onHeights={handleColumnHeights}
                         id={`candidate-compare-column-${index}`}
                         heights={heights}
+                        project={project}
                         toggleRow={handleRowToggle}
                         onDelete={() => onCompareRemove(c)}
                         active={activeRows}
@@ -249,7 +250,7 @@ const ProjectInterviewCompare = ({ className, compare = [], project, onCompareAd
         }
 
         {
-            offset > 0 ? 
+            offset > 0 ?
             <button className={style['project-interview-compare-prev']} onClick={() => setOffset(offset - 1)}>
                 <ArrowSharpLeftIcon className={style['project-interview-compare-prev-icon']} />
             </button> :

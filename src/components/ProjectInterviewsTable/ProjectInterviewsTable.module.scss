@@ -49,6 +49,11 @@
       vertical-align: middle;
       padding-right: 30rem;
 
+      &-edit {
+        font-size: 16rem;
+        vertical-align: middle;
+      }
+
       &::after {
         content: '';
         height: 50%;

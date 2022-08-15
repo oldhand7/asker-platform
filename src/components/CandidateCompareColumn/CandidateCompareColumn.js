@@ -11,12 +11,12 @@ import styles from './CandidateCompareColumn.module.scss';
 
 function getAbsoluteHeight(el) {
     // Get the DOM Node if you pass in a string
-    el = (typeof el === 'string') ? document.querySelector(el) : el; 
-  
+    el = (typeof el === 'string') ? document.querySelector(el) : el;
+
     var styles = window.getComputedStyle(el);
     var margin = parseFloat(styles['marginTop']) +
                  parseFloat(styles['marginBottom']);
-  
+
     return Math.ceil(el.offsetHeight + margin);
   }
 
@@ -24,7 +24,7 @@ const TinyTrashButton  = ({ onClick, className }) => (<button data-test-id="tras
 <TrashIcon className={styles['candidate-compare-column-delete-icon']} />
 </button>)
 
-const CandidateCompareColumn = ({ className, toggleRow, compare, evaluations, active = {}, onDelete, heights = {}, onHeights, id ='', dragProps }) => {
+const CandidateCompareColumn = ({ className, toggleRow, compare, evaluations, active = {}, onDelete, heights = {}, project, onHeights, id ='', dragProps }) => {
 const itemsRef = useRef({});
 
 const calcHeights = () => {
@@ -34,10 +34,10 @@ const calcHeights = () => {
         for (let key in itemsRef.current) {
             if (itemsRef.current[key]) {
                 heights[key] = itemsRef.current[key].getBoundingClientRect().height;
-                
+
             }
         }
-        
+
         onHeights(heights)
     }
 }
@@ -74,7 +74,7 @@ return <div data-test-id="candidate-compare-column" className={classNames(
         {...dragProps.dragHandleProps}
     >
         <div className={styles['candidate-compare-column-head']}>
-            <h4 className={styles['candidate-compare-column-title']} title={compare.candidate.name}>{compare.candidate.name}</h4>
+            <h4 className={styles['candidate-compare-column-title']} title={compare.candidate.name}>{project.anonimize ? compare.candidate.alias : compare.candidate.name}</h4>
             <InterviewScore className={styles['candidate-compare-column-score']} score={compare.score || 0} />
             <TinyTrashButton className={styles['candidate-compare-column-delete']} onClick={onDelete}/>
         </div>
@@ -100,7 +100,7 @@ return <div data-test-id="candidate-compare-column" className={classNames(
                 <div onClick={() => hasChildren && toggleRowLocal(type)} className={styles['candidate-compare-column-evaluation-head']}>
                     {
                         screeningType ?
-                        (exclude && <ScreeningEvaluationLabel className={styles['candidate-compare-column-evaluation-screening-popup-answer']} evaluation={exclude} />) : 
+                        (exclude && <ScreeningEvaluationLabel className={styles['candidate-compare-column-evaluation-screening-popup-answer']} evaluation={exclude} />) :
                         <EvaluationScoreBar
                         className={styles['candidate-compare-column-evaluation-criteria-score']}
                         value={evaluation.score} color={COLOR_MAP[type]} />
