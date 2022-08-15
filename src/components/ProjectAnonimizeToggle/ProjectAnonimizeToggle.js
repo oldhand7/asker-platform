@@ -9,7 +9,7 @@ import styles from './ProjectAnonimizeToggle.module.scss'
 
 const ProjectAnonimizeToggle = ({ className, project, onChange }) => {
   const [loading, setLoading] = useState(false);
-  const { t } = useSite();
+  const [config, t] = useSite();
 
   const toggleAnonimization = () => {
     setLoading(true);
