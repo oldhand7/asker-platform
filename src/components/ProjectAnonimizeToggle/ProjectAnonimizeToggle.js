@@ -3,11 +3,13 @@ import Toggle from 'react-toggle'
 import Preloader from 'components/Preloader/Preloader';
 import { saveCollectionDocument } from 'libs/firestore';
 import { useState } from 'react';
+import { useSite } from 'libs/site';
 
 import styles from './ProjectAnonimizeToggle.module.scss'
 
 const ProjectAnonimizeToggle = ({ className, project, onChange }) => {
   const [loading, setLoading] = useState(false);
+  const { t } = useSite();
 
   const toggleAnonimization = () => {
     setLoading(true);
@@ -42,7 +44,7 @@ const ProjectAnonimizeToggle = ({ className, project, onChange }) => {
       onChange={toggleAnonimization}
       className={styles["project-anonimize-toggle-input"]}
     />
-    <label className={styles["project-anonimize-toggle-label"]} htmlFor='anonimization-status'>Anonimize candidates</label>
+    <label className={styles["project-anonimize-toggle-label"]} htmlFor='anonimization-status'>{t('Anonymize candidates')}</label>
     {loading ? <Preloader /> : null}
   </div>
 }
