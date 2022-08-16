@@ -17,13 +17,16 @@ import { useFlash } from 'libs/flash'
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
 import { ctxError } from 'libs/helper';
 import { unpackQuestions } from 'libs/project';
+import { getRandomAlias } from 'libs/candidate';
+import ProjectAnonimizeToggle from 'components/ProjectAnonimizeToggle/ProjectAnonimizeToggle';
+import CompareBox from 'components/CompareBox/CompareBox';
+import { useSite  } from 'libs/site';
 
 import styles from 'styles/pages/project-overview.module.scss';
-import CompareBox from 'components/CompareBox/CompareBox';
-import { useSite } from 'libs/site';
 
 const defaultSort = [
-  ['status', 'desc'], // complete, awaiting
+  ['status', 'desc'],
+  ['score', 'desc'],
   ['createdAt', 'desc']
 ]
 
@@ -36,13 +39,15 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
   const flashSuccess = useFlash('success');
   const [success, setSuccess] = useState(null);
   const [compare, setCompare] = useState([])
-  const { t} = useSite()
-
+  const [_project, setProject] = useState(project);
+  const { t } = useSite();
+  
   useEffect(() => {
     if (flashSuccess) {
       setSuccess(flashSuccess)
     }
   }, [flashSuccess])
+
 
   const handleCandidate = (values) => {
     if (!values) return;
@@ -53,7 +58,8 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
       projectId: router.query.id,
       companyId: project.companyId,
       candidate: values,
-      status: 'awaiting'
+      status: 'awaiting',
+      score: 0
     }
 
     saveCollectionDocument('interviews', interview)
@@ -124,7 +130,30 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
   const complateInterviews = useMemo(
     () => _interviews.filter(i => i.status == 'complete'),
     [_interviews]
-  ); 
+  );
+
+  const handleCandidateEdit = (interview) => {
+    const { candidate } = interview;
+
+    openCandidateModal((candidate) => {
+      if (!candidate) return;
+
+      setLoading(true);
+
+      interview.candidate = candidate
+
+      saveCollectionDocument('interviews', {...interview})
+        .then(() => {
+          setInterviews([...interviews])
+          setLoading(false);
+        })
+        .catch(() => {
+          setError(new Error("Saving candidate failed."))
+          setLoading(false);
+        })
+    }, { candidate })
+  }
+
 
   return <div className={styles['project-overview-page']}>
       <Head>
@@ -139,8 +168,8 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
               <a className={styles['project-overview-page-title-edit-link']}>{t('Edit')}</a></Link>
           </h1>
           <div>
-          <PlatformButton onClick={() => openCandidateModal(handleCandidate)} className={styles['project-overview-page-add-candidate']}>
-            <PlusIcon /> {t('Add candidate')}</PlatformButton>
+          <PlatformButton onClick={() => openCandidateModal(handleCandidate, {alias: getRandomAlias(_interviews.map(i => i.candidate.alias))})} className={styles['project-overview-page-add-candidate']}>
+            <PlusIcon /> Add candidate</PlatformButton>
           </div>
         </div>
 
@@ -148,7 +177,8 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
         {error ? <Alert type="error">{error.message}</Alert> : null}
 
         <ProjectInterviewsTable
-          project={project}
+          project={_project}
+          onEditCandidate={handleCandidateEdit}
           onDelete={handleDeleteInterview}
           className={styles['project-overview-page-interviews-table']}
           data={_interviews}
@@ -159,6 +189,8 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
       </div>
 
       <div className={styles['project-overview-page-sidebar']}>
+        <ProjectAnonimizeToggle className={styles["project-overview-page-anonimizaiton"]} project={_project} onChange={p => setProject({ ...p })} />
+
         <ProjectEvaluationCriteria className={styles['project-overview-page-evaluation-criteria']} project={project} />
 
         <div data-test-id="interviewers" className={styles['project-overview-page-interviewers']}>
@@ -181,7 +213,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
         compare={compare}
         interviews={complateInterviews}
         className={styles['project-overview-page-compare']}
-        project={project}
+        project={_project}
         />
 
       {loading ? <Preloader /> : null}

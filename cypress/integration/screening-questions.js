@@ -210,6 +210,7 @@ describe('Screening questions', () => {
         cy.contains('Jimmy')
           .closest('[data-test-id="flex-table-row"]')
           .find('[data-test-id="edit-button"]')
+          .last()
           .click()
 
         cy.get('[data-test-id="feature-form"]').eq(1)

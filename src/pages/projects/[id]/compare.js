@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import {useModal} from 'libs/modal';
 import { scoreSort, buildSearchQuery } from 'libs/helper';
 import { useSite } from 'libs/site';
+import ProjectAnonimizeToggle from 'components/ProjectAnonimizeToggle/ProjectAnonimizeToggle';
 import styles from 'styles/pages/project-compare.module.scss';
 import CandidateChooseModal from 'modals/candidate-choose/candidate-choose-modal';
 // import CompareBox from 'components/CompareBox/CompareBox';
@@ -25,11 +26,12 @@ const ProjectComparePage = ({ project, interviews = [] }) => {
   const router = useRouter();
   const [compare, setCompare] = useState([])
   const { t } = useSite();
+  const [_project, setProject] = useState(project);
 
   const completeInterviews = useMemo(
     () => interviews.filter(i => i.status == 'complete'),
     [interviews]
-  ); 
+  );
 
   useEffect(() => {
     const parts = router.query.interviews.split('|');
@@ -66,27 +68,30 @@ const ProjectComparePage = ({ project, interviews = [] }) => {
       </Head>
 
       <div className={styles['project-compare-page-head']}>
-        <Link href={`/projects/${project.id}/overview`}>
+        <Link href={`/projects/${_project.id}/overview`}>
             <a className={styles['project-compare-page-back']}>
               <BackIcon className={styles['project-compare-page-back-icon']} />
               <span className={styles['project-compare-page-back-text']}>{t('Back')}</span>
             </a>
         </Link>
 
-        <h1 className={styles['project-compare-page-title']}>{project.name}</h1>
+        <h1 className={styles['project-compare-page-title']}>{_project.name}</h1>
+
+        <ProjectAnonimizeToggle project={_project} onChange={p => setProject({...p})} className={styles['project-compare-page-anonimize']} />
       </div>
 
       <ProjectInterviewCompare
         compare={compare}
         interviews={completeInterviews}
         onCompareRemove={removeCompareInterview}
-        project={project}
+        project={_project}
         onCompare={setCompare}
         onCompareAdd={() => openChooseCandidateModal(
           compare => compare && setCompare(compare),
           {
             formProps: {
-              interviews: completeInterviews, values: [...compare] 
+              interviews: completeInterviews, values: [...compare],
+              anonimize: _project.anonimize
             }
           }
         )}

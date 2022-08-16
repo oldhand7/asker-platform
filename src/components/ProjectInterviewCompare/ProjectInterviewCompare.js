@@ -36,20 +36,20 @@ const ProjectInterviewCompare = ({ className, compare = [], interviews = [], pro
                 'screening-questions': [],
                 'other-questions': []
             };
-        
+
             for (let i = 0; i < project.stages.length; i++) {
               if (['screening-questions', 'other-questions'].indexOf(project.stages[i].id) == -1) {
                 continue;
               }
-        
+
               const key = getStageKey(project.stages[i])
-        
+
               if (c.evaluations && c.evaluations[key]) {
                 const { config } = project.stages[i];
         
                 for (const qid in c.evaluations[key]) {
                   const question = config.questions.find(q => q.id == qid)
-        
+
                   if (question) {
                     otherQuestions[project.stages[i].id].push({
                       question: question,
@@ -109,7 +109,7 @@ const ProjectInterviewCompare = ({ className, compare = [], interviews = [], pro
 
         setDetails(details)
     }, [compare, project])
-    
+
     return <div data-test-id="project-interview-compare" className={classNames(
         style['project-interview-compare'],
         className
@@ -120,7 +120,7 @@ const ProjectInterviewCompare = ({ className, compare = [], interviews = [], pro
 
                 return <div key={c.id} className={style['project-interview-compare-candidate']}>
                     <div className={style['project-interview-compare-candidate-compact']}>
-                        <h4 className={style['project-interview-compare-candidate-title']}>{c.candidate.name}</h4>
+                        <h4 className={style['project-interview-compare-candidate-title']}>{project.anonimize ? c.candidate.alias : c.candidate.name}</h4>
                         <InterviewScore className={style['project-interview-compare-candidate-score']} score={c.score || 0} />
                         <TrashButton onClick={() => onCompareRemove(c)} className={style['project-interview-compare-candidate-trash']} />
                     </div>
@@ -142,12 +142,12 @@ const ProjectInterviewCompare = ({ className, compare = [], interviews = [], pro
                 className={style['project-interview-compare-details']}
                 headerColumnWidth={20}
                 defaultOpen={true}
-                head={null} 
+                head={null}
                 name={labels[type]}>
                     <div className={style['project-interview-compare-details-body']}>
                         {evaluations.map((evaluation, index) => <div key={`${type}-${index}`} style={{flex: `0 0 ${100 / (interviews.length > compare.length ? compare.length + 1 : compare.length)}%`}}>
                             <ScreeningEvaluationsList className={style['project-interview-compare-details-criteria-list']} evaluations={evaluation} /></div>)}
-                    </div>                
+                    </div>
                 </InterviewDetailsRow>
             }
 
@@ -171,7 +171,7 @@ const ProjectInterviewCompare = ({ className, compare = [], interviews = [], pro
                 <div className={style['project-interview-compare-details-body']}>
                     {evaluations.map((evaluation, index) => <div className={style['project-interview-compare-details-column']} key={`${type}-${index}`} style={flexCompactStyle}>
                         <EvaluationCriteriaList className={style['project-interview-compare-details-criteria-list']} evaluation={evaluation} /></div>)}
-                </div> : null}            
+                </div> : null}
             </InterviewDetailsRow>
         })}
     </div>

@@ -12,15 +12,15 @@ const getColor = (score) => {
     if (score < 25) {
       return '#E77272';
     }
-  
+
     if (score < 50) {
       return '#DFD049';
     }
-  
+
     return colorBetween('#9AE23E', '#43B88C', score / 100, 'hex');
   }
 
-const CandidateChooseForm = ({ className, onValues, values = [], interviews = [] }) => {
+const CandidateChooseForm = ({ className, onValues, anonimize = false, values = [], interviews = [] }) => {
     const [formValues, setValues] = useState(values || []);
     const [error, setError] = useState(null);
 
@@ -67,7 +67,7 @@ const CandidateChooseForm = ({ className, onValues, values = [], interviews = []
         {_interviews.map(i => (
             <li className={styles['candidate-choose-form-list-item']} key={i.id}>
                 <CheckboxInputField label={<div className={styles['candidate-choose-form-list-item-label']}>
-                    <span className={styles['candidate-choose-form-list-item-label-name']}>{i.candidate.name}</span>
+                    <span className={styles['candidate-choose-form-list-item-label-name']}>{anonimize ? i.candidate.alias : i.candidate.name}</span>
 
                     <PillLabel color={getColor(i.score || 0)} className={styles['candidate-choose-form-list-item-label-score']}>
                                 {i.score || 0}%

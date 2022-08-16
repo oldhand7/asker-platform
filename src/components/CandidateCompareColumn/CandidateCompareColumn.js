@@ -10,13 +10,11 @@ import ScreeningEvaluationLabel from 'components/ScreeningEvaluationLabel/Screen
 import styles from './CandidateCompareColumn.module.scss';
 import { useSite } from "libs/site";
 
-
-
 const TinyTrashButton  = ({ onClick, className }) => (<button data-test-id="trash-button" onClick={onClick} className={className}>
 <TrashIcon className={styles['candidate-compare-column-delete-icon']} />
 </button>)
 
-const CandidateCompareColumn = ({ className, toggleRow, compare, evaluations, active = {}, onDelete, heights = {}, onHeights, id ='', dragProps }) => {
+const CandidateCompareColumn = ({ className, toggleRow, compare, evaluations, active = {}, onDelete, heights = {}, project, onHeights, id ='', dragProps }) => {
 const itemsRef = useRef({});
 const { i18nField } = useSite();
 
@@ -27,10 +25,10 @@ const calcHeights = () => {
         for (let key in itemsRef.current) {
             if (itemsRef.current[key]) {
                 heights[key] = itemsRef.current[key].getBoundingClientRect().height;
-                
+
             }
         }
-        
+
         onHeights(heights)
     }
 }
@@ -67,7 +65,7 @@ return <div data-test-id="candidate-compare-column" className={classNames(
         {...dragProps.dragHandleProps}
     >
         <div className={styles['candidate-compare-column-head']}>
-            <h4 className={styles['candidate-compare-column-title']} title={compare.candidate.name}>{compare.candidate.name}</h4>
+            <h4 className={styles['candidate-compare-column-title']} title={compare.candidate.name}>{project.anonimize ? compare.candidate.alias : compare.candidate.name}</h4>
             <InterviewScore className={styles['candidate-compare-column-score']} score={compare.score || 0} />
             <TinyTrashButton className={styles['candidate-compare-column-delete']} onClick={onDelete}/>
         </div>
@@ -93,7 +91,7 @@ return <div data-test-id="candidate-compare-column" className={classNames(
                 <div onClick={() => hasChildren && toggleRowLocal(type)} className={styles['candidate-compare-column-evaluation-head']}>
                     {
                         screeningType ?
-                        (exclude && <ScreeningEvaluationLabel className={styles['candidate-compare-column-evaluation-screening-popup-answer']} evaluation={exclude} />) : 
+                        (exclude && <ScreeningEvaluationLabel className={styles['candidate-compare-column-evaluation-screening-popup-answer']} evaluation={exclude} />) :
                         <EvaluationScoreBar
                         className={styles['candidate-compare-column-evaluation-criteria-score']}
                         value={evaluation.score} color={COLOR_MAP[type]} />

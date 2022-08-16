@@ -34,14 +34,15 @@ const sumReducer = (sum, { score }) => {
   return Number.parseInt(score) + sum;
 }
 
-const getColumns = ({ handleAction, compare = [],  project, sort, order }) => ([
+const getColumns = ({ handleAction, compare = [],  project, sort, order, t, onEditCandidate, anonimize = false }) => ([
   {
     title: <Link href={getSortLink('candidate.name', sort, order, project)}>
       <a>Candidate {getSortArrowIcon('candidate.name', sort, order)}</a>
     </Link>,
     dataIndex: 'name',
-    render: (_, row) => <span className={styles['project-interviews-table-col-name']}>
-    {row.candidate.name}</span>
+    render: (_, row) => <div className={styles['project-interviews-table-col-name']}>
+    {!anonimize ? row.candidate.name : row.candidate.alias} <EditButton onClick={() => onEditCandidate(row)} className={styles['project-interviews-table-col-name-edit']} />
+    </div>
   },
   {
     title: <Link href={getSortLink('score', sort, order, project)}>
@@ -59,7 +60,7 @@ const getColumns = ({ handleAction, compare = [],  project, sort, order }) => ([
     </Link>,
     dataIndex: 'updatedAt',
     render: (updatedAt, row) => {
-      if (typeof row.score === 'undefined') {
+      if (row.status == 'awaiting') {
         return <PlatformButton className={styles['project-interviews-table-start-button']} onClick={e => {
           e.stopPropagation();
           window.location = `/interviews/${row.id}/conduct`
@@ -77,8 +78,8 @@ const getColumns = ({ handleAction, compare = [],  project, sort, order }) => ([
     </a>,
     render: (_, row) => {
       return <div className={styles['project-interviews-table-actions']}>
-        
-        {typeof row.score !== 'undefined' ? <>
+
+        {row.status != 'awaiting' ? <>
         <Tooltip text='Compare candidate'>{setRef => (
           <CompareButton active={compare.indexOf(row) > -1} ref={setRef} onClick={e => handleAction('compare', row, e)} />)}
         </Tooltip>
@@ -92,7 +93,7 @@ const getColumns = ({ handleAction, compare = [],  project, sort, order }) => ([
   }
 ]);
 
-const ProjectInterviewsTable = ({ className, data = [], onDelete, compare, onCompare, project, ...props }) => {
+const ProjectInterviewsTable = ({ className, data = [], onEditCandidate, onDelete, compare, onCompare, project, ...props }) => {
   const [rowsOpen, setRowsOpen] = useState([]);
 
   const router = useRouter()
@@ -116,7 +117,9 @@ const ProjectInterviewsTable = ({ className, data = [], onDelete, compare, onCom
   const columns = getColumns({
     handleAction, project,
     sort: router.query.sort || '', order: router.query.order || '',
-    compare
+    compare,
+    onEditCandidate,
+    anonimize: project.anonimize
   })
 
   const handleRowSelect = (row, index) => {
@@ -170,7 +173,7 @@ const ProjectInterviewsTable = ({ className, data = [], onDelete, compare, onCom
 
     return <InterviewDetails className={styles['project-interviews-table-details']} interview={interview}>
         {
-          table['competency'].score ?
+          table['competency'].children.length  ?
           <InterviewDetailsRowEvaluation evaluation={table['competency']} className={styles['project-interviews-table-details-row']} /> :
           null
         }
@@ -182,7 +185,7 @@ const ProjectInterviewsTable = ({ className, data = [], onDelete, compare, onCom
       }
 
         {
-          table['hard-skill'].score ?
+          table['hard-skill'].children.length ?
           <InterviewDetailsRowEvaluation evaluation={table['hard-skill']} className={styles['project-interviews-table-details-row']} /> :
           null
         }
@@ -200,7 +203,7 @@ const ProjectInterviewsTable = ({ className, data = [], onDelete, compare, onCom
         }
 
         {
-          table['experience'].score ?
+          table['experience'].children.length ?
           <InterviewDetailsRowEvaluation evaluation={table['experience']} className={styles['project-interviews-table-details-row']} /> :
           null
         }

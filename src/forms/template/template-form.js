@@ -53,7 +53,8 @@ const defaultValues = {
   scoringRules: null,
   stagesCount: 0,
   userId: null,
-  companyId: null
+  companyId: null,
+  anonimize: false
 }
 
 const rules = {

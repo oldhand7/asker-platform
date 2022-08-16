@@ -25,7 +25,7 @@ return <ul className={styles['interview-details-row-list']}>
 const InterviewDetailsRowEvaluation = ({ className, evaluation, ...props }) => (
   <InterviewDetailsRow
   name={evaluation.name}
-  head={evaluation.score ? <EvaluationScoreBar value={evaluation.score} color={COLOR_MAP[evaluation.type]} /> : null}
+  head={<EvaluationScoreBar value={evaluation.score} color={COLOR_MAP[evaluation.type]} />}
   className={classNames(styles['interview-details-row-evaluation'], className)}>{
   evaluation.children ? <List evaluation={evaluation} />  : null}</InterviewDetailsRow>
 )
