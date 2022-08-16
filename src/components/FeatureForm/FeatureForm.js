@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 const featureForms = {
   'introduction': dynamic(() => import('forms/introduction-stage/introduction-stage-form')),
   'company-presentation': dynamic(() => import('forms/company-presentation-stage/company-presentation-stage-form')),
-  'team-role-presentation': dynamic(() => import('forms/team-role-presentation-stage/team-role-presentation-stage-form')),
   'competency-questions': dynamic(() => import('forms/evaluation-question-stage/evaluation-question-stage-form')),
   'motivation-questions': dynamic(() => import('forms/evaluation-question-stage/evaluation-question-stage-form')),
   'experience-questions': dynamic(() => import('forms/evaluation-question-stage/evaluation-question-stage-form')),

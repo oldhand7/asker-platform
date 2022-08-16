@@ -11,7 +11,6 @@ export const getStageTime = stage => {
 }
 
 export const SHORT_NAMES = {
-    'team-role-presentation': 'Team & role',
     'company-presentation': 'Company',
     'salary': 'Salary',
     'candidate-questions': 'Candidate',

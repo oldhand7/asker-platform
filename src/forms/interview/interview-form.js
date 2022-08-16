@@ -89,7 +89,6 @@ const createStats = (stages = [], oldStats, t) => {
 
 const nonStrictStages = [
   'introduction',
-  'team-role-presentation',
   'company-presentation',
   'summary',
   'candidate-questions'

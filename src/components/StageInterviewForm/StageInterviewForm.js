@@ -9,7 +9,6 @@ import { DEFAULT_STAGE_TIME } from 'libs/config';
 const stageForms = {
   'introduction': dynamic(() => import('forms/introduction-int/introduction-int-form')),
   'company-presentation': dynamic(() => import('forms/company-presentation-int/company-presentation-int-form')),
-  'team-role-presentation': dynamic(() => import('forms/team-role-presentation-int/team-role-presentation-int-form')),
   'competency-questions': dynamic(() => import('forms/evaluation-question-int/evaluation-question-int-form')),
   'experience-questions': dynamic(() => import('forms/evaluation-question-int/evaluation-question-int-form')),
   'motivation-questions': dynamic(() => import('forms/evaluation-question-int/evaluation-question-int-form')),

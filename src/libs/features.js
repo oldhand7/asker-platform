@@ -5,7 +5,6 @@ export const featureTypes = [
 ]
 
 export const features = [
-  { id: 'team-role-presentation', name: 'Team & role presentation', type: 'attraction' },
   { id: 'company-presentation', name: 'Company presentation', type: 'attraction' },
   { id: 'salary', name: 'Salary', type: 'attraction' },
   { id: 'candidate-questions', name: 'Candidate questions', type: 'attraction' },
