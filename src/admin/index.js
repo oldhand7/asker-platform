@@ -12,6 +12,7 @@ import { Layout } from 'admin/components/AdminLayout/AdminLayout';
 import SettingsSharpIcon from '@material-ui/icons/SettingsSharp';
 import { CriteriaOptionsList, CriteriaOptionsEdit, CriteriaOptionsAdd } from 'admin/resources/criteria-options/criteria-options-resource';
 import { PartnersList, PartnersEdit, PartnersAdd } from 'admin/resources/partners/partners-resource';
+import { QuestionsList, QuestionsEdit, QuestionsAdd } from 'admin/resources/questions/questions-resource';
 
 import CustomAuthProvider from 'admin/auth-providers/custom/custom-auth-provider';
 import CustomDataProvider from 'admin/data-providers/custom/custom-data-provider';
@@ -55,9 +56,11 @@ const AdminApp = () => {
         <Resource name="sections" options={{domain: "landing", label: 'Sections'}} list={SectionsList} edit={SectionsEdit} create={SectionsAdd} />
         <Resource name="employees" options={{domain: "landing", label: 'Employees'}} list={EmployeesList} edit={EmployeesEdit} create={EmployeesAdd} />
         <Resource name="companies" options={{domain: "platform", label: 'Companies'}} list={CompaniesList} edit={CompaniesEdit} create={CompaniesAdd} />
-        <Resource name="translations" options={{domain: "landing", label: 'Translations'}} list={TranslationsList} edit={TranslationsEdit} create={TranslationsAdd} />
+        <Resource name="translations" options={{domain: "platform", label: 'Translations'}} list={TranslationsList} edit={TranslationsEdit} create={TranslationsAdd} />
         <Resource name="settings" options={{domain: 0, label: 'Settings', Icon: SettingsSharpIcon }} list={SettingsList} edit={SettingsEdit} create={SettingsAdd} />
         <Resource name="partners" options={{domain: "landing", label: 'Partners'}} list={PartnersList} edit={PartnersEdit} create={PartnersAdd} />
+
+        <Resource name="questions" options={{domain: "platform", label: 'Questions'}} list={QuestionsList} edit={QuestionsEdit} create={QuestionsAdd} />
     </Admin>
 }
 

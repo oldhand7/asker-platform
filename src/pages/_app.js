@@ -12,7 +12,7 @@ import 'styles/globals.scss'
 function App({ Component, pageProps }) {
   const { user, logout, loading } = useUser();
   const router = useRouter()
-  const [config, t] = useSite();
+  const { config, t } = useSite();
 
   const [maintenence, setMaintenence] = useState(false)
 

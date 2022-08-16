@@ -33,27 +33,6 @@ describe('Stages', () => {
         unit: '$'
       })
 
-      cy.createScreeningTextQuestion({ name: 'Tell us about your best years' })
-
-      cy.createOtherChoiceQuestion({
-        name: 'Do you like traveling?'
-      })
-
-      cy.createOtherChoiceQuestion({
-        name: 'Where have you been',
-        choices: ['UK', 'France', 'Netherlands', 'Germany', 'Other'],
-        multichoice: true
-      })
-
-      cy.createOtherRangeQuestion({
-        name: 'How old are Egypt pyramids?',
-        desc: '',
-        min: 0,
-        max: 10000,
-        step: 1000,
-        unit: 'Y.O.'
-      })
-
       cy.createOtherTextQuestion({ name: 'What is your favorite movie?' })
 
       cy.createDummyProject('Test project')
@@ -122,14 +101,12 @@ describe('Stages', () => {
       cy.get('[data-test-id="feature-salary"]').drag('[data-test-id="stage-4"] .Droppable')
       cy.get('[data-test-id="feature-candidate-questions"]').drag('[data-test-id="stage-5"] .Droppable')
       cy.get('[data-test-id="feature-competency-questions"]').drag('[data-test-id="stage-6"] .Droppable')
+        .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
-            cy.get('table').first()
-            .within(() => {
-              cy.get('button').first().click()
-              cy.get('button').first().click()
-            })
+            cy.get('button[data-test-id="add-question"]').first().click()
+            cy.get('button[data-test-id="add-question"]').first().click()
         })
 
       cy.get('[data-test-id="feature-motivation-questions"]').drag('[data-test-id="stage-7"] .Droppable')
@@ -137,10 +114,7 @@ describe('Stages', () => {
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
-            cy.get('table').first()
-            .within(() => {
-              cy.get('button').first().click()
-            })
+            cy.get('button[data-test-id="add-question"]').first().click()
         })
 
       cy.get('[data-test-id="feature-screening-questions"]').drag('[data-test-id="stage-8"] .Droppable')
@@ -148,13 +122,9 @@ describe('Stages', () => {
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
-            cy.get('table').first()
-            .within(() => {
-              cy.get('button').first().click()
-              cy.get('button').first().click()
-              cy.get('button').first().click()
-              cy.get('button').first().click()
-            })
+            cy.get('button[data-test-id="add-question"]').first().click()
+            cy.get('button[data-test-id="add-question"]').first().click()
+            cy.get('button[data-test-id="add-question"]').first().click()
         })
 
       cy.get('[data-test-id="feature-experience-questions"]').drag('[data-test-id="stage-9"] .Droppable')
@@ -162,10 +132,7 @@ describe('Stages', () => {
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
-            cy.get('table').first()
-            .within(() => {
-              cy.get('button').first().click()
-            })
+          cy.get('button[data-test-id="add-question"]').first().click()
         })
 
       cy.get('[data-test-id="feature-hard-skill-questions"]').drag('[data-test-id="stage-10"] .Droppable')
@@ -173,21 +140,15 @@ describe('Stages', () => {
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
-            cy.get('table').first()
-            .within(() => {
-              cy.get('button').first().click()
-            })
+          cy.get('button[data-test-id="add-question"]').first().click()
         })
       
-      cy.get('[data-test-id="feature-culture-fit-questions"]').drag('[data-test-id="stage-11"] .Droppable')
+      cy.get('[data-test-id="feature-culture-questions"]').drag('[data-test-id="stage-11"] .Droppable')
         .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
-            cy.get('table').first()
-            .within(() => {
-              cy.get('button').first().click()
-            })
+          cy.get('button[data-test-id="add-question"]').first().click()
         })
 
       cy.get('[data-test-id="feature-other-questions"]').drag('[data-test-id="stage-12"] .Droppable')
@@ -195,16 +156,11 @@ describe('Stages', () => {
       
       cy.get('[data-test-id="feature-form"]')
       .within(() => {
-          cy.get('table').first()
-          .within(() => {
-            cy.get('button').first().click()
-            cy.get('button').first().click()
-            cy.get('button').first().click()
-            cy.get('button').first().click()
-          })
+        cy.get('button[data-test-id="add-question"]').first().click()
       })
 
       cy.get('[data-test-id="feature-summary"]').drag('[data-test-id="stage-13"] .Droppable')
+        .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
       .within(() => {
@@ -230,8 +186,8 @@ describe('Stages', () => {
           cy.get('[data-test-id="stage"]').eq(6).should('contain', 'Motivation')
           cy.get('[data-test-id="stage"]').eq(7).should('contain', 'Screening')
           cy.get('[data-test-id="stage"]').eq(8).should('contain', 'Experience')
-          cy.get('[data-test-id="stage"]').eq(9).should('contain', 'Hard-skill')
-          cy.get('[data-test-id="stage"]').eq(10).should('contain', 'Culture-fit')
+          cy.get('[data-test-id="stage"]').eq(9).should('contain', 'Hard skill')
+          cy.get('[data-test-id="stage"]').eq(10).should('contain', 'Culture')
           cy.get('[data-test-id="stage"]').eq(11).should('contain', 'Other')
           cy.get('[data-test-id="stage"]').eq(12).should('contain', 'Summary')
         })

@@ -3,17 +3,22 @@ import { useMemo, useState } from 'react';
 import UpDownButton from 'components/UpDownButton/UpDownButton';
 import { createSumReducer } from 'libs/helper';
 import InterviewStatus from 'components/InterviewStatus/InterviewStatus';
+import { useSite } from 'libs/site';
 
 import styles from './InterviewProcessOverview.module.scss';
 
-const QuestionCount = ({ count = 0}) => (
-  <div className={styles['interview-process-overview-question-count']}>
-    <span className={styles['interview-process-overview-question-count-title']}>Left:</span>
+const QuestionCount = ({ count = 0}) => {
+  const { t } = useSite();
+
+  return <div className={styles['interview-process-overview-question-count']}>
+    <span className={styles['interview-process-overview-question-count-title']}>{t('Left:')}</span>
     <span className={styles['interview-process-overview-question-count-value']}>{count}</span>
-  </div>)
+  </div>
+}
 
 const InterviewProcessOverview = ({ className ='xx', interview, stats = []}) => {
   const [open, setOpen] = useState(true);
+  const { t } = useSite();
 
   const questionsRemaining = useMemo(
     () => stats.filter(stat => stat.status == 'awaiting').reduce(createSumReducer('questions'), 0),
@@ -27,7 +32,7 @@ const InterviewProcessOverview = ({ className ='xx', interview, stats = []}) => 
 
     <div onClick={() => setOpen(!open)} className={styles['interview-process-overview-head']}>
       <h3 className={styles['interview-process-overview-title']}>
-        Process overview
+        {t('Process overview')}
       </h3>
       <UpDownButton on={open} className={styles['interview-process-overview-toggle']} />
     </div>
@@ -37,7 +42,7 @@ const InterviewProcessOverview = ({ className ='xx', interview, stats = []}) => 
       <>
         <div className={styles['interview-process-overview-subhead']}>
           <h3 className={styles['interview-process-overview-subhead-title']}>
-            Questions
+            {t('Questions')}
           </h3>
           <QuestionCount count={questionsRemaining} className={styles['interview-process-overview-subhead-counter']} />
         </div>

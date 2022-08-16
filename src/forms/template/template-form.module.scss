@@ -39,18 +39,10 @@
     box-sizing: border-box;
     position: relative;
     margin-top: 32rem;
-
-    h3 {
-      color: #B7B7B7;
-      font-size: 20rem;
-      line-height: 30rem;
-      font-weight: 500;
-      margin: 0;
-    }
   }
 
   &-details-inner {
-    max-width: 505rem;
+    padding-right: calc(100% - 550rem);
   }
 
   &-title {
@@ -87,18 +79,25 @@
     &-name {
       width: 360rem;
     }
-
-    &-stages {
-
-
-    }
   }
 
   &-stager {
     margin-top: 20rem !important;
+    max-width: 505rem;
+  }
+  
+  &-feature-form {
+    margin-top: 24rem;
 
-    &-feature-form {
-      margin-top: 24rem;
+    &[data-stage-id="competency-questions"],
+    &[data-stage-id="motivation-questions"],
+    &[data-stage-id="experience-questions"],
+    &[data-stage-id="hard-skill-questions"],
+    &[data-stage-id="culture-questions"],
+    &[data-stage-id="screening-questions"],
+    &[data-stage-id="other-questions"] {
+      max-width: 650rem;
+      margin-right: -100rem;
     }
   }
 

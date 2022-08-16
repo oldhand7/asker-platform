@@ -6,6 +6,11 @@
   padding: 26rem 26rem 26rem 32rem;
   font-size: 12rem;
 
+  &-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
 
   div {
     max-width: 100%;

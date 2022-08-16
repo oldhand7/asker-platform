@@ -4,16 +4,19 @@ import { init } from 'pell';
 
 import styles from './HtmlInputField.module.scss';
 
-const HtmlInputField = ({ error, value = '', onChange, className, placeholder = 'Start typing...', focus = false }) => {
-  const [editor, setEditor] = useState();
-  const [content, setContent] = useState(value);
-
+const HtmlInputField = ({ error, value = '', diff = '', id, onChange, className, placeholder = 'Start typing...', focus = false }) => {
   const editorRef = useRef();
 
   useEffect(() => {
+    const div = document.createElement('div');
+
+    editorRef.current.appendChild(div);
+
     const editor = init({
-      element: editorRef.current,
-      onChange: setContent,
+      element: div,
+      onChange: content => {
+        onChange && onChange(content)
+      },
       actions: [
         {
           name: 'bold',
@@ -43,8 +46,6 @@ const HtmlInputField = ({ error, value = '', onChange, className, placeholder = 
       }
     })
 
-    setEditor(editor);
-
     editor.content.innerHTML = value;
 
     const editorClickHandler = () => {
@@ -56,17 +57,14 @@ const HtmlInputField = ({ error, value = '', onChange, className, placeholder = 
     if (focus) {
       editor.content.focus()
     }
-  }, [])
-  
 
-  useEffect(() => {
-    if (content != value) {
-      onChange && onChange(content);
+    return () => {
+      div.remove();
     }
-  }, [content, value])
+  }, [diff])
 
-  return <div data-test-id="html-input-field" className={classNames(styles['html-input-field'], className)}>
-    <div className={styles['html-input-field-placeholder']}>{!content ? placeholder : null}</div>
+  return <div id={id} data-test-id="html-input-field" className={classNames(styles['html-input-field'], className)}>
+    <div className={styles['html-input-field-placeholder']}>{!value ? placeholder : null}</div>
     <div ref={editorRef} className={styles['html-input-field-input']}></div>
     {error ? <p className="form-error">{error}</p> : null}
   </div>

@@ -1,4 +1,4 @@
-import { getSettings } from 'libs/firestore-admin';
+import { getSettings, getTranslations } from 'libs/firestore-admin';
 import { useEffect, useState, useMemo, useCallback} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget'
@@ -18,6 +18,7 @@ import { useQueryState } from 'next-usequerystate'
 import FilterButton from 'components/Button/FilterButton';
 import { useUser } from 'libs/user';
 import TemplateList from 'components/TemplateList/TemplateList'
+import { useSite } from 'libs/site';
 
 import styles from 'styles/pages/templates.module.scss';
 
@@ -49,6 +50,7 @@ const TemplatesPage = ({ templates = [], companyId, total = 0 }) => {
   const [deletedTemplates, setDeletedTemplates] = useState([]);
   const [qMax, setMaxQ] = useQueryState('fl')
   const { user } = useUser();
+  const { t } = useSite();
 
   useEffect(() => {
     if (!filter.pristine) {
@@ -164,17 +166,17 @@ const TemplatesPage = ({ templates = [], companyId, total = 0 }) => {
 
   return <div className={styles['templates-page']}>
       <Head>
-        <title>Templates listing - Asker</title>
+        <title>{t('Templates listing')} - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
 
       <div className={styles['templates-page-nav']}>
         <div data-test-id="company-filter" className={styles['templates-page-filter-company']}>
-            <FilterButton className={styles['templates-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker templates</FilterButton>
-            <FilterButton className={styles['templates-page-filter-company-button']} theme="dark" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>Your templates</FilterButton>
+            <FilterButton className={styles['templates-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>{t('Asker templates')}</FilterButton>
+            <FilterButton className={styles['templates-page-filter-company-button']} theme="dark" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>{t('Your templates')}</FilterButton>
           </div>
           <LiveSearchWidget className={styles['templates-page-search']} q={filter.q} onQuery={handleQuery} />
-          <Button className={styles['templates-page-create-button']} href='/templates/create/'><PlusIcon /> Create new template</Button>
+          <Button className={styles['templates-page-create-button']} href='/templates/create/'><PlusIcon /> {t('Create new template')}</Button>
       </div>
 
       {success ? <Alert type="success">{success}</Alert> : null}
@@ -188,10 +190,22 @@ const TemplatesPage = ({ templates = [], companyId, total = 0 }) => {
   </div>
 }
 
-export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
+export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }) => {
   if (!req.session.user.companyId) {
     return {
       notFound: true
+    }
+  }
+
+  if (req.session.user.locale && req.session.user.locale != locale) {
+    let destination = `/${req.session.user.locale}/templates/`;
+
+    return {
+      redirect: {
+        destination,
+        locale: false,
+        permanent: false,
+      }
     }
   }
 
@@ -221,6 +235,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
   return {
     props: {
       config: await getSettings(),
+      translations: await getTranslations(),
       templates,
       companyId: req.session.user.companyId,
       total

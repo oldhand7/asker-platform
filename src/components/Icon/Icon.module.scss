@@ -36,4 +36,18 @@
   &-arrow-sharp-left {
     transform: rotate(180deg);
   }
+
+  &-checkbox {
+    fill: white;
+  }
+
+  &-yes-no {
+    font-size: 1.5em;
+    height: auto;
+  }
+
+  &-range {
+    font-size: 1.5em;
+    height: auto;
+  }
 }

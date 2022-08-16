@@ -21,8 +21,8 @@ describe('Scoring', () => {
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
     cy.get('#feature-select-modal').contains('Competency').click().wait(1000)
     cy.get('[data-test-id="feature-form"]')
-      .find('table tbody tr')
-      .first()
+      .contains('Are you familiar with ISO standards?')
+      .closest('li')
       .find('button')
       .click()
 
@@ -31,12 +31,12 @@ describe('Scoring', () => {
     cy.get('[data-test-id="stage-3"] [data-test-id="load-button"]').click()
     cy.get('#feature-select-modal').contains('Motivation').click().wait(1000)
     cy.get('[data-test-id="feature-form"]')
-      .find('table tbody tr')
-      .first()
-      .find('button')
-      .click()
+    .contains('Does money motivate you?')
+    .closest('li')
+    .find('button')
+    .click()
 
-    cy.contains('Evaluation criteria').parent()
+    cy.get('[data-test-id="project-evaluation-criteria"]')
       .within(() => {
         cy.contains('Motivation').parent().should('contain', '50%')
         cy.contains('Competency').parent().should('contain', '50%')
@@ -58,7 +58,7 @@ describe('Scoring', () => {
       })
       .wait(1000)
 
-    cy.contains('Evaluation criteria').parent()
+    cy.get('[data-test-id="project-evaluation-criteria"]')
       .within(() => {
         cy.contains('Motivation').parent().should('contain', '80%')
         cy.contains('Competency').parent().should('contain', '20%')
@@ -132,16 +132,11 @@ describe('Scoring', () => {
     cy.get('#feature-select-modal').contains('Competency').click().wait(1000)
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
-        cy.get('input').first().type('X')
-
-        cy.get('table tbody tr').first().find('button').click()
-        cy.get('table tbody tr').first().find('button').click()
-        cy.get('table tbody tr').first().find('button').click()
-        cy.get('table tbody tr').first().find('button').click()
-        cy.get('table tbody tr').first().find('button').click()
+        cy.get('input[name="q"]').type('X')
+        cy.get('ul li button').click({multiple: true})
       })
 
-    cy.contains('Evaluation criteria').parent()
+    cy.get('[data-test-id="project-evaluation-criteria"]')
         .within(() => {
           cy.contains('Competency').parent().should('contain', '100%')
             .parent()
@@ -164,7 +159,7 @@ describe('Scoring', () => {
         cy.contains('Save').click()
       })
 
-    cy.contains('Evaluation criteria').parent()
+    cy.get('[data-test-id="project-evaluation-criteria"]')
       .within(() => {
         cy.contains('Competency').parent().should('contain', '100%')
           .parent()

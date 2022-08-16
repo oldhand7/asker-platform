@@ -8,17 +8,7 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import ScreeningEvaluationLabel from 'components/ScreeningEvaluationLabel/ScreeningEvaluationLabel';
 
 import styles from './CandidateCompareColumn.module.scss';
-
-function getAbsoluteHeight(el) {
-    // Get the DOM Node if you pass in a string
-    el = (typeof el === 'string') ? document.querySelector(el) : el;
-
-    var styles = window.getComputedStyle(el);
-    var margin = parseFloat(styles['marginTop']) +
-                 parseFloat(styles['marginBottom']);
-
-    return Math.ceil(el.offsetHeight + margin);
-  }
+import { useSite } from "libs/site";
 
 const TinyTrashButton  = ({ onClick, className }) => (<button data-test-id="trash-button" onClick={onClick} className={className}>
 <TrashIcon className={styles['candidate-compare-column-delete-icon']} />
@@ -26,6 +16,7 @@ const TinyTrashButton  = ({ onClick, className }) => (<button data-test-id="tras
 
 const CandidateCompareColumn = ({ className, toggleRow, compare, evaluations, active = {}, onDelete, heights = {}, project, onHeights, id ='', dragProps }) => {
 const itemsRef = useRef({});
+const { i18nField } = useSite();
 
 const calcHeights = () => {
     if (onHeights) {
@@ -80,7 +71,7 @@ return <div data-test-id="candidate-compare-column" className={classNames(
         </div>
         <div className={styles['candidate-compare-column-body']}>
         {evaluations.map(({ type, evaluation }) => {
-            const screeningType = type == 'screening-questions' || type == 'other-questions';
+            const screeningType = type == 'screening-questions';
 
             let exclude = null;
 
@@ -114,7 +105,7 @@ return <div data-test-id="candidate-compare-column" className={classNames(
                     <>
                     {evaluation.children.map(e => (
                         <div className={styles['candidate-compare-column-evaluation-rating']} key={e.id}>
-                            <span className={styles['candidate-compare-column-evaluation-rating-name']}>{e.name}</span>
+                            <span className={styles['candidate-compare-column-evaluation-rating-name']}>{i18nField(e.name)}</span>
                             <CriteriaRating color={COLOR_MAP[type]} className={styles['candidate-compare-column-evaluation-rating-value']} value={e.score} />
                         </div>
                     ))}

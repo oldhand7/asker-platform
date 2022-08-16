@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import { useEffect } from 'react';
 import useForm from 'libs/use-form';
-import EvaluationQuestionExplorer from 'components/EvaluationQuestionExplorer/EvaluationQuestionExplorer';
-import { getCriteriaTypeById } from 'libs/criteria';
-import SelectedQuestionsList from 'components/SelectedQuestionsList/SelectedQuestionsList';
+import QuestionExplorer from 'components/QuestionExplorer/QuestionExplorer';
+import SelectedQuestionsManager from 'components/SelectedQuestionsManager/SelectedQuestionsManager';
 
 import styles from './evaluation-question-stage-form.module.scss';
+import { SHORT_IDS, SHORT_NAMES } from 'libs/stage';
 
 const defaultValues = {
   questions: []
@@ -27,12 +27,6 @@ const EvaluationQuestionStageForm = ({ className, values, onValues, feature, onE
     pristine: false
   })
 
-  const handleQuestionRemove = question => {
-    if (confirm('Are you sure?')) {
-      control.set('questions', [...formValues.questions.filter(q => q != question)])
-    }
-  }
-
   useEffect(() => {
     if (!errors) {
       onValues && onValues(formValues)
@@ -41,9 +35,9 @@ const EvaluationQuestionStageForm = ({ className, values, onValues, feature, onE
     }
   }, [formValues, errors])
 
-  return <div className={classNames(styles['evaluation-question-from'], className)}>
-    <EvaluationQuestionExplorer questions={formValues.questions} onQuestions={control.input('questions', false)} criteria={getCriteriaTypeById(feature && feature.metadata.criteria)} />
-    <SelectedQuestionsList feature={feature} questions={formValues.questions} onChange={control.input('questions', false)} />
+  return <div className={classNames(styles['evaluation-question-stage-from'], className)}>
+    <QuestionExplorer type={'evaluation'} subtype={SHORT_IDS[feature.id]} label={SHORT_NAMES[feature.id]} className={styles['evaluation-question-stage-form-question-explorer']} questions={formValues.questions} onQuestions={control.input('questions', false)} />
+    <SelectedQuestionsManager notes={formValues.notes} onNotes={control.input('notes', false)} type={'evaluation'} subtype={SHORT_IDS[feature.id]} className={styles['evaluation-question-stage-form-question-explorer']}  questions={formValues.questions} onChange={control.input('questions', false)} />
   </div>
 }
 

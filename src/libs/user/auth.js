@@ -73,32 +73,38 @@ export const useAuth = () => {
   }, [wait])
 
 
-  const login = (email, password) => {
+  const login = async (email, password) => {
     setWait(true);
 
     const auth = getAuth();
 
-    return setPersistence(auth, browserLocalPersistence)
-      .then(() => {
-        return signInWithEmailAndPassword(auth, email, password)
-        .then(async ({ user }) => {
-          try {
-            const idToken = await user.getIdToken()
-            const metauser = await createPairSession(user.uid, idToken)
-            setLocalMetauser(metauser)
-            userBoot(user);
-            setWait(false);
-          } catch (error) {
-            throw new Error(error.message)
-          }
-        })
-        .catch(error => {
-          throw new Error('Email or password invalid.')
-        })
-      })
-      .catch(() => {
-        throw new Error('Email or password invalid.')
-      })
+    try {
+      await setPersistence(auth, browserLocalPersistence)
+    } catch (error) {
+      throw new Error('Authenitcation error.')
+    }
+
+    let result;
+
+    try {
+      result = await signInWithEmailAndPassword(auth, email, password)
+    } catch (error) {
+      throw new Error('Email or password invalid.')
+    }
+
+    const { user } = result;
+
+    try {
+      const idToken = await user.getIdToken()
+      const metauser = await createPairSession(user.uid, idToken)
+      setLocalMetauser(metauser)
+      userBoot(user);
+      setWait(false);
+    } catch (error) {
+      throw new Error(error.message)
+    }
+
+    return 
   }
 
   const logout = async () => {

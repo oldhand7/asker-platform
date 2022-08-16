@@ -10,7 +10,7 @@ import Alert from 'components/Alert/Alert';
 import styles from './default-layout.module.scss';
 
 const DefaultLayout = ({ children }) => {
-  const [config] = useSite();
+  const {config} = useSite();
   const { user } = useUser();
 
   useEffect(() => {

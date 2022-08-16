@@ -1,6 +1,6 @@
 import { questionTypes } from 'libs/questions';
 import { withUserGuardSsr } from 'libs/iron-session';
-import { getSettings } from 'libs/firestore-admin';
+import { getSettings, getTranslations } from 'libs/firestore-admin';
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
 
@@ -18,11 +18,31 @@ const QuestionCreatePage = ({ questionType, questionSubtype }) => {
 
     { questionType.id == 'screening' ? <ScreeningQuestionForm className={styles['question-create-page-form']} /> : null}
     { questionType.id == 'other' ? <ScreeningQuestionForm type='other' className={styles['question-create-page-form']} /> : null}
-    { questionType.id == 'evaluation' ? <EvaluationQuestionForm className={styles['question-create-page-form']} subtype={questionSubtype || questionType.subtypes[0]} /> : null}
+    { questionType.id == 'evaluation' ? <EvaluationQuestionForm className={styles['question-create-page-form']} type={(questionSubtype || questionType.subtypes[0]).id} /> : null}
   </div>
 }
 
-export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
+export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale}) => {
+  if (req.session.user.locale && req.session.user.locale != locale) {
+    let destination = `/${req.session.user.locale}/questions/create/`;
+
+    if (query.type) {
+      destination = `${destination}${query.type}/`
+    }
+
+    if (query.subtype) {
+      destination = `${destination}?subtype=${query.subtype}`;
+    }
+    
+    return {
+      redirect: {
+        destination,
+        locale: false,
+        permanent: false,
+      }
+    }
+  }
+
   const questionType = questionTypes.find(c => c.id == query.type);
 
   let questionSubtype = null;
@@ -41,7 +61,8 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
     props: {
       config: await getSettings(),
       questionType,
-      questionSubtype: questionSubtype
+      questionSubtype: questionSubtype,
+      translations: await getTranslations()
     }
   }
 })

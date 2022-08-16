@@ -25,7 +25,7 @@ describe('Modal froms', () => {
     cy.get('[data-test-id="stage-2"]')
       .should('contain', 'Competency based questions')
 
-    cy.contains('Create new question').click().wait(1000)
+    cy.contains('Create').click().wait(1000)
 
     cy.get('#evaluation-question-modal')
       .should('exist')
@@ -33,12 +33,12 @@ describe('Modal froms', () => {
     cy.get('form[data-test-id="evaluation-question-form"]')
       .should('contain', 'Create a new competency based question')
       .within(() => {
-        cy.get('input[name="name"]').first().type('Sample question')
+        cy.get('input[name="name.en"]').first().type('Sample question')
 
         cy.get('[data-test-id="html-input-field"]').first().click()
           .type('Sample question desc')
 
-        cy.get('[data-test-id="criteria-option-input-field"]').as('criteria')
+        cy.get('[data-test-id="criteria-option"]').as('criteria')
           .within(() => {
             cy.contains('Competency')
             cy.get('button').should('contain', 'Create new').click({ force: true})
@@ -48,7 +48,7 @@ describe('Modal froms', () => {
           .find('#criteria-option-modal')
           .should('contain', 'Competency option')
           .within(() => {
-            cy.get('input[name="name"]').type('Criteria A')
+            cy.get('input[name="name.en"]').type('Criteria A')
             cy.get('button[type="submit"]').click().wait(1000)
         })
 
@@ -123,7 +123,7 @@ describe('Modal froms', () => {
         cy.get('button[type="submit"]').should('contain', 'Add question').click()
       })
 
-      cy.get('[data-test-id="selected-questions-list"]')
+      cy.get('[data-test-id="question-manager"]')
         .should('contain', 'Sample question')
 
       cy.contains('Save project').click()
@@ -164,7 +164,7 @@ describe('Modal froms', () => {
     cy.get('#feature-select-modal')
       .should('not.exist')
 
-    cy.contains('Create new question').click()
+    cy.contains('Create').click()
 
     cy.get('#screening-question-modal').should('exist')
 
@@ -178,7 +178,7 @@ describe('Modal froms', () => {
 
         cy.get('[data-test-id="choice-question-form"]')
           .within(() => {
-            cy.get('input[name="name"]').type('Do you like fruits?')
+            cy.get('input[name="name.en"]').type('Do you like fruits?')
 
             cy.get('[data-test-id="html-input-field"]').click()
               .type('Fruits fruits fruits')
@@ -186,8 +186,8 @@ describe('Modal froms', () => {
             cy.get('[data-test-id="answers-form"]')
               .find('ul')
               .within(() => {
-                cy.get('li').eq(0).find('input[name="answers[]"]').type('Yes{enter}')
-                cy.get('li').eq(1).find('input[name="answers[]"]').type('No')
+                cy.get('li').eq(0).find('input[name="answers[0].name.en"]').type('Yes{enter}')
+                cy.get('li').eq(1).find('input[name="answers[1].name.en"]').type('No')
               })
               .children()
               .should('have.length', 2)
@@ -196,7 +196,7 @@ describe('Modal froms', () => {
           cy.contains("Create question").click()
       })
 
-    cy.get('[data-test-id="selected-questions-list"]')
+    cy.get('[data-test-id="question-manager"]')
       .should('contain', 'Do you like fruits?')
 
     cy.contains('Save project').click()

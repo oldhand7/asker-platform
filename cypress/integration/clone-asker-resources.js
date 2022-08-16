@@ -3,7 +3,7 @@ describe('Clone Asker resources', () => {
     cy.simpleLogin('admin@askertech.com', 'test123', true)
 
     cy.createDummyTemplate('Asker Public Template 123')
-    cy.createTextQuestion('Asker Public Question 123')
+    cy.createOtherTextQuestion({ name: 'Asker Public Question 123'})
 
     cy.visit('/logout/');
   })

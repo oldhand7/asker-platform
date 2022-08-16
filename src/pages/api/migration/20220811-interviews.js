@@ -1,6 +1,4 @@
-//@INFO: project and template forms are changing
-//@INFO: interv
-
+//@INFO:anonimization of candidates
 import {
     createApiHandler as getHandler
   } from 'libs/nc';

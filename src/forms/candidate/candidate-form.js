@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import TextInputField from 'components/TextInputField/TextInputField';
 import PlatformButton from 'components/Button/PlatformButton';
 import PlusIcon from 'components/Icon/PlusIcon'
+import { useSite  } from 'libs/site';
 import { getRandomAlias } from 'libs/candidate';
 import { useMemo } from 'react';
 

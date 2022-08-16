@@ -1,0 +1,59 @@
+.live-select {
+    &-head {
+        padding-bottom: 16rem;
+        border-bottom: 1px solid #D5D5D5;
+    }
+
+    &-toggle-all {
+        font-weight: 500;
+        font-size: 12rem;
+        line-height: 18rem;
+        color: #9F9F9F;
+    }
+
+    &-body {
+        height: min-content;
+        max-height: 50vh;
+        overflow-y: auto;
+        padding: 16rem 0;
+    }
+
+    &-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    &-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16rem;
+        cursor: pointer;
+        
+        &-checkbox {
+            margin-right: 16rem;
+            display: inline-block;
+        }
+
+        &-name {
+            margin-right: 16rem;
+            flex: 0 0 160rem;
+            font-weight: 500;
+            font-size: 14rem;
+            line-height: 21rem;
+            color: #282828;
+            display: inline-block;
+        }
+
+        &-desc {
+            flex: 1 1;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 12rem;
+            line-height: 18rem;
+            color: #282828;
+            padding-right: 16rem;
+        }
+
+    }
+}

@@ -11,7 +11,6 @@ export const getStageTime = stage => {
 }
 
 export const SHORT_NAMES = {
-    'team-role-presentation': 'Team & role',
     'company-presentation': 'Company',
     'salary': 'Salary',
     'candidate-questions': 'Candidate',
@@ -19,8 +18,8 @@ export const SHORT_NAMES = {
     'motivation-questions': 'Motivation',
     'screening-questions': 'Screening',
     'experience-questions': 'Experience',
-    'hard-skill-questions': 'Hard-skill',
-    'culture-fit-questions': 'Culture-fit',
+    'hard-skill-questions': 'Hard skill',
+    'culture-questions': 'Culture',
     'introduction': 'Introduction',
     'summary': 'Summary',
     'other-questions': 'Other'
@@ -31,3 +30,13 @@ export const featureTypes = [
     { id: 'evaluation', name: 'Evaluation' },
     { id: 'other', name: 'Other options' }
   ]
+
+  export const SHORT_IDS = {
+    'competency-questions': 'competency',
+    'motivation-questions': 'motivation',
+    'experience-questions': 'experience',
+    'culture-questions': 'culture',
+    'hard-skill-questions': 'hard-skill',
+    'screening-questions': 'screening',
+    'other-questions': 'other'
+  }

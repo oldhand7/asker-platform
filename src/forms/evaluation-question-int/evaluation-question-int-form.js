@@ -1,7 +1,7 @@
 import { getCriteriaTypeById } from 'libs/criteria';
 import classNames from 'classnames';
 import QuestionScoreBoard from 'components/QuestionScoreBoard/QuestionScoreBoard';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {useForm} from 'libs/form';
 import { calcScore, createDummyVotes } from 'libs/helper';
 import InterviewNotes from 'components/InterviewNotes/InterviewNotes';
@@ -15,6 +15,8 @@ import Tooltip from 'components/Tooltip/Tooltip';
 import InfoIcon from 'components/Icon/InfoIcon'
 import QuestionIcon from 'components/Icon/QuestionIcon';
 import { useInView } from 'react-intersection-observer';
+import { useSite } from 'libs/site';
+import { useUser } from 'libs/user';
 
 const defaultValues = {
   notes: '',
@@ -38,8 +40,28 @@ const adjust = (values, question) => {
   return values;
 }
 
-const EvaluationQuestionIntForm = ({ className, question, values, markComplete, onValues, taxStageSecond, onError }) => {
-  const { values: formValues, errors, control, pristine } = useForm({
+const QuestionCriteria = ({ criteria }) => {
+  const { i18nField }  = useSite();
+
+  const criteriaNameInt = i18nField(criteria.name);
+  const criteriaDescInt = i18nField(criteria.desc);
+
+  return <div className={styles['evaluation-question-int-form-criteria']}>
+    <h2 className={styles['evaluation-question-int-form-criteria-name']}>
+      <span>{criteriaNameInt}</span>
+      {
+        criteriaDescInt ?
+        <Tooltip delay={0} text={striptags(criteriaDescInt)}>{ref => (
+          <span className={styles['evaluation-question-int-form-criteria-icon']} ref={ref}><InfoIcon /></span>
+        )}</Tooltip> :
+        null
+      }
+    </h2>
+</div>
+}
+
+const EvaluationQuestionIntForm = ({ className, question, values, markComplete, onValues, config, note, taxStageSecond, onError }) => {
+  const { values: formValues, errors, control } = useForm({
     values: adjust(
       values ? values : defaultValues,
       question
@@ -48,6 +70,8 @@ const EvaluationQuestionIntForm = ({ className, question, values, markComplete, 
     messages
   })
   const [criteria, setCriteria] = useState(null);
+  const { i18nField, t }  = useSite();
+  const { locale } = useUser();
 
   const { ref, inView } = useInView({
     threshold: 0.7
@@ -77,7 +101,7 @@ const EvaluationQuestionIntForm = ({ className, question, values, markComplete, 
     if (!errors) {
       onValues && onValues(formValues)
     } else {
-      onError(new Error('Some fields not valid'))
+      onError(new Error(t('Some fields not valid')))
     }
   }, [formValues])
 
@@ -107,39 +131,32 @@ const EvaluationQuestionIntForm = ({ className, question, values, markComplete, 
     }
   }
 
+  const questionNameInt = useMemo(() => i18nField(question.name), [locale, question]);
+  const questionNoteInt = useMemo(() => {
+    const customNote = config && config.notes && config.notes[question.id];
+
+  
+    return customNote ?  i18nField(customNote.text) : i18nField(question.note)
+  }, [locale, question, config]);
+
   return question ? <div ref={ref} className={classNames(styles['evaluation-question-int-form'], className)}>
     <h2 className={styles['evaluation-question-int-form-title']}>
-      {criteria && `${criteria.altName || criteria.name} question`}</h2>
+      {criteria && t(`${criteria.altName || criteria.name} question`)}</h2>
 
     <FlexRow className={styles['evaluation-question-int-form-flex-row']}>
       <div className={styles['evaluation-question-int-form-formulation']}>
 
-        {EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(question.subtype) == -1 ?
-          <div className={styles['evaluation-question-int-form-criteria']}>
-            {
-              question && question.criteria ?
-              <h2 className={styles['evaluation-question-int-form-criteria-name']}>
-                <span>{question && question.criteria.name}</span>
-                {
-                  question.criteria.desc ?
-                  <Tooltip delay={0} text={striptags(question.criteria.desc)}>{ref => (
-                    <span className={styles['evaluation-question-int-form-criteria-icon']} ref={ref}><InfoIcon /></span>
-                  )}</Tooltip> :
-                  null
-                }
-              </h2> :
-              null
-            }
-          </div> : null}
+        {EVALUATION_SUBTYPES_NO_CRITERIA.indexOf(question.subtype) == -1 && question.criteria ?
+          <QuestionCriteria criteria={question.criteria} /> : null}
 
         <h2 className={styles['evaluation-question-int-form-question-name']}>
           <QuestionIcon className={styles['evaluation-question-int-form-question-name-icon']} />
-          <span>{question.name}</span>
+          <span>{questionNameInt}</span>
         </h2>
 
         <ul className={styles['evaluation-question-int-form-question-questions']}>
           {(question.followup || []).map((fq, index) => (
-            <li className={styles['evaluation-question-int-form-question-questions-question']} key={index}>{fq}</li>
+            <li className={styles['evaluation-question-int-form-question-questions-question']} key={index}>{i18nField(fq)}</li>
           ))}
         </ul>
       </div>
@@ -147,11 +164,11 @@ const EvaluationQuestionIntForm = ({ className, question, values, markComplete, 
       <div className={styles['evaluation-question-int-form-notes']}>
         <InterviewNotes className={styles['evaluation-question-int-form-notes-input']} value={formValues.notes} onChange={control.input('notes', false)} />
             
-        {question && question.desc && !formValues.alertDismissed ?
+        {questionNoteInt && !formValues.alertDismissed ?
           <DismissAlert className={styles['evaluation-question-int-form-alert']} onDismiss={() => control.set('alertDismissed', true)}>
-            <Html>{question.desc}</Html>
+            <Html>{questionNoteInt}</Html>
           </DismissAlert> : null}
-    </div>
+        </div>
     </FlexRow>
 
     <QuestionScoreBoard score={formValues.score} votes={formValues.votes} onVotes={handleVotes} className={styles['evaluation-question-int-form-scoring-board']} rules={question.rules} />

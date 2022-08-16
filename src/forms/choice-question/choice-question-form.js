@@ -2,56 +2,61 @@ import BrandishButton from 'components/Button/BrandishButton';
 import TextButton from 'components/Button/TextButton';
 import classNames from 'classnames';
 import TextInputField from 'components/TextInputField/TextInputField';
-import { useEffect, useState } from 'react';
-import useForm from 'libs/use-form';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'libs/react-hook-form';
 import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField';
 import AnswersForm from 'forms/answers/answers-form';
 import HtmlInputField from 'components/HtmlInputField/HtmlInputField';
+import { useSite } from 'libs/site';
+import { useUser } from 'libs/user';
 
 import styles from './choice-question-form.module.scss'
 
-const rules =  {
-  name: 'required',
-  desc: 'max:9000',
-  answers: 'required|min:1'
+const defaultValues = {
+  name: { en: '' },
+  desc: { en: '' },
+  answers: [],
+  multichoice: false
 }
 
 const ChoiceQuestionForm = ({ values, className, onValues, onCancel, loading, multichoice = false }) => {
-  const [formValues, errors, control] = useForm({
-    values,
-    rules
-  })
+  const { locale } = useUser();
 
-  const toggleQuestionType = () => {
-    control.set('multichoice', !formValues.multichoice)
-  }
+  const validationRules = useMemo(() => ({
+    [`name.${locale}`]: 'required',
+    answers: 'required|min:1'
+  }), [locale])
+
+  const { values: formValues, errors, input, handleSubmit, setValue } = useForm({
+    values: values || defaultValues,
+    rules: validationRules
+  })
+  const { t } = useSite();
 
   useEffect(() => {
-    if (typeof formValues.multichoice === 'undefined') {
-      control.set('multichoice', multichoice)
-    }
-  }, [formValues, multichoice])
+    setValue('multichoice', multichoice)
+  }, [multichoice])
 
-  return <form data-test-id="choice-question-form" onSubmit={control.submit(onValues)} className={classNames(styles['choice-question-form'], className)}>
-    <TextInputField error={errors && errors.name} className={styles['choice-question-form-field']} onChange={control.input('name')} value={formValues.name || ''} label="Title" name='name' placeholder={!multichoice ? "E.g. Do you have a driving licence?" : "E.g. Which of the following systems are you used working with?"} />
-    <HtmlInputField error={errors && errors.desc} className={styles['choice-question-form-field']} onChange={control.input('desc', false)} value={formValues.desc} label="Description" name='desc' placeholder="Description" />
+  return <form data-test-id="choice-question-form" onSubmit={handleSubmit(onValues)} className={classNames(styles['choice-question-form'], className)}>
+    <TextInputField error={errors && errors.name && errors.name[locale]} className={styles['choice-question-form-field']} onChange={input(`name.${locale}`)} value={formValues.name && formValues.name[locale]} label={t("Title")} name={`name.${locale}`} placeholder={t(!multichoice ? "E.g. Do you have a driving licence?" : "E.g. Which of the following systems are you used working with?")} />
+    <HtmlInputField id="desc" error={errors && errors.desc && errors.desc[locale]} className={styles['choice-question-form-field']} onChange={input(`desc.${locale}`, false)} diff={locale} value={formValues.desc && formValues.desc[locale]} label={t("Description")} name='desc' placeholder={t("Description")} />
 
     <div>
-      <AnswersForm values={formValues.answers} onValues={control.input('answers', false)} className={styles['choice-question-form-field']} title='Answers' />
+      <AnswersForm values={formValues.answers} onValues={input('answers', false)} className={styles['choice-question-form-field']} title={t('Answers')} />
       {errors && errors.answers ? <p className="form-error">{errors.answers}</p> : null}
     </div>
 
-    <CheckboxInputField className={styles['choice-question-form-field']} checked={formValues.multichoice} label="Allow multiple answers?" name="multichoice" onChange={toggleQuestionType}  />
+    <CheckboxInputField className={styles['choice-question-form-field']} checked={formValues.multichoice} label="Allow multiple answers?" name="multichoice" onChange={() => setValue('multichoice', !formValues.multichoice)}  />
 
     <div className={styles['choice-question-form-buttons']}>
     {
-      !values.id ?
+      !formValues.id ?
       <>
-        <TextButton disabled={loading} className={styles['choice-question-form-buttons-button']} type="button" onClick={onCancel}>Cancel</TextButton>
-        <BrandishButton disabled={loading} className={styles['choice-question-form-buttons-button']} type="submit">Create question</BrandishButton>
+        <TextButton disabled={loading} className={styles['choice-question-form-buttons-button']} type="button" onClick={onCancel}>{t('Cancel')}</TextButton>
+        <BrandishButton disabled={loading} className={styles['choice-question-form-buttons-button']} type="submit">{t('Create question')}</BrandishButton>
       </> :
       <>
-        <BrandishButton disabled={loading} className={styles['choice-question-form-buttons-button']} type="submit">Save question</BrandishButton>
+        <BrandishButton disabled={loading} className={styles['choice-question-form-buttons-button']} type="submit">{t('Save question')}</BrandishButton>
       </>
     }
     </div>

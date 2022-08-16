@@ -4,7 +4,7 @@ describe('Updating queestions', () => {
   })
 
   it('should sync project questions with questions', () => {
-      cy.createTextQuestion('Question 123')
+      cy.createOtherTextQuestion({ name: 'Question 123'})
 
       cy.createDummyProject('Project 123')
 
@@ -13,23 +13,24 @@ describe('Updating queestions', () => {
       cy.contains('Add stage')
         .click()
 
-      cy.get('[data-test-id="feature-screening-questions"]')
+      cy.get('[data-test-id="feature-other-questions"]')
         .drag('[data-test-id="stage-2"] .Droppable')
         .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
-          cy.get('table tbody').last()
-            .should('not.contain', 'Question 123')
+          cy.get('[data-test-id="question-manager"]')
+          .should('not.contain', 'Question 123')
 
-          cy.get('table tbody').first()
+          cy.get('[data-test-id="question-explorer"] ul').last()
             .contains('Question 123')
-            .closest('tr')
+            .closest('li')
             .find('button')
             .click()
 
-          cy.get('table tbody').last()
+            cy.get('[data-test-id="question-manager"]')
             .should('contain', 'Question 123')
+  
         })
 
       cy.contains('Save project').click()
@@ -49,7 +50,7 @@ describe('Updating queestions', () => {
 
       cy.tableFirstRowNavigate('Edit')
 
-      cy.get('input[name="name"]').first().type('{selectAll}{backspace}Questione 111')
+      cy.get('input[name="name.en"]').first().type('{selectAll}{backspace}Questione 111')
 
       cy.contains('Save question').click()
 
@@ -62,11 +63,8 @@ describe('Updating queestions', () => {
 
       cy.get('[data-test-id="stage-2"]').click()
 
-      cy.get('[data-test-id="feature-form"]')
-        .within(() => {
-          cy.get('table tbody').last()
-            .should('contain', 'Questione 111')
-        })
+      cy.get('[data-test-id="feature-form"] [data-test-id="question-manager"]')
+        .should('contain', 'Questione 111')
 
       cy.visit('/projects')
 
@@ -79,7 +77,7 @@ describe('Updating queestions', () => {
   })
 
   it('should sync template questions with questions', () => {
-      cy.createTextQuestion('Question ABC')
+      cy.createOtherTextQuestion({ name: 'Question ABC'})
 
       cy.createDummyTemplate('Project ABC')
 
@@ -89,22 +87,22 @@ describe('Updating queestions', () => {
 
       cy.contains('Add stage').click()
 
-      cy.get('[data-test-id="feature-screening-questions"]')
+      cy.get('[data-test-id="feature-other-questions"]')
         .drag('[data-test-id="stage-2"] .Droppable')
         .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
-          cy.get('table tbody').last()
+          cy.get('[data-test-id="question-manager"]')
             .should('not.contain', 'Question ABC')
 
-          cy.get('table tbody').first()
+          cy.get('[data-test-id="question-explorer"] ul').last()
             .contains('Question ABC')
-            .closest('tr')
+            .closest('li')
             .find('button')
             .click()
 
-          cy.get('table tbody').last()
+            cy.get('[data-test-id="question-manager"]')
             .should('contain', 'Question ABC')
         })
 
@@ -117,7 +115,7 @@ describe('Updating queestions', () => {
 
       cy.tableFirstRowNavigate('Edit')
 
-      cy.get('input[name="name"]').first().type('{selectAll}{backspace}Questione 222')
+      cy.get('input[name="name.en"]').first().type('{selectAll}{backspace}Questione 222')
 
       cy.contains('Save question').click()
 
@@ -127,15 +125,12 @@ describe('Updating queestions', () => {
       cy.visit('/templates')
 
       cy.contains('Project ABC')
-      .closest('ul')
-      .listFirstRowNavigate('Edit')
+        .closest('ul')
+        .listFirstRowNavigate('Edit')
 
-      cy.get('[data-test-id="stage-2"]').click()
+      cy.get('[data-test-id="stage-2"]').click().wait(1000)
 
-      cy.get('[data-test-id="feature-form"]')
-        .within(() => {
-          cy.get('table tbody').last()
-            .should('contain', 'Questione 222')
-        })
+      cy.get('[data-test-id="feature-form"] [data-test-id="question-manager"]')
+        .should('contain', 'Questione 222')
   })
 })

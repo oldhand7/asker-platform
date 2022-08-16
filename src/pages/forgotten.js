@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import ForgottenForm from 'forms/forgotten/forgotten-form';
-import { getSettings } from 'libs/firestore-admin';
+import { getSettings, getTranslations } from 'libs/firestore-admin';
 import { useUser } from 'libs/user';
 import { useEffect} from 'react';
 import Head from 'next/head';
@@ -26,10 +26,11 @@ const ForgottenPage = () => {
   </div>
 }
 
-export const getServerSideProps = async ({ req, res}) => {
+export const getServerSideProps = async ({ req }) => {
   return {
     props: {
-      config: await getSettings()
+      config: await getSettings(),
+      translations: await getTranslations()
     }
   }
 }

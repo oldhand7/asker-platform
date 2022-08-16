@@ -9,9 +9,6 @@ import {
     ReferenceInput,
     SelectInput,
     TextInput,
-    TabbedShowLayout,
-    Tab,
-    RichTextField,
     TranslatableInputs,
     TranslatableFields,
     Create,
@@ -42,13 +39,18 @@ const validateForm = values => {
   return dot2obj(errors)
 }
 
+const translationFilters = [
+    <TextInput label="Text" source="text" alwaysOn />
+];
+
 export const TranslationsList = props => {
     const locale = useLocale();
 
-    return <List {...props} perPage={25}>
+    return <List filters={translationFilters} {...props} perPage={50}>
         <Datagrid rowClick="edit">
-            <TextField source="id" />
             <TextField source={`text`} label="Text" />
+            <TextField source={`translation.en`} label="EN" />
+            <TextField source={`translation.se`} label="SE" />
         </Datagrid>
     </List>
 };
@@ -59,7 +61,7 @@ export const TranslationsEdit = props => {
     return <Edit {...props}>
         <SimpleForm validate={validateForm}>
           <TextInput fullWidth={true} source="text" label="Text" />
-          <TranslatableInputs locales={i18n.locales}>
+          <TranslatableInputs locales={i18n.locales.reverse()}>
               <TextInput fullWidth={true} multiline={true} source="translation" label="Translation" />
           </TranslatableInputs>
         </SimpleForm>
@@ -72,7 +74,7 @@ export const TranslationsAdd = props => {
     return <Create {...props}>
         <SimpleForm redirect='list' validate={validateForm}>
             <TextInput fullWidth={true} source="text" label="Text" />
-            <TranslatableInputs fullWidth={true}  locales={i18n.locales}>
+            <TranslatableInputs fullWidth={true}  locales={i18n.locales.reverse()}>
                 <TextInput fullWidth={true} multiline={true} source="translation" label="Translation" />
             </TranslatableInputs>
         </SimpleForm>

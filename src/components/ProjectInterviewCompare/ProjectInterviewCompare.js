@@ -17,9 +17,9 @@ const labels = {
     'other-questions': 'Other',
     'competency': 'Competencies',
     'screening': 'Screening',
-    'hard-skill': 'Hard-skill',
+    'hard-skill': 'Hard skill',
     'motivation': 'Motivation',
-    'culture-fit': 'Culture-fit',
+    'culture': 'Culture',
     'experience': 'Experience'
 }
 
@@ -45,10 +45,9 @@ const ProjectInterviewCompare = ({ className, compare = [], interviews = [], pro
               const key = getStageKey(project.stages[i])
 
               if (c.evaluations && c.evaluations[key]) {
-
+                const { config } = project.stages[i];
+        
                 for (const qid in c.evaluations[key]) {
-                  const { config } = project.stages[i];
-
                   const question = config.questions.find(q => q.id == qid)
 
                   if (question) {
@@ -94,10 +93,10 @@ const ProjectInterviewCompare = ({ className, compare = [], interviews = [], pro
             })
         }
 
-        if (adjustedCompare.some(c => c.scoreMap['culture-fit'].score)) {
+        if (adjustedCompare.some(c => c.scoreMap['culture'].score)) {
             details.push({
-                type: 'culture-fit',
-                evaluations: adjustedCompare.map(c => c.scoreMap['culture-fit'])
+                type: 'culture',
+                evaluations: adjustedCompare.map(c => c.scoreMap['culture'])
             })
         }
 
@@ -105,13 +104,6 @@ const ProjectInterviewCompare = ({ className, compare = [], interviews = [], pro
             details.push({
                 type: 'experience',
                 evaluations: adjustedCompare.map(c => c.scoreMap['experience'])
-            })
-        }
-
-        if (adjustedCompare.some(c => c.otherQuestions['other-questions'].length)) {
-            details.push({
-                type: 'other-questions',
-                evaluations: adjustedCompare.map(c => c.otherQuestions['other-questions'])
             })
         }
 
@@ -175,7 +167,7 @@ const ProjectInterviewCompare = ({ className, compare = [], interviews = [], pro
                 {interviews.length > compare.length ? <div style={flexCompactStyle}></div> : null}
             </div>}
             name={labels[type]}>
-                {type != 'motivation' && type != 'culture-fit' ?
+                {type != 'motivation' && type != 'culture' ?
                 <div className={style['project-interview-compare-details-body']}>
                     {evaluations.map((evaluation, index) => <div className={style['project-interview-compare-details-column']} key={`${type}-${index}`} style={flexCompactStyle}>
                         <EvaluationCriteriaList className={style['project-interview-compare-details-criteria-list']} evaluation={evaluation} /></div>)}

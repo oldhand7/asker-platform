@@ -35,7 +35,7 @@ export const calcInterviewScore = (interview, projectOrTemplate) => {
   }
 
   const categoryEvaluations = [
-    ...aggregate['culture-fit'],
+    ...aggregate['culture'],
     ...aggregate['motivation']
   ]
 
@@ -51,7 +51,7 @@ export const calcInterviewScore = (interview, projectOrTemplate) => {
   return Math.round(interviewScore);
 }
 
-export const scoreMap = (interview, { scoringRules }) => {
+export const scoreMap = (interview, { scoringRules }, t) => {
   const aggregate = getInterviewAggregate(interview)
 
   const table = {
@@ -69,7 +69,7 @@ export const scoreMap = (interview, { scoringRules }) => {
     },
     'hard-skill': {
       score: 0,
-      name: 'Hard-skill',
+      name: 'Hard skill',
       children: [],
       type: 'hard-skill'
     },
@@ -79,11 +79,11 @@ export const scoreMap = (interview, { scoringRules }) => {
       children: null,
       type: 'motivation'
     },
-    'culture-fit': {
+    'culture': {
       score: 0,
-      name: 'Culture-fit',
+      name: 'Culture',
       children: null,
-      type: 'culture-fit'
+      type: 'culture'
     }
   }
 

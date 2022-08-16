@@ -1,50 +1,30 @@
 import Menu from 'components/Menu/Menu';
 import Logo from 'components/Logo/Logo';
 import classNames from 'classnames';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import MenuToggle from 'components/MenuToggle/MenuToggle';
 import { useSite } from 'libs/site';
-import { useScrollDirection } from 'react-use-scroll-direction'
-import UserMenu from 'components/UserMenu/UserMenu';
 import { useUser } from 'libs/user';
-import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import LanguageSwitcher from 'components/LanguageSwitcher/LanguageSwitcher';
 
 import styles from './Navbar.module.scss';
 
 const NavbarUserResolved = dynamic(() => import("components/NavbarUserResolved/NavbarUserResolved"), { ssr: false })
 
-const menuItems = [
-  {
-    id: 'projects',
-    title: 'Projects',
-    href: '/projects/'
-  },
-  {
-    id: 'templates',
-    title: 'Templates',
-    href: '/templates/'
-  },
-  {
-    id: 'questions',
-    title: 'Questions',
-    href: '/questions/'
-  }
-]
-
-const menuItemsMobile = (user) => {
+const menuItemsMobile = (user, t) => {
   const mobile = [...menuItems]
 
   if (user) {
     mobile.push({
       id: 'profile',
-      title: 'Profile',
+      title: t('Profile'),
       href: '/profile/'
     })
 
     mobile.push({
       id: 'logout',
-      title: 'Logout',
+      title: t('Logout'),
       href: '/logout/'
     })
   }
@@ -53,35 +33,29 @@ const menuItemsMobile = (user) => {
 }
 
 const Navbar = ({ className, menu = [] }) => {
-  const [config, t] = useSite();
+  const {config, t} = useSite();
   const [mode, setMode] = useState('normal');
   const { user, loading } = useUser();
   const [open, setOpen] = useState(false);
   const [menuItemsLoad, setMenuItemsLoad] = useState([]);
 
-  // const {
-  //   isScrollingUp,
-  //   isScrollingDown,
-  //   isScrolling
-  // } = useScrollDirection()
-  //
-  // useEffect(() => {
-  //   if (isScrollingUp && window.pageYOffset > 100) {
-  //     setMode('fixed')
-  //   }
-  // }, [isScrollingUp])
-  //
-  // useEffect(() => {
-  //   if (isScrollingDown && window.pageYOffset > 100) {
-  //     setMode('offset')
-  //   }
-  // }, [isScrollingDown])
-  //
-  // useEffect(() => {
-  //   if (window.pageYOffset == 0) {
-  //     setMode('normal')
-  //   }
-  // }, [isScrolling])
+  const menuItems = useMemo(() => [
+    {
+      id: 'projects',
+      title: t('Projects'),
+      href: '/projects/'
+    },
+    {
+      id: 'templates',
+      title: t('Templates'),
+      href: '/templates/'
+    },
+    {
+      id: 'questions',
+      title: t('Questions'),
+      href: '/questions/'
+    }
+  ], [t])
 
   useEffect(() => {
     if (open) {
@@ -96,7 +70,11 @@ const Navbar = ({ className, menu = [] }) => {
   }
 
   useEffect(() => {
-    setMenuItemsLoad(user && menuItems || [])
+    if (!user) {
+      return;
+    }
+
+    setMenuItemsLoad(menuItems)
   }, [user, menuItems])
 
   return <div id="navbar" className={classNames(
@@ -111,10 +89,13 @@ const Navbar = ({ className, menu = [] }) => {
       {
         !open ?
         <Menu items={menuItemsLoad} onClick={() => setOpen(false)} className={styles['navbar-menu']} /> :
-        <Menu items={menuItemsMobile(user)} onClick={() => setOpen(false)} className={styles['navbar-menu']} />
+        <Menu items={menuItemsMobile(user, t)} onClick={() => setOpen(false)} className={styles['navbar-menu']} />
       }
 
-      <NavbarUserResolved user={user} loading={loading} className={styles['navbar-session']} styles={styles} />
+      <div className={styles['navbar-control']}>
+        <LanguageSwitcher className={styles['navbar-language-switcher']} />
+        {user ? <NavbarUserResolved user={user} loading={loading} className={styles['navbar-session']} styles={styles} /> : null}
+      </div>
 
       <MenuToggle className={styles['navbar-toggle']} onClick={handleMobileToggle} active={open} />
     </div>

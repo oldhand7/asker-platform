@@ -5,6 +5,7 @@ import { CompanyUsersList, CompanyUsersEdit, CompanyUsersAdd } from 'admin/resou
 import ProfileLayout from 'admin/components/ProfileLayout/ProfileLayout';
 import { createTheme } from '@material-ui/core/styles';
 import { blueGrey } from "@material-ui/core/colors";
+import i18nProvider from './i18n/i18nProvider';
 
 const firebaseConfig = getFirebaseConfig();
 
@@ -38,8 +39,10 @@ const theme = createTheme({
     }
 })
 
-const ProfileAdminApp = () => {
-    return <Admin layout={ProfileLayout} theme={theme} layout={ProfileLayout} dataProvider={dataProvider}>
+
+
+const ProfileAdminApp = ({ locale = 'en', translations = {}}) => {
+    return <Admin locale={locale} i18nProvider={i18nProvider(locale, translations)} layout={ProfileLayout} theme={theme} dataProvider={dataProvider}>
         <Resource name={`users`} list={CompanyUsersList} edit={CompanyUsersEdit} create={CompanyUsersAdd} />
     </Admin>
 }

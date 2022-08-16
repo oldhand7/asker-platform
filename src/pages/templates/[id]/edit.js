@@ -1,4 +1,4 @@
-import { getSettings } from 'libs/firestore-admin';
+import { getSettings, getTranslations } from 'libs/firestore-admin';
 import { withUserGuardSsr } from 'libs/iron-session'
 import TemplateForm from 'forms/template/template-form';
 import Head from 'next/head';
@@ -17,10 +17,22 @@ const TemplatesEditPage = ({ template }) => {
   </div>
 }
 
-export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
+export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale}) => {
   if (!req.session.user.companyId) {
     return {
       notFound: true
+    }
+  }
+
+  if (req.session.user.locale && req.session.user.locale != locale) {
+    let destination = `/${req.session.user.locale}/templates/${query.id}/edit/`;
+
+    return {
+      redirect: {
+        destination,
+        locale: false,
+        permanent: false,
+      }
     }
   }
 
@@ -37,7 +49,8 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
   return {
     props: {
       template: JSON.parse(JSON.stringify(template)),
-      config: await getSettings()
+      config: await getSettings(),
+      translations: await getTranslations()
     }
   }
 })

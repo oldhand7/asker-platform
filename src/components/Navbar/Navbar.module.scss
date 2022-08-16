@@ -97,4 +97,14 @@
       display: none;
     }
   }
+
+  &-control {
+    flex: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  &-language-switcher {
+    margin-right: 8rem;
+  }
 }

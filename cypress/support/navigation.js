@@ -27,3 +27,12 @@ Cypress.Commands.add(
       })
 
 })
+
+Cypress.Commands.add(
+  'listNavigate',
+  {  prevSubject: true },
+  (subject, code = 'Edit') => {
+    cy.wrap(subject)
+      .find('[data-test-id="compact-menu"]').click().parent()
+      .contains(code).click()
+})

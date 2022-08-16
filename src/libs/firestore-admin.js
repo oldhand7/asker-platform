@@ -16,6 +16,18 @@ export const getSettings = async () => {
   return result;
 }
 
+export const getTranslations = async () => {
+  const translations = await filterManyDocuments('translations')
+
+  const result = {}
+
+  for (let i = 0; i < translations.length; i++) {
+    result[translations[i].text] = translations[i].translation || null
+  }
+
+return result;
+}
+
 export const getConfig = async (db) => {
   return {
     ...(await getSettings(db)),

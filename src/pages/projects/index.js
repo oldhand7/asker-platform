@@ -1,4 +1,4 @@
-import { getSettings } from 'libs/firestore-admin';
+import { getSettings, getTranslations } from 'libs/firestore-admin';
 import { useEffect, useState, useMemo, useCallback} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget'
@@ -18,6 +18,7 @@ import { ctxError } from 'libs/helper';
 import { useQueryState } from 'next-usequerystate'
 import { deleteSingle } from 'libs/firestore';
 import ProjectList from 'components/ProjectList/ProjectList';
+import { useSite } from 'libs/site';
 
 import styles from 'styles/pages/projects.module.scss';
 
@@ -47,6 +48,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
   const [qMax, setMaxQ] = useQueryState('fl')
+  const { t } = useSite();
 
   useEffect(() => {
     if (!filter.pristine) {
@@ -153,7 +155,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
 
   return <div className={styles['projects-page']}>
       <Head>
-        <title>Projects listing - Asker</title>
+        <title>{t('Projects listing')} - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
       <div className={styles['projects-page-nav']}>
@@ -161,7 +163,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
           <DropDownButton className={styles['projects-page-create-button']} onChoice={handleProjectCreate} options={[
             { id: 'blank-project', name: 'Blank project' },
             { id: 'template-project', name: 'Use template' }
-          ]}><PlusIcon /> Create new project</DropDownButton>
+          ]}><PlusIcon /> {t('Create new project')}</DropDownButton>
       </div>
 
       {success ? <Alert type="success">{success}</Alert> : null}
@@ -174,12 +176,25 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
   </div>
 }
 
-export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) => {
+export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }) => {
   if (!req.session.user.companyId) {
     return {
       notFound: true
     }
   }
+
+  if (req.session.user.locale && req.session.user.locale != locale) {
+    const destination = `/${req.session.user.locale}/projects/`;
+
+    return {
+      redirect: {
+        destination,
+        locale: false,
+        permanent: false,
+      }
+    }
+  }
+
 
   const dbQuery = [
     ['companyId', '==', req.session.user.companyId]
@@ -207,6 +222,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, res}) =>
   return {
     props: {
       config: await getSettings(),
+      translations: await getTranslations(),
       projects,
       total
     }

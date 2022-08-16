@@ -19,7 +19,7 @@ steps:
   args: ['push', 'gcr.io/$PROJECT_ID/nextjs-app-platform-beta']
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
-  args: ['run', 'deploy', 'nextjs-app-platform-beta', '--image', 'gcr.io/$PROJECT_ID/nextjs-app-platform-beta:latest', '--platform', 'managed', '--allow-unauthenticated', '--region', 'europe-west3']
+  args: ['run', 'deploy', 'nextjs-app-platform-beta', '--image', 'gcr.io/$PROJECT_ID/nextjs-app-platform-beta:latest', '--max-instances=4', '--platform', 'managed', '--allow-unauthenticated', '--region', 'europe-west3']
 - name: gcr.io/cloud-builders/npm
   args: ['install']
   dir: cloud-functions

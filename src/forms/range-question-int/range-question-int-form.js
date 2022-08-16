@@ -3,18 +3,26 @@ import { Range, getTrackBackground } from 'react-range';
 import striptags from 'striptags';
 import { allowedHtmlTags } from 'libs/config';
 
+
+
 import styles from './range-question-int-form.module.scss'
+import { useSite } from 'libs/site';
 
 const RangeQuestionIntForm = ({ className, question, values, onValues }) => {
+  const { i18nField} = useSite();
+
   const vor = () => values || [
     question.min,
-    Math.min(Math.round(question.max / 2), question.max)
+    Math.max(Math.round(question.max / 2), question.min)
   ]
 
+  const questionIntName = i18nField(question.name);
+  const questionIntDesc = i18nField(question.desc);
+
   return <div className={classNames(styles['range-question-int-form'], className)}>
-  <h3 className={styles['range-question-int-form-title']}>{question.name}</h3>
+  <h3 className={styles['range-question-int-form-title']}>{questionIntName}</h3>
   <div className={styles['range-question-int-form-desc']}
-  dangerouslySetInnerHTML={{ __html: striptags(question.desc, allowedHtmlTags) }}></div>
+  dangerouslySetInnerHTML={{ __html: striptags(questionIntDesc, allowedHtmlTags) }}></div>
 
 
     <div className={styles['range-question-int-form-slider']}>

@@ -29,42 +29,36 @@ describe('Interview', () => {
     cy.get('[data-test-id="stage-1"] [data-test-id="load-button"]').click()
     cy.get('#feature-select-modal').contains('Motivation').click()
     cy.get('[data-test-id="feature-form"]')
-      .find('table').first()
       .find('button[data-test-id="add-question"]').first()
       .click()
 
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Culture-fit').click()
+    cy.get('#feature-select-modal').contains('Culture').click()
     cy.get('[data-test-id="feature-form"]')
-      .find('table').first()
       .find('button[data-test-id="add-question"]').first()
       .click()
 
     cy.get('[data-test-id="stage-3"] [data-test-id="load-button"]').click()
     cy.get('#feature-select-modal').contains('Competency').click()
     cy.get('[data-test-id="feature-form"]')
-      .find('table').first()
       .find('button[data-test-id="add-question"]').first()
       .click()
 
     cy.get('[data-test-id="stage-4"] [data-test-id="load-button"]').click()
     cy.get('#feature-select-modal').contains('Experience').click()
     cy.get('[data-test-id="feature-form"]')
-      .find('table').first()
       .find('button[data-test-id="add-question"]').first()
       .click()
 
     cy.get('[data-test-id="stage-5"] [data-test-id="load-button"]').click()
     cy.get('#feature-select-modal').contains('Hard').click()
     cy.get('[data-test-id="feature-form"]')
-      .find('table').first()
       .find('button[data-test-id="add-question"]').first()
       .click()
 
     cy.get('[data-test-id="stage-6"] [data-test-id="load-button"]').click()
     cy.get('#feature-select-modal').contains('Screening').click()
     cy.get('[data-test-id="feature-form"]')
-      .find('table').first()
       .find('button[data-test-id="add-question"]').first()
       .click()
 
@@ -89,7 +83,7 @@ describe('Interview', () => {
       .contains('Not motivated').click()
 
     cy.get('[data-test-id="feature-form"]').eq(1)
-      .should('contain', 'Culture-fit')
+      .should('contain', 'Culture')
       .should('contain', 'Are you peoples person?')
       .contains('Low fit').click()
 
@@ -122,12 +116,10 @@ describe('Interview', () => {
         cy.get('li').eq(0)
           .should('contain', 'Yes')
           .find('input[type="radio"]')
-          .should('have.value', 'Yes')
 
         cy.get('li').eq(1)
           .should('contain', 'No')
           .find('input[type="radio"]')
-          .should('have.value', 'No')
           .click()
       })
 
@@ -149,7 +141,7 @@ describe('Interview', () => {
               .should('contain', '3')
           })
 
-        cy.contains('Culture-fit')
+        cy.contains('Culture')
           .closest('[data-test-id="interview-details-row"]')
           .should('contain', '25%')
 
@@ -164,7 +156,7 @@ describe('Interview', () => {
               .should('contain', '4')
           })
 
-        cy.contains('Hard-skill')
+        cy.contains('Hard skill')
           .closest('[data-test-id="interview-details-row"]')
           .should('contain', '100%')
           .click()
@@ -201,10 +193,11 @@ describe('Interview', () => {
     cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
     cy.get('#feature-select-modal').contains('Competency').click()
     cy.get('[data-test-id="feature-form"]')
-      .find('table').first()
+      .find('[data-test-id="question-explorer"] ul')
+      .last()
       .within(() => {
-        cy.contains('ISO-111').closest('tr').find('[data-test-id="add-question"]').click()
-        cy.contains('ISO-222').closest('tr').find('[data-test-id="add-question"]').click()
+        cy.contains('ISO-111').closest('li').find('[data-test-id="add-question"]').click()
+        cy.contains('ISO-222').closest('li').find('[data-test-id="add-question"]').click()
       })
 
     cy.get('[data-test-id="stage-3"] [data-test-id="load-button"]').click()

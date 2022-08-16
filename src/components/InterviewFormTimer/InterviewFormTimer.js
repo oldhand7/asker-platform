@@ -81,33 +81,6 @@ const InterviewFormTimer = ({ className, totalTime = 5, availableTime = 5, onTim
       null
     }
 
-    <div >
-      <p>Project time: {
-        !timeRemainingMinutes ? <span className={styles['interview-form-timer-overtime']}>time over</span> : null}</p>
-
-      {timeRemainingMinutes ?  <Tooltip text={timeLabelSeconds}>{(setRef, _ref) => (
-          <PieChart ref={ref => ref && setRef(ref.container)} className={styles['interview-form-timer-wheel']} width={100} height={100} >
-                <Pie
-                  data={[
-                    { name: '', value: (totalTime * 60)-timeRemainingSeconds },
-                    { name: 'Score', value: timeRemainingSeconds }
-                  ]}
-                  innerRadius={41}
-                  outerRadius={49}
-                  fill="#8884d8"
-                  paddingAngle={false}
-                  startAngle={90}
-                  endAngle={450}
-                  dataKey="value"
-                  isAnimationActive={false}
-                  blendStroke
-                >
-                  <Cell key={`cell`} fill={'#DCDCDC'} />
-                  <Cell key={`cell-score`} fill={getColor(timeRemainingMinutes, totalTime)} />
-                </Pie>
-              </PieChart>)}</Tooltip> : null}
-    </div>
-
       <div className={styles['interview-form-timer-progress-wrapper']}>
         <p>Project progress:</p>
 

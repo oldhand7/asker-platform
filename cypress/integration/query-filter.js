@@ -86,9 +86,9 @@ describe('Query filter', () => {
   it('should filter questions', () => {
     cy.visit('/questions/')
 
-    cy.createTextQuestion('Demo Question AAA')
-    cy.createTextQuestion('Demo Question AAB')
-    cy.createTextQuestion('Demo Question ABB')
+    cy.createOtherTextQuestion({ name: 'Demo Question AAA' })
+    cy.createOtherTextQuestion({ name: 'Demo Question AAB' })
+    cy.createOtherTextQuestion({ name: 'Demo Question ABB' })
 
     cy.get('table tbody tr')
       .should('have.length', 3)

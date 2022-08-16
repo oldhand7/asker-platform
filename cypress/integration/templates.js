@@ -13,14 +13,10 @@ describe('Templates', () => {
     cy.login('joe.doe@example.com', 'test123', 'templates')
   })
 
-  it('should show a no templates message', () => {
-    cy.visit('/templates/')
-    cy.title().should('include', 'Templates')
-    cy.contains('No templates to show.')
-  })
-
   it('should create a 1 step template with introduction', () => {
     cy.visit('/templates/')
+
+    cy.title().should('include', 'Templates')
 
     cy.contains('Create new template')
       .click()
@@ -54,7 +50,7 @@ describe('Templates', () => {
       .closest('li')
       .should('contain', 'Joe')
       .should('contain', '15 min')
-      .within(() => {
+    .within(() => {
           cy.get('[data-test-id="stage"]').eq(0).should('contain', 'Introduction')
           cy.get('[data-test-id="stage"]').eq(1).should('contain', 'Salary')
           cy.get('[data-test-id="stage"]').eq(2).should('contain', 'Summary')
@@ -62,7 +58,7 @@ describe('Templates', () => {
   })
 
   it('shoud create project from template', () => {
-    cy.createTextQuestion('Sample questione')
+    cy.createOtherTextQuestion({ name: 'Sample questione' })
 
     cy.createDummyTemplate('Tmpl Test')
 
@@ -73,15 +69,12 @@ describe('Templates', () => {
     cy.contains('Add stage')
       .click()
 
-    cy.get('[data-test-id="feature-screening-questions"]').drag('[data-test-id="stage-2"] .Droppable')
+    cy.get('[data-test-id="feature-other-questions"]').drag('[data-test-id="stage-2"] .Droppable')
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
-        cy.get('input').first().type('Sample questione')
-
-        cy.get('table').first()
-          .find('button[data-test-id="add-question"]').first()
-          .click()
+        cy.get('input[name="q"]').type('Sample questione')
+        cy.get('button[data-test-id="add-question"]').first().click()
       })
 
     cy.contains('Save template').click()
@@ -94,11 +87,7 @@ describe('Templates', () => {
 
     cy.get('[data-test-id="stage-2"]').click()
 
-    cy.get('[data-test-id="feature-form"]')
-      .within(() => {
-        cy.get('table')
-          .last()
-          .should('contain', 'Sample questione')
-      })
+    cy.get('[data-test-id="feature-form"] [data-test-id="question-manager"]')
+      .should('contain', 'Sample questione')
   })
 })

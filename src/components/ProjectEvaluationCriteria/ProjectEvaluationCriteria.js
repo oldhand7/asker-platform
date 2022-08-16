@@ -10,18 +10,20 @@ import { useModal } from 'libs/modal';
 import { getProjectEvaluationCriterias } from 'libs/project'
 import ExclamationIcon from 'components/Icon/ExclamationIcon';
 import Tooltip from 'components/Tooltip/Tooltip';
+import { useSite } from 'libs/site';
 
 const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
   const [criteria, setCriteria] = useState([]);
   const [error, setError] = useState(null);
-  const openScoreAdjustmentModal = useModal(
+  const { t } = useSite();
+  const openScoringRulesModal = useModal(
     ScoringRulesModal, { values: project.scoringRules, criteria })
 
   useEffect(() => {
-    const criteria = getProjectEvaluationCriterias(project);
+    const criteria = getProjectEvaluationCriterias(project, t);
 
     setCriteria(criteria)
-  }, [project])
+  }, [project, ])
 
   useEffect(() => {
     const sum = criteria.reduce((s, c) => Number.parseFloat(c.weight) + s, 0)
@@ -33,10 +35,14 @@ const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
     }
   }, [criteria, project])
 
-  return criteria.length ? <div data-testid="project-evaluation-criteria" className={classNames(styles['project-evaluation-criteria'], className)}>
-  <h2 className={styles['project-evaluation-criteria-title']}>Evaluation criteria {error ? <Tooltip text='Criteria unbalanced.'>{ref => <span className={styles['project-evaluation-criteria-title-warning']} ref={ref} ><ExclamationIcon /></span>}</Tooltip> : null}</h2>
+  return criteria.length ? <div data-test-id="project-evaluation-criteria" className={classNames(styles['project-evaluation-criteria'], className)}>
 
-  <PieChart className={styles['project-evaluation-criteria-chart']} width={140} height={140} >
+  <div className={styles['project-evaluation-criteria-head']}>
+  <h2 className={styles['project-evaluation-criteria-title']}>{t('Evaluation criteria')} {error ? <Tooltip text={t('Criteria unbalanced!')}>{ref => <span className={styles['project-evaluation-criteria-title-warning']} ref={ref} ><ExclamationIcon /></span>}</Tooltip> : null}</h2>
+  {onScoringRules ? <EditButtonLabeled text='Edit' className={styles['project-evaluation-criteria-edit']} onClick={() => openScoringRulesModal(onScoringRules)} /> : null}
+  </div>
+
+  <PieChart id={1} className={styles['project-evaluation-criteria-chart']} width={140} height={140} >
     <Pie
       data={criteria}
       innerRadius={60}
@@ -55,7 +61,6 @@ const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
          </Pie>
        </PieChart>
       <ProjectEvaluationCriteriaLegend className={styles['project-evaluation-criteria-legend']} criteria={criteria} />
-      {onScoringRules ? <EditButtonLabeled text='Edit' className={styles['project-evaluation-criteria-edit']} onClick={() => openScoreAdjustmentModal(onScoringRules)} /> : null}
   </div> : null
 }
 
