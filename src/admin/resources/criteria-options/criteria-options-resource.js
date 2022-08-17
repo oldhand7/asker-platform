@@ -58,7 +58,8 @@ const useStyles = makeStyles({
   })
 
 const criteriaOptionFilters = [
-    <TextInput label="Name" source="name" alwaysOn />,
+    <TextInput label="Name EN" source="name.en" alwaysOn />,
+    <TextInput label="Name SE" source="name.se" alwaysOn />,
      <SelectInput source="type" choices={[
         { id: 'competency', name: 'Competency' },
         { id: 'experience', name: 'Experience' },

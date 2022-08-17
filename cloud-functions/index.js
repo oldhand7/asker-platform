@@ -234,3 +234,29 @@ exports.updateQuestion = functions.region('europe-west3').firestore.document('qu
         batchTemplates.commit()
       ])
   });
+
+  exports.updateCriteriaOption = functions.region('europe-west3').firestore.document('criteriaOptions/{docId}')
+    .onUpdate(async (change) => {
+      const criteriaOption = change.after.data();
+
+      const batchQuestions = await admin.firestore()
+        .collection('questions')
+        .where('criteria.id', '==', criteriaOption.id)
+        .get()
+        .then(response => {
+          let batch = admin.firestore().batch()
+
+          response.forEach((doc) => {
+             const docRef = admin.firestore().collection('questions').doc(doc.id)
+
+             batch.update(docRef,{
+                criteria: criteriaOption
+             })
+          })
+
+          return batch;
+        })
+
+
+      await batchQuestions.commit();
+  });
