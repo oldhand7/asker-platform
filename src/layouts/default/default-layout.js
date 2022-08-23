@@ -3,7 +3,7 @@ import Footer from 'components/Footer/Footer';
 import Container from 'components/Container/Container';
 import Content from 'components/Content/Content';
 import { useSite } from 'libs/site';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useUser } from 'libs/user';
 import Alert from 'components/Alert/Alert';
 

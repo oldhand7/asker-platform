@@ -2,30 +2,18 @@ import {
     List,
     Datagrid,
     TextField,
-    ReferenceField,
-    EditButton,
     Edit,
     SimpleForm,
-    ReferenceInput,
-    SelectInput,
     TextInput,
-    TabbedShowLayout,
-    Tab,
-    RichTextField,
-    TranslatableInputs,
-    TranslatableFields,
     Create,
     ImageInput,
-    required,
     useLocale
 } from 'react-admin';
-import RichTextInput from 'ra-input-rich-text';
 import { validate } from 'libs/validator';
 import { makeStyles } from '@material-ui/core/styles';
-import { dot2obj, localize } from 'libs/helper';
-import TranslatableSlugField from 'admin/fields/translatable-slug/translatable-slug-field';
-import { i18n } from 'libs/config';
+import { dot2obj } from 'libs/helper';
 import ImageField from 'admin/fields/image/image-field';
+import { FunctionField } from 'react-admin';
 
 const useStyles = makeStyles({
     textInput: {
@@ -52,6 +40,14 @@ export const CompaniesList = props => {
         <Datagrid rowClick="edit">
             <TextField source="name" label="Name"  />
             <ImageField alwaysSingle={true} source="images" src="src" title="title" />
+            <TextField source="projectCount" label="Projects"  />
+            <TextField source="projectStageAvg" label="Stages (avg. pp.)"  />
+            <TextField source="projectInterviewAvg" label="Interviews (avg. pp.)"  />
+            <FunctionField source="projectInterviewCompleteP" label="Interviews complete" render={rec => `${rec.projectInterviewCompleteP || 0}%`} />
+            <FunctionField source="projectInterviewCompleteScoreAvg" label="Score (avg. %)" render={rec => `${rec.projectInterviewCompleteScoreAvg || 0}%`}  />
+            <TextField source="templateCount" label="Templates"  />
+            <TextField source="questionCount" label="Questions"  />
+            <TextField source="userCount" label="Users"  />
         </Datagrid>
     </List>
 };

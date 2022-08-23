@@ -48,7 +48,6 @@ const ProjectFormSidebar = ({ className }) => {
 const defaultValues = {
   name: '',
   interviewers: [],
-  interviewersCount: 0,
   stages: [
     { id: 'introduction', name: 'Introduction', type: 'other', config: { html: '' }},
     null,
@@ -58,8 +57,6 @@ const defaultValues = {
   stagesCount: 0,
   userId: null,
   template: null,
-  interviewsCount: 0,
-  interviewsAwaitingCount: 0,
   saveAsTemplate: false,
   anonimize: false
 }
@@ -147,7 +144,7 @@ const ProjectForm = ({ project, className }) => {
     values.userId = user.id;
     values.companyId = user.companyId;
     values.stagesCount = values.stages.filter(s => s).length;
-    values.interviewersCount = values.interviewers.length;
+    values.interviewerCount = values.interviewers.length;
     values.scoringRules = {
       ...calcDefaultScoringRules(values),
       ...(values.scoringRules || {})

@@ -55,8 +55,7 @@ const CustomDataProvider = (config, options) => {
     getList: async (resource, params) => {
       const { filter } = params;
 
-
-      if (typeof filter.companyId === "object" && filter.companyId.length) {
+       if (typeof filter.companyId === "object" && filter.companyId.length) {
 
         const uniqueCompanyId = filter.companyId.filter((v, i, a) => a.indexOf(v) === i)
 
@@ -96,7 +95,56 @@ const CustomDataProvider = (config, options) => {
         return Promise.resolve(result)
       }
 
-      return dataProvider.getList(resource, params);
+      console.log(params)
+
+      let result = await dataProvider.getList(resource, params);
+
+      if (resource == 'companies') {
+        const derivativeFields = [
+          'projectStageAvg',
+          'projectInterviewAvg',
+          'projectInterviewCompleteP',
+          'projectInterviewCompleteScoreAvg'
+        ]
+
+
+        const { sort } = params;
+
+        result.data = result.data.map(rec => {
+          rec.projectStageAvg = rec.projectCount && Math.round(rec.projectStageCount / rec.projectCount) || 0;
+
+          const projectInterviewCompleteCount = rec.projectInterviewCount - rec.projectInterviewAwaitingCount;
+
+          rec.projectInterviewAvg = rec.projectCount && Math.round(rec.projectInterviewCount / rec.projectCount) || 0;
+          rec.projectInterviewCompleteP = rec.projectInterviewCount && Math.round(projectInterviewCompleteCount * 100 / rec.projectInterviewCount);
+          rec.projectInterviewCompleteScoreAvg = projectInterviewCompleteCount && Math.round((rec.projectInterviewCompleteScoreSum || 0) / projectInterviewCompleteCount);
+
+
+          return rec;
+        });
+
+        if (sort && sort.field && derivativeFields.indexOf(sort.field) > -1) {
+
+          result.data.sort((a, b) => {
+            console.log(a[sort.field], b[sort.field]);
+
+            if (a[sort.field] < b[sort.field]) {
+              return 1;
+            }
+            if (a[sort.field] > b[sort.field]) {
+              return -1;
+            }
+            return 0;
+          })
+
+          if (sort.order == 'DESC') {
+            result.data.reverse();
+          }
+        }
+      }
+
+
+      return result
     }
   }
 }

@@ -20,7 +20,7 @@ const ProjectStat = ({ project, className, template = false}) => {
       styles['project-stat-status'],
       styles['project-stat-status-complete']
     )}>
-      <span className={styles['project-stat-status-value']}>{project.interviewsCount - project.interviewsAwaitingCount || 0} </span>
+      <span className={styles['project-stat-status-value']}>{project.interviewCount - project.interviewAwaitingCount || 0} </span>
       <StatusLabel on={true} className={styles['project-stat-status-label']}>Completed</StatusLabel>
     </div>
 
@@ -29,7 +29,7 @@ const ProjectStat = ({ project, className, template = false}) => {
         styles['project-stat-status'],
         styles['project-stat-status-awaiting']
     )}>
-      <span className={styles['project-stat-status-value']}>{project.interviewsAwaitingCount || 0} </span>
+      <span className={styles['project-stat-status-value']}>{project.interviewAwaitingCount || 0} </span>
       <StatusLabel className={styles['project-stat-status-label']}>Awaiting</StatusLabel>
     </div></> : null}
   </div>

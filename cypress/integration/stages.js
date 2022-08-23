@@ -61,26 +61,8 @@ describe('Stages', () => {
         .click()
         .click()
         .click()
-        .click()
 
-      cy.get('[data-test-id="feature-team-role-presentation"]').drag('[data-test-id="stage-2"] .Droppable')
-
-      cy.get('[data-test-id="feature-form"]')
-        .within(() => {
-            cy.get('[contenteditable="true"]')
-              .click()
-              .wait(500)
-              .type(LOREM_IPSUM)
-          
-            cy.get('[data-test-id="file-upload-area"]')
-              .find('input[type="file"]')
-              .first()
-              .attachFile(['uploads/office.jpg'])
-
-            cy.get('.form-success').should('exist').should('contain', 'Upload success.')
-          })
-
-      cy.get('[data-test-id="feature-company-presentation"]').drag('[data-test-id="stage-3"] .Droppable')
+      cy.get('[data-test-id="feature-company-presentation"]').drag('[data-test-id="stage-2"] .Droppable')
         .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
@@ -98,9 +80,9 @@ describe('Stages', () => {
           cy.get('.form-success').should('exist').should('contain', 'Upload success.')
         })
 
-      cy.get('[data-test-id="feature-salary"]').drag('[data-test-id="stage-4"] .Droppable')
-      cy.get('[data-test-id="feature-candidate-questions"]').drag('[data-test-id="stage-5"] .Droppable')
-      cy.get('[data-test-id="feature-competency-questions"]').drag('[data-test-id="stage-6"] .Droppable')
+      cy.get('[data-test-id="feature-salary"]').drag('[data-test-id="stage-3"] .Droppable')
+      cy.get('[data-test-id="feature-candidate-questions"]').drag('[data-test-id="stage-4"] .Droppable')
+      cy.get('[data-test-id="feature-competency-questions"]').drag('[data-test-id="stage-5"] .Droppable')
         .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
@@ -109,7 +91,7 @@ describe('Stages', () => {
             cy.get('button[data-test-id="add-question"]').first().click()
         })
 
-      cy.get('[data-test-id="feature-motivation-questions"]').drag('[data-test-id="stage-7"] .Droppable')
+      cy.get('[data-test-id="feature-motivation-questions"]').drag('[data-test-id="stage-6"] .Droppable')
         .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
@@ -117,7 +99,7 @@ describe('Stages', () => {
             cy.get('button[data-test-id="add-question"]').first().click()
         })
 
-      cy.get('[data-test-id="feature-screening-questions"]').drag('[data-test-id="stage-8"] .Droppable')
+      cy.get('[data-test-id="feature-screening-questions"]').drag('[data-test-id="stage-7"] .Droppable')
         .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
@@ -127,7 +109,7 @@ describe('Stages', () => {
             cy.get('button[data-test-id="add-question"]').first().click()
         })
 
-      cy.get('[data-test-id="feature-experience-questions"]').drag('[data-test-id="stage-9"] .Droppable')
+      cy.get('[data-test-id="feature-experience-questions"]').drag('[data-test-id="stage-8"] .Droppable')
         .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
@@ -135,7 +117,7 @@ describe('Stages', () => {
           cy.get('button[data-test-id="add-question"]').first().click()
         })
 
-      cy.get('[data-test-id="feature-hard-skill-questions"]').drag('[data-test-id="stage-10"] .Droppable')
+      cy.get('[data-test-id="feature-hard-skill-questions"]').drag('[data-test-id="stage-9"] .Droppable')
         .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
@@ -143,7 +125,7 @@ describe('Stages', () => {
           cy.get('button[data-test-id="add-question"]').first().click()
         })
       
-      cy.get('[data-test-id="feature-culture-questions"]').drag('[data-test-id="stage-11"] .Droppable')
+      cy.get('[data-test-id="feature-culture-questions"]').drag('[data-test-id="stage-10"] .Droppable')
         .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
@@ -151,7 +133,7 @@ describe('Stages', () => {
           cy.get('button[data-test-id="add-question"]').first().click()
         })
 
-      cy.get('[data-test-id="feature-other-questions"]').drag('[data-test-id="stage-12"] .Droppable')
+      cy.get('[data-test-id="feature-other-questions"]').drag('[data-test-id="stage-11"] .Droppable')
         .wait(1000)
       
       cy.get('[data-test-id="feature-form"]')
@@ -159,7 +141,7 @@ describe('Stages', () => {
         cy.get('button[data-test-id="add-question"]').first().click()
       })
 
-      cy.get('[data-test-id="feature-summary"]').drag('[data-test-id="stage-13"] .Droppable')
+      cy.get('[data-test-id="feature-summary"]').drag('[data-test-id="stage-12"] .Droppable')
         .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
@@ -178,18 +160,17 @@ describe('Stages', () => {
         .closest('li')
         .within(() => {
           cy.get('[data-test-id="stage"]').eq(0).should('contain', 'Introduction')
-          cy.get('[data-test-id="stage"]').eq(1).should('contain', 'Team')
-          cy.get('[data-test-id="stage"]').eq(2).should('contain', 'Company')
-          cy.get('[data-test-id="stage"]').eq(3).should('contain', 'Salary')
-          cy.get('[data-test-id="stage"]').eq(4).should('contain', 'Candidate')
-          cy.get('[data-test-id="stage"]').eq(5).should('contain', 'Competency')
-          cy.get('[data-test-id="stage"]').eq(6).should('contain', 'Motivation')
-          cy.get('[data-test-id="stage"]').eq(7).should('contain', 'Screening')
-          cy.get('[data-test-id="stage"]').eq(8).should('contain', 'Experience')
-          cy.get('[data-test-id="stage"]').eq(9).should('contain', 'Hard skill')
-          cy.get('[data-test-id="stage"]').eq(10).should('contain', 'Culture')
-          cy.get('[data-test-id="stage"]').eq(11).should('contain', 'Other')
-          cy.get('[data-test-id="stage"]').eq(12).should('contain', 'Summary')
+          cy.get('[data-test-id="stage"]').eq(1).should('contain', 'Company')
+          cy.get('[data-test-id="stage"]').eq(2).should('contain', 'Salary')
+          cy.get('[data-test-id="stage"]').eq(3).should('contain', 'Candidate')
+          cy.get('[data-test-id="stage"]').eq(4).should('contain', 'Competency')
+          cy.get('[data-test-id="stage"]').eq(5).should('contain', 'Motivation')
+          cy.get('[data-test-id="stage"]').eq(6).should('contain', 'Screening')
+          cy.get('[data-test-id="stage"]').eq(7).should('contain', 'Experience')
+          cy.get('[data-test-id="stage"]').eq(8).should('contain', 'Hard skill')
+          cy.get('[data-test-id="stage"]').eq(9).should('contain', 'Culture')
+          cy.get('[data-test-id="stage"]').eq(10).should('contain', 'Other')
+          cy.get('[data-test-id="stage"]').eq(11).should('contain', 'Summary')
         })
     })
   })

@@ -2,13 +2,13 @@ const helpers = require('./helpers');
 
 const beforeRun = async () => {
   await helpers.removeAllFirebaseUsers()
-  await helpers.deleteCollection('companies');
   await helpers.deleteCollection('projects');
   await helpers.deleteCollection('interviews');
   await helpers.deleteCollection('questions');
   await helpers.deleteCollection('templates');
   await helpers.deleteCollection('criteriaOptions');
   await helpers.deleteCollection('translations');
+  await helpers.deleteCollection('companies');
 
   //Creates superadmin
   await helpers.createRootCompany()
@@ -135,6 +135,11 @@ const beforeRun = async () => {
   const userId20Joe  = await helpers.createUser('Joe Woodkid', 'joe.lubeck@example.com', 'test123', companyId20, 'admin', true)
   const userId20Jane = await helpers.createUser('Jane Woodkid', 'jane.lubeck@example.com', 'test123', companyId20, 'hr', false)
 
+  //User 21
+  const companyId21 = await helpers.createCompany('Pink & Co')
+
+  const userId21Joe  = await helpers.createUser('Joe Pink', 'joe.pink@example.com', 'test123', companyId21, 'admin', true)
+  const userId21Jane = await helpers.createUser('Jane Pink', 'jane.pink@example.com', 'test123', companyId21, 'hr', false)
 
   //Translations
 

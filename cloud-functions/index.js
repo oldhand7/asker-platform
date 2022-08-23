@@ -66,18 +66,15 @@ exports.interviewCreate = functions.region('europe-west3').firestore.document('i
     const interview = snap.data();
 
     try {
-      const projectFields = {
-        interviewsCount: admin.firestore.FieldValue.increment(1)
-      }
-
-      if (interview.status != 'complete') {
-          projectFields.interviewsAwaitingCount = admin.firestore.FieldValue.increment(1);
-      }
+      const { increment } = admin.firestore.FieldValue;
 
       await admin.firestore()
         .collection('projects')
         .doc(interview.projectId)
-        .update(projectFields)
+        .update({
+          interviewCount: increment(1),
+          interviewAwaitingCount: increment(interview.status != 'complete' ? 1 : 0)
+        })
     } catch (error) {
       console.log(error)
 
@@ -92,11 +89,14 @@ exports.updateInterview = functions.region('europe-west3').firestore.document('i
 
     if (interviewOld.status != 'complete' && interview.status == 'complete') {
       try {
+        const { increment } = admin.firestore.FieldValue;
+
         await admin.firestore()
           .collection('projects')
           .doc(interview.projectId)
           .update({
-            interviewsAwaitingCount: admin.firestore.FieldValue.increment(-1)
+            interviewAwaitingCount: increment(-1),
+            interviewCompleteScoreSum: increment(interview.score),
           })
       } catch (error) {
         console.log(error)
@@ -111,18 +111,16 @@ exports.interviewDelete = functions.region('europe-west3').firestore.document('i
     const interview = snap.data();
 
     try {
-      const projectFields = {
-        interviewsCount: admin.firestore.FieldValue.increment(-1)
-      }
-
-      if (interview.status == 'awaiting') {
-        projectFields.interviewsAwaitingCount = admin.firestore.FieldValue.increment(-1);
-      }
+      const { increment } = admin.firestore.FieldValue;
 
       await admin.firestore()
         .collection('projects')
         .doc(interview.projectId)
-        .update(projectFields)
+        .update({
+          interviewCount: increment(-1),
+          interviewAwaitingCount: increment(interview.status == 'awaiting' ? -1 : 0),
+          interviewCompleteScoreSum: increment(interview.status == 'complete' ? interview.score * -1 : 0),
+        })
     } catch (error) {
       console.log(error)
 
@@ -260,3 +258,205 @@ exports.updateQuestion = functions.region('europe-west3').firestore.document('qu
 
       await batchQuestions.commit();
   });
+
+  // Company statistics
+
+  exports.projectCreate = functions.region('europe-west3').firestore.document('projects/{docId}')
+    .onCreate(async (snap) => {
+        const data = snap.data();
+
+        if (data.companyId) {
+          const { increment } = admin.firestore.FieldValue;
+
+          await admin.firestore()
+            .collection('companies')
+            .doc(data.companyId)
+            .update({
+              projectCount: increment(1),
+              projectStageCount: increment(data.stages.length)
+            })
+        }
+
+        return null
+    });
+
+  exports.projectUpdate = functions.region('europe-west3').firestore.document('projects/{docId}')
+    .onUpdate(async (change) => {
+      const dataBefore = change.before.data();
+      const dataAfter = change.after.data();
+
+      if (dataAfter.companyId) {
+        const { increment } = admin.firestore.FieldValue;
+
+        await admin.firestore()
+          .collection('companies')
+          .doc(dataAfter.companyId)
+          .update({
+            projectInterviewCount: increment((dataAfter.interviewCount  || 0) - (dataBefore.interviewCount || 0)),
+            projectInterviewAwaitingCount: increment((dataAfter.interviewAwaitingCount || 0) - (dataBefore.interviewAwaitingCount || 0)),
+            projectInterviewCompleteScoreSum: increment((dataAfter.interviewCompleteScoreSum || 0) - (dataBefore.interviewCompleteScoreSum || 0)),
+            projectStageCount: increment(dataAfter.stages.length - dataBefore.stages.length),
+          })
+      }
+
+      return null
+    })
+
+  exports.projectDelete = functions.region('europe-west3').firestore.document('projects/{docId}')
+    .onDelete(async (snap) => {
+        const data = snap.data();
+
+        if (data.companyId) {
+          const { increment } = admin.firestore.FieldValue;
+
+          await admin.firestore()
+            .collection('companies')
+            .doc(data.companyId)
+            .update({
+              projectCount: increment(-1),
+              projectStageCount: increment(data.stages.length * - 1),
+              projectInterviewCount: increment(data.interviewCount * - 1),
+              projectInterviewAwaitingCount: increment(data.interviewAwaitingCount * -1)
+            })
+        }
+
+        return null
+    });
+  
+  exports.templateCreate = functions.region('europe-west3').firestore.document('templates/{docId}')
+    .onCreate(async (snap) => {
+        const data = snap.data();
+
+        if (data.companyId) {
+          const { increment } = admin.firestore.FieldValue;
+
+          await admin.firestore()
+            .collection('companies')
+            .doc(data.companyId)
+            .update({
+              templateCount: increment(1)
+            })
+        }
+
+        return null
+    });
+
+  exports.templateDelete = functions.region('europe-west3').firestore.document('templates/{docId}')
+    .onDelete(async (snap) => {
+        const data = snap.data();
+
+        if (data.companyId) {
+          const { increment } = admin.firestore.FieldValue;
+
+          await admin.firestore()
+            .collection('companies')
+            .doc(data.companyId)
+            .update({
+              templateCount: increment(-1)
+            })
+        }
+
+        return null
+    });
+
+  exports.userCreate = functions.region('europe-west3').firestore.document('users/{docId}')
+    .onCreate(async (snap) => {
+        const data = snap.data();
+
+        if (data.companyId) {
+          const { increment } = admin.firestore.FieldValue;
+
+          await admin.firestore()
+            .collection('companies')
+            .doc(data.companyId)
+            .update({
+              userCount: increment(1)
+            })
+        }
+
+        return null
+    });
+
+  exports.userUpdate = functions.region('europe-west3').firestore.document('users/{docId}')
+    .onUpdate(async (change) => {
+        const beforeData = change.before.data();
+        const afterData = change.after.data();
+
+        if (beforeData.companyId != afterData.companyId) {
+          const { increment } = admin.firestore.FieldValue;
+
+          if (beforeData.companyId) {
+            await admin.firestore()
+            .collection('companies')
+            .doc(beforeData.companyId)
+            .update({
+              userCount: increment(-1)
+            })
+          }
+
+          if (afterData.companyId) {
+            await admin.firestore()
+            .collection('companies')
+            .doc(beforeData.companyId)
+            .update({
+              userCount: increment(1)
+            })
+          }
+        }
+
+        return null
+    });
+
+  exports.userDelete = functions.region('europe-west3').firestore.document('users/{docId}')
+    .onDelete(async (snap) => {
+        const data = snap.data();
+
+        if (data.companyId) {
+          const { increment } = admin.firestore.FieldValue;
+
+          await admin.firestore()
+            .collection('companies')
+            .doc(data.companyId)
+            .update({
+              userCount: increment(-1)
+            })
+        }
+
+        return null
+    });
+
+  exports.questionCreate = functions.region('europe-west3').firestore.document('questions/{docId}')
+    .onCreate(async (snap) => {
+        const data = snap.data();
+
+        if (data.companyId) {
+          const { increment } = admin.firestore.FieldValue;
+
+          await admin.firestore()
+            .collection('companies')
+            .doc(data.companyId)
+            .update({
+              questionCount: increment(1)
+            })
+        }
+
+        return null
+    });
+
+  exports.questionDelete = functions.region('europe-west3').firestore.document('questions/{docId}')
+    .onDelete(async (snap) => {
+        const data = snap.data();
+
+        if (data.companyId) {
+          const { increment } = admin.firestore.FieldValue;
+
+          await admin.firestore()
+            .collection('companies')
+            .doc(data.companyId)
+            .update({
+              questionCount: increment(-1)
+            })
+        }
+
+        return null
+    });
