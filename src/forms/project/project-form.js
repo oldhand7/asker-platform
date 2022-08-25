@@ -169,7 +169,8 @@ const ProjectForm = ({ project, className }) => {
       const copy = JSON.parse(JSON.stringify(values));
 
       delete copy.interviewers;
-
+      delete copy.id;
+      
       copy.templateName = copy.name;
       copy.name = '';
 

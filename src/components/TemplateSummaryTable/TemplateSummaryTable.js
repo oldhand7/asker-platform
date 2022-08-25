@@ -9,12 +9,10 @@ const getColumns = ({ onTemplate }) => ([
   {
     title: 'Template',
     dataIndex: 'templateName',
-    key: 'name'
   },
   {
     title: 'Stages',
     dataIndex: 'stages',
-    key: 'stages',
     render: (stages) => {
       return stages.length;
     }
