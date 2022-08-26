@@ -84,8 +84,9 @@
 
     &-list {
       white-space: nowrap;
-      overflow-x: hidden;
+      overflow-x: auto;
       flex: 1;
+      padding-bottom: 5rem;
     }
 
     &-option {

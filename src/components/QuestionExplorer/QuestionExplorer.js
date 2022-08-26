@@ -197,26 +197,26 @@ const QuestionExplorer = ({ className, questions, onQuestions, label = '', type 
   }
 
   const toggleFilterControl = ev => {
-      ev.stopPropagation();
-
       setFilterControlOpen(!filterControlOpen)
   }
 
   useEffect(() => {
-    if (!open) {
+    if (!filterControlOpen) {
       return;
     }
 
     const handleOffClick = ev => {
+      ev.stopPropagation();
+
       if (filterControlPopupRef && filterControlPopupRef.current && ev.target != filterControlPopupRef.current && !filterControlPopupRef.current.contains(ev.target)) {
         setFilterControlOpen(false)
       }
     }
 
-    document.body.addEventListener('click', handleOffClick, true)
+    document.body.addEventListener('click', handleOffClick)
 
     return () => {
-      document.body.removeEventListener('click', handleOffClick, true)
+      document.body.removeEventListener('click', handleOffClick)
     }
   }, [filterControlOpen])
 
