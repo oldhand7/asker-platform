@@ -149,7 +149,7 @@ const QuestionExplorer = ({ className, questions, onQuestions, label = '', type 
       let typeSelected;
       
       if (type == 'evaluation') {
-        typeSelected = !filterType.length || filterType.indexOf(q.criteria) > -1
+        typeSelected = !filterType.length || filterType.find(c => q.criteria && c.id == q.criteria.id)
       } else {
         typeSelected = !filterType.length || filterType.indexOf(q.subtype) > -1
       }
