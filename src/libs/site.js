@@ -26,16 +26,27 @@ export const withSite = (WrappedComponent) => (props) => {
       }
     }, [user])
 
-    const i18nField = (field) => {
+    const i18nField = useCallback((field) => {
         const { locale } = router;
     
         const isObject = typeof field === "object";
-    
-        if (isObject && typeof field[locale] !== "undefined") return field[locale];
-        if (isObject && typeof field['en'] !== "undefined") return field['en'];
+
+        if (isObject && locale == "en") {
+          let fieldSE = typeof field['se'] !== "undefined" ? field['se'] : '';
+
+          if (typeof field['en'] !== "undefined") return field['en'] === '' ? fieldSE : field['en'];
+          if (typeof field['se'] !== "undefined") return fieldSE;
+        }
+
+        if (isObject && locale == "se") {
+          let fieldEN = typeof field['en'] !== "undefined" ? field['en'] : '';
+
+          if (typeof field['se'] !== "undefined") return field['se'] === '' ? fieldEN : field['se'];
+          if (typeof field['en'] !== "undefined") return fieldEN;
+        }
     
         return isObject ? '' : field;
-    }
+    }, [router.locale])
 
     const tools = {
       config,
