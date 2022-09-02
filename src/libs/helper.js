@@ -268,13 +268,11 @@ export const secondsToTimeLabel = (seconds, labels = ['h', 'm', 's']) => {
 }
 
 export const nameSort = function(a, b) {
-  if (typeof a.name === 'object' && typeof b.name === 'object') {
-    if (a.name.en.toLowerCase() < b.name.en.toLowerCase()) return -1;
-    if (a.name.en.toLowerCase() > b.name.en.toLowerCase()) return 1;
-  } else {
-    if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-    if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-  }
+  let nameA = (typeof a.name === 'object' ? a.name.en : a.name) || '';
+  let nameB = (typeof b.name === 'object' ? b.name.en : b.name) || '';
+
+  if (nameA.toLowerCase() < nameB.toLowerCase()) return -1;
+  if (nameA.toLowerCase() > nameB.toLowerCase()) return 1;
 
   return 0;
 }
