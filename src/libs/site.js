@@ -29,7 +29,7 @@ export const withSite = (WrappedComponent) => (props) => {
     const i18nField = useCallback((field) => {
         const { locale } = router;
     
-        const isObject = typeof field === "object";
+        const isObject = field && typeof field === "object";
 
         if (isObject && locale == "en") {
           let fieldSE = typeof field['se'] !== "undefined" ? field['se'] : '';
