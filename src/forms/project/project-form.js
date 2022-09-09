@@ -1,336 +1,343 @@
-import FeatureList from 'components/FeatureList/FeatureList';
 import classNames from 'classnames';
-import { useForm } from 'libs/form';
+import { useForm } from 'libs/react-hook-form';
 import Button from 'components/Button/PlatformButton';
 import TextInputField from 'components/TextInputField/TextInputField'
-import ProjectFormStager from 'components/ProjectFormStager/ProjectFormStager';
-import ProjectFormInterviewers from 'components/ProjectFormInterviewers/ProjectFormInterviewers';
-import { useState, useEffect, useCallback } from 'react';
-import { features, featureTypes } from 'libs/features';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { addFlash } from 'libs/flash';
 import Alert from 'components/Alert/Alert';
 import { useUser } from 'libs/user';
-import { saveCollectionDocument } from 'libs/firestore'
 import { useRouter } from 'next/router';
 import Preloader from 'components/Preloader/Preloader'
-import NewStageDroppable from 'components/NewStageDroppable/NewStageDroppable'
-import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField';
 import ProjectEvaluationCriteria from 'components/ProjectEvaluationCriteria/ProjectEvaluationCriteria';
-import ErrorBox from 'components/ErrorBox/ErrorBox';
-import { ctxError, getTimeLabel } from 'libs/helper';
+import { ctxError } from 'libs/helper';
 import FeatureForm from 'components/FeatureForm/FeatureForm';
-import { calcDefaultScoringRules, packQuestions, getProjectMinutes } from 'libs/project';
+import { calcDefaultScoringRules, packQuestions, calcProjectTime, configureStages } from 'libs/project';
 import TimeLabel from 'components/TimeLabel/TimeLabel';
-import { validate } from 'libs/validator';
 import { v4 as uuidv4 } from 'uuid';
-import { getStageTime } from 'libs/stage'
+import { getStageKey } from 'libs/stage';
+import ProjectFormProcess from 'components/ProjectFormProcess/ProjectFormProcess';
+import InterviewerSelect from 'components/InterviewerSelect/InterviewerSelect';
+import { checkScoringRulesValid } from 'libs/project';
+import { getFeatureById } from 'libs/features';
+import { useFieldArray, useWatch } from 'react-hook-form';
+import { useDocumentsApi } from 'libs/db';
+import { useTranslation } from 'libs/translation';
+import { validate } from 'libs/validator';
 
 import styles from './project-form.module.scss';
-import { useSite } from 'libs/site';
-
-const ProjectFormSidebar = ({ className }) => {
-  return <div className={classNames(styles['project-form-sidebar'], className)}>
-      {featureTypes.map((featureType) => {
-        const targetFeatures = features.filter(f => f.type == featureType.id)
-
-        if (targetFeatures.length == 0) {
-          return null;
-        }
-
-        return <div key={`feature-list-widget-${featureType.id}`} className={styles['project-form-sidebar-widget']}>
-          <h3 className={styles['project-form-sidebar-widget-title']}>{featureType.name}</h3>
-          <FeatureList className={styles['project-form-sidebar-features']} features={targetFeatures} />
-        </div>
-      })}
-    </div>
-}
 
 const defaultValues = {
   name: '',
   interviewers: [],
   stages: [
-    { id: 'introduction', name: 'Introduction', type: 'other', config: { html: '' }},
-    null,
-    null
+    { ...getFeatureById('introduction'), uid: uuidv4() }
   ],
+  config: {},
+  interviewers: [],
   scoringRules: null,
   stagesCount: 0,
+  time: 0,
   userId: null,
+  user: null,
   template: null,
   saveAsTemplate: false,
   anonimize: false
 }
 
-const rules = {
-  name: 'required',
-  interviewers: 'array|min:1'
-}
-
-const messages = {
-  'min.interviewers': 'At least one interviewer is required.',
-  'required.name': 'Name is required.'
-}
-
-const ProjectForm = ({ project, className }) => {
-  const [stage, setStage] = useState(null);
-  const [stageErrors, setStageErrors] = useState([]);
+const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
   const [error, setError] =  useState(null);
   const { user } = useUser();
   const router = useRouter();
+  const { t } = useTranslation()
   const [loading, setLoading] = useState(true);
-  const { t } = useSite()
+  const docsApi = useDocumentsApi();
+  const stageErrors = useRef({});
+  const [stageErrorsLive, setStageErrorsLive] = useState({})
 
-  const { values, errors, control, pristine, submitted } = useForm({
-    values: project ? { ...defaultValues, ...project} : defaultValues,
-    rules,
-    messages
+  const validationRules = useMemo(() => {
+    const rules = {
+      name: 'required'
+    }
+
+    if (context == 'project') {
+      rules.interviewers = 'required|array|min:1'
+    }
+
+    return rules;
+  }, [context]);
+
+  const validationMessages = useMemo(() => ({
+    'required': t('errors.field.required')
+  }), [router.locale])
+
+  const initValue = useMemo(() => record || defaultValues, [])
+
+  const {
+    errors,
+    setValue,
+    handleSubmit,
+    control,
+    formState: { isSubmitted }
+  } = useForm({
+    values: initValue,
+    rules: validationRules,
+    messages: validationMessages
   })
 
-  const handleStageValues = useCallback(stageValues => {
-    const index = values.stages.indexOf(stage);
+  const {
+    fields: formStages,
+    ...stagesApi
+  } = useFieldArray({ control, name: 'stages',  keyName: '_id' })
+  const formValues  = useWatch({ control, defaultValue: initValue })
+  const formConfig  = useWatch({ control, name: 'config', defaultValue: initValue.config })
 
-    if (index > -1) {
-      values.stages[index].config = stageValues;
+  const [stage, setStage] = useState(null);
 
-      control.set('stages', values.stages)
-    }
-
-    control.set('time', getProjectMinutes(values))
-
-    setStageErrors([
-      ...stageErrors.filter(error => error.stage.id != stage.id )
-    ])
-  }, [values.stages, stage])
-
-  const onStageError = (error) => {
-    setStageErrors([
-      ...stageErrors.filter(error => error.stage.id != stage.id ),
-      { stage, error }
-    ])
-  }
-
-  const handleSubmit = (values, e) => {
-    e.preventDefault();
-
-    const errors = validate(values, rules, messages)
-
-    if (errors) {
-      setErrors(errors);
-
-      return;
-    }
-
-    if (stageErrors.length) {
-      setError(new Error(t('Some stages are invalid.')))
-
-      return;
-    }
-
-    values.stages = values.stages
-      .filter(s => s)
-      .map(s => {
-        if (!s.uid) {
-          s.uid = uuidv4()
-        }
-
-        if (!s.time) {
-          s.time = getStageTime(s);
-        }
-
-        return s;
-      })
-
-
-    values.userId = user.id;
-    values.companyId = user.companyId;
-    values.stagesCount = values.stages.filter(s => s).length;
-    values.interviewerCount = values.interviewers.length;
-    values.scoringRules = {
-      ...calcDefaultScoringRules(values),
-      ...(values.scoringRules || {})
-    }
-
-    //Cleanup old stages
-    for (let key in (values.config || {})) {
-      const s = values.stages.find(s => s.id == key)
-
-      if (!s) {
-        delete values.config[key]
-      }
-    }
-
-    packQuestions(values);
-
-    const tasks = []
-
-    if (values.saveAsTemplate) {
-      delete values.saveAsTemplate;
-
-      const copy = JSON.parse(JSON.stringify(values));
-
-      delete copy.interviewers;
-      delete copy.id;
-      
-      copy.templateName = copy.name;
-      copy.name = '';
-
-      copy.user = {
-        id: user.id,
-        name: user.name,
-        avatar: user.images && user.images[0].src || null
-      }
-
-      tasks.push(saveCollectionDocument('templates', copy))
-      tasks.push(saveCollectionDocument('projects', values))
-    } else {
-      delete values.saveAsTemplate;
-
-      tasks.push(saveCollectionDocument('projects', values))
-    }
-
-    setLoading(true)
-
-    Promise.all(tasks)
-      .then(() => {
-        if (project && project.id) {
-          addFlash(t('Project saved'), 'success')
-        } else {
-          addFlash(t('Project created'), 'success')
-        }
-
-        router.push('/projects/')
-      })
-      .catch(error => {
-        setError(ctxError(t('Server error'), error))
-      })
-  }
+  useEffect(() => {
+    setValue('time', calcProjectTime(formValues))
+  }, [formStages, formConfig, setValue])
 
   useEffect(() => {
     setLoading(false)
   }, [error])
 
-  const handleStages = useCallback((stages, _stage) => {
-    control.set('stages', stages);
+  const onSubmit = (values) => {
+    const errors = validate(
+      { stageErrors: stageErrors.current },
+      { stageErrors: 'errorsEmpty'},
+      validationMessages
+    )
 
-    if (_stage) {
-      setStage(_stage)
+    if (errors) {
+      setError(new Error(errors.stageErrors))
 
       return;
     }
 
-    if (stage) {
-      const found = stages.find(s => s == stage)
+    values.stages = configureStages(values.stages, values.config, true);
 
-      if (!found) {
-        setStage(null);
+    const scoringRules = {
+      ...calcDefaultScoringRules(values),
+      ...(values.scoringRules || {})
+    }
+
+    if (!checkScoringRulesValid(scoringRules)) {
+      setError(new Error(t('errors.scoring-rules.invalid')));
+
+      return;
+    }
+
+    values.userId = user.id;
+    values.companyId = user.companyId;
+    values.stagesCount = values.stages.filter(s => s).length;
+    values.interviewerCount = values.interviewers.length;
+    values.scoringRules = scoringRules;
+    values.user = {
+      id: user.id,
+      name: user.name,
+      avatar: user.images && user.images[0].src || null
+    }
+
+    packQuestions(values);
+
+    const tasks = [];
+
+    let onSave;
+
+    if (context == 'template') {
+
+      if (record && record.id) {
+        delete values.id;
+      }
+
+      tasks.push(docsApi.save('templates', values));
+
+      onSave = () => {
+        if (record && record.id) {
+          addFlash(t('status.saved.template'), 'success')
+        } else {
+          addFlash(t('status.created.template'), 'success')
+        }
+
+        router.push('/templates/')
+      }
+    } else {
+      if (values.saveAsTemplate) {
+        const copy = JSON.parse(JSON.stringify(values));
+
+        delete copy.id;
+
+        copy.interviewers = [];
+
+        tasks.push(docsApi.save('templates', copy))
+      }
+
+      tasks.push(docsApi.save('projects', values))
+
+      onSave = () => {
+        if (record && record.id) {
+          addFlash(t('status.saved.project'), 'success')
+        } else {
+          addFlash(t('status.created.project'), 'success')
+        }
+
+        router.push('/projects/')
       }
     }
-  }, [values.stages])
 
-  const addStage = (stage = null) => {
-    const uniqueStage = JSON.parse(JSON.stringify(stage));
+    setLoading(true)
 
-    const stages =  [
-      ...values.stages,
-      uniqueStage
-    ]
-
-    control.set('stages', stages);
-
-    setStage(uniqueStage)
+    Promise.all(tasks)
+      .then(onSave)
+      .catch(error => {
+        console.log(error)
+        setError(ctxError(t('errors.server'), error))
+      })
   }
 
-  useEffect(() => {
-    control.set('time', getProjectMinutes(values))
-  }, [values.stages])
-
-  const handleAddDropStage = (stage) => {
-    addStage(stage)
-  }
-
-  useEffect(() => {
-    if (stage) {
-      const el = document.querySelector('#feature-form')
-
-      if (el) {
-        el.scrollIntoView({
-          block: 'center',
-          behavior: 'smooth'
-        })
-      }
+  const handleStageValues = useCallback(values => {
+    if (!stage) {
+      return;
     }
+
+    const stageId = getStageKey(stage);
+
+    setValue(`config.${stageId}`, values)
   }, [stage])
 
-  return  <form data-test-id="project-form" onSubmit={control.submit(handleSubmit)} className={classNames(styles['project-form'], className)}>
-    { project && !project.id && project.template ?
-        <p className={styles['project-form-template']}>{t('Using template:')} <span>{project.template.name}</span></p>
-        : null}
+  const handleStageError = useCallback(error => {
+    const stageId = getStageKey(stage);
 
-    <div className={styles['project-form-header']}>
-      <TextInputField value={values.name} onChange={control.input('name')} placeholder={t('Project name')} error={errors && errors.name}  autoComplete='off' name='name' type='text' className={styles['project-form-field-name']} />
+    let err;
 
-      <div className={styles['project-form-header-control']}>
-        <TimeLabel className={styles['project-form-total-time']}>{getTimeLabel(values.time)}</TimeLabel>
-        <Button disabled={loading || errors} type="submit" className={styles['project-form-submit']}>
-          {!loading ? (project && project.id ? t('Save project') : t('Create project')) : t('Loading...')}</Button>
-      </div>
+    if (error instanceof Error) {
+      err = error.message || error;
+    } else {
+      err = error;
+    }
+
+    stageErrors.current[stageId] = err;
+    setStageErrorsLive({ ...stageErrors.current })
+  }, [stage])
+
+  const stageValues = useMemo(() => formConfig[getStageKey(stage)], [stage, formConfig])
+
+  useEffect(() => {
+    const keys = formStages.map(s => getStageKey(s));
+
+    for (let key in stageErrors.current) {
+      if (keys.indexOf(key) > -1) continue;
+      delete stageErrors.current[key]
+    }
+
+    setStageErrorsLive({ ...stageErrors.current })
+  }, [formStages])
+
+  const handleStages = useCallback((stages) => {
+    setValue('stages', stages)
+  }, [setValue])
+
+  const handleStageAdd = useCallback((stage) => {
+    stagesApi.append(stage)
+    setStage(stage)
+  }, [stagesApi, setStage])
+
+  useEffect(() => {
+    let hasValidStage = true;
+
+    if (stage) {
+      const found = formStages.find(s => getStageKey(s) ==  getStageKey(stage));
+
+      if (!found) {
+        hasValidStage = false;
+      }
+
+    } else {
+      hasValidStage = false;
+    }
+
+    if (!hasValidStage) {
+      setStage(formStages.length ? formStages[0] : null)
+    }
+  }, [formStages, stage])
+
+  const handleName = useCallback((ev) => {
+    setValue('name', ev.target.value)
+  }, [setValue])
+
+  const handleInterviwer = useCallback(interviewer => {
+    setValue('interviewers.0', interviewer)
+  }, [setValue])
+
+  const handleScoringRules = useCallback(sr => {
+    setValue('scoringRules', sr)
+  }, [setValue])
+
+  return  <form data-test-id="project-form" onSubmit={handleSubmit(onSubmit)} className={classNames(styles['project-form'], className)}>
+    <div className={classNames(styles['project-form-sidebar'], styles['project-form-sidebar-left'])}>
+      <ProjectFormProcess config={formConfig} onStageAdd={handleStageAdd} errors={isSubmitted && stageErrorsLive} stage={stage} onStage={setStage} onChange={handleStages} stages={formStages} className={styles['project-form-process']} />
     </div>
-
-    <ProjectFormSidebar className={styles['project-form-sidebar']} />
 
     <div className={styles['project-form-details']}>
+
       <div className={styles['project-form-details-inner']}>
+    { record && !record.id && record.template ?
+        <p className={styles['project-form-template']}>{t('labels.template')}: <span>{record.template.name}</span></p>
+        : null}
 
 
-        {error ? <Alert type="error">{error.message}</Alert> : null}
-
+    <div className={styles['project-form-head']}>
+      {
+        context == 'project' ?
+        <InterviewerSelect
+          interviewer={formValues.interviewers && formValues.interviewers[0]}
+          onChange={handleInterviwer}
+          error={isSubmitted && errors && errors.interviewers}
+          className={styles['project-form-interviewer-select']}
+        /> : null
+      }
+      <TextInputField
+        value={formValues.name}
+        onChange={handleName}
+        placeholder={context == 'template' ? t('labels.template.name') : t('labels.project.name')}
+        error={isSubmitted && errors && errors.name}
+        autoComplete='off'
+        name='name'
+        type='text'
+        className={styles['project-form-field-name']} />
+      <div className={styles['project-form-head-group']}>
+        <TimeLabel className={styles['project-form-total-time']} time={formValues.time} />
         {
-          submitted && stageErrors.length ?
-          <ErrorBox className={styles['project-form-stage-error-report']}>
-            <p>{t('You can\'t save form, because some stages are invalid:')}</p>
-            <ul>
-              {stageErrors.map(({ stage, error}) => <li key={stage.id}>{stage.name}</li>)}
-            </ul>
-          </ErrorBox> : null
+          context == 'project' ?
+        <Button disabled={loading} type="submit" className={styles['project-form-submit']}>
+          {!loading ? (record && record.id ? t('actions.save.project') : t('actions.create.project')) : t('status.loading')}
+        </Button> :
+        <Button disabled={loading} type="submit" className={styles['project-form-submit']}>
+          {!loading ? (record && record.id ? t('actions.save.template') : t('actions.create-template')) : t('status.loading')}
+        </Button>
         }
+      </div>
+  </div>
 
-        <ProjectEvaluationCriteria
-          project={values}
-          onScoringRules={sr => control.set('scoringRules', sr)} className={styles['project-form-criteria']} />
+    <div className={styles['project-form-body']}>
+      {error && <Alert type="error" autoclose={5}>{error.message}</Alert>}
 
-        <div className={styles['project-form-field-stages']}>
-          <h3 className={styles['project-form-field-title']}>{t('Interview Stages')}</h3>
-
-          <ProjectFormStager onStages={handleStages} activeStage={stage} onStageSelect={setStage} stages={values.stages} className={styles['project-form-stager']}   />
-
-          <NewStageDroppable onStage={handleAddDropStage}>
-          <div>
-          {values.stages.length < 14 ? <button type="button" className={styles['project-form-add-stage']} onClick={() => addStage()}>{t('Add stage +')}</button> : null}
-          </div>
-          </NewStageDroppable>
-        </div>
-
-        {stage ?
-        <div className={styles['project-form-feature-form']} data-stage-id={stage.id} id="feature-form" data-test-id="feature-form">
-          <FeatureForm values={stage.config} onError={onStageError} onValues={handleStageValues} feature={stage} />
+      {stage ? <div className={styles['project-form-feature-form']} data-stage-id={stage.id} id="feature-form" data-test-id="feature-form">
+         <FeatureForm test={test} values={stageValues} isSubmitted={isSubmitted} onError={handleStageError} onValues={handleStageValues} feature={stage}  />
         </div> : null}
-
-        <div className={classNames(styles['project-form-field'], styles['project-form-field-interviewers'])}>
-          <h3 className={styles['project-form-field-title']}>{t('Assign interviewer')}</h3>
-
-          <ProjectFormInterviewers className={styles['project-form-interviewers']} interviewers={values.interviewers} onChange={v => control.set('interviewers', v)} />
-
-          {errors && errors['interviewers'] ? <p className="form-error">{errors['interviewers']}</p> : null}
-        </div>
-
-        {
-        !values.template ?
-        <CheckboxInputField checked={values.saveAsTemplate} className={styles['project-form-field']} onChange={control.toggle('saveAsTemplate')} label={t('Also save project as template')} /> :
-        null
-        }
+    </div>
 
       </div>
     </div>
+    {!test ?
+    <div className={classNames(styles['project-form-sidebar'], styles['project-form-sidebar-right'])}>
+      <ProjectEvaluationCriteria
+        project={formValues}
+        onScoringRules={handleScoringRules}
+        className={styles['project-form-criteria']}
+      />
+      </div> : null}
+
     {loading ? <Preloader /> : null}
   </form>
 }

@@ -68,8 +68,7 @@ describe('Backoffice screening questions', () => {
 
         cy.get('table tbody tr').first()
           .should('contain', 'Do you like fruits? (SE)')
-          .should('contain', 'Screening (SE)')
-          .listNavigate('Edit')
+          .listRowNavigate('Edit')
 
         cy.get('input[name="name.se"]').should('have.value', 'Do you like fruits? (SE)');
 
@@ -83,11 +82,9 @@ describe('Backoffice screening questions', () => {
 
        cy.createDummyProject('Project fruits')
 
-       cy.contains('Project fruits').closest('li').listNavigate('Edit')
+       cy.contains('Project fruits').closest('li').listRowNavigate('Edit')
 
-       cy.contains('Add stage').click()
-
-       cy.get('[data-test-id="feature-screening-questions"]').drag('[data-test-id="stage-2"] .Droppable')
+       cy.addStage('Screening')
         .wait(1000)
 
         cy.get('[data-test-id="feature-form"]')
@@ -209,8 +206,8 @@ describe('Backoffice screening questions', () => {
 
       cy.get('table tbody tr').first()
         .should('contain', 'What music do you like? (SE)')
-        .should('contain', 'Screening (SE)')
-        .listNavigate('Edit')
+        .should('contain', 'Screening')
+        .listRowNavigate('Edit')
 
       cy.get('input[name="name.se"]').should('have.value', 'What music do you like? (SE)');
 
@@ -226,11 +223,9 @@ describe('Backoffice screening questions', () => {
 
      cy.createDummyProject('Project music')
 
-     cy.contains('Project music').closest('li').listNavigate('Edit')
+     cy.contains('Project music').closest('li').listRowNavigate('Edit')
 
-     cy.contains('Add stage').click()
-
-     cy.get('[data-test-id="feature-screening-questions"]').drag('[data-test-id="stage-2"] .Droppable')
+     cy.addStage('Screening')
       .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
@@ -252,7 +247,7 @@ describe('Backoffice screening questions', () => {
 
       cy.processOverviewConfirmQuestioncount(1)
       cy.processOverviewConfirmStageCount(2);
-      cy.processOverviewConfirmStageStatus(1, 'Screening questions', 'Not started')
+      cy.processOverviewConfirmStageStatus(1, 'Screening', 'Not started')
 
       cy.get('[data-test-id="feature-form"]').eq(1)
         .within(() => {
@@ -353,8 +348,8 @@ describe('Backoffice screening questions', () => {
 
       cy.get('table tbody tr').first()
         .should('contain', 'How deep is Atlantic ocean? (SE)')
-        .should('contain', 'Screening (SE)')
-        .listNavigate('Edit')
+        .should('contain', 'Screening')
+        .listRowNavigate('Edit')
 
       cy.get('input[name="name.se"]').should('have.value', 'How deep is Atlantic ocean? (SE)');
 
@@ -367,11 +362,9 @@ describe('Backoffice screening questions', () => {
 
      cy.createDummyProject('Project ocean')
 
-     cy.contains('Project ocean').closest('li').listNavigate('Edit')
+     cy.contains('Project ocean').closest('li').listRowNavigate('Edit')
 
-     cy.contains('Add stage').click()
-
-     cy.get('[data-test-id="feature-screening-questions"]').drag('[data-test-id="stage-2"] .Droppable')
+     cy.addStage('Screening')
       .wait(1000)
 
       cy.get('[data-test-id="feature-form"]')
@@ -393,7 +386,7 @@ describe('Backoffice screening questions', () => {
 
       cy.processOverviewConfirmQuestioncount(1)
       cy.processOverviewConfirmStageCount(2);
-      cy.processOverviewConfirmStageStatus(1, 'Screening questions', 'Not started')
+      cy.processOverviewConfirmStageStatus(1, 'Screening', 'Not started')
 
       cy.get('[data-test-id="feature-form"]').eq(1)
         .within(() => {

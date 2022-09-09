@@ -10,7 +10,7 @@ import ArrowUpIcon from 'components/Icon/ArrowUpIcon';
 import { useUser } from 'libs/user';
 import { useRouter } from 'next/router';
 import { useQueryStates, queryTypes } from 'next-usequerystate'
-import { useSite } from 'libs/site';
+import { useTranslation } from 'libs/translation';
 
 import styles from './QuestionsTable.module.scss';
 
@@ -39,7 +39,7 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user, t,
   return [
   {
     title: <a href='#' onClick={handleSortOrder('type')}>
-      {t('Question type')} {getSortArrowIcon('type')}</a>,
+      {t('headings.question-type')} {getSortArrowIcon('type')}</a>,
     key: 'type',
     render: (_, row) => {
       if (row.type == 'evaluation') {
@@ -48,20 +48,20 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user, t,
         if (!ct) {
           return <NODATA />
         }
-
-        return t(ct.name)
+        
+        return t(`labels.${row.subtype}`)
       }
 
       if (row.type == 'screening') {
-        const subtype = getScreeningQuestionLabelBySubtype(row.subtype);
+        const subtype = getScreeningQuestionLabelBySubtype(row.subtype, t);
 
-        return <>{t('Screening')}<br/><small>{subtype}</small></>
+        return <>{t('labels.screening')}<br/><small>{subtype}</small></>
       }
 
       if (row.type == 'other') {
-        const subtype = getScreeningQuestionLabelBySubtype(row.subtype);
+        const subtype = getScreeningQuestionLabelBySubtype(row.subtype, t);
 
-        return <>{t('Other')}<br/><small>{subtype}</small></>
+        return <>{t('labels.other')}<br/><small>{subtype}</small></>
       }
 
       return <NODATA />
@@ -69,7 +69,7 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user, t,
   },
   {
     title: <a href='#' onClick={handleSortOrder(`criteria.name.${locale}`)}>
-      {t('Criterion')} {getSortArrowIcon(`criteria.name.${locale}`)}</a>,
+      {t('labels.criterion')} {getSortArrowIcon(`criteria.name.${locale}`)}</a>,
     key: 'criteria',
     render: (_, { criteria }) => {
       return criteria && i18nField(criteria.name) || <NODATA />
@@ -77,7 +77,7 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user, t,
   },
   {
     title: <a href='#' onClick={handleSortOrder('name')}>
-      {t('Question')} {getSortArrowIcon('name')}</a>,
+      {t('labels.question')} {getSortArrowIcon('name')}</a>,
     dataIndex: 'name',
     key: 'name',
     render: (name) => <div className={styles['questions-table-expand']}>{i18nField(name)}</div>
@@ -96,13 +96,13 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user, t,
     key: 'action',
     render: (_, row) => {
       const options = [
-        { id: 'edit', name: user && user.companyId == row.companyId ? t('Edit') : t('Edit copy') }
+        { id: 'edit', name: user && user.companyId == row.companyId ? t('actions.edit') : t('actions.edit-copy') }
       ]
 
       if (user && user.companyId == row.companyId) {
         options.push({
           id: 'delete',
-          name: t('Delete')
+          name: t('actions.delete')
         })
       }
 
@@ -113,8 +113,9 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user, t,
 
 const QuestionsTable = ({ className, data = [], onDelete, ...props }) => {
   const router = useRouter()
-  const {user, locale} = useUser()
-  const { t, i18nField } = useSite()
+  const { user } = useUser()
+  const { locale } = useRouter();
+  const { t, i18nField } = useTranslation()
 
   const [sortOrder, setSortOrder] = useQueryStates({
     sort: queryTypes.string.withDefault(router.query.sort || 'createdAt'),

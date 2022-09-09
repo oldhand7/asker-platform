@@ -1,0 +1,13 @@
+.project-stage-tree {
+    list-style: none;
+    padding: 0;
+    margin: 0;;
+    
+    &-item {
+        margin-bottom: 8rem;
+    }
+
+    &-drag [data-test-id="popup-menu"] {
+        
+    }
+}

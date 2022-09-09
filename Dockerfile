@@ -7,6 +7,7 @@ USER node
 RUN npm install --only=production --verbose && npm cache clean --force --loglevel=error
 COPY --chown=node:node . /home/node/app
 
+RUN npm run translate
 RUN npm run build
 
 CMD [ "npm", "run", "start" ]

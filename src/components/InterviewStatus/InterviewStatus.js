@@ -3,12 +3,12 @@ import { secondsToTimeLabel } from 'libs/helper';
 import Tooltip from 'components/Tooltip/Tooltip';
 import CheckIcon from 'components/Icon/CheckIcon'
 import { handleNext } from 'libs/helper'
-import { useSite } from 'libs/site';
+import { useTranslation } from 'libs/translation';
 
 import styles from './InterviewStatus.module.scss';
 
 const InterviewStatus = ({ className, stats = []}) => {
-    const { t, i18nField }  = useSite();
+    const { t, i18nField }  = useTranslation();
 
     const handleNavigate = stat => {
         if (!stat.questionId) {
@@ -35,8 +35,8 @@ const InterviewStatus = ({ className, stats = []}) => {
                 <div className={styles['interview-status-item-summary']}>
                     <span className={styles['interview-status-item-status']}>
                         {   
-                            stat.status == 'complete' ? t('Completed') : (
-                                stat.time ? t('In progress') : t('Not started')
+                            stat.status == 'complete' ? t('status.completed') : (
+                                stat.time ? t('status.in-progress') : t('status.not-started')
                             )
                         }
                     </span>

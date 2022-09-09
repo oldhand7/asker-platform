@@ -12,17 +12,13 @@ describe('Project overview', () => {
 
     cy.visit('/projects/')
 
-    cy.get('[data-test-id="project-list"] li').first().listNavigate('Edit')
+    cy.contains('Philips Demo Project').closest('li').listRowNavigate('Edit')
 
-    cy.contains('Add stage').click()
-
-    cy.get('[data-test-id="feature-competency-questions"]').drag('[data-test-id="stage-2"] .Droppable')
-      .wait(1000)
+    cy.addStage('Competency')
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
-          //Adding C1
-          cy.get('button[data-test-id="add-question"]').first().click()
+          cy.contains('Are you familiar with C1?').closest('li').find('button').click()
       })
 
     cy.contains('Save project').click()
@@ -33,7 +29,7 @@ describe('Project overview', () => {
       .should('contain', 'Philips Demo Project')
       .should('contain', 'Philips Engineer')
       .should('contain', 'Jane Philips')
-      .should('contain', '10 min')
+      .should('contain', '10m')
       .should('contain', '0 Awaiting')
       .should('contain', '0 Completed')
       .click()
@@ -64,7 +60,7 @@ describe('Project overview', () => {
         })
 
       cy.get('[data-test-id="flex-table-body"]')
-        .should('contain', 'No interviews');
+        .should('contain', 'No candidates');
     })
 
     cy.addProjectCandidate('Candidate A', 'candidate1@example.com')
@@ -94,7 +90,6 @@ describe('Project overview', () => {
       .should('contain', '3 Awaiting')
       .should('contain', '0 Completed')
       .click()
-
       
     cy.contains('Candidate A').closest('[data-test-id="flex-table-row"]')
       .contains('Start interview').click()

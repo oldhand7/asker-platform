@@ -3,12 +3,12 @@ import classNames from 'classnames';
 import { useRef } from 'react';
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget';
 import striptags from 'striptags'
+import { useTranslation } from 'libs/translation';
 
 import styles from './Autocomplete.module.scss';
-import { useSite } from 'libs/site';
 
 const AutocompleteOptions = ({ options, index, className, onChoice }) => {
-  const { i18nField } = useSite();
+  const { t, i18nField } = useTranslation();
 
   const optionProps = (option, optionIndex) => {
     const className = classNames(
@@ -29,7 +29,7 @@ const AutocompleteOptions = ({ options, index, className, onChoice }) => {
       <span className={styles['autocomplete-options-item-name']}>{i18nField(option.name)}</span>
       <div className={styles['autocomplete-options-item-desc']} dangerouslySetInnerHTML={{ __html: striptags(i18nField(option.desc)) }}></div>
     </li>) :
-    <li key="no-options-warn" className={classNames(styles['autocomplete-options-item'], styles['autocomplete-options-item-warning'])}>No results.</li>
+    <li key="no-options-warn" className={classNames(styles['autocomplete-options-item'], styles['autocomplete-options-item-warning'])}>{t('status.no-results')}</li>
   }
   </ul>
 }
@@ -39,7 +39,7 @@ const Autocomplete = ({ onSearch, className, options = [] }) => {
   const [focusIndex, setFocusIndex] = useState(0);
   const [q, setQuery] = useState('');
   const [open, setOpen] = useState(false);
-  const { i18nField } = useSite();
+  const { i18nField } = useTranslation();
 
   const ref = useRef();
 

@@ -1,4 +1,4 @@
-import { getSettings, getTranslations } from 'libs/firestore-admin';
+import { getSettings } from 'libs/firestore-admin';
 import { useEffect, useState, useMemo } from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import Head from 'next/head';
@@ -20,7 +20,7 @@ import { unpackQuestions } from 'libs/project';
 import { getRandomAlias } from 'libs/candidate';
 import ProjectAnonimizeToggle from 'components/ProjectAnonimizeToggle/ProjectAnonimizeToggle';
 import CompareBox from 'components/CompareBox/CompareBox';
-import { useSite  } from 'libs/site';
+import { useTranslation } from 'libs/translation';
 
 import styles from 'styles/pages/project-overview.module.scss';
 
@@ -40,8 +40,8 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
   const [success, setSuccess] = useState(null);
   const [compare, setCompare] = useState([])
   const [_project, setProject] = useState(project);
-  const { t } = useSite();
-  
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (flashSuccess) {
       setSuccess(flashSuccess)
@@ -74,7 +74,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
       setLoading(false);
     })
     .catch(error => {
-      setError(ctxError('Server error', error))
+      setError(ctxError('errors.server', error))
     })
   }
 
@@ -89,7 +89,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
   }, [interviews])
 
   const handleDeleteInterview = (interview) => {
-      if (!confirm('Are you sure?')) {
+      if (!confirm(t('actions.confirm'))) {
         return;
       }
 
@@ -99,10 +99,10 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
         .then(() => {
           setInterviews(_interviews.filter(i => i.id != interview.id))
           setLoading(false);
-          setSuccess('Interview deleted')
+          setSuccess('status.interview-deleted')
         })
         .catch(error => {
-          setError(ctxError('Server error', error))
+          setError(ctxError('errors.server', error))
         })
   }
 
@@ -157,7 +157,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
 
   return <div className={styles['project-overview-page']}>
       <Head>
-        <title>{project.name} - {t('Project overview')} - Asker</title>
+        <title>{project.name} - {t('headings.project-overview')} - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
 
@@ -165,11 +165,11 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
         <div className={styles['project-overview-page-overview-head']}>
           <h1 className={styles['project-overview-page-title']}>
             {project.name} <Link href={`/projects/${project.id}/edit`}>
-              <a className={styles['project-overview-page-title-edit-link']}>{t('Edit')}</a></Link>
+              <a className={styles['project-overview-page-title-edit-link']}>{t('actions.edit')}</a></Link>
           </h1>
           <div>
           <PlatformButton onClick={() => openCandidateModal(handleCandidate, {alias: getRandomAlias(_interviews.map(i => i.candidate.alias))})} className={styles['project-overview-page-add-candidate']}>
-            <PlusIcon /> Add candidate</PlatformButton>
+            <PlusIcon /> {t('actions.add-candidate')}</PlatformButton>
           </div>
         </div>
 
@@ -182,7 +182,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
           onDelete={handleDeleteInterview}
           className={styles['project-overview-page-interviews-table']}
           data={_interviews}
-          emptyLabel='No interviews'
+          emptyLabel={t('status.no-candidates')}
           onCompare={handleCompareInterview}
           compare={compare}
           />
@@ -194,7 +194,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
         <ProjectEvaluationCriteria className={styles['project-overview-page-evaluation-criteria']} project={project} />
 
         <div data-test-id="interviewers" className={styles['project-overview-page-interviewers']}>
-          <h2 className={styles['project-overview-page-interviewers-title']}>{t('Assigned Interviewers')}</h2>
+          <h2 className={styles['project-overview-page-interviewers-title']}>{t('headings.interviewers')}</h2>
           <ul className={styles['project-overview-page-interviewers-list']}>
             {project.interviewers.map(interviewer => <li className={styles['project-overview-page-interviewers-list-item']} key={interviewer.id}>{interviewer.name}</li>)}
           </ul>
@@ -262,8 +262,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }
     props: {
       project: JSON.parse(JSON.stringify(project)),
       interviews,
-      config: await getSettings(),
-      translations: await getTranslations()
+      config: await getSettings()
     }
   }
 })

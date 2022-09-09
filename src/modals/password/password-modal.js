@@ -5,7 +5,7 @@ import styles from './password-modal.module.scss';
 
 const PasswordModal = ({ onResult }) => {
   return <Modal id="password-modal" className={`${styles['modal']}`} onClose={() => onResult(null, true)}>
-    <PasswordForm onSuccess={val => onResult(val, true)} />
+    <PasswordForm onValues={val => onResult(val, true)} />
   </Modal>
 }
 

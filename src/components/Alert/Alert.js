@@ -1,9 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import styles from './Alert.module.scss';
 
-const Alert = ({ type = 'danger' , html = false, children, className, close = true }) => {
+const Alert = ({ type = 'danger' , html = false, children, className, close = true, autoclose= 0 }) => {
   const [open, setOpen] = useState(true);
+
+  useEffect(() => {
+    if (autoclose) {
+      setTimeout(() => {
+        setOpen(false);
+      }, [autoclose * 1000])
+    }
+  }, [autoclose, children])
+
+  useEffect(() => {
+    setOpen(true)
+  }, [children])
 
   return open ? <div data-test-id={`alert-${type}`} className={classNames(styles['alert'], className, styles[`alert-${type}`])}>
     {

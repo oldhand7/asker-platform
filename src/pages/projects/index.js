@@ -1,4 +1,4 @@
-import { getSettings, getTranslations } from 'libs/firestore-admin';
+import { getSettings } from 'libs/firestore-admin';
 import { useEffect, useState, useMemo, useCallback} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget'
@@ -18,7 +18,9 @@ import { ctxError } from 'libs/helper';
 import { useQueryState } from 'next-usequerystate'
 import { deleteSingle } from 'libs/firestore';
 import ProjectList from 'components/ProjectList/ProjectList';
-import { useSite } from 'libs/site';
+import { useDocumentsApi } from 'libs/db';
+import { addFlash } from 'libs/flash';
+import { useTranslation } from 'libs/translation';
 
 import styles from 'styles/pages/projects.module.scss';
 
@@ -48,7 +50,9 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
   const [qMax, setMaxQ] = useQueryState('fl')
-  const { t } = useSite();
+  const { t } = useTranslation();
+  const docsApi = useDocumentsApi();
+  const { locale } = router;
 
   useEffect(() => {
     if (!filter.pristine) {
@@ -86,7 +90,7 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
   }
 
   const deleteProject = (p) => {
-    if (!confirm('Are you sure?')) {
+    if (!confirm(t('actions.confirm'))) {
       return;
     }
 
@@ -101,12 +105,32 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
 
         setLoading(false);
 
-        setSuccess('Project deleted')
+        setSuccess(t('status.project-deleted'))
       })
       .catch(error => {
-        setError(ctxError('Server error', error))
+        setError(ctxError(t('errors.server'), error))
       })
   }
+
+  const saveAsTemplate = useCallback(p => {
+    setLoading(true);
+
+    const copy = JSON.parse(JSON.stringify(p));
+
+    delete copy.id;
+    copy.interviewers = [];
+
+    docsApi.save('templates', copy)
+      .then(() => {
+        addFlash(t('status.created.template'), 'success')
+    
+        router.push('/templates/')
+      })
+      .catch(error => {
+        setError(error)
+        setLoading(false);
+      })
+  }, [docsApi, locale])
 
   useEffect(() => {
     if (error) {
@@ -155,21 +179,21 @@ const ProjectsPage = ({ projects = [], total = 0 }) => {
 
   return <div className={styles['projects-page']}>
       <Head>
-        <title>{t('Projects listing')} - Asker</title>
+        <title>{t('headings.project-listing')} - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
       <div className={styles['projects-page-nav']}>
           <LiveSearchWidget className={styles['projects-page-search']} q={filter.q} onQuery={handleQuery} />
           <DropDownButton className={styles['projects-page-create-button']} onChoice={handleProjectCreate} options={[
-            { id: 'blank-project', name: 'Blank project' },
-            { id: 'template-project', name: 'Use template' }
-          ]}><PlusIcon /> {t('Create new project')}</DropDownButton>
+            { id: 'blank-project', name: t('labels.blank-project')},
+            { id: 'template-project', name: t('actions.use-template')}
+          ]}><PlusIcon /> {t('actions.create-new-project')}</DropDownButton>
       </div>
 
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <ProjectList onDelete={deleteProject} emptyText="No projects to show." data={tableData} className={styles['projects-page-list']} />
+      <ProjectList onDelete={deleteProject} saveAsTemplate={saveAsTemplate} emptyText={t('status.no-projects')} data={tableData} className={styles['projects-page-list']} />
       <Pagination page={filter.page} className={styles['projects-page-pagination']} onChange={handlePageChange} total={relativeTotal} perPage={filter.perPage} />
 
       {loading ? <Preloader /> : null}
@@ -222,7 +246,6 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }
   return {
     props: {
       config: await getSettings(),
-      translations: await getTranslations(),
       projects,
       total
     }

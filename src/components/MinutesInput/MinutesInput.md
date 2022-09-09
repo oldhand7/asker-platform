@@ -1,0 +1,1 @@
+Wrapper around LazyInput with minutes (min, m) labels.

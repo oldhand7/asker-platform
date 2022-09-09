@@ -1,18 +1,21 @@
 import DefaultLayout from 'layouts/default/default-layout';
-
 import { withSite, useSite } from 'libs/site';
 import { withUser } from 'libs/user';
 import { withModal } from 'libs/modal';
 import { useUser } from 'libs/user';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { withDocumentsApi } from 'libs/db';
+import 'libs/polyfill'
+import { useTranslation } from 'libs/translation';
 
 import 'styles/globals.scss'
 
 function App({ Component, pageProps }) {
   const { user, logout, loading } = useUser();
   const router = useRouter()
-  const { config, t } = useSite();
+  const { config } = useSite();
+  const { t } = useTranslation()
 
   const [maintenence, setMaintenence] = useState(false)
 
@@ -34,15 +37,15 @@ function App({ Component, pageProps }) {
 
 
   if (maintenence && maintenence != 'warning' ) {
-    return <p>{t('Website is being updated and will be back soon.')}</p>
+    return <p>{t('status.website-updating')}</p>
   }
 
   const Layout = Component.layout ? Component.layout : DefaultLayout;
 
-  return <Layout>
+  return <Layout fullWidth={Component.fullWidth}>
     <Component {...pageProps} />
-    {maintenence == 'warning' ? <p className="maintenence-warning">{t('Website is will be updated soon. Please save all changes immediatly to avoid loosing data.')}</p> : null}
+    {maintenence == 'warning' ? <p className="maintenence-warning">{t('warnings.website-update')}</p> : null}
   </Layout>
 }
 
-export default withUser(withSite(withModal(App)))
+export default withDocumentsApi(withUser(withSite(withModal(App))))

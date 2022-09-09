@@ -3,13 +3,13 @@ import Toggle from 'react-toggle'
 import Preloader from 'components/Preloader/Preloader';
 import { saveCollectionDocument } from 'libs/firestore';
 import { useState } from 'react';
-import { useSite } from 'libs/site';
+import { useTranslation } from 'libs/translation';
 
 import styles from './ProjectAnonimizeToggle.module.scss'
 
 const ProjectAnonimizeToggle = ({ className, project, onChange }) => {
   const [loading, setLoading] = useState(false);
-  const { config, t } = useSite();
+  const { t } = useTranslation();
 
   const toggleAnonimization = () => {
     setLoading(true);

@@ -1,12 +1,12 @@
 import CheckboxInputField from "components/CheckboxInputField/CheckboxInputField";
-import { useSite } from "libs/site";
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useTranslation } from "libs/translation";
+import { useState, useEffect, useMemo } from "react";
 
 import styles from './LiveSelect.module.scss';
 
-const LiveSelect = ({ selected = [], items = [], onSelect }) => {
+const LiveSelect = ({ selected = [], items = [], onChange }) => {
     const [selectedItems, setSelectedItems] = useState(selected);
-    const { i18nField } = useSite();
+    const { i18nField } = useTranslation();
 
     useEffect(() => {
         setSelectedItems(selected);
@@ -25,7 +25,7 @@ const LiveSelect = ({ selected = [], items = [], onSelect }) => {
             selectedItems = [...items]
         }
 
-        onSelect(selectedItems)
+        onChange(selectedItems)
     }
 
     const toggleSingle = (item) => {
@@ -37,7 +37,7 @@ const LiveSelect = ({ selected = [], items = [], onSelect }) => {
             selectedItemsCopy = [...selectedItems, item]
         }
 
-        onSelect(selectedItemsCopy)
+        onChange(selectedItemsCopy)
     }
 
     return <div className={styles['live-select']}>

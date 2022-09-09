@@ -13,7 +13,7 @@ describe('Templates', () => {
     cy.login('joe.doe@example.com', 'test123', 'templates')
   })
 
-  it('should create a 1 step template with introduction', () => {
+  it('should create a 3 step template', () => {
     cy.visit('/templates/')
 
     cy.title().should('include', 'Templates')
@@ -22,39 +22,36 @@ describe('Templates', () => {
       .click()
 
     cy.location('pathname').should('eq', '/templates/create/')
+
     cy.title().should('include', 'Create template')
 
-    cy.get('form[data-test-id="template-form"]').within(() => {
+    cy.get('input[name="name"]').type('Demo TPL')
 
-      cy.get('input[name="templateName"]').type('Demo TPL')
+    cy.get('[data-test-id="feature-form"]')
+      .findHtmlInputAndType('Lorem ipsum')
 
-      cy.get('ul[data-test-id="stager"]').children('li').should('have.length', 3)
+    cy.addStage('Salary')
+    cy.addStage('Summary')
+    
+    cy.get('[data-test-id="feature-form"]')
+      .findHtmlInputAndType('Lorem ipsum')
 
-      cy.get('[data-test-id="stage-1"]').contains('Introduction').click()
-      cy.get('[data-test-id="stage-2"]').contains('Drag and drop here to add a section')
-      cy.get('[data-test-id="stage-3"]').contains('Drag and drop here to add a section')
-      cy.get('[data-test-id="feature-salary"]').drag('[data-test-id="stage-2"] .Droppable')
-      cy.get('[data-test-id="feature-summary"]').drag('[data-test-id="stage-3"] .Droppable')
-      cy.get('[data-test-id="stage-2"]').contains('Salary')
-      cy.get('[data-test-id="stage-3"]').contains('Summary')
-
-      cy.get('[data-test-id="feature-form"]').find('[data-test-id="html-input-field"]').type('Demo TPL hello')
-
-      cy.get('button').contains('Create template').click()
-    })
+    cy.contains('Create template').click()
 
     cy.location('pathname').should('eq', '/templates/')
+    
     cy.contains('Template created')
 
     cy.contains('Demo TPL')
       .closest('li')
+      .should('contain', dateFormatedToday())
       .should('contain', 'Joe')
-      .should('contain', '15 min')
-    .within(() => {
-          cy.get('[data-test-id="stage"]').eq(0).should('contain', 'Introduction')
-          cy.get('[data-test-id="stage"]').eq(1).should('contain', 'Salary')
-          cy.get('[data-test-id="stage"]').eq(2).should('contain', 'Summary')
-      })
+      .should('contain', '15m')
+      .confirmStageOrder([
+        'Introduction',
+        'Salary',
+        'Summary'
+      ])
   })
 
   it('shoud create project from template', () => {
@@ -62,32 +59,33 @@ describe('Templates', () => {
 
     cy.createDummyTemplate('Tmpl Test')
 
-    cy.contains('Tmpl Test')
-      .closest('ul')
-      .listFirstRowNavigate('Edit')
+    cy.visit('/projects/')
 
-    cy.contains('Add stage')
-      .click()
+    cy.contains('Create new project').click()
+    cy.contains('Use template').click()
 
-    cy.get('[data-test-id="feature-other-questions"]').drag('[data-test-id="stage-2"] .Droppable')
-
-    cy.get('[data-test-id="feature-form"]')
+    cy.get('#project-template-modal')
       .within(() => {
-        cy.get('input[name="q"]').type('Sample questione')
-        cy.get('button[data-test-id="add-question"]').first().click()
+        cy.contains('Tmpl Test').closest('tr').find('button').click()
       })
+    
+    cy.location('pathname').should('contain', '/projects/create/')
+    cy.location('search').should('contain', '?template=')
 
-    cy.contains('Save template').click()
+    cy.get('[data-test-id="project-form"]')
+      .should('contain', 'Template: Tmpl Test')
 
-    cy.get('[data-test-id="alert-success"]').should('contain', 'Template saved');
+    cy.contains('Select interviewer')
+      .closest('[data-test-id="interviewer-select"]')
+      .click()
+      .wait(1000)
+      .trigger('keyup', { code: "Enter" })
+      .type('{downArrow}{enter}')
+  
+    cy.get("input[name='name']").type('Testing')
 
-    cy.contains('Tmpl Test')
-      .closest('ul')
-      .listFirstRowNavigate('Edit')
+    cy.contains('Create project').click()
 
-    cy.get('[data-test-id="stage-2"]').click()
-
-    cy.get('[data-test-id="feature-form"] [data-test-id="question-manager"]')
-      .should('contain', 'Sample questione')
+    cy.get('[data-test-id="alert-success"]').should('contain', 'Project created');
   })
 })

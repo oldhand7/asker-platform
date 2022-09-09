@@ -1,0 +1,1 @@
+Allows for editing of a rule column.

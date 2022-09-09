@@ -12,7 +12,7 @@ const Avatar = ({ onClick, className, src, rounded = true }) => {
     )
   }
 
-  return <div onClick={onClick} className={getClassNames()}>
+  return <div data-test-id="avatar" onClick={onClick} className={getClassNames()}>
     <img className={styles['avatar-image']} src={src ? src : placeholder.src} alt="" />
   </div>
 }

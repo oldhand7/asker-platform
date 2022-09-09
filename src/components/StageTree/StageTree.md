@@ -1,0 +1,1 @@
+Expands stage configuration into clickable-draggable-controllable elements.

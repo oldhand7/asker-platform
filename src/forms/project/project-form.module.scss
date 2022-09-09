@@ -3,46 +3,21 @@
 .project-form {
   display: flex;
   position: relative;
-  flex-wrap: wrap;
-
-
-  &-sidebar {
-    flex: 0 0 290rem;
-    margin-right: 30rem;
-    box-sizing: border-box;
-    overflow-x: hidden;
-
-    &-widget {
-      margin-bottom: 24rem;
-      font-size: 16rem;
-      width: 100%;
-
-      &-title {
-        color: $brandish-grey;
-        font-weight: 500;
-        font-size: 14rem;
-        margin-bottom: 20rem;
-        line-height: 1;
-      }
-    }
-
-    @media (max-width: 768px) {
-      display: none;
-    }
-  }
 
   &-details {
-    flex: 1;
+    flex: 1 1;
     background: white;
-    border-radius: 13px;
-    padding: 40rem;
     box-sizing: border-box;
     position: relative;
-    margin-top: 32rem;
+    z-index: 1;
+
   }
 
   &-details-inner {
-    padding-right: calc(100% - 550rem);
+  }
+
+  &-body {
+    padding: 16rem;
   }
 
   &-title {
@@ -58,7 +33,6 @@
       background: #F6F6F6;
       border: 1px solid #CECECE;
       border-radius: 7px;
-      min-width: 350rem;
 
       input {
         background: 0 !important;
@@ -72,12 +46,13 @@
       font-weight: 500;
       font-size: 20rem;
       border-radius: 7px;
-      line-height: calc(56rem - 2rem);
-      height: calc(56rem - 2rem);
+      line-height: 48rem;
+      height: 48rem;
     }
 
     &-name {
-      width: 360rem;
+      flex: 1 1 286rem;
+      max-width: 320rem;
     }
   }
 
@@ -87,23 +62,24 @@
   }
 
   &-feature-form {
-    margin-top: 24rem;
-
-    &[data-stage-id="competency-questions"],
-    &[data-stage-id="motivation-questions"],
-    &[data-stage-id="experience-questions"],
-    &[data-stage-id="hard-skill-questions"],
-    &[data-stage-id="culture-questions"],
-    &[data-stage-id="screening-questions"],
-    &[data-stage-id="other-questions"] {
-      max-width: 650rem;
-      margin-right: -100rem;
-    }
+    margin-top: 16rem;
   }
 
   &-submit {
-    width: 100%;
     cursor: pointer;
+    font-weight: 700;
+    font-size: 14rem;
+    line-height: 21rem;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    background: #1E453E;
+    border-radius: 7px;
+    height: 48rem;
+
+    &:hover {
+      background: #122B26;
+    }
   }
 
   &-add-stage {
@@ -123,53 +99,35 @@
     color: $brandish-grey;
   }
 
-  &-criteria {
-    position: fixed;
-    bottom: 100rem;
-    right: 0;
-    box-shadow: -3px 5px 33px rgba(0, 0, 0, 0.15);
-    z-index: 1;
-    width: 305rem;
-    z-index: 10;
-    max-height: calc(100vh - 320rem);
-    overflow-y: auto;
-
-    @media (max-width: 1024px) {
-      display: none;
-    }
-  }
-
   &-stage-error-report {
     margin-bottom: 20rem;
   }
 
-  &-header {
-    background: white;
-    flex: 1 1 100%;
+  &-head {
     display: flex;
-    margin-bottom: 40rem;
-    padding: 12rem;
-    border-radius: 13px;
+    padding: 16rem 0 16rem 16rem;
+    border-bottom: 2px solid #E9E9E9;
+    align-items: flex-start;
     justify-content: space-between;
-    line-height: 56rem;
 
-    &-control {
-      display: flex;
-      align-items: center;
-      margin-left: 12rem;
+    & > * {
+      margin-right: 16rem;
     }
 
-    input, button {
-      line-height: inherit;
+
+    &-group {
+      display: flex;
+      align-items: center;
+
+      & > * {
+        margin-right: 16rem;
+      }
     }
   }
 
   &-total-time {
-    display: inline-block;
-    margin-right: 12rem;
-    border: 1px solid #ECECEC;
-    border-radius: 7px;
-    padding: 0 24rem;
+    line-height: 48rem;
+    height: 48rem;
 
     @media (max-width: 540px) {
       display: none;
@@ -179,4 +137,42 @@
   &-template {
     margin-bottom: 16rem;
   }
+
+  &-sidebar {
+    position: relative;
+    background: white;
+    z-index: 2;
+
+    &-left {
+      flex: 0 0 300rem;
+      border-right: 2px solid #E9E9E9;
+    }
+
+    &-right {
+      padding: 16rem 0;
+      box-sizing: border-box;
+      border-left: 2px solid #E9E9E9;
+
+      & > * {
+        width: calc(250rem - 32rem);
+        margin: 0 16rem 16rem 16rem;
+      }
+    }
+  }
+
+  &-criteria {
+    position: relative;
+    padding: 16rem;
+    padding: 0;
+  }
+
+  &-process {
+  }
+
+  &-interviewer-select {
+    flex: 1 0 168rem;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  
 }

@@ -3,13 +3,13 @@ import { COLOR_MAP } from 'libs/config';
 import { useState } from 'react';
 import classNames from 'classnames';
 import { fixFloat } from 'libs/helper';
-import { useSite } from 'libs/site';
+import { useTranslation } from 'libs/translation';
 
 import styles from './CriteriaLegend.module.scss';
 
 const CriteriaLegend = ({ criteria, className }) => {
   const [active, setActive] = useState(true);
-  const { i18nField } = useSite();
+  const { i18nField } = useTranslation();
 
   const toggleOpen = () => criteria.children && setActive(!active)
 

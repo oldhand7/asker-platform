@@ -1,6 +1,6 @@
-import { getSettings, getTranslations } from 'libs/firestore-admin';
+import { getSettings } from 'libs/firestore-admin';
 import { withUserGuardSsr } from 'libs/iron-session'
-import TemplateForm from 'forms/template/template-form';
+import ProjectForm from 'forms/project/project-form';
 import Head from 'next/head';
 import { getSingleDocument } from 'libs/firestore-admin'
 import { unpackQuestions } from 'libs/project';
@@ -10,10 +10,10 @@ import styles from 'styles/pages/templates-edit.module.scss';
 const TemplatesEditPage = ({ template }) => {
   return <div className={styles['templates-edit-page']}>
       <Head>
-        <title>{template.templateName} - Edit Template - Asker</title>
+        <title>{template.name} - Edit Template - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
-      <TemplateForm template={template} className={styles['templates-edit-page-form']} />
+      <ProjectForm context='template' record={template} className={styles['templates-edit-page-form']} />
   </div>
 }
 
@@ -49,10 +49,11 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale})
   return {
     props: {
       template: JSON.parse(JSON.stringify(template)),
-      config: await getSettings(),
-      translations: await getTranslations()
+      config: await getSettings()
     }
   }
 })
+
+TemplatesEditPage.fullWidth = true;
 
 export default TemplatesEditPage;

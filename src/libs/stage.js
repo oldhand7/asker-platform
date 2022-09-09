@@ -1,6 +1,6 @@
 import { DEFAULT_STAGE_TIME } from 'libs/config';
 
-export const getStageKey = s => `${s.id}_${s.uid}`
+export const getStageKey = s => s && `${s.id}_${s.uid}`
 
 export const getStageTime = stage => {
     if (stage && stage.config && stage.config.questions && !stage.time) {
@@ -8,6 +8,11 @@ export const getStageTime = stage => {
     }
 
     return Number.parseInt(stage.time || DEFAULT_STAGE_TIME);
+}
+
+
+export const getStageTime_v2 = stage => {
+    return stage && stage.config && typeof stage.config.time !== "undefined" ? Number.parseInt(stage.config.time) : DEFAULT_STAGE_TIME;
 }
 
 export const SHORT_NAMES = {
@@ -40,3 +45,15 @@ export const featureTypes = [
     'screening-questions': 'screening',
     'other-questions': 'other'
   }
+
+export const isMultistage = stage => {
+    const target = [
+        'competency-questions',
+        'experience-questions',
+        'hard-skill-questions',
+        'motivation-questions',
+        'culture-questions'
+    ]
+    
+    return target.indexOf(stage.id) > -1;
+}

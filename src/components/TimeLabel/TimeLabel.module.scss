@@ -2,16 +2,27 @@
   white-space: nowrap;
   display: inline-block;
   line-height: inherit;
+  border: 1px solid #ECECEC;
+  border-radius: 7px;
+  padding: 0 16rem;
+
+  & > * {
+    vertical-align: middle;
+    top: -1px;
+    position: relative;
+  }
 
   &-label {
     color: #B7B7B7;
     font-size: 12rem;
-    margin-right: 10rem;
+    margin-right: 8rem;
+    line-height: 1;
+    vertical-align: middle;
   }
 
   &-icon {
     fill: #969696;
-    margin-right: 10rem;
+    margin-right: 8rem;
     vertical-align: middle;
     width: 1.5em;
     height: 1.5em;

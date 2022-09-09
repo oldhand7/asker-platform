@@ -1,22 +1,21 @@
 import { withUserGuardSsr } from 'libs/iron-session';
-import { getSettings, getTranslations } from 'libs/firestore-admin';
+import { getSettings } from 'libs/firestore-admin';
 import { getSingleDocument } from 'libs/firestore-admin';
 import Head from 'next/head';
 import dynamic from 'next/dynamic'
+import { useTranslation } from 'libs/translation';
 
+import styles from 'styles/pages/question-edit.module.scss';
 
 const ScreeningQuestionForm = dynamic(() => import('forms/screening-question/screening-question-form'));
 const EvaluationQuestionForm = dynamic(() => import('forms/evaluation-question/evaluation-question-form'));
 
-import styles from 'styles/pages/question-edit.module.scss';
-import { useSite } from 'libs/site';
-
 const QuestionEditPage = ({ question }) => {
-  const { t, i18nField } = useSite();
+  const { t, i18nField } = useTranslation();
   
   return <div className={styles['question-edit-page']}>
     <Head>
-      <title>{i18nField(question.name)} - {question.companyId === 'asker' ? t('Clone question') : t('Edit question')} - Asker</title>
+      <title>{i18nField(question.name)} - {question.companyId === 'asker' ? t('actions.clone.question') : t('actions.edit-question')} - Asker</title>
       <meta name="robots" content="noindex" />
     </Head>
 
@@ -50,8 +49,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }
   return {
     props: {
       config: await getSettings(),
-      question: JSON.parse(JSON.stringify(question)),
-      translations: await getTranslations()
+      question: JSON.parse(JSON.stringify(question))
     }
   }
 })

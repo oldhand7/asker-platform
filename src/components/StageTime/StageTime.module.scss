@@ -1,0 +1,20 @@
+.stage-time {
+  border: 1px solid #E2E2E2;
+  border-radius: 3000px;
+  padding: 4rem 16rem 4rem 32rem;
+  position: relative;
+  font-size: 14rem;
+  line-height: 21rem;
+
+  &-icon {
+    position: absolute;
+    top: 50%;
+    left: 10rem;
+    transform: translateY(-50%);
+  }
+
+  &-value {
+    font-weight: 500;
+    color: #5B5B5B;
+  }
+}

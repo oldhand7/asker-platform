@@ -7,7 +7,6 @@ import { useUser } from 'libs/user';
 import TemplateSummaryTable from 'components/TemplateSummaryTable/TemplateSummaryTable';
 import PlusIcon from 'components/Icon/PlusIcon';
 import { filterManyDocuments } from 'libs/firestore';
-import { useRouter } from 'next/router';
 
 import styles from './TemplateExplorer.module.scss';
 
@@ -16,7 +15,6 @@ const TemplateExplorer = ({ className, onTemplate, label = '', onNewTemplate }) 
   const [templates, settemplates] = useState([]);
   const [filteredTemplates, setFilteredTemplates] = useState([])
   const [filter, setFilter] = useState({ company: ['asker', user.companyId] })
-  const router = useRouter();
 
   const toggleCompany = (companyId) => {
     const existsAlready = filter.company.find(c => c == companyId);
@@ -48,7 +46,7 @@ const TemplateExplorer = ({ className, onTemplate, label = '', onNewTemplate }) 
       const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
 
       filteredTemplates = filteredTemplates.filter(t => {
-        const nameQ = regex.test(t.templateName.toLowerCase());
+        const nameQ = regex.test(t.name.toLowerCase());
 
         return nameQ;
       })
@@ -61,17 +59,17 @@ const TemplateExplorer = ({ className, onTemplate, label = '', onNewTemplate }) 
     {
       label ?
       <h3 className={styles['template-explorer-title']}>{label}</h3> :
-      <h3 className={styles['template-explorer-title']}>Search template</h3>
+      <h3 className={styles['template-explorer-title']}>{t('actions.search-template')}</h3>
     }
 
     <div className={styles['template-explorer-widget']}>
       <div className={styles['template-explorer-widget-header']}>
         <div className={styles['template-explorer-controls']}>
           <div className={styles['template-explorer-company-filter']}>
-            <FilterButton theme='green' className={styles['template-explorer-company-filter-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>Asker templates</FilterButton>
-            <FilterButton theme='grape' className={styles['template-explorer-company-filter-button']} active={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user && user.companyId)}>Your templates</FilterButton>
+            <FilterButton theme='green' className={styles['template-explorer-company-filter-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>{t('labels.asker-templates')}</FilterButton>
+            <FilterButton theme='grape' className={styles['template-explorer-company-filter-button']} active={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user && user.companyId)}>{t('labels.your-templates')}</FilterButton>
           </div>
-          <OutlineButton className={styles['template-explorer-create-template']} onClick={onNewTemplate}><PlusIcon /> Create new template</OutlineButton>
+          <OutlineButton className={styles['template-explorer-create-template']} onClick={onNewTemplate}><PlusIcon /> {t('actions.create-new-template')}</OutlineButton>
         </div>
         <LiveSearch className={styles['template-explorer-live-search']} q={filter.q} onQuery={q => setFilter({ ...filter, q})} />
       </div>

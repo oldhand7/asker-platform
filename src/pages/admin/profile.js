@@ -1,7 +1,6 @@
 import dynamic from 'next/dynamic';
 import AdminLayout from 'layouts/admin/admin-layout';
 import Preloader from 'components/Preloader/Preloader';
-import { getTranslations } from 'libs/firestore-admin';
 import { useRouter } from 'next/router';
 
 const ReactAdminProfileApp = dynamic(() => import("admin/profile.js"), {
@@ -18,7 +17,6 @@ const ProfileAdminPage = ({ translations }) => {
 export const getServerSideProps = async () => {
   return {
     props: {
-      translations: await getTranslations()
     }
   }
 }

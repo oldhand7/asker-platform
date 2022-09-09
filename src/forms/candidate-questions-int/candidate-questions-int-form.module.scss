@@ -1,6 +1,6 @@
 @import 'styles/vars';
 
-.candidate-questions-int-form {
+.form {
   &-title {
     margin: 10rem 0 20rem;
     color: #B7B7B7;
@@ -16,4 +16,11 @@
     color: #5B5B5B;
   }
 
+  &-alert {
+    margin: 24rem 0;
+  }
+
+  &-notes {
+    margin: 24rem 0;
+  }
 }

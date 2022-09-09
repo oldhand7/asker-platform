@@ -5,7 +5,7 @@ import { useSite } from 'libs/site';
 
 import styles from './blank-layout.module.scss';
 
-const BlankLayout = ({ children }) => {
+const BlankLayout = ({ children, fullWidth = false }) => {
   const {config} = useSite();
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const BlankLayout = ({ children }) => {
 
   return (
     <Container className={styles['layout-container']}>
-      <Content>{children}</Content>
+      <Content fullWidth={fullWidth}>{children}</Content>
     </Container>
   )
 }

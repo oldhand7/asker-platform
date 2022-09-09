@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import striptags from 'striptags';
 import { allowedHtmlTags } from 'libs/config';
-import { useSite } from 'libs/site';
+import { useTranslation } from 'libs/translation';
 
 import styles from './QuestionScoreBoardVertical.module.scss';
 
 const QuestionScoreBoardVertical = ({ className, index, rule, scores = [], lock = false, active, onScores, onHead }) => {
-  const { i18nField } = useSite();
+  const { i18nField } = useTranslation();
 
   const toggleStep = (index) => {
     if (lock && !scores[index]) return;

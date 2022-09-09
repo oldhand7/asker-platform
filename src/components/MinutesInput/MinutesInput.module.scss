@@ -1,10 +1,13 @@
 .minutes-input {
+  background: #F6F6F6;
   border: 1px solid #CECECE;
   border-radius: 7px;
   line-height: 56rem;
-  width: 105rem;
+  min-width: auto;
+  position: relative;
 
   input {
-    max-width: 100%;
+    color: #5B5B5B;
+    min-width: 75rem;
   }
 }

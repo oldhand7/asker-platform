@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import StatusLabel from 'components/Label/StatusLabel';
 import ClockIcon from 'components/Icon/ClockIcon';
+import { getTimeLabel } from 'libs/helper';
 
 import styles from './ProjectStat.module.scss';
 
@@ -11,7 +12,7 @@ const ProjectStat = ({ project, className, template = false}) => {
       styles['project-stat-time']
     )}>
       <ClockIcon className={styles['project-stat-time-icon']} />
-      <span className={styles['project-stat-time-value']}>{project.time || 0} min</span>
+      <span className={styles['project-stat-time-value']}>{getTimeLabel(project.time || 0)}</span>
     </div>
 
     {!template ? <>

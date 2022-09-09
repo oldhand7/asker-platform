@@ -1,4 +1,4 @@
-import { useAuth } from './auth';
+import { useAuth } from 'libs/user/auth';
 import { createContext, useContext, useMemo } from 'react';
 import { storeRemoteUserLocale } from 'libs/api'
 import { useRouter } from 'next/router';

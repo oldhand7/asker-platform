@@ -1,4 +1,4 @@
-import { getSettings, getTranslations } from 'libs/firestore-admin';
+import { getSettings } from 'libs/firestore-admin';
 import { useEffect, useState, useMemo, useCallback} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import LiveSearchWidget from 'components/LiveSearchWidget/LiveSearchWidget'
@@ -18,7 +18,7 @@ import { useQueryState } from 'next-usequerystate'
 import FilterButton from 'components/Button/FilterButton';
 import { useUser } from 'libs/user';
 import TemplateList from 'components/TemplateList/TemplateList'
-import { useSite } from 'libs/site';
+import { useTranslation } from 'libs/translation';
 
 import styles from 'styles/pages/templates.module.scss';
 
@@ -50,7 +50,7 @@ const TemplatesPage = ({ templates = [], companyId, total = 0 }) => {
   const [deletedTemplates, setDeletedTemplates] = useState([]);
   const [qMax, setMaxQ] = useQueryState('fl')
   const { user } = useUser();
-  const { t } = useSite();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!filter.pristine) {
@@ -87,30 +87,30 @@ const TemplatesPage = ({ templates = [], companyId, total = 0 }) => {
 
     const regex = new RegExp(`(.*)${q.toLowerCase()}(.*)`)
 
-    filteredTemplates = filteredTemplates.filter(data => regex.test(data.templateName.toLowerCase()))
+    filteredTemplates = filteredTemplates.filter(data => regex.test(data.name.toLowerCase()))
 
     setFilteredTemplates(filteredTemplates)
   }, 500, [filter, templates, deletedTemplates])
 
-  const deleteTemplate = (t) => {
-    if (!confirm('Are you sure?')) {
+  const deleteTemplate = (tpl) => {
+    if (!confirm(t('actions.confirm'))) {
       return;
     }
 
     setLoading(true);
 
-    deleteSingle('templates', t.id)
+    deleteSingle('templates', tpl.id)
       .then(() => {
         setDeletedTemplates([
           ...deletedTemplates,
-          t.id
+          tpl.id
         ])
 
         setLoading(false);
-        setSuccess('Template deleted')
+        setSuccess(t('status.template-deleted'))
       })
       .catch(error => {
-        setError(ctxError('Deleting template failed', error))
+        setError(ctxError(t('errors.server'), error))
       })
   }
 
@@ -166,23 +166,23 @@ const TemplatesPage = ({ templates = [], companyId, total = 0 }) => {
 
   return <div className={styles['templates-page']}>
       <Head>
-        <title>{t('Templates listing')} - Asker</title>
+        <title>{t('headings.template-listing')} - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
 
       <div className={styles['templates-page-nav']}>
         <div data-test-id="company-filter" className={styles['templates-page-filter-company']}>
-            <FilterButton className={styles['templates-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>{t('Asker templates')}</FilterButton>
-            <FilterButton className={styles['templates-page-filter-company-button']} theme="dark" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>{t('Your templates')}</FilterButton>
+            <FilterButton className={styles['templates-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>{t('labels.asker-templates')}</FilterButton>
+            <FilterButton className={styles['templates-page-filter-company-button']} theme="dark" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>{t('labels.your-templates')}</FilterButton>
           </div>
           <LiveSearchWidget className={styles['templates-page-search']} q={filter.q} onQuery={handleQuery} />
-          <Button className={styles['templates-page-create-button']} href='/templates/create/'><PlusIcon /> {t('Create new template')}</Button>
+          <Button className={styles['templates-page-create-button']} href='/templates/create/'><PlusIcon /> {t('actions.create-new-template')}</Button>
       </div>
 
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <TemplateList onDelete={deleteTemplate} emptyText="No templates to show." data={tableData} className={styles['templates-page-table']} />
+      <TemplateList onDelete={deleteTemplate} emptyText={t('status.no-templates')} data={tableData} className={styles['templates-page-table']} />
 
       <Pagination page={filter.page} className={styles['templates-page-pagination']} onChange={handlePageChange} total={relativeTotal} perPage={filter.perPage} />
 
@@ -235,7 +235,6 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }
   return {
     props: {
       config: await getSettings(),
-      translations: await getTranslations(),
       templates,
       companyId: req.session.user.companyId,
       total

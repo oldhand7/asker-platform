@@ -1,22 +1,22 @@
-import { getSettings, getTranslations } from 'libs/firestore-admin';
+import { getSettings } from 'libs/firestore-admin';
 import { withUserGuardSsr } from 'libs/iron-session'
 import ProjectForm from 'forms/project/project-form';
 import Head from 'next/head';
 import { getSingleDocument } from 'libs/firestore-admin'
 import { unpackQuestions } from 'libs/project';
+import { useTranslation } from 'libs/translation';
 
 import styles from 'styles/pages/projects-edit.module.scss';
-import { useSite } from 'libs/site';
 
 const ProjectsEditPage = ({ project }) => {
-  const { t } = useSite();
+  const { t } = useTranslation();
   
   return <div className={styles['projects-edit-page']}>
       <Head>
-        <title>{project.name} - {t('Edit project')} - Asker</title>
+        <title>{project.name} - {t('actions.edit-project')} - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
-      <ProjectForm project={project} className={styles['projects-edit-page-form']} />
+      <ProjectForm record={project} className={styles['projects-edit-page-form']} />
   </div>
 }
 
@@ -52,10 +52,11 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }
   return {
     props: {
       project: JSON.parse(JSON.stringify(project)),
-      config: await getSettings(),
-      translations: await getTranslations()
+      config: await getSettings()
     }
   }
 })
+
+ProjectsEditPage.fullWidth = true;
 
 export default ProjectsEditPage;

@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import RadioInputField from 'components/RadioInputField/RadioInputField';
 import striptags from 'striptags';
 import { allowedHtmlTags } from 'libs/config';
-import { useSite } from 'libs/site';
+import { useTranslation } from 'libs/translation';
 
 import styles from './choice-question-int-form.module.scss';
 
 const ChoiceQuestionIntForm = ({ className, question, values, onValues }) => {
-  const { i18nField } = useSite();
+  const { i18nField } = useTranslation();
 
   return <div className={classNames(styles['choice-question-int-form'], className)}>
     <h3 className={styles['choice-question-int-form-title']}>{i18nField(question.name)}</h3>

@@ -1,43 +1,79 @@
 import HtmlInputField from 'components/HtmlInputField/HtmlInputField'
-import useForm from 'libs/use-form';
-import { useEffect } from 'react';
+import {useForm} from 'libs/react-hook-form';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import classNames from 'classnames';
+import TimedTitle from 'components/TimedTitle/TimedTitle';
+import { useWatch } from 'react-hook-form';
+import { useTranslation } from 'libs/translation';
+import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
+
+const StageTemplateForm = dynamic(() => import('forms/stage-template/stage-template-form'))
 
 import styles from './introduction-stage-form.module.scss';
 
 const defaultValues = {
-  text: '',
-  html: ''
+  html: '',
+  time: 5
 }
 
-const rules = {
-  html: 'max:9000',
+const validationRules = {
+  html: 'required|max:9000',
+  time: 'numeric'
 }
 
-const messages = {
-  max: 'Text is too long'
-}
+const IntroductionStageForm = ({ className, onValues, values, onError, isSubmitted, test }) => {
+  const { t } = useTranslation();
+  const { locale } = useRouter();
+  const [diff, setDiff] = useState(0)
 
-const IntroductionStageForm = ({ className, onValues, values, onError }) => {
-  const [formValues, errors, control] = useForm({
-    values: values ? values : defaultValues,
-    rules,
-    messages,
-    pristine: false
+  const validationMessage = useMemo(() => ({
+    max: t('errors.text.too-long'),
+    required: t('errors.field.required')
+  }), [locale])
+
+  const initValues = useMemo(() => values || defaultValues, [])
+
+  const {
+    errors,
+    setValue,
+    control
+  } = useForm({
+    values: initValues,
+    rules: validationRules,
+    messages: validationMessage
   })
 
+  const formValues = useWatch({
+    control,
+    defaultValue: initValues
+  })
+  
   useEffect(() => {
-    if (!errors) {
-      onValues && onValues(formValues)
-    } else {
-      onError(new Error("Form invalid"))
-    }
-  }, [errors, formValues])
+    onValues && onValues(formValues)
+  }, [formValues, onValues])
 
+  useEffect(() => {
+    onError && onError(errors && new Error(t("errors.form.invalid")))
+  }, [errors, onError])
 
-  return <div className={classNames(className, styles['introduction-stage-form'])}>
-    <h3 className={styles['introduction-stage-form-title']}>Introduction text</h3>
-    <HtmlInputField focus={true} value={formValues.html || formValues.text} error={errors && errors['html']} className={classNames(styles['introduction-stage-form-field'], styles['introduction-stage-form-text'])} name="html" onChange={control.input('html', false)} placeholder="Enter your introduction text" />
+  const handleTemplate = useCallback((template) => {
+    setValue('html', template.html)
+    setDiff(diff+1)
+  }, [setValue, diff])
+
+  const handleTime = useCallback(time => {
+    setValue('time', time)
+  }, [setValue])
+
+  const handleHtml = useCallback(html => {
+    setValue('html', html)
+  }, [setValue])
+
+  return <div className={classNames(className, styles['form'])}>
+    <TimedTitle className={styles['form-title']} time={formValues.time} onChange={handleTime}>{t('stages.introduction.name')}</TimedTitle>
+    <HtmlInputField diff={diff} focus={true} value={formValues.html} error={isSubmitted && errors && errors['html']} className={classNames(styles['form-field'], styles['form-text'])} name="html" onChange={handleHtml} placeholder={t("placeholders.introduction-text")} />
+    {!test && <StageTemplateForm className={styles['form-stage-template-form']} type='introduction' values={formValues} onValues={handleTemplate} />}
   </div>
 }
 

@@ -1,12 +1,13 @@
 .login-page {
+  margin: 50rem;
+
   &-form {
     max-width: 420rem;
     margin-left: auto;
     margin-right: auto;
     background: white;
     border-radius: 40px;
-    margin-top: 50px;
-
+    
     @media (max-width: 768px) {
       max-width: 540rem;
     }

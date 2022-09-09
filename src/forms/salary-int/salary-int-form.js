@@ -1,110 +1,98 @@
-import { Range } from 'react-range';
-import {useForm} from 'libs/form'
-import { useEffect, useMemo } from 'react';
+import {useForm} from 'libs/react-hook-form'
+import { useCallback, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import HtmlInputField from 'components/HtmlInputField/HtmlInputField';
-import FlexRow from 'components/FlexRow/FlexRow';
-import clasNames from 'classnames';
+import TextInputField from 'components/TextInputField/TextInputField';
+import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField';
+import DismissAlert from 'components/DismissAlert/DismissAlert';
+import Html from 'components/Html/Html';
+import { useWatch } from 'react-hook-form';
+import { useTranslation } from 'libs/translation';
 
 import styles from './salary-int-form.module.scss';
 
 const defaultValues = {
-  currency: '€',
-  range: [0, 0],
+  range: false,
+  min: '',
+  max: '',
   notes: ''
 }
 
-const rules = {
+const validationRules = {}
 
-}
+const SalaryIntForm = ({ className, values, markComplete, onValues, config, onError }) => {
+  const { t } = useTranslation()
 
-const SalaryIntForm = ({ last, nextId, className, values, markComplete, onValues, config }) => {
-  const { values: formValues, errors, control, pristine } = useForm({
-    values: values ? values : { ...defaultValues, range: [
-      config.config ? config.config[0] : config.range[0],
-      config.config ? config.config[1] : config.range[1]
-    ]},
-    rules
+  const initValues = useMemo(() => values || defaultValues, [])
+
+  const {
+    errors,
+    input,
+    setValue,
+    formState: { isDirty },
+    control
+  } = useForm({
+    values: initValues,
+    rules: validationRules
   })
 
+  const formValues = useWatch({ control, defaultValue: initValues })
+
+  useEffect(() => isDirty && markComplete && markComplete(), [isDirty])
+
   useEffect(() => {
-    if (!errors) {
-      onValues(formValues)
-    }
-  }, [formValues, errors])
+    onValues && onValues(formValues)
+  }, [formValues, onValues])
 
-  const background = useMemo(() => {
-    const bgStart = formValues.range[0] * 100 / config.range[1];
-    const bgEnd = formValues.range[1] * 100 / config.range[1];
-    const projectMin = config.config[0] * 100 / config.range[1];
-    const projectMax = config.config[1] * 100 / config.range[1];
+  useEffect(() => {
+    onError && onError(errors && new Error(t("errors.form.invalid")))
+  }, [errors, onError])
 
-    return `
-    linear-gradient(
-      to right,
-      #B7B7B733 0%,
-      #B7B7B733 ${Math.min(bgStart, projectMin)}%,
-      #B7B7B733 ${projectMin}%,
-      #43B88C ${projectMin}%,
-      #43B88C ${projectMax}%,
-      #E5C673 ${projectMax}%,
-      #E5C673 ${Math.max(bgEnd, projectMax)}%,
-      #E5C673 ${Math.max(bgEnd, projectMax)}%,
-      #B7B7B733 ${projectMax}%,
-      #B7B7B733 100%
-      )
-    `;
-  }, [formValues])
+  const handleMin = useCallback(ev => {
+    setValue('min', ev.target.value)
+  }, [setValue])
 
-  return <div className={classNames(styles['salary-int-form'], className)}>
-    <h2 className={styles['salary-int-form-title']}>Salary</h2>
+  const handleMax = useCallback(ev => {
+    setValue('max', ev.target.value)
+  }, [setValue])
 
-    <FlexRow className={styles['salary-int-form-flex-row']}>
-      <div className={classNames(styles['salary-int-form-slider'])}>
-        <span className={styles['salary-int-form-slider-min']}>{config.currency}{config.range[0]} -</span>
-        <span className={styles['salary-int-form-slider-max']}>- {config.currency}{config.range[1]}</span>
-        <Range
-          step={100}
-          min={config.range[0]}
-          max={config.range[1]}
-          state={ { range: formValues.range }}
-          values={formValues.range}
-          onChange={range => {
-            control.set('range', range)
-            markComplete()
-          }}
-          renderTrack={({ props, children }) => (
-          <div
-            {...props}
-            style={{
-              ...props.style,
-              background
-            }}
-            className={styles['salary-int-form-slider-track']}
-          >
-            {children}
+  const handleNotes = useCallback(ev => {
+    setValue('notes', val)
+  }, [setValue])
+
+  return <div className={classNames(styles['form'], className)}>
+      <div className={styles['form-group']}>
+        <h2 className={styles['form-title']}>{t('stages.salary.name')}</h2>
+
+        <div className={styles['form-expo']}>
+          <h5 className={styles['form-expo-title']}>{t('labels.budget-range')}:</h5>
+          <div className={styles['form-expo-range']}>
+            <span className={styles["form-expo-range-value"]}>{config.min}</span><span className={styles["form-expo-range-divider"]}> - </span><span className={styles["form-expo-range-value"]}>{config.max}</span>
           </div>
-        )}
-        renderThumb={({ props }) => {
-          return <div
-            {...props}
-            style={{
-              ...props.style
-            }}
-            className={clasNames(
-              styles['salary-int-form-slider-marker'],
-              // props.key == 0 && formValues.range[0] < config.config[0] || formValues.range[0] > config.config[1]  ? styles['salary-int-form-slider-marker-outside'] : '',
-              props.key == 1 && formValues.range[1] > config.config[1] ? styles['salary-int-form-slider-marker-outside'] : ''
-            )}
-          >
-          <span className={styles['salary-int-form-slider-marker-value']}>{config.currency}{formValues.range[props.key]}</span></div>
-        }}
-          />
+        </div>
+
+        <div className={styles['form-input']}>
+          <h5 className={styles['form-input-label']}>{t('labels.requested-salary')}</h5>
+          <div className={styles['form-input-range']}>
+            <span className={styles['form-input-range-divider-text']}>{t('labels.from')}</span>
+            <TextInputField placeholder={config.min} className={styles['form-input-input']} name="min" onChange={handleMin} value={formValues.min} />
+            {formValues.range && <>
+              <span className={styles['form-input-range-divider-text']}>- {t('labels.to')}</span>
+              <TextInputField placeholder={config.max} className={styles['form-input-input']} name="max" onChange={handleMax} value={formValues.max} />
+            </>}
+          </div>
+
+          <CheckboxInputField className={styles['form-input-checkbox']} label={t('actions.add.salary-range')} checked={formValues.range} onChange={() => setValue('range', !formValues.range)} />
+        </div>
       </div>
-      <div className={styles['salary-int-form-notes']}>
-        <HtmlInputField className={styles['salary-int-form-notes-input']} value={formValues.notes || ''} onChange={control.input('notes', false)} placeholder='Notes about salary'  />
+      <div className={styles['form-group']}>
+        <HtmlInputField className={styles['form-notes']} value={formValues.notes} onChange={handleNotes} placeholder={t('placeholders.notes-salary')}  />
+ 
+        {config.note && !formValues.alertDismissed ?
+        <DismissAlert className={styles['form-alert']} onDismiss={() => setValue('alertDismissed', true)}>
+          <Html>{config.note}</Html>
+        </DismissAlert> : null}
       </div>
-    </FlexRow>
   </div>
 }
 

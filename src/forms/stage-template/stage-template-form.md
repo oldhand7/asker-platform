@@ -1,0 +1,1 @@
+Interface for template selection and saving. Templates are used for repeating stage configuration.

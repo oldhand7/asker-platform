@@ -1,18 +1,13 @@
 describe('Clone Asker resources', () => {
-  before(() => {
+  it('modified template should be saved as user owned copy', () => {
     cy.simpleLogin('admin@askertech.com', 'test123', true)
 
     cy.createDummyTemplate('Asker Public Template 123')
-    cy.createOtherTextQuestion({ name: 'Asker Public Question 123'})
 
-    cy.visit('/logout/');
-  })
+    cy.logout()
 
-  beforeEach(() => {
-    cy.login('joe.spencer@example.com', 'test123')
-  })
+    cy.simpleLogin('joe.spencer@example.com', 'test123', true)
 
-  it('modified template should be saved as user owned copy', () => {
     cy.visit('/templates/')
 
     cy.contains('Asker Public Template 123')
@@ -20,14 +15,14 @@ describe('Clone Asker resources', () => {
       .should('contain', 'Asker Public Template 123')
       .should('contain', 'John Powers')
       .should('have.attr', 'data-company-id', 'asker')
-      .closest('ul')
-      .listFirstRowNavigate('Edit copy')
+      .listRowNavigate('Edit copy')
 
     cy.contains('Save template').click()
 
-    cy.get('[data-test-id="template-list"] > li')
-      .should('have.length', 2)
-      .first()
+    cy.get("[data-test-id='alert-success']").should('contain', 'Template saved')
+
+    cy.contains('Asker Public Template 123')
+      .closest('li')
       .should('contain', 'Asker Public Template 123')
       .should('contain', 'Joe Spencer')
       .should('have.attr', 'data-company-id')
@@ -37,6 +32,14 @@ describe('Clone Asker resources', () => {
   })
 
   it('modified question should be saved as user owned copy', () => {
+    cy.simpleLogin('admin@askertech.com', 'test123', true)
+
+    cy.createOtherTextQuestion({ name: 'Asker Public Question 123'})
+
+    cy.logout()
+
+    cy.simpleLogin('joe.spencer@example.com', 'test123', true)
+
     cy.visit('/questions/')
 
     cy.get('table tbody tr')
@@ -47,6 +50,8 @@ describe('Clone Asker resources', () => {
       .tableFirstRowNavigate('Edit copy')
 
     cy.contains('Save question').click()
+
+    cy.get("[data-test-id='alert-success']").should('contain', 'Question saved')
 
     cy.get('table tbody tr')
       .should('have.length', 2)

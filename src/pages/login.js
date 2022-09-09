@@ -1,15 +1,17 @@
 import { useRouter } from 'next/router';
 import LoginForm from 'forms/login/login-form';
-import { getSettings, getTranslations } from 'libs/firestore-admin';
+import { getSettings } from 'libs/firestore-admin';
 import { useUser } from 'libs/user';
 import { useEffect} from 'react';
 import Head from 'next/head';
+import { useTranslation } from 'libs/translation';
 
 import styles from 'styles/pages/login.module.scss';
 
 const LoginPage = () => {
   const router = useRouter();
   const { user, login} = useUser()
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (user) {
@@ -19,7 +21,7 @@ const LoginPage = () => {
 
   return <div className={styles['login-page']}>
     <Head>
-      <title>Login - Asker</title>
+      <title>{t('actions.login')} - Asker</title>
     </Head>
     <LoginForm className={styles['login-page-form']} authFunction={login} />
   </div>
@@ -28,8 +30,7 @@ const LoginPage = () => {
 export const getServerSideProps = async ({ req, res}) => {
   return {
     props: {
-      config: await getSettings(),
-      translations: await getTranslations()
+      config: await getSettings()
     }
   }
 }

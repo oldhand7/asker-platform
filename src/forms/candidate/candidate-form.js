@@ -1,48 +1,67 @@
-import useForm from 'libs/use-form';
-import classNames from 'classnames';
+import { useForm } from 'libs/react-hook-form';
 import TextInputField from 'components/TextInputField/TextInputField';
 import PlatformButton from 'components/Button/PlatformButton';
 import PlusIcon from 'components/Icon/PlusIcon'
-import { useSite  } from 'libs/site';
+import { useCallback, useMemo } from 'react';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'libs/translation';
+import { useWatch } from 'react-hook-form';
 import { getRandomAlias } from 'libs/candidate';
-import { useMemo } from 'react';
+import classNames from 'classnames';
 
 import styles from './candidate-form.module.scss';
 
 const defaultValues = {
   name: '',
-  email: ''
+  email: '',
+  alias: ''
 }
 
-const rules = {
+const validationRules = {
   name: 'required',
   email: 'required|email'
 }
 
-const messages = {
+const CandidateForm = ({ className, values, onValues, alias }) => {
+  const { locale } = useRouter();
+  const { t } = useTranslation();
 
-}
-
-const CandidateForm = ({ className, onValues, values, alias }) => {
   const initValues = useMemo(() => ({
-    ...(values || defaultValues),
+    ...(values || defaultValues, []),
     alias: alias || getRandomAlias()
   }), [])
 
-  const [formValues, errors, control] = useForm({
+  const messages = useMemo(() => ({
+      'required': t('errors.field.required'),
+      'email': t('errors.field.email'),
+    }), [locale])
+
+  const {
+    errors,
+    handleSubmit,
+    formState: { isSubmitted },
+    setValue,
+    control
+  } = useForm({
     values: initValues,
-    rules,
+    rules: validationRules,
     messages
   })
 
-  return <form data-test-id="candidate-form" method="POST" noValidate className={classNames(styles['candidate-form'], className)} onSubmit={control.submit(onValues)}>
-    <TextInputField value={formValues.name} placeholder={'Candidate name'} error={errors ? errors.name : null} onChange={control.input('name')} autoComplete='off' name="name" className={styles['candidate-form-field']} />
-    <TextInputField value={formValues.email} placeholder={'Email address'} error={errors ? errors.email : null} onChange={control.input('email')} autoComplete='off' name='email' className={styles['candidate-form-field']} />
-    {
-      !values ?
-      <PlatformButton type="submit" className={styles['candidate-form-submit']}><PlusIcon /> Add candidate</PlatformButton> :
-      <PlatformButton type="submit" className={styles['candidate-form-submit']}>Save changes</PlatformButton>
-    }
+  const formValues = useWatch({ control, defaultValue: initValues })
+
+  const handleCandidateName = useCallback((ev) => {
+    setValue('name', ev.target.value)
+  }, [setValue])
+
+  const handleCandidateEmail = useCallback((ev) => {
+    setValue('email', ev.target.value)
+  }, [setValue])
+
+  return <form data-test-id="candidate-form" method="POST" noValidate className={classNames(styles['candidate-form'], className)} onSubmit={handleSubmit(onValues)}>
+    <TextInputField value={formValues.name} placeholder={t('labels.candidate-name')} error={isSubmitted && errors && errors.name} onChange={handleCandidateName} autoComplete='off' name="name" className={styles['candidate-form-field']} />
+    <TextInputField value={formValues.email} placeholder={t('labels.email')} error={isSubmitted && errors && errors.email} onChange={handleCandidateEmail} autoComplete='off' name='email' className={styles['candidate-form-field']} />
+    <PlatformButton type="submit" className={styles['candidate-form-submit']}><PlusIcon /> {t('actions.add-candidate')}</PlatformButton>
   </form>
 }
 

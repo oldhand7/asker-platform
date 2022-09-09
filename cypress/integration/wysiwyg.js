@@ -8,8 +8,6 @@ describe('WYSIWYG', () => {
 
     cy.contains('Just some project X').closest('ul').listFirstRowNavigate('Edit')
 
-    cy.get('[data-test-id="stage-1"]').click().wait(1000)
-
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
         cy.get('[contenteditable="true"]').click()
@@ -39,8 +37,6 @@ describe('WYSIWYG', () => {
   it('should create an unordered list', () => {
     cy.createDummyProject('Just some project Y')
     cy.contains('Just some project Y').closest('ul').listFirstRowNavigate('Edit')
-
-    cy.get('[data-test-id="stage-1"]').click().wait(1000)
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
@@ -85,8 +81,6 @@ describe('WYSIWYG', () => {
     cy.createDummyProject('Just some project Z')
 
     cy.contains('Just some project Z').closest('ul').listFirstRowNavigate('Edit')
-
-    cy.get('[data-test-id="stage-1"]').click().wait(1000)
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {

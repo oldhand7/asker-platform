@@ -1,3 +1,5 @@
+@import 'styles/vars';
+
 .alert {
   width: 100%;
   padding: 10rem;
@@ -15,9 +17,16 @@
 
   &-danger,
   &-error {
-    background: #f5d8db;
-    border-color: #f1c7cd;
+    background: $asker-red;
+    color: white;
+    border: none;
   }
+
+  &-error &-close-icon,
+  &-danger &-close-icon {
+    fill: white;
+  }
+
 
   &-success {
     background: #d8edda;

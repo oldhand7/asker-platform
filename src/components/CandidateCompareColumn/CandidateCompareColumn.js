@@ -4,11 +4,11 @@ import EvaluationScoreBar from "components/EvaluationScoreBar/EvaluationScoreBar
 import TrashIcon from "components/Icon/TrashIcon";
 import InterviewScore from "components/InterviewScore/InterviewScore";
 import { COLOR_MAP } from 'libs/config';
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import ScreeningEvaluationLabel from 'components/ScreeningEvaluationLabel/ScreeningEvaluationLabel';
+import { useTranslation } from "libs/translation";
 
 import styles from './CandidateCompareColumn.module.scss';
-import { useSite } from "libs/site";
 
 const TinyTrashButton  = ({ onClick, className }) => (<button data-test-id="trash-button" onClick={onClick} className={className}>
 <TrashIcon className={styles['candidate-compare-column-delete-icon']} />
@@ -16,7 +16,7 @@ const TinyTrashButton  = ({ onClick, className }) => (<button data-test-id="tras
 
 const CandidateCompareColumn = ({ className, toggleRow, compare, evaluations, active = {}, onDelete, heights = {}, project, onHeights, id ='', dragProps }) => {
 const itemsRef = useRef({});
-const { i18nField } = useSite();
+const { i18nField } = useTranslation();
 
 const calcHeights = () => {
     if (onHeights) {

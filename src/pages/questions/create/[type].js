@@ -1,8 +1,9 @@
 import { questionTypes } from 'libs/questions';
 import { withUserGuardSsr } from 'libs/iron-session';
-import { getSettings, getTranslations } from 'libs/firestore-admin';
+import { getSettings } from 'libs/firestore-admin';
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
+import { useTranslation } from 'libs/translation';
 
 const ScreeningQuestionForm = dynamic(() => import('forms/screening-question/screening-question-form'));
 const EvaluationQuestionForm = dynamic(() => import('forms/evaluation-question/evaluation-question-form'));
@@ -10,9 +11,11 @@ const EvaluationQuestionForm = dynamic(() => import('forms/evaluation-question/e
 import styles from 'styles/pages/question-create.module.scss';
 
 const QuestionCreatePage = ({ questionType, questionSubtype }) => {
+  const { t } = useTranslation();
+
   return <div className={styles['question-create-page']}>
     <Head>
-      <title>Create a new {((questionSubtype || questionType).altName || (questionSubtype || questionType).name).toLowerCase()} question  - Asker</title>
+      <title>{t('actions.create-new-question')} - Asker</title>
       <meta name="robots" content="noindex" />
     </Head>
 
@@ -61,8 +64,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale})
     props: {
       config: await getSettings(),
       questionType,
-      questionSubtype: questionSubtype,
-      translations: await getTranslations()
+      questionSubtype: questionSubtype
     }
   }
 })

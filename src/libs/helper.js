@@ -146,7 +146,7 @@ export const snap2data = snap => {
   return JSON.parse(JSON.stringify(items));
 }
 
-export const humanFileSize = (bytes, si=false, dp=1) => {
+export const humanFileSize = (bytes, si=true, dp=1) => {
   const thresh = si ? 1000 : 1024;
 
   if (Math.abs(bytes) < thresh) {
@@ -234,9 +234,10 @@ export const createDummyVotes = rules => rules.map(rule => ({
 }))
 
 export const projectStageQuestionsReducer = (questions, stage) => {
+  
   return [
     ...questions,
-    ...(stage.questions ? stage.questions : [])
+    ...(stage && stage.questions ? stage.questions : [])
   ]
 }
 
@@ -249,7 +250,7 @@ export const getTimeLabel = (minutes) => {
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
 
-  return h ? `${h} h ${m} min` : `${m} min`
+  return h ? `${h}h ${m}m` : `${m}m`
 }
 
 export const fixFloat = (val, pr = 2) => Number.parseFloat(Number.parseFloat(val).toFixed(pr))
@@ -261,10 +262,10 @@ export const secondsToTimeLabel = (seconds, labels = ['h', 'm', 's']) => {
   const m = Math.floor((seconds % 3600) / 60);
   const s = Math.floor(seconds % 60);
 
-  const hLabel = h ? `${h} ${labels[0]} ` : '';
-  const mLabel = m ? `${m} ${labels[1]} ` : '';
+  const hLabel = h ? `${h}${labels[0]} ` : '';
+  const mLabel = m ? `${m}${labels[1]} ` : '';
 
-  return `${hLabel}${mLabel}${s} ${labels[2]}`
+  return `${hLabel}${mLabel}${s}${labels[2]}`
 }
 
 export const nameSort = function(a, b) {

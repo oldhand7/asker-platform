@@ -3,39 +3,49 @@ import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField
 import striptags from 'striptags';
 import { allowedHtmlTags } from 'libs/config';
 import { useForm } from 'libs/react-hook-form';
-import { useSite } from 'libs/site';
+import { useEffect, useMemo } from 'react';
+import { useTranslation } from 'libs/translation';
+import { useWatch } from 'react-hook-form';
 
 import styles from './multichoice-question-int-form.module.scss';
-import { useEffect } from 'react';
 
 const MultichoiceQuestionIntForm = ({ className, question, values = [], onValues }) => {
-  const { i18nField } = useSite()
+  const { i18nField } = useTranslation()
 
-  const { setValue, values: formValues } = useForm({
-    values: {
-      answers: values || []
-    }
+  const initValues = useMemo(() => ({
+    answers: values || []
+  }), [])
+
+  const {
+    setValue,
+    control
+  } = useForm({
+    values: initValues
+  })
+
+  const answers = useWatch({
+    control,
+    name: 'answers',
+    defaultValue: initValues.answers
   })
 
   const toggleAnswer = answer => {
-    const exist = formValues.answers.find(a => a.uid === answer.uid);
+    const exist = answers.find(a => a.uid === answer.uid);
 
-    let newAnswers = formValues.answers;
+    let copy = [...answers];
     
     if (exist) {
-      newAnswers = newAnswers.filter(a => a.uid != answer.uid);
+      copy = copy.filter(a => a.uid != answer.uid);
     } else {
-      newAnswers.push(answer)
+      copy.push(answer)
     }
 
-    setValue('answers', newAnswers)
+    setValue('answers', copy)
   }
 
   useEffect(() => {
-    if (JSON.stringify(values) != JSON.stringify(formValues.answers)) {
-      onValues && onValues(formValues.answers)
-    }
-  }, [values, formValues])
+      onValues && onValues(answers)
+  }, [answers, onValues])
 
   const questionNameInt = i18nField(question.name);
   const questionDescInt = i18nField(question.desc);
@@ -54,7 +64,9 @@ const MultichoiceQuestionIntForm = ({ className, question, values = [], onValues
             name={`q${question.id}`}
             className={styles['multichoice-question-int-form-answers-input']}
             onChange={_ => toggleAnswer(answer)}
-            key={index} checked={!!formValues.answers.find(a => a.uid == answer.uid)} label={answerIntLabel} />
+            key={index}
+            checked={!!answers.find(a => a.uid == answer.uid)}
+            label={answerIntLabel} />
         </li>
       })}
     </ul>

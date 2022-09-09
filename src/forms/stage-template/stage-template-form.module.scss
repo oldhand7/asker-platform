@@ -1,0 +1,41 @@
+.stage-template-form {
+    display: flex;
+    justify-content: space-between;
+    z-index: 1;
+    position: relative;
+
+    &-select {
+        display: flex;
+        align-items: center;
+
+        &-label {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 21px;
+            color: #B7B7B7;
+            margin-right: 8rem;
+        }
+    }
+
+    &-control {
+        z-index: 1;
+        &-save {
+            background: #43B88C;
+            border-radius: 5px;
+            font-weight: 500;
+            font-size: 14rem;
+            line-height: 21rem;
+            color: #FFFFFF;
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+            padding: 8rem 16rem;
+            cursor: pointer;
+            border: 0;
+
+            &:hover {
+                background: #3DA67E;
+            }
+        }
+    }
+}

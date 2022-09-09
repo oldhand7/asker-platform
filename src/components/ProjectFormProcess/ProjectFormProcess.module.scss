@@ -1,0 +1,63 @@
+.project-form-process {
+    position: relative;
+    min-height: calc(100vh - 100rem);
+    padding: 16rem;
+
+    &-head {
+        margin-bottom: 16rem;;
+    }
+
+    &-title {
+        font-weight: 600;
+        font-size: 20rem;
+        line-height: 30rem;
+        color: #282828;
+        margin: 0 0 16rem 0;
+    }
+
+    &-add-stage {
+        background: #43B88C;
+        border: 1px solid #43B88C;
+        border-radius: 5px;
+        color: white;
+        font-size: 14rem;
+        display: inline-block;
+        width: 100%;
+        padding: 12rem 0;
+        cursor: pointer;
+        position: relative;
+
+        &:hover {
+            background: #3DA67E;
+        }
+
+        &-icon {
+            position: absolute;
+            left: 16rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        &-text {
+            font-weight: 700;
+            line-height: 21rem;
+            letter-spacing: 0.01em;
+            text-transform: uppercase;
+        }
+    }
+
+    &-body {
+    }
+
+    &-stage-tree {
+
+    }
+
+    &-stage-choose {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+}

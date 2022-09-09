@@ -2,6 +2,8 @@ import { projectStageQuestionsReducer, getSubtype, ucFirst } from 'libs/helper';
 import { flattenCriteriaTree } from 'libs/criteria';
 import { fixFloat } from 'libs/helper'
 import { getStageTime } from './stage';
+import { DEFAULT_STAGE_TIME } from 'libs/config';
+import { getStageKey } from 'libs/stage';
 
 const weightSort = function(ca, cb) {
   if (ca.weight < cb.weight) return 1;
@@ -15,10 +17,16 @@ const weightSort = function(ca, cb) {
   return 0;
 }
 
-export const getProjectEvaluationCriterias = (project, t) => {
-  const { stages, scoringRules } = project;
+export const getProjectEvaluationCriterias = (project, trans = {}) => {
+  const { config, scoringRules } = project;
 
-  const questions = stages.filter(s => s && s.config).map(s => s.config)
+  const {
+    t, i18nField
+  } = trans;
+
+  const stages = Object.values(config);
+
+  const questions = stages.filter(s => s)
     .reduce(projectStageQuestionsReducer, [])
     .filter(({ type }) => {
       return type != 'screening' && type != 'other';
@@ -50,8 +58,8 @@ export const getProjectEvaluationCriterias = (project, t) => {
   }
 
   const categoryQuestions = {
-    'culture': t ? t('Culture') : 'Culture',
-    'motivation': t ? t('Motivation') : 'Motivation'
+    'culture': t ? t('labels.culture') : 'Culture',
+    'motivation': t ? t('labels.motivation') : 'Motivation'
   }
 
   const result = []
@@ -90,7 +98,7 @@ export const getProjectEvaluationCriterias = (project, t) => {
         const w = fixFloat(customP || p);
 
         evaluationAggregate.children.push({
-          name: aggregate[key][subtype][0].criteria.name,
+          name: i18nField ? i18nField(aggregate[key][subtype][0].criteria.name) : aggregate[key][subtype][0].criteria.name,
           type: subtype,
           weight: w,
           questions: aggregate[key][subtype].length
@@ -132,6 +140,7 @@ export const unpackQuestions = p => {
         .filter(q => q)
 
        config.questions = questions;
+       p.config[getStageKey(p.stages[i])].questions = questions;
     }
   }
 }
@@ -145,11 +154,14 @@ export const packQuestions = p => {
     const { config } = p.stages[i]
 
     if (config && config.questions) {
-      config.questions = config.questions.map(q => {
+      const questions = config.questions.map(q => {
         questionsMap[q.id] = q;
 
         return q.id;
       })
+
+      config.questions = questions;
+      p.config[getStageKey(p.stages[i])].questions = questions;
     }
   }
 
@@ -159,4 +171,56 @@ export const packQuestions = p => {
 export const getProjectMinutes = project => {
   return project.stages.filter(s => s)
     .reduce((sum, s) => sum + getStageTime(s), 0)
+}
+
+export const checkScoringRulesValid = (scoringRules) => {
+  const weights = Object.values(scoringRules || {});
+
+  if (!weights.length) {
+    return true;
+  }
+
+  const sum = weights.reduce((sum, weight) => Number.parseFloat(weight) + sum, 0);
+
+  return Math.round(sum) == 100
+}
+
+
+export const calcProjectTime = p => {
+  const { config, stages } = p;
+
+  let time = 0;
+
+  for (let i = 0; i < stages.length; i++) {
+    const stageId = getStageKey(stages[i])
+
+    if (config && config[stageId] && typeof config[stageId].time !== "undefined") {
+      time += Number.parseInt(config[stageId].time)
+    } else if (typeof stages[i].time !== "undefined") {
+      time += Number.parseInt(config[stageId].time)
+    } else {
+      time += DEFAULT_STAGE_TIME;
+    }
+  }
+
+  return time;
+}
+
+export const configureStages = (stages = [], config = {}, remove = false)=> {
+  const stageKeys = stages.map(s => getStageKey(s))
+
+  if (remove) {
+    for (let key in Object.keys(config)) {
+      if (stageKeys.indexOf(key) == -1) delete config[key]
+    }
+  }
+
+  return stages.map(stage => {
+    const stageId = getStageKey(stage);
+
+    return {
+      ...stage,
+      config: config[stageId]
+    }
+  })
 }

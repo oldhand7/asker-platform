@@ -9,18 +9,13 @@ describe('Updating queestions', () => {
       cy.createDummyProject('Project 123')
 
       cy.contains('Project 123').closest('ul').listFirstRowNavigate('Edit')
-
-      cy.contains('Add stage')
-        .click()
-
-      cy.get('[data-test-id="feature-other-questions"]')
-        .drag('[data-test-id="stage-2"] .Droppable')
-        .wait(1000)
+ 
+      cy.addStage('Other')
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
           cy.get('[data-test-id="question-manager"]')
-          .should('not.contain', 'Question 123')
+            .should('not.contain', 'Question 123')
 
           cy.get('[data-test-id="question-explorer"] ul').last()
             .contains('Question 123')
@@ -55,13 +50,13 @@ describe('Updating queestions', () => {
       cy.contains('Save question').click()
 
       cy.get('[data-test-id="alert-success"]')
-        .contains('Question saved').wait(1000)
+        .contains('Question saved')
 
       cy.visit('/projects')
 
-      cy.contains('Project 123').closest('ul').listFirstRowNavigate('Edit')
+      cy.contains('Project 123').closest('li').listRowNavigate('Edit')
 
-      cy.get('[data-test-id="stage-2"]').click()
+      cy.contains('Other (1)').click()
 
       cy.get('[data-test-id="feature-form"] [data-test-id="question-manager"]')
         .should('contain', 'Questione 111')
@@ -85,11 +80,8 @@ describe('Updating queestions', () => {
         .closest('ul')
         .listFirstRowNavigate('Edit')
 
-      cy.contains('Add stage').click()
 
-      cy.get('[data-test-id="feature-other-questions"]')
-        .drag('[data-test-id="stage-2"] .Droppable')
-        .wait(1000)
+      cy.addStage('Other')
 
       cy.get('[data-test-id="feature-form"]')
         .within(() => {
@@ -120,7 +112,7 @@ describe('Updating queestions', () => {
       cy.contains('Save question').click()
 
       cy.get('[data-test-id="alert-success"]')
-        .contains('Question saved').wait(1000)
+        .contains('Question saved')
 
       cy.visit('/templates')
 
@@ -128,7 +120,7 @@ describe('Updating queestions', () => {
         .closest('ul')
         .listFirstRowNavigate('Edit')
 
-      cy.get('[data-test-id="stage-2"]').click().wait(1000)
+      cy.contains('Other (1)').click()
 
       cy.get('[data-test-id="feature-form"] [data-test-id="question-manager"]')
         .should('contain', 'Questione 222')

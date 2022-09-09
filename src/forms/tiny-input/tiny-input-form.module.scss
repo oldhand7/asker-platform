@@ -1,0 +1,57 @@
+.tiny-input-form {
+    position: relative;
+    right: -12rem;
+    text-align: right;
+
+    &-input-field {
+        position: relative;
+
+        &-body {
+            position: relative;
+
+            & > * {
+                line-height: 37rem;
+                height: 37rem;
+            }
+        }
+    }
+
+    &-input {
+        width: 232rem;
+        background: #F6F6F6;
+        border: 1px solid #DEDEDE;
+        border-radius: 5px;
+        font-weight: 400;
+        font-size: 14rem;
+        line-height: 21rem;
+        color: #969696;
+        padding-left: 12rem;
+        position: relative;
+        right: -12rem;
+        z-index: 1;
+        padding-right: 24rem;
+        display: inline-block;
+
+        &:focus {
+            outline: 0;
+        }
+    }
+
+    &-button {
+        border-radius: 5px;
+        background: #43B88C;
+        border-radius: 5px;
+        font-weight: 500;
+        font-size: 14rem;
+        color: #FFFFFF;
+        padding: 0 16rem;
+        z-index: 2;
+        position: relative;
+        border: 0;
+        cursor: pointer;
+
+        &:hover {
+            background: #3DA67E;
+        }
+    }
+}

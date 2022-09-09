@@ -1,9 +1,28 @@
-.followup-question-form {
-  &-input-field {
-    margin: 20rem 0;
+@import 'styles/vars';
+
+.form {
+  &-label {
+    display: block;
+    font-weight: 500;
+
+    small {
+      float: right;
+      font-size: 14rem;
+      color: $brandish-grey;
+    }
   }
 
-  &-submit {
+  &-list {
+    list-style-type: square;
 
+
+    &-item {
+      &-remove {
+        margin-left: 8rem;
+        vertical-align: middle;
+      }
+
+      margin-bottom: 8rem;
+    }
   }
 }

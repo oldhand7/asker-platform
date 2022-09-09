@@ -1,0 +1,35 @@
+.input {
+  padding: 0 8rem;
+  white-space: nowrap;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+  &-input {
+
+  }
+
+  &-label {
+  }
+
+  &-icon {
+    margin-left: 8rem;
+  }
+
+  &-read {
+    cursor: pointer;
+  }
+
+  &-edit {
+    padding: 0;
+
+    input {
+      border: 0;
+      line-height: inherit;
+    }
+  }
+
+  &-before-icon {
+    margin-right: 8rem;
+  }
+}

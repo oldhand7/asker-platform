@@ -159,11 +159,10 @@ describe('Backoffice evaluation questions', () => {
 
         cy.get('table tbody tr').first()
           .should('contain', 'Are you familiar with C1_SE?')
-          .should('contain', 'Competency_SE')
           .should('contain', 'C1_SE followup 1')
           .should('contain', 'C1_SE followup 2')
           .should('contain', 'C1_SE followup 3')
-          .listNavigate('Edit')
+          .listRowNavigate('Edit')
 
         cy.get('[data-test-id="criteria-option"]')
           .should('contain', 'C1_SE')
@@ -213,11 +212,9 @@ describe('Backoffice evaluation questions', () => {
 
        cy.createDummyProject('Project C1')
 
-       cy.contains('Project C1').closest('li').listNavigate('Edit')
+       cy.contains('Project C1').closest('li').listRowNavigate('Edit')
 
-       cy.contains('Add stage').click()
-
-       cy.get('[data-test-id="feature-competency-questions"]').drag('[data-test-id="stage-2"] .Droppable')
+       cy.addStage('Competency')
         .wait(1000)
 
         cy.get('[data-test-id="feature-form"]')
@@ -238,7 +235,6 @@ describe('Backoffice evaluation questions', () => {
        cy.contains('Start interview').click()
 
        cy.get('[data-test-id="feature-form"]').eq(1)
-        // .should('contain', 'Competency_SE')
         .should('contain', 'C1_SE')
         .should('contain', 'Are you familiar with C1_SE?')
         .should('contain', 'C1note_SE')
@@ -417,11 +413,10 @@ describe('Backoffice evaluation questions', () => {
   
       cy.get('table tbody tr').first()
         .should('contain', 'Are you familiar with HS1_SE?')
-        .should('contain', 'Hard skill_SE')
         .should('contain', 'HS1_SE followup 1')
         .should('contain', 'HS1_SE followup 2')
         .should('contain', 'HS1_SE followup 3')
-        .listNavigate('Edit')
+        .listRowNavigate('Edit')
   
       cy.get('[data-test-id="criteria-option"]')
         .should('contain', 'HS1_SE')
@@ -468,18 +463,13 @@ describe('Backoffice evaluation questions', () => {
   
      cy.createDummyProject('Project HS1')
   
-     cy.contains('Project HS1').closest('li').listNavigate('Edit')
+     cy.contains('Project HS1').closest('li').listRowNavigate('Edit')
   
-     cy.contains('Add stage').click()
-  
-     cy.get('[data-test-id="feature-hard-skill-questions"]').drag('[data-test-id="stage-2"] .Droppable')
-      .wait(1000)
+     cy.addStage('Hard skill')
   
       cy.get('[data-test-id="feature-form"]')
       .within(() => {
-        cy.contains('Are you familiar with HS1_SE?')
-          .closest('li')
-          .find('button[data-test-id="add-question"]').first().click()
+        cy.contains('Are you familiar with HS1_SE?').closest('li').find('button').click()
       })
   
       cy.contains('Save project').click()
@@ -655,11 +645,10 @@ describe('Backoffice evaluation questions', () => {
 
     cy.get('table tbody tr').first()
       .should('contain', 'Are you familiar with E1_SE?')
-      .should('contain', 'Experience_SE')
       .should('contain', 'E1_SE followup 1')
       .should('contain', 'E1_SE followup 2')
       .should('contain', 'E1_SE followup 3')
-      .listNavigate('Edit')
+      .listRowNavigate('Edit')
 
     cy.get('[data-test-id="criteria-option"]')
       .should('contain', 'E1_SE')
@@ -689,18 +678,15 @@ describe('Backoffice evaluation questions', () => {
 
   cy.createDummyProject('Project E1')
 
-   cy.contains('Project E1').closest('li').listNavigate('Edit')
+   cy.contains('Project E1').closest('li').listRowNavigate('Edit')
 
-   cy.contains('Add stage').click()
-
-   cy.get('[data-test-id="feature-experience-questions"]').drag('[data-test-id="stage-2"] .Droppable')
-    .wait(1000)
+   cy.addStage('Experience')
 
     cy.get('[data-test-id="feature-form"]')
     .within(() => {
       cy.contains('Are you familiar with E1_SE?')
         .closest('li')
-        .find('button[data-test-id="add-question"]').first().click()
+        .find('button').first().click()
     })
     .wait(1000)
 
@@ -712,7 +698,7 @@ describe('Backoffice evaluation questions', () => {
             cy.get('li').eq(0).should('contain', 'E1_SE').should('contain', '100%')
           })
       })
-      .contains('Edit')
+      .find('[data-test-id="edit-button"]')
       .click()
 
 
@@ -850,11 +836,10 @@ it('Should create motivation question', () => {
   
   cy.get('table tbody tr').first()
       .should('contain', 'Are you familiar with M1_SE?')
-      .should('contain', 'Motivation_SE')
       .should('contain', 'M1_SE followup 1')
       .should('contain', 'M1_SE followup 2')
       .should('contain', 'M1_SE followup 3')
-      .listNavigate('Edit')
+      .listRowNavigate('Edit')
   
   cy.get('input[name="name.se"]').should('have.value', 'Are you familiar with M1_SE?');
   
@@ -870,18 +855,15 @@ it('Should create motivation question', () => {
   
   cy.createDummyProject('Project M1')
   
-  cy.contains('Project M1').closest('li').listNavigate('Edit')
+  cy.contains('Project M1').closest('li').listRowNavigate('Edit')
   
-  cy.contains('Add stage').click()
-  
-  cy.get('[data-test-id="feature-motivation-questions"]').drag('[data-test-id="stage-2"] .Droppable')
-  .wait(1000)
+  cy.addStage('Motivation')
   
   cy.get('[data-test-id="feature-form"]')
   .within(() => {
       cy.contains('Are you familiar with M1_SE?')
       .closest('li')
-      .find('button[data-test-id="add-question"]').first().click()
+      .find('button').first().click()
   })
   .wait(1000)
   
@@ -889,14 +871,14 @@ it('Should create motivation question', () => {
       .within(() => {
         cy.contains('Motivation').parent().should('contain', '100%')
       })
-      .contains('Edit')
+      .find('[data-test-id="edit-button"]')
       .click()
   
   
   cy.get('#scoring-rules-modal')
       .should('contain', 'Project scoring rules')
       .within(() => {
-      cy.contains('Motivation_SE').closest('tr').find('input').should('have.value', 100)
+      cy.contains('Motivation').closest('tr').find('input').should('have.value', 100)
       })
       .trigger('keyup', { code: "Escape" })
   
@@ -912,7 +894,7 @@ it('Should create motivation question', () => {
   
   cy.processOverviewConfirmQuestioncount(1)
   cy.processOverviewConfirmStageCount(2);
-  cy.processOverviewConfirmStageStatus(1, 'Motivation_SE', 'Not started')
+  cy.processOverviewConfirmStageStatus(1, 'Motivation', 'Not started')
   
   cy.get('[data-test-id="feature-form"]').eq(1)
   .should('contain', 'M1_SE')
@@ -1027,11 +1009,10 @@ it('Should create culture question', () => {
     
     cy.get('table tbody tr').first()
         .should('contain', 'Are you familiar with C1_SE?')
-        .should('contain', 'Culture_SE')
         .should('contain', 'C1_SE followup 1')
         .should('contain', 'C1_SE followup 2')
         .should('contain', 'C1_SE followup 3')
-        .listNavigate('Edit')
+        .listRowNavigate('Edit')
     
     cy.get('input[name="name.se"]').should('have.value', 'Are you familiar with C1_SE?');
     
@@ -1047,18 +1028,17 @@ it('Should create culture question', () => {
     
     cy.createDummyProject('Project C1')
     
-    cy.contains('Project C1').closest('li').listNavigate('Edit')
+    cy.contains('Project C1').closest('li').listRowNavigate('Edit')
     
-    cy.contains('Add stage').click()
-    
-    cy.get('[data-test-id="feature-culture-questions"]').drag('[data-test-id="stage-2"] .Droppable')
-    .wait(1000)
+
+    cy.addStage('Culture')
+
     
     cy.get('[data-test-id="feature-form"]')
     .within(() => {
         cy.contains('Are you familiar with C1_SE?')
         .closest('li')
-        .find('button[data-test-id="add-question"]').first().click()
+        .find('button').first().click()
     })
     .wait(1000)
     
@@ -1066,14 +1046,14 @@ it('Should create culture question', () => {
         .within(() => {
           cy.contains('Culture').parent().should('contain', '100%')
         })
-        .contains('Edit')
+        .find('[data-test-id="edit-button"]')
         .click()
     
     
     cy.get('#scoring-rules-modal')
         .should('contain', 'Project scoring rules')
         .within(() => {
-        cy.contains('Culture_SE').closest('tr').find('input').should('have.value', 100)
+        cy.contains('Culture').closest('tr').find('input').should('have.value', 100)
         })
         .trigger('keyup', { code: "Escape" })
     
@@ -1089,7 +1069,7 @@ it('Should create culture question', () => {
     
     cy.processOverviewConfirmQuestioncount(1)
     cy.processOverviewConfirmStageCount(2);
-    cy.processOverviewConfirmStageStatus(1, 'Culture_SE', 'Not started')
+    cy.processOverviewConfirmStageStatus(1, 'Culture', 'Not started')
     
     cy.get('[data-test-id="feature-form"]').eq(1)
     .should('contain', 'C1_SE')

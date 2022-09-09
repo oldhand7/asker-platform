@@ -3,10 +3,10 @@ import Logo from 'components/Logo/Logo';
 import classNames from 'classnames';
 import { useState, useEffect, useMemo } from 'react';
 import MenuToggle from 'components/MenuToggle/MenuToggle';
-import { useSite } from 'libs/site';
 import { useUser } from 'libs/user';
 import dynamic from 'next/dynamic';
 import LanguageSwitcher from 'components/LanguageSwitcher/LanguageSwitcher';
+import { useTranslation } from 'libs/translation';
 
 import styles from './Navbar.module.scss';
 
@@ -18,13 +18,13 @@ const menuItemsMobile = ({ user, t, menuItems = []}) => {
   if (user) {
     mobile.push({
       id: 'profile',
-      title: t('Profile'),
+      title: t('menu.profile'),
       href: '/profile/'
     })
 
     mobile.push({
       id: 'logout',
-      title: t('Logout'),
+      title: t('actions.logout'),
       href: '/logout/'
     })
   }
@@ -33,7 +33,7 @@ const menuItemsMobile = ({ user, t, menuItems = []}) => {
 }
 
 const Navbar = ({ className, menu = [] }) => {
-  const {config, t} = useSite();
+  const { t } = useTranslation();
   const [mode, setMode] = useState('normal');
   const { user, loading } = useUser();
   const [open, setOpen] = useState(false);
@@ -42,17 +42,17 @@ const Navbar = ({ className, menu = [] }) => {
   const menuItems = useMemo(() => [
     {
       id: 'projects',
-      title: t('Projects'),
+      title: t('menu.projects'),
       href: '/projects/'
     },
     {
       id: 'templates',
-      title: t('Templates'),
+      title: t('menu.templates'),
       href: '/templates/'
     },
     {
       id: 'questions',
-      title: t('Questions'),
+      title: t('menu.questions'),
       href: '/questions/'
     }
   ], [t])

@@ -1,10 +1,12 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useMemo, memo } from 'react';
 import dynamic from 'next/dynamic'
 import classNames from 'classnames';
 import { useInView } from 'react-intersection-observer';
 import InterviewStageTimeLabel from 'components/InterviewStageTimeLabel/InterviewStageTimeLabel';
 import styles from './StageInterviewForm.module.scss';
 import { DEFAULT_STAGE_TIME } from 'libs/config';
+import { useForm } from 'libs/react-hook-form';
+import { isMultistage } from 'libs/stage';
 
 const stageForms = {
   'introduction': dynamic(() => import('forms/introduction-int/introduction-int-form')),
@@ -21,89 +23,120 @@ const stageForms = {
   'summary': dynamic(() => import('forms/summary-int/summary-int-form'))
 }
 
-const evaluationQuestions = [
-  'competency-questions',
-  'experience-questions',
-  'hard-skill-questions',
-  'motivation-questions',
-  'culture-questions'
-]
+const StageInterviewForm = ({ onValues, values, stage, stages = stageForms, question, taxStageSecond, markComplete, id, onFocusId, className, ...props}) => {
+  const initValues = useMemo(() => values, []);
 
-const StageInterviewForm = (props) => {
-  const isMultistage = useMemo(
-    () => !props.question && evaluationQuestions.indexOf(props.stage.id) > -1,
-    [props]
-  )
+  console.log(stage)
 
-  const [FormComponent, setFormComponent] = useState(null);
-  const [formComponentProps, setFormComponentProps] = useState({});
+  const {
+    values: formValues,
+    setValue
+  } = useForm({
+    values: initValues
+  })
+
+  const notQuestionMultistage = useMemo(() => !question && isMultistage(stage), [question, stage])
 
   const { ref, inView } = useInView({
     threshold: 0.7
   });
 
   useEffect(() => {
-    if (!inView || !props.taxStageSecond) return;
+    if (!inView || !taxStageSecond) return;
 
-    const timeHandler = () => {
-      props.taxStageSecond(props.question && props.question.id)
-    }
-
-    const int = setInterval(timeHandler, 1000)
+    const int = setInterval(() => {
+      taxStageSecond(question)
+    }, 1000)
 
     return () => clearInterval(int)
-  }, [inView, props])
+  }, [inView, taxStageSecond, question])
 
   useEffect(() => {
     if (inView) {
-      props.onFocusId(`stage-${props.id}`)
+      onFocusId && onFocusId(`stage-${id}`)
     }
-  }, [inView, props.id, props.onFocusId])
+  }, [inView, id, onFocusId])
+
+  const questionInputHandlers = useMemo(() => {
+    if (!notQuestionMultistage) {
+      return {};
+    }
+
+    return stage.config.questions.reduce((handlers, question) => {
+      handlers[question.id] = values => setValue(question.id, values)
+
+      return handlers;
+    }, {})
+  }, [notQuestionMultistage, stage, setValue])
+
+  const questionCompleteHandlers = useMemo(() => {
+    if (!notQuestionMultistage) {
+      return {}
+    }
+
+    return stage.config.questions.reduce((handlers, question) => {
+      handlers[question.id] = () => markComplete(question);
+    
+      return handlers;
+    }, {})
+  }, [notQuestionMultistage, markComplete, stage])
 
   useEffect(() => {
-    const { stage } = props;
+    notQuestionMultistage && onValues && onValues(formValues)
+  }, [formValues, notQuestionMultistage, onValues])
 
-    if (stage && stageForms[stage.id]) {
-      setFormComponent(stageForms[stage.id]);
-      setFormComponentProps({ ...props })
-    }
-  }, [props])
+  const time = useMemo(() => {
+    return stage.config && stage.config.time || DEFAULT_STAGE_TIME;
+  }, [stage]);
 
-  if (isMultistage) {
-    return props.stage.config.questions.map((q, qIndex) => {
+  const FormComponent = useMemo(() => stages[stage.id], [stage, stages])
+
+  if (notQuestionMultistage) {
+    return stage.config.questions.map(q => {
       return <StageInterviewForm
         key={q.id}
-        {...props}
-        values={props.values && props.values[q.id]}
-        onValues={values => {
-          props.onValues({
-            ...props.values,
-            [q.id]: values
-          })
-        }}
+        values={formValues && formValues[q.id]}
+        onValues={questionInputHandlers[q.id]}
+        config={stage.config.questions[q.id]}
         question={q}
-        id={`${props.id}-${q.id}`}
+        onFocusId={onFocusId}
+        stages={stages}
+        className={className}
+        markComplete={questionCompleteHandlers[q.id]}
+        taxStageSecond={taxStageSecond}
+        stage={stage}
+        {...props}
+        id={`${id}-${q.id}`}
       />
     })
   }
 
   return <div
     ref={ref}
-    id={`stage-${props.id}`}
+    id={`stage-${id}`}
     data-test-id="feature-form"
     className={classNames(
       styles['stage-interview-form'],
-      props.className
-    )} >
+      className
+    )}>
     {
       FormComponent ?
       <>
-      <InterviewStageTimeLabel className={styles['stage-interview-form-timer']} time={props.stage.time || DEFAULT_STAGE_TIME} />
-      <FormComponent inView={inView} config={props.stage.config} {...formComponentProps} className={styles['stage-interview-form-form']} />
-      
+        <InterviewStageTimeLabel className={styles['stage-interview-form-timer']} time={time} />
+        <FormComponent
+          {...props}
+          values={values}
+          onValues={onValues}
+          onFocusId={onFocusId}
+          question={question}
+          markComplete={markComplete}
+          stage={stage}
+          config={props.config || stage.config}
+          className={styles['stage-interview-form-form']}
+        />
       </> : null
   }
   </div>
 }
 
-export default StageInterviewForm;
+export default memo(StageInterviewForm);

@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import CarretDown from 'components/Icon/CarretDownIcon';
-import { useSite } from 'libs/site';
 import { useUser } from 'libs/user';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -23,7 +22,6 @@ const LanguageSwitcherItem = ({ language }) => (
 )
 
 const LanguageSwitcher = ({ className, language = 'en', languages = defaultLanguages}) => {
-    const {config, t} = useSite();
     const [open, setOpen] = useState(false);
     const router = useRouter();
     const ref = useRef();

@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import styles from './TextInput.module.scss';
 
-const TextInput = ({ focus, className, name = '', type="text", onFocus, onBlur, onKeyDown, onEnter, ...props }) => {
+const TextInput = ({ focus, className, name = '', type="text", onFocus, onBlur, onKeyDown, onEnter, onEscape, ...props }) => {
   const [focused, setFocused] = useState(false)
 
   const ref = useRef();
@@ -15,40 +15,39 @@ const TextInput = ({ focus, className, name = '', type="text", onFocus, onBlur, 
   }, [focus])
 
   useEffect(() => {
-    if (focused && onEnter) {
-      const keyHandler = (ev) => {
-        if (ev.code == "Enter" || ev.code == "NumpadEnter") {
-          ev.preventDefault();
+    if (!focused) return;
 
-          onEnter(ev)
-        }
+    const keyHandler = (ev) => {
+      if (ev.code == "Enter" || ev.code == "NumpadEnter") {
+        onEnter && ev.preventDefault();
+        onEnter && onEnter(ev)
       }
 
-      document.addEventListener('keydown', keyHandler);
-
-      return () => {
-        document.removeEventListener('keydown', keyHandler);
+      if (ev.code == "Escape") {
+        onEscape && onEscape(ev)
       }
+
+      onKeyDown && onKeyDown(ev)
     }
-  }, [focused, onEnter])
+
+    document.addEventListener('keydown', keyHandler);
+
+    return () => {
+      document.removeEventListener('keydown', keyHandler);
+    }
+  }, [focused, onKeyDown, onEnter, onEscape])
 
   const handleFocus = (ev) => {
-    if (onFocus) {
-      return onFocus(ev);
-    }
-
     setFocused(true);
+    onFocus && onFocus(ev);
   }
 
   const handleBlur = (ev) => {
-    if (onBlur) {
-      return onBlur(ev);
-    }
-
     setFocused(false);
+    onBlur && onBlur(ev)
   }
 
-  return <input onFocus={handleFocus} onBlur={handleBlur} type={type} id={`input-${name}`} name={name} className={classNames(styles['text-input'], className)} ref={ref} {...props} />
+  return <input data-focus={focused ? 'focus' : 'nofocus'} onFocus={handleFocus} onBlur={handleBlur} type={type} name={name} className={classNames(styles['text-input'], className)} ref={ref} {...props} />
 }
 
 export default TextInput
