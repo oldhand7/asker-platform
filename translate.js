@@ -22,12 +22,12 @@ const firebaseServiceCreds = configs[APP_ENV_LOCAL]
 dotenv.config();
 
 dotenv.config({
-  path: path.resolve(process.cwd(), `.env.${APP_ENV_LOCAL}`),
+  path: path.resolve(process.cwd(), `.env.poduction`),
   override: true
 });
 
 dotenv.config({
-  path: path.resolve(process.cwd(), `.env.${APP_ENV_LOCAL}.local`),
+  path: path.resolve(process.cwd(), `.env.production.local`),
   override: true
 });
 
