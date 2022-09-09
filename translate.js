@@ -3,9 +3,32 @@ const path = require('path');
 const dotenv = require('dotenv');
 const { initializeApp } = require("firebase-admin/app");
 const { credential } = require("firebase-admin");
-const firebaseServiceCreds = require('./firebase-service-creds-production.json');
 const { getFirestore, FieldPath, Timestamp } = require('firebase-admin/firestore');
 const baseEnTranslations = require('./src/translation/en.json');
+
+const firebaseServiceCredsProd = require('./firebase-service-creds-production.json');
+const firebaseServiceCredsBeta = require('./firebase-service-creds-beta.json');
+const firebaseServiceCredsDevelopment = require('./firebase-service-creds-beta.json');
+const firebaseServiceCredsTesting = require('./firebase-service-creds-testing.json');
+
+const configs = {
+  production: firebaseServiceCredsProd,
+  beta: firebaseServiceCredsBeta,
+  development: firebaseServiceCredsDevelopment,
+  testing:firebaseServiceCredsTesting
+}
+
+const firebaseServiceCreds = configs[process.env.APP_ENV || 'production']
+
+dotenv.config({
+  path: path.resolve(process.cwd(), '.env.production'),
+  override: true
+});
+
+dotenv.config({
+  path: path.resolve(process.cwd(), '.env.production.local'),
+  override: true
+});
 
 const snap2data = snap => {
   const items = [];
