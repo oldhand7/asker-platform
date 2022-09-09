@@ -10,7 +10,7 @@ const firebaseServiceCreds = require('./firebase-service-creds-production.json')
 dotenv.config();
 
 dotenv.config({
-  path: path.resolve(process.cwd(), `.env.poduction`),
+  path: path.resolve(process.cwd(), `.env.production`),
   override: true
 });
 
