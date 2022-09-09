@@ -5,19 +5,7 @@ const { initializeApp } = require("firebase-admin/app");
 const { credential } = require("firebase-admin");
 const { getFirestore, FieldPath, Timestamp } = require('firebase-admin/firestore');
 const baseEnTranslations = require('./src/translation/en.json');
-
-const firebaseServiceCredsBeta = require('./firebase-service-creds-beta.json');
-const firebaseServiceCredsProduction = require('./firebase-service-creds-production.json');
-
-
-const configs = {
-  production: firebaseServiceCredsProduction,
-  beta: firebaseServiceCredsBeta,
-}
-
-const APP_ENV_LOCAL = process.env.APP_ENV == 'production' ? 'production' : 'beta';
-
-const firebaseServiceCreds = configs[APP_ENV_LOCAL]
+const firebaseServiceCreds = require('./firebase-service-creds-production.json');
 
 dotenv.config();
 
@@ -79,13 +67,14 @@ const getTranslations = async (db) => {
   return result;
 }
 
+const FIREBASE_SERVICE_KEY = process.env.FIREBASE_SERVICE_KEY_PROD || process.env.FIREBASE_SERVICE_KEY;
 
 (async function () {
   try {
     const app = initializeApp({
       credential: credential.cert({
         ...firebaseServiceCreds,
-        private_key: process.env.FIREBASE_SERVICE_KEY.replace(/\\n/g, '\n')
+        private_key: FIREBASE_SERVICE_KEY.replace(/\\n/g, '\n')
       })
     });
     
