@@ -6,27 +6,28 @@ const { credential } = require("firebase-admin");
 const { getFirestore, FieldPath, Timestamp } = require('firebase-admin/firestore');
 const baseEnTranslations = require('./src/translation/en.json');
 
-const firebaseServiceCredsProd = require('./firebase-service-creds-production.json');
 const firebaseServiceCredsBeta = require('./firebase-service-creds-beta.json');
-const firebaseServiceCredsDevelopment = require('./firebase-service-creds-beta.json');
-const firebaseServiceCredsTesting = require('./firebase-service-creds-testing.json');
+const firebaseServiceCredsProduction = require('./firebase-service-creds-production.json');
+
 
 const configs = {
-  production: firebaseServiceCredsProd,
+  production: firebaseServiceCredsProduction,
   beta: firebaseServiceCredsBeta,
-  development: firebaseServiceCredsDevelopment,
-  testing:firebaseServiceCredsTesting
 }
 
-const firebaseServiceCreds = configs[process.env.APP_ENV || 'production']
+const APP_ENV_LOCAL = process.env.APP_ENV == 'production' ? 'production' : 'beta';
+
+const firebaseServiceCreds = configs[APP_ENV_LOCAL]
+
+dotenv.config();
 
 dotenv.config({
-  path: path.resolve(process.cwd(), '.env.production'),
+  path: path.resolve(process.cwd(), `.env.${APP_ENV_LOCAL}`),
   override: true
 });
 
 dotenv.config({
-  path: path.resolve(process.cwd(), '.env.production.local'),
+  path: path.resolve(process.cwd(), `.env.${APP_ENV_LOCAL}.local`),
   override: true
 });
 
@@ -39,17 +40,6 @@ const snap2data = snap => {
 
   return items;
 }
-
-dotenv.config();
-
-dotenv.config({
-  path: path.resolve(process.cwd(), '.env.production'),
-  override: true
-});
-dotenv.config({
-  path: path.resolve(process.cwd(), '.env.production.local'),
-  override: true
-});
 
 const uploadTranslations = async (db, dict = {}) => {
   const query = db.collection('translations');
