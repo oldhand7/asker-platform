@@ -107,4 +107,9 @@
   &-language-switcher {
     margin-right: 8rem;
   }
+
+  &.mobile &-language-switcher {
+    margin-top: 40rem;
+    font-size: 27rem;
+  }
 }

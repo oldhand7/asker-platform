@@ -12,7 +12,7 @@ import styles from './Navbar.module.scss';
 
 const NavbarUserResolved = dynamic(() => import("components/NavbarUserResolved/NavbarUserResolved"), { ssr: false })
 
-const menuItemsMobile = (user, t) => {
+const menuItemsMobile = ({ user, t, menuItems = []}) => {
   const mobile = [...menuItems]
 
   if (user) {
@@ -89,7 +89,7 @@ const Navbar = ({ className, menu = [] }) => {
       {
         !open ?
         <Menu items={menuItemsLoad} onClick={() => setOpen(false)} className={styles['navbar-menu']} /> :
-        <Menu items={menuItemsMobile(user, t)} onClick={() => setOpen(false)} className={styles['navbar-menu']} />
+        <Menu items={menuItemsMobile({ user, t, menuItems })} onClick={() => setOpen(false)} className={styles['navbar-menu']} />
       }
 
       <div className={styles['navbar-control']}>
