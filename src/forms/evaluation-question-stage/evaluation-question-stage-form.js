@@ -25,7 +25,7 @@ const validationRules = {
 const EvaluationQuestionStageForm = ({ className, values, onValues, feature, onError, isSubmitted }) => {
   const { t } = useTranslation();
 
-  const initValues = useMemo(() => values || defaultValues, [])
+  const initValues = useMemo(() => ({ ...defaultValues, ...(values || {})}), [])
 
   const {
     errors,
@@ -116,6 +116,8 @@ const EvaluationQuestionStageForm = ({ className, values, onValues, feature, onE
     if (subtype == 'motivation') {
       return t('stages.motivation-questions.name')
     }
+
+    return feature.shortName || feature.name;
   }, [feature])
 
   return <div className={classNames(styles['from'], className)}>

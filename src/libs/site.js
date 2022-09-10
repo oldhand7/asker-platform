@@ -11,13 +11,13 @@ export const withSite = (WrappedComponent) => (props) => {
     const router = useRouter()
     const { user, getUserLocale } = useUser()
 
-    useEffect(() => {
-      const userLocale = getUserLocale();
+    // useEffect(() => {
+    //   const userLocale = getUserLocale();
 
-      if (userLocale && userLocale != router.locale) {
-        router.push(router.asPath, null, { locale: userLocale })
-      }
-    }, [user])
+    //   if (userLocale && userLocale != router.locale) {
+    //     router.push(router.asPath, null, { locale: userLocale })
+    //   }
+    // }, [user])
 
     const tools = {
       config

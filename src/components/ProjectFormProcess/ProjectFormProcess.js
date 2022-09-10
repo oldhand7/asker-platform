@@ -26,7 +26,7 @@ const ProjectFormProcess = ({ className, stages = [], onStageAdd, stage, onChang
         const timetable = {}
 
         for (let key in config) {
-            timetable[key] = config[key].time;
+            timetable[key] = config[key] && config[key].time;
         }
 
         return timetable;

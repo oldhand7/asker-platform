@@ -190,7 +190,6 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
     Promise.all(tasks)
       .then(onSave)
       .catch(error => {
-        console.log(error)
         setError(ctxError(t('errors.server'), error))
       })
   }
@@ -272,6 +271,22 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
   const handleScoringRules = useCallback(sr => {
     setValue('scoringRules', sr)
   }, [setValue])
+
+  useEffect(() => {
+    const keys = formStages.map(s => getStageKey(s));
+
+    const config = { ...formValues.config }
+
+    for (let key in config) {
+      if (keys.indexOf(key) == -1) {
+        delete config[key];
+      }
+    }
+
+    if (JSON.stringify(formValues.config) != JSON.stringify(config)) {
+      setValue('config', config)
+    }
+  }, [setValue, formValues.config, formStages])
 
   return  <form data-test-id="project-form" onSubmit={handleSubmit(onSubmit)} className={classNames(styles['project-form'], className)}>
     <div className={classNames(styles['project-form-sidebar'], styles['project-form-sidebar-left'])}>

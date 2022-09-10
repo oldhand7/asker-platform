@@ -34,6 +34,7 @@ import styles from './ProjectStageTree.module.scss';
 
 const ProjectStageTree = ({ stages = [], stage, onStage, onChange, timetable = {}, errors = {}, className }) => {
     const initValues = useMemo(() => ({ stages }), [])
+    const [treeState, setTreeState] = useState({})
     
     const {
         control,
@@ -94,6 +95,21 @@ const ProjectStageTree = ({ stages = [], stage, onStage, onChange, timetable = {
         onChange && onChange(treeStages)
     }, [treeStages, onChange])
 
+    const treeStateHanlders = useMemo(() => {
+        const handlers = {};
+
+        for (let i = 0; i < treeStages.length; i++) {
+            const stageId = getStageKey(treeStages[i])
+            handlers[stageId] = state => setTreeState({
+                    ...treeState,
+                    [stageId]: state
+                })
+        }
+
+        return handlers;
+    }, [treeStages, treeState])
+
+
     return <DragDropContext onDragEnd={handleDragEnd}>
     <Droppable direction="vertical" droppableId='stage'>{
     (provided) => (
@@ -114,7 +130,7 @@ const ProjectStageTree = ({ stages = [], stage, onStage, onChange, timetable = {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                     className={styles['project-stage-tree-item']}>
-                <StageTree time={time} stage={s} error={error} onDelete={removeHandlers[stageId]} active={stage && getStageKey(stage) == stageId} onClick={clickHandlers[stageId]}  className={styles['project-stage-tree-item-leaf']}  />
+                <StageTree treeState={treeState && treeState[stageId]} onTreeState={treeStateHanlders[stageId]} time={time} stage={s} error={error} onDelete={removeHandlers[stageId]} active={stage && getStageKey(stage) == stageId} onClick={clickHandlers[stageId]}  className={styles['project-stage-tree-item-leaf']}  />
                 </li>)}</Draggable>})}
             {provided.placeholder}
     </ul>)}</Droppable></DragDropContext>

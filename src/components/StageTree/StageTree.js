@@ -1,7 +1,7 @@
 const { default: classNames } = require("classnames");
 const { default: StageTreeLeaf } = require("components/StageTreeLeaf/StageTreeLeaf");
 const { useTranslation } = require("libs/translation");
-const { useCallback, useMemo, useState, memo } = require("react");
+const { useCallback, useMemo, useState, memo, useEffect } = require("react");
 import { features } from "libs/features";
 import DragIcon from "components/Icon/DragIcon";
 import QuestionIcon from "components/Icon/QuestionIcon";
@@ -10,8 +10,8 @@ import { DEFAULT_STAGE_TIME } from "libs/config";
 
 import styles from './StageTree.module.scss';
 
-const StageTree = ({ className, stage, time, error, active = false, draggable=true, onClick, onDelete, dragProps = {}, drag = false }) => {
-    const [open, setOpen] = useState({})
+const StageTree = ({ className, stage, time, error, active = false, draggable=true, onClick, onDelete, dragProps = {}, drag = false, treeState = {}, onTreeState }) => {
+    const [open, setOpen] = useState(treeState)
     const { i18nField } = useTranslation();
     
     const questions = useMemo(() => {
@@ -92,17 +92,16 @@ const StageTree = ({ className, stage, time, error, active = false, draggable=tr
     }, [feature, criterias, questions])
 
     const handleRootClick = useCallback((ev) => {
-        if (open.root) {
-            setOpen({})
-        } else {
-            setOpen({
-                ...open,
-                'root': !open.root
-            })
+        const openState = {
+            ...open,
+            'root': !open.root
         }
 
+        setOpen(openState)
+        
+        onTreeState && onTreeState(openState)
         onClick && onClick(ev)
-    }, [open, onClick])
+    }, [open, onTreeState, onClick])
 
     const toggleCriteria = useCallback((criteria) => {
         setOpen({

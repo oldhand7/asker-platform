@@ -195,9 +195,9 @@ export const calcProjectTime = p => {
     const stageId = getStageKey(stages[i])
 
     if (config && config[stageId] && typeof config[stageId].time !== "undefined") {
-      time += Number.parseInt(config[stageId].time)
+      time += Number.parseInt(config[stageId] && config[stageId].time || 0)
     } else if (typeof stages[i].time !== "undefined") {
-      time += Number.parseInt(config[stageId].time)
+      time += Number.parseInt(config[stageId] && config[stageId].time || 0)
     } else {
       time += DEFAULT_STAGE_TIME;
     }

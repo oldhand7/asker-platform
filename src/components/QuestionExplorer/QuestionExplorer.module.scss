@@ -81,24 +81,26 @@
   &-type-filter {
     padding-bottom: 8rem;
     display: flex;
+    position: relative;
 
     &-list {
       white-space: nowrap;
       overflow-x: auto;
-      flex: 1;
       padding-bottom: 5rem;
+      width:0; /* Collapses .statusmessage so it doesn't affect column width */
+      min-width:calc(100% - 42rem); /* Expands .statusmessage to width of column */
     }
 
     &-option {
       margin-right: 8rem;
     }
 
-
     &-control {
       padding: 0 0 0 16rem;
-      position: relative;
+      position: absolute;
       z-index: 10;
       flex: 0 0;
+      right: 0;
 
       &-button {
         border-radius: 50%;
@@ -114,7 +116,7 @@
 
       &-popup {
         width: 1024rem;
-        max-width: 90vw;
+        max-width: 50vw;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
         border-radius: 5px;
         background-color: white;

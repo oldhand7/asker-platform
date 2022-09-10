@@ -26,8 +26,6 @@ const stageForms = {
 const StageInterviewForm = ({ onValues, values, stage, stages = stageForms, question, taxStageSecond, markComplete, id, onFocusId, className, ...props}) => {
   const initValues = useMemo(() => values, []);
 
-  console.log(stage)
-
   const {
     values: formValues,
     setValue

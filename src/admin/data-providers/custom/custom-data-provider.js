@@ -95,8 +95,6 @@ const CustomDataProvider = (config, options) => {
         return Promise.resolve(result)
       }
 
-      console.log(params)
-
       let result = await dataProvider.getList(resource, params);
 
       if (resource == 'companies') {
@@ -126,8 +124,6 @@ const CustomDataProvider = (config, options) => {
         if (sort && sort.field && derivativeFields.indexOf(sort.field) > -1) {
 
           result.data.sort((a, b) => {
-            console.log(a[sort.field], b[sort.field]);
-
             if (a[sort.field] < b[sort.field]) {
               return 1;
             }
