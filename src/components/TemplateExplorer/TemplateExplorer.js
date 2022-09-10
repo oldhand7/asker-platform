@@ -7,6 +7,7 @@ import { useUser } from 'libs/user';
 import TemplateSummaryTable from 'components/TemplateSummaryTable/TemplateSummaryTable';
 import PlusIcon from 'components/Icon/PlusIcon';
 import { filterManyDocuments } from 'libs/firestore';
+import { useTranslation } from 'libs/translation';
 
 import styles from './TemplateExplorer.module.scss';
 
@@ -15,6 +16,7 @@ const TemplateExplorer = ({ className, onTemplate, label = '', onNewTemplate }) 
   const [templates, settemplates] = useState([]);
   const [filteredTemplates, setFilteredTemplates] = useState([])
   const [filter, setFilter] = useState({ company: ['asker', user.companyId] })
+  const { t } = useTranslation();
 
   const toggleCompany = (companyId) => {
     const existsAlready = filter.company.find(c => c == companyId);
