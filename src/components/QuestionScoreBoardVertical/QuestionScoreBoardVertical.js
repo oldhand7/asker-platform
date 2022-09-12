@@ -2,10 +2,9 @@ import classNames from 'classnames';
 import striptags from 'striptags';
 import { allowedHtmlTags } from 'libs/config';
 import { useTranslation } from 'libs/translation';
-
 import styles from './QuestionScoreBoardVertical.module.scss';
+
 import { useCallback, useEffect, useRef } from 'react';
-import { height } from '../../../__mocks__/fileMock';
 
 const QuestionScoreBoardVertical = ({ className, index, rule, scores = [], lock = true, onRow, heights = [], onHeights, rowActive, active, onScores, onHead }) => {
   const { i18nField } = useTranslation();
