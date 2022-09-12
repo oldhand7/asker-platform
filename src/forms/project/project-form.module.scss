@@ -109,6 +109,8 @@
     border-bottom: 2px solid #E9E9E9;
     align-items: flex-start;
     justify-content: space-between;
+    z-index: 2;
+    position: relative;
 
     & > * {
       margin-right: 16rem;
