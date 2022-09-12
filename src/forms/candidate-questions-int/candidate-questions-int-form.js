@@ -48,7 +48,7 @@ const CandidateQuestionsIntForm = ({ className, values, onValues, onError, confi
       {t('headings.time-for-candidate-questions')}
     </div>
 
-    {config.note && !formValues.alertDismissed ?
+    {config && config.note && !formValues.alertDismissed ?
       <DismissAlert className={styles['form-alert']} onDismiss={() => setValue('alertDismissed', true)}>
         <Html>{config.note}</Html>
       </DismissAlert> : null}

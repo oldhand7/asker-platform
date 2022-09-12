@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import dynamic from 'next/dynamic';
 import Link from "next/link";
 import classNames from "classnames";
-import InterviewerSelectPreview from 'components/InterviewerSelect/InterviewerSelectPreview'
 
 import styles from 'styles/pages/preview.module.scss';
 
@@ -26,7 +25,8 @@ const components = {
         'TimeLabel': dynamic(() => import('components/TimeLabel/TimeLabelPreview')),
         'InterviewerSelect': dynamic(() => import('components/InterviewerSelect/InterviewerSelectPreview')),
         'InterviewFormTimer': dynamic(() => import('components/InterviewFormTimer/InterviewFormTimerPreview')),
-        'FileDropInputField': dynamic(() => import('components/FileDropInputField/FileDropInputFieldPreview'))
+        'FileDropInputField': dynamic(() => import('components/FileDropInputField/FileDropInputFieldPreview')),
+        'QuestionScoreBoard': dynamic(() => import('components/QuestionScoreBoard/QuestionScoreBoardPreview'))
     },
     form: {
         'followup-question-form': dynamic(() => import('forms/followup-question/followup-question-form')),

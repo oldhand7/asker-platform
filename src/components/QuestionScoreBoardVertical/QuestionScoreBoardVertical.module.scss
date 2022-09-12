@@ -54,6 +54,7 @@
       font-size: 12rem;
       line-height: 18rem;
       margin-bottom: 16rem;
+      border: 1px solid transparent;
 
       p:last-child {
         margin-bottom: 0;
@@ -78,6 +79,10 @@
         cursor: pointer !important;
         background: $brandish-green !important;
         color: white !important;
+      }
+
+      &-candidate {
+        border: 1px solid $brandish-green;
       }
     }
   }

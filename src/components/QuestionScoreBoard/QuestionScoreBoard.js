@@ -1,12 +1,16 @@
 import classNames from 'classnames';
 import QuestionScoreBoardVertical from 'components/QuestionScoreBoardVertical/QuestionScoreBoardVertical';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import styles from './QuestionScoreBoard.module.scss';
 
 const QuestionScoreBoard = ({ className, rules, votes = [], onVotes, onError }) => {
   const [lock, setLock] = useState(false);
   
+  const [rowActive, setRowActive] = useState(-1)
+
+  const heightsGlobal = useRef((rules[0].steps || []).map(r => 0))
+
   const handleHead = (index) => {
     if (!onVotes) {
       return;
@@ -22,17 +26,20 @@ const QuestionScoreBoard = ({ className, rules, votes = [], onVotes, onError }) 
     onVotes(vOff)
   }
 
-  const handleTail = (scores, index) => {
+  const handleTail = (scores, index, rowIndex) => {
     if (!onVotes) {
       return;
     }
 
     const vote = votes.find(v => v.head)
 
-    const newVotes = votes.map(v => ({
-      head: false,
-      tail: v.tail
-    }));
+    const newVotes = votes.map(v => {
+
+      return {
+        head: false,
+        tail: v.tail.map((cell, cellIndex) => cellIndex == rowIndex ? false : cell)
+      }
+    });
 
     newVotes[index].tail = scores;
 
@@ -73,15 +80,25 @@ const QuestionScoreBoard = ({ className, rules, votes = [], onVotes, onError }) 
     setLock(count == 3);
   }, [votes])
 
+  const adjustHeights = (heights = []) => {
+    heightsGlobal.current = heightsGlobal.current.map(
+      (h, index) => Math.max(h, typeof heights[index] !== "undefined" ? Number.parseFloat(heights[index]) : 0)
+    )
+  }
+
   return <ul data-test-id="question-score-board" className={classNames(styles['question-score-board'], className)}>
       {rules.map((rule, index) => <li data-test-id={votes && votes[index] && votes[index].head ? 'question-score-board-active' : undefined}  className={styles['question-score-board-column']} key={index}>
         <QuestionScoreBoardVertical
           lock={lock}
           index={index + 1}
+          onHeights={adjustHeights}
+          heights={heightsGlobal.current}
+          rowActive={rowActive}
+          onRow={setRowActive}
           rule={rule}
           active={votes && votes[index] && votes[index].head}
           scores={votes && votes[index] ? votes[index].tail : []}
-          onScores={scores => handleTail(scores, index)}
+          onScores={(scores, rowIndex) => handleTail(scores, index, rowIndex)}
           onHead={() => handleHead(index)}
           className={styles['question-score-board-column-item']}
         />
