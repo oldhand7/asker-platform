@@ -6,19 +6,17 @@ import { features } from "libs/features";
 import DragIcon from "components/Icon/DragIcon";
 import QuestionIcon from "components/Icon/QuestionIcon";
 import TrashIcon from "components/Icon/TrashIcon";
-import { DEFAULT_STAGE_TIME } from "libs/config";
 
 import styles from './StageTree.module.scss';
 
-const StageTree = ({ className, stage, time, error, active = false, draggable=true, onClick, onDelete, dragProps = {}, drag = false, treeState = {}, onTreeState }) => {
+const StageTree = ({ className, stage, time, error, active = false, draggable=true, onClick, onDelete, dragProps = {}, drag = false, treeState = {}, onTreeState, config }) => {
     const [open, setOpen] = useState(treeState)
     const { i18nField } = useTranslation();
+    const { t } = useTranslation();
     
     const questions = useMemo(() => {
-        return stage && stage.config && stage.config.questions || [];
-    }, [stage])
-
-    const { t } = useTranslation();
+        return config && config.questions || [];
+    }, [config])
 
     const actions = useMemo(() => ([
         { id: 'delete', icon: TrashIcon, name: t('actions.delete') }
@@ -116,7 +114,6 @@ const StageTree = ({ className, stage, time, error, active = false, draggable=tr
     )}>
         <li data-level="1" className={styles['stage-tree-item']}> 
             <StageTreeLeaf drag={drag} draggable={draggable} active={active} error={error} onClick={handleRootClick} expanded={open['root']} level={1} hasChildren={criterias.length || questions.length} Icon={DragIcon} time={time} label={stageLabel} actions={actions} onAction={handleAction} />
-
             {
                 criterias.length && open['root'] ?
                 <ul className={styles['stage-tree']}>

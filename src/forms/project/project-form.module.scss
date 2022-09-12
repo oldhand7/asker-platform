@@ -51,8 +51,7 @@
     }
 
     &-name {
-      flex: 1 1 286rem;
-      max-width: 320rem;
+      flex: 1 0 286rem;
     }
   }
 
@@ -109,6 +108,8 @@
     border-bottom: 2px solid #E9E9E9;
     align-items: flex-start;
     justify-content: space-between;
+    z-index: 2;
+    position: relative;
 
     & > * {
       margin-right: 16rem;
@@ -170,7 +171,7 @@
   }
 
   &-interviewer-select {
-    flex: 1 0 168rem;
+    flex: 0 1 320rem;
     font-size: 13px;
     white-space: nowrap;
   }
