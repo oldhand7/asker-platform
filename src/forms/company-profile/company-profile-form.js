@@ -1,7 +1,7 @@
 import {useForm} from 'libs/react-hook-form';
 import classNames from 'classnames';
 import Alert from 'components/Alert/Alert';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import TextInputField from 'components/TextInputField/TextInputField';
 import { useUser } from 'libs/user';
 import { useCompany } from 'libs/company'
@@ -12,9 +12,9 @@ import { ctxError } from 'libs/helper';
 import CompanyLogoPlaceholder from './assets/images/placeholder.png'
 import { useTranslation } from 'libs/translation';
 import { useRouter } from 'next/router';
+import { useWatch } from 'react-hook-form';
 
 import styles from './company-profile-form.module.scss';
-import { useWatch } from 'react-hook-form';
 
 const rules = {
   name: 'required'
@@ -111,7 +111,7 @@ const CompanyProfileForm = ({ className }) => {
     setValue('name', ev.target.value)
   }, [setValue])
 
-  return company ? <form method="POST" noValidate className={classNames(styles['company-profile-form'], className)} onSubmit={handleSubmit(onSubmit)}>
+  return formValues ? <form method="POST" noValidate className={classNames(styles['company-profile-form'], className)} onSubmit={handleSubmit(onSubmit)}>
     {error && <Alert className={styles['company-profile-form-alert']} type="error">{error.message}</Alert>}
     {success && <Alert className={styles['company-profile-form-alert']} type="success">{success}</Alert>}
 

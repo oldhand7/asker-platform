@@ -41,7 +41,7 @@ const ProjectFormProcess = ({ className, stages = [], onStageAdd, stage, onChang
             </button>
         </div>
         <div className={styles['project-form-process-body']}>
-            {mode == 'stage-control' && <ProjectStageTree timetable={timetable} errors={errors} stage={stage} onChange={onChange} onStage={onStage} stages={stages} className={styles['project-from-process-stage-tree']} />}
+            {mode == 'stage-control' && <ProjectStageTree config={config} timetable={timetable} errors={errors} stage={stage} onChange={onChange} onStage={onStage} stages={stages} className={styles['project-from-process-stage-tree']} />}
             {mode == 'stage-choose' && <ProjectStageChoose  onChoose={handleStageChoose} onClose={() => setMode('stage-control')} className={styles['project-form-process-stage-choose']} />}
         </div>
     </div>

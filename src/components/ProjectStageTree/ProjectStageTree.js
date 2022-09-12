@@ -32,7 +32,7 @@ const Draggable = dynamic(
 
 import styles from './ProjectStageTree.module.scss';
 
-const ProjectStageTree = ({ stages = [], stage, onStage, onChange, timetable = {}, errors = {}, className }) => {
+const ProjectStageTree = ({ stages = [], stage, onStage, onChange, timetable = {}, errors = {}, className, config }) => {
     const initValues = useMemo(() => ({ stages }), [])
     const [treeState, setTreeState] = useState({})
     
@@ -120,7 +120,8 @@ const ProjectStageTree = ({ stages = [], stage, onStage, onChange, timetable = {
             {treeStages.map((s, index) => {
             const stageId = getStageKey(s);
             const time = timetable[stageId];
-            const error = errors && errors[stageId];           
+            const error = errors && errors[stageId];
+            const cfg = config && config[stageId]     
 
             const key = `${stageId}-${time}-${error && 'err'}`
 
@@ -130,7 +131,7 @@ const ProjectStageTree = ({ stages = [], stage, onStage, onChange, timetable = {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                     className={styles['project-stage-tree-item']}>
-                <StageTree treeState={treeState && treeState[stageId]} onTreeState={treeStateHanlders[stageId]} time={time} stage={s} error={error} onDelete={removeHandlers[stageId]} active={stage && getStageKey(stage) == stageId} onClick={clickHandlers[stageId]}  className={styles['project-stage-tree-item-leaf']}  />
+                <StageTree config={cfg} treeState={treeState && treeState[stageId]} onTreeState={treeStateHanlders[stageId]} time={time} stage={s} error={error} onDelete={removeHandlers[stageId]} active={stage && getStageKey(stage) == stageId} onClick={clickHandlers[stageId]}  className={styles['project-stage-tree-item-leaf']}  />
                 </li>)}</Draggable>})}
             {provided.placeholder}
     </ul>)}</Droppable></DragDropContext>
@@ -138,6 +139,10 @@ const ProjectStageTree = ({ stages = [], stage, onStage, onChange, timetable = {
 
 const ProjectStageTreeMemo = memo(ProjectStageTree, (prev, next) => {
     if (getStageKey(prev.stage) != getStageKey(next.stage)) {
+        return false;
+    }
+
+    if (JSON.stringify(prev.config) != JSON.stringify(next.config)) {
         return false;
     }
 
