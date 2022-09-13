@@ -24,6 +24,9 @@
         display: inline-block;
         vertical-align: middle;
         flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow:ellipsis;
     }
 
     &-time {

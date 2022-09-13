@@ -8,7 +8,7 @@ import { useTranslation } from 'libs/translation';
 
 import styles from './StageTreeLeaf.module.scss';
 
-const StageTreeLeaf = ({ drag = false, hasChildren = false, expanded = false, Icon = null, actions = [], onAction, className, error, label = '', time = '', onClick, active = false, level=1 }) => {
+const StageTreeLeaf = ({ hoverText = '', drag = false, hasChildren = false, expanded = false, Icon = null, actions = [], onAction, className, error, label = '', time = '', onClick, active = false, level=1 }) => {
     const  handleClick = useCallback((ev) => {
         if (onClick) {
             ev.stopPropagation();
@@ -17,7 +17,7 @@ const StageTreeLeaf = ({ drag = false, hasChildren = false, expanded = false, Ic
         }
     }, [onClick])
 
-    return <div data-test-id="stage-tree-leaf" data-error={error || '0'} data-status={active ? 'active' : ''} onClick={handleClick} data-level={level} className={classNames(
+    return <div title={hoverText} data-test-id="stage-tree-leaf" data-error={error || '0'} data-status={active ? 'active' : ''} onClick={handleClick} data-level={level} className={classNames(
         styles['stage-tree-leaf'],
         hasChildren && styles['stage-tree-leaf-has-children'],
         className,

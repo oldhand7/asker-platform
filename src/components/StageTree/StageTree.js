@@ -123,11 +123,13 @@ const StageTree = ({ className, stage, time, error, active = false, draggable=tr
             
                             {open[criteria.id] ?
                             <ul  className={styles['stage-tree']}>
-                                {questions.map(question => (
-                                    <li data-level="3" key={question.id} className={styles['stage-tree-item']}>
-                                        <StageTreeLeaf level={3} Icon={QuestionIcon} label={i18nField(question.name)} />
+                                {questions.map(question => {
+                                    const questionName = i18nField(question.name);
+
+                                    return <li data-level="3" key={question.id} className={styles['stage-tree-item']}>
+                                        <StageTreeLeaf hoverText={questionName} level={3} Icon={QuestionIcon} label={questionName} />
                                     </li>
-                                ))}
+                                })}
                             </ul> : null}
                         </li>
                     ))}
