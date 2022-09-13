@@ -1,0 +1,27 @@
+.form {
+    &-title {
+        font-weight: 600;
+        font-size: 18rem;
+        line-height: 27rem;
+        color: #282828;
+    }
+
+    &-select-input {
+        margin: 16rem 0;
+    }
+
+    &-footer {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        &-share-input {
+            flex: 1;
+        }
+
+        &-button {
+            margin-left: 8rem;
+        }
+    }
+
+}

@@ -86,7 +86,7 @@ describe('Backoffice other questions', () => {
       
            cy.contains('Start interview').click()
 
-            cy.wait(1000)
+           cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
       
             cy.processOverviewConfirmQuestioncount(1)
             cy.processOverviewConfirmStageCount(2);

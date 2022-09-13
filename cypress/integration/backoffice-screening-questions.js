@@ -104,6 +104,8 @@ describe('Backoffice screening questions', () => {
 
        cy.contains('Start interview').click()
 
+       cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
        cy.get('[data-test-id="feature-form"]').eq(1)
         .within(() => {
             cy.get('[data-test-id="screening-question-int"]').eq(0)
@@ -245,6 +247,8 @@ describe('Backoffice screening questions', () => {
 
      cy.contains('Start interview').click()
 
+     cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
       cy.processOverviewConfirmQuestioncount(1)
       cy.processOverviewConfirmStageCount(2);
       cy.processOverviewConfirmStageStatus(1, 'Screening', 'Not started')
@@ -383,6 +387,8 @@ describe('Backoffice screening questions', () => {
      cy.addProjectCandidate('Tom', 'tom@foobar.net')
 
      cy.contains('Start interview').click()
+
+     cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
 
       cy.processOverviewConfirmQuestioncount(1)
       cy.processOverviewConfirmStageCount(2);

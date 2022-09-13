@@ -6,11 +6,34 @@ import InterviewForm from 'forms/interview/interview-form'
 import { unpackQuestions } from 'libs/project';
 import BlankLayout from 'layouts/blank/blank-layout';
 import { useTranslation } from 'libs/translation';
+import { useEffect } from 'react';
+import { useModal } from 'libs/modal';
+import { useUser } from 'libs/user';
+import { useRouter } from 'next/router';
+import LanguageChooseModal from 'modals/language-choose/language-choose-modal';
 
 import styles from 'styles/pages/interview-conduct.module.scss';
 
 const InterviewConductPage = ({ interview, project }) => {
   const { t } = useTranslation();
+  const openLanguageChooseModal = useModal(LanguageChooseModal)
+  const {
+    getUserLocale,
+    storeUserLocale
+  } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    const locale = getUserLocale();
+
+    openLanguageChooseModal(async lang => {
+      if (lang && lang != locale) {
+        await storeUserLocale(lang.id)
+
+        router.push( router.asPath, null, { locale: lang.id })
+      }
+    }, { values: locale })
+  }, [])
 
   return <div className={styles['interview-conduct-page']}>
       <Head>

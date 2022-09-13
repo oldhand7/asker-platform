@@ -39,6 +39,8 @@ describe('Candidate compare', () => {
           .closest('[data-test-id="flex-table-row')
           .contains('Start interview')
           .click()
+
+          cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
         
         cy.get('[data-test-id="feature-form"]').eq(1)
             .should('contain', 'Competency')
@@ -62,6 +64,8 @@ describe('Candidate compare', () => {
           .closest('[data-test-id="flex-table-row')
           .contains('Start interview')
           .click()
+
+          cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
         
         cy.get('[data-test-id="feature-form"]').eq(1)
             .should('contain', 'Competency')

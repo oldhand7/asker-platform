@@ -41,6 +41,8 @@ describe('Project custom note', () => {
     
          cy.contains('Start interview').click()
 
+         cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
         cy.get('[data-test-id="feature-form"]').eq(1)
             .should('contain', 'ISO-123')
             .should('contain', 'Are you familiar with ISO-123?')

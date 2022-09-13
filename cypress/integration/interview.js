@@ -75,6 +75,8 @@ describe('Interview', () => {
       .contains('Start interview')
       .click()
 
+    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
     cy.get('[data-test-id="feature-form"]').eq(1)
       .should('contain', 'Competency')
       .should('contain', 'ISO-90210')
@@ -173,7 +175,7 @@ describe('Interview', () => {
     })
   })
 
-  it('should have interview steps',  { scrollBehavior: 'center' }, () => {
+ it('should have interview steps',  { scrollBehavior: 'center' }, () => {
     cy.createCompetencyQuestion({ name: 'Are you familiar with ISO-111?', criteria: { name: 'ISO-111'} });
     cy.createCompetencyQuestion({ name: 'Are you familiar with ISO-222?', criteria: { name: 'ISO-222'} });
 
@@ -206,6 +208,8 @@ describe('Interview', () => {
       .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
+
+    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
 
     cy.location('pathname').should('contain', '/conduct/')
 
@@ -317,5 +321,50 @@ describe('Interview', () => {
     cy.contains('Project progress')
       .closest('div')
       .should('contain', '100%')
+  })
+
+  it('should allow for language choosing when starting interview',  { scrollBehavior: 'center' }, () => {
+    cy.createDummyProject('Some int position X')
+
+    cy.contains('Some int position X').closest('li').click()
+
+    cy.addProjectCandidate('AAA DDD', 'aaa.ddd@hotmail.net')
+
+    cy.contains('AAA DDD')
+      .closest('[data-test-id="flex-table-row"]')
+      .contains('Start interview')
+      .click()
+
+
+    cy.location().then(loc => {
+      let match = Cypress.minimatch(loc.pathname , '/interviews/*/conduct/', {
+        matchBase: true,
+      })
+
+      expect(match).to.be.true
+    })
+
+    cy.get('#language-choose-modal')
+      .within(() => {
+        cy.root().should('contain', 'Choose language')
+
+        cy.contains('English')
+          .closest('[data-test-id="language-choose"]')
+          .click()
+          .wait(1000)
+          .type('Swe{downArrow}{enter}')
+
+        cy.get('button').contains('Choose').click()
+      })
+
+    cy.wait(2000)
+    
+    cy.location().then(loc => {
+      let match = Cypress.minimatch(loc.pathname , '/se/interviews/*/conduct/', {
+        matchBase: true,
+      })
+
+      expect(match).to.be.true
+    })
   })
 })

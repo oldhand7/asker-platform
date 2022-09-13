@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import styles from './LanguageSwitcher.module.scss';
 
-const defaultLanguages = [
+export const LANGUAGES = [
     { id: 'en', name: 'English', icon: null, emoji: '🇬🇧' },
     { id: 'se', name: 'Sweedish', icon: null, emoji: '🇸🇪' },
 ]
@@ -21,7 +21,7 @@ const LanguageSwitcherItem = ({ language }) => (
         </div>
 )
 
-const LanguageSwitcher = ({ className, language = 'en', languages = defaultLanguages}) => {
+const LanguageSwitcher = ({ className, language = 'en', languages = LANGUAGES}) => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
     const ref = useRef();

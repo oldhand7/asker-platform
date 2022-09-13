@@ -38,6 +38,8 @@ describe('Updating queestions', () => {
 
       cy.contains('Start interview').click()
 
+      cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
       cy.get('[data-test-id="feature-form"]').eq(1)
         .should('contain', 'Question 123')
 
@@ -66,6 +68,8 @@ describe('Updating queestions', () => {
       cy.contains('Project 123').closest('li').click()
 
       cy.contains('Start interview').click()
+
+      cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
 
       cy.get('[data-test-id="feature-form"]').eq(1)
         .should('contain', 'Questione 111')

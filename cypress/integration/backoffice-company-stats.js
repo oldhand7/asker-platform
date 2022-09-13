@@ -52,6 +52,8 @@ describe('Backoffice company stats', () => {
           .contains('Start interview')
           .click();
 
+        cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
         cy.contains('Are you familiar with CQ1?')
           .closest('[data-test-id="feature-form"]')
           .contains('Great')
@@ -68,6 +70,8 @@ describe('Backoffice company stats', () => {
           .closest('[data-test-id="flex-table-row"]')
           .contains('Start interview')
           .click();
+
+        cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
 
         cy.contains('Are you familiar with CQ1?')
           .closest('[data-test-id="feature-form"]')

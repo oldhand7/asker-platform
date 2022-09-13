@@ -147,6 +147,8 @@
     "actions.back": "Back",
     "actions.edit-project": "Edit project",
     "actions.search-template": "Search template",
+    "actions.choose-language": "Choose language",
+    "actions.choose": "Choose",
     "status.loading": "Loading...",
     "status.saved.template": "Template saved.",
     "status.created.template": "Template created.",

@@ -54,6 +54,8 @@ describe('stages', () => {
 
       cy.contains('Start interview').click()
 
+      cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
       cy.get('[data-test-id="feature-form"]').eq(0)
         .should('contain', 'Introduction')
         .should('contain', '10m')
@@ -123,6 +125,8 @@ describe('stages', () => {
       cy.addProjectCandidate('Tom', 'tom@foobar.net')
 
       cy.contains('Start interview').click()
+
+      cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
 
       cy.get('[data-test-id="feature-form"]').eq(0)
         .should('contain', 'Summary')
@@ -305,6 +309,8 @@ describe('stages', () => {
 
       cy.contains('Start interview').click()
 
+      cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
       cy.get('[data-test-id="feature-form"]').eq(0)
         .should('contain', 'Company')
         .should('contain', '10m')
@@ -392,6 +398,8 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
+    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', '1000 - 5000')
       .within(() => {
@@ -459,6 +467,8 @@ describe('stages', () => {
     cy.addProjectCandidate('Tom', 'tom@foobar.net')
 
     cy.contains('Start interview').click()
+
+    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'Candidate questions')
@@ -528,6 +538,8 @@ describe('stages', () => {
     cy.addProjectCandidate('Tom', 'tom@foobar.net')
 
     cy.contains('Start interview').click()
+
+    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .within(() => {
@@ -611,6 +623,8 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
+    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'Are you familiar with ISO-111-A?')
       .findHtmlInputAndType('Yes ISO-111-A')
@@ -690,6 +704,8 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
+    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'E1A?')
       .findHtmlInputAndType('Yes E1A')
@@ -767,6 +783,8 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
+    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'HS1A?')
       .findHtmlInputAndType('Yes HS1A')
@@ -842,6 +860,8 @@ describe('stages', () => {
     cy.addProjectCandidate('Tom', 'tom@foobar.net')
 
     cy.contains('Start interview').click()
+
+    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'C1?')
@@ -919,6 +939,8 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
+    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'M1?')
       .findHtmlInputAndType('Yes M1')
@@ -994,6 +1016,8 @@ describe('stages', () => {
     cy.addProjectCandidate('Tom', 'tom@foobar.net')
 
     cy.contains('Start interview').click()
+
+    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .within(() => {

@@ -234,6 +234,8 @@ describe('Backoffice evaluation questions', () => {
 
        cy.contains('Start interview').click()
 
+       cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
        cy.get('[data-test-id="feature-form"]').eq(1)
         .should('contain', 'C1_SE')
         .should('contain', 'Are you familiar with C1_SE?')
@@ -481,6 +483,8 @@ describe('Backoffice evaluation questions', () => {
      cy.addProjectCandidate('Tom', 'tom@foobar.net')
   
      cy.contains('Start interview').click()
+
+     cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
   
      cy.get('[data-test-id="feature-form"]').eq(1)
       .should('contain', 'HS1_SE')
@@ -719,6 +723,8 @@ describe('Backoffice evaluation questions', () => {
 
    cy.contains('Start interview').click()
 
+   cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+
     cy.processOverviewConfirmQuestioncount(1)
     cy.processOverviewConfirmStageCount(2);
     cy.processOverviewConfirmStageStatus(1, 'E1_SE', 'Not started')
@@ -891,6 +897,8 @@ it('Should create motivation question', () => {
   cy.addProjectCandidate('Tom', 'tom@foobar.net')
   
   cy.contains('Start interview').click()
+
+  cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
   
   cy.processOverviewConfirmQuestioncount(1)
   cy.processOverviewConfirmStageCount(2);
@@ -1066,6 +1074,8 @@ it('Should create culture question', () => {
     cy.addProjectCandidate('Tom', 'tom@foobar.net')
     
     cy.contains('Start interview').click()
+
+    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
     
     cy.processOverviewConfirmQuestioncount(1)
     cy.processOverviewConfirmStageCount(2);
