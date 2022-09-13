@@ -108,7 +108,7 @@ const SelectedQuestionsManager = ({ className, questions = [], timetable = {}, n
   }, [formQuestions, onQuestionTime])
 
   return <div data-test-id="question-manager" className={classNames(styles['selected-questions-manager'], className)}>
-    <h3 className={styles['selected-questions-manager-title']}>{t('headings.selected-questions')}</h3>
+    <h3 className={styles['selected-questions-manager-title']}>{t('headings.selected-questions')} ({formQuestions.length})</h3>
     {formQuestions.length ? <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable direction="vertical" droppableId='compare'>{
           (provided) => (
