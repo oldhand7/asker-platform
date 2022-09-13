@@ -8,7 +8,7 @@ import styles from './LanguageSwitcher.module.scss';
 
 export const LANGUAGES = [
     { id: 'en', name: 'English', icon: null, emoji: '🇬🇧' },
-    { id: 'se', name: 'Sweedish', icon: null, emoji: '🇸🇪' },
+    { id: 'se', name: 'Swedish', icon: null, emoji: '🇸🇪' },
 ]
 
 const LanguageSwitcherItem = ({ language }) => (
