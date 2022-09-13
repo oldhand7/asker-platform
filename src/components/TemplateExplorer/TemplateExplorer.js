@@ -69,7 +69,7 @@ const TemplateExplorer = ({ className, onTemplate, label = '', onNewTemplate }) 
         <div className={styles['template-explorer-controls']}>
           <div className={styles['template-explorer-company-filter']}>
             <FilterButton theme='green' className={styles['template-explorer-company-filter-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>{t('labels.asker-templates')}</FilterButton>
-            <FilterButton theme='grape' className={styles['template-explorer-company-filter-button']} active={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user && user.companyId)}>{t('labels.your-templates')}</FilterButton>
+            <FilterButton theme='dark' className={styles['template-explorer-company-filter-button']} active={filter.company.indexOf(user && user.companyId) > -1} onClick={() => toggleCompany(user && user.companyId)}>{t('labels.your-templates')}</FilterButton>
           </div>
           <OutlineButton className={styles['template-explorer-create-template']} onClick={onNewTemplate}><PlusIcon /> {t('actions.create-new-template')}</OutlineButton>
         </div>
