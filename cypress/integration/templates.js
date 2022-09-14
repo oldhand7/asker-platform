@@ -88,4 +88,43 @@ describe('Templates', () => {
 
     cy.get('[data-test-id="alert-success"]').should('contain', 'Project created');
   })
+
+  it('should save project as template', () => {
+    cy.createDummyProject('Some project X')
+
+    cy.contains('Some project X').closest('li').listRowNavigate('Edit')
+
+    cy.get('[data-test-id="feature-form"]')
+      .findHtmlInputAndType('{selectAll}{backspace}Introduction. Introduction? Introduction!')
+
+    cy.addStage('Summary')
+
+    cy.get('[data-test-id="feature-form"]')
+      .findHtmlInputAndType('Summary. Summary? Summary!')
+
+    cy.contains('Save project').click()
+    cy.contains('Do you want to save this project as a template?')
+      .closest('#focus-popup')
+      .within(() => {
+        cy.contains('Yes').click()
+        
+        cy.get('input')
+          .should('have.attr', 'placeholder', 'Enter template name')
+          .type('Tpl X1')
+
+        cy.get('button').contains('Save as template').click()
+      })
+    
+    cy.visit('/templates')
+
+    cy.contains('Tpl X1').closest('li').listRowNavigate('Edit')
+
+    cy.get('[data-test-id="feature-form"]')
+      .should('contain', 'Introduction. Introduction? Introduction!')
+
+    cy.contains('Summary').click()
+
+    cy.get('[data-test-id="feature-form"]')
+      .should('contain', 'Summary. Summary? Summary!')
+  })
 })

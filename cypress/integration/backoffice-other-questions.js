@@ -76,9 +76,7 @@ describe('Backoffice other questions', () => {
                 .find('button[data-test-id="add-question"]').first().click()
             })
       
-            cy.contains('Save project').click()
-      
-            cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+            cy.saveProject()
       
            cy.contains('Project movie').closest('li').click()
       

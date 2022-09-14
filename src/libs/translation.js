@@ -4,7 +4,7 @@ import enDict from 'translation/en.json'
 import dict from 'translation/dictionary.json'
 
 export const useTranslation = () => {
-  const { locale } = useRouter()
+  const { locale } = useRouter() || {};
 
   const i18nField = useCallback((field) => {
       const isObject = field && typeof field === "object";

@@ -30,6 +30,13 @@ Cypress.Commands.add('createDummyProject', (name = 'Demo ABC', template = '') =>
 
   cy.get('button').contains('Create project').click()
 
+  if (!template) {
+    cy.contains('Do you want to save this project as a template?')
+      .closest('#focus-popup')
+      .contains('No')
+      .click()
+  }
+
   cy.get('[data-test-id="alert-success"]').should('contain', 'Project created')
 })
 
@@ -53,6 +60,11 @@ Cypress.Commands.add('createEmptyProject', (name = 'Demo ABC') => {
     })
 
   cy.get('button').contains('Create project').click()
+
+  cy.contains('Do you want to save this project as a template?')
+  .closest('#focus-popup')
+  .contains('No')
+  .click()
 
   cy.get('[data-test-id="alert-success"]').should('contain', 'Project created')
 })
@@ -100,4 +112,19 @@ Cypress.Commands.add(
             .should('contain', list[i])
         }
       })
+})
+
+Cypress.Commands.add('saveProject', (expectTemplateSequence = true) => {
+  cy.contains('Save project').click()
+
+  if (expectTemplateSequence) {
+    cy.wait(500)
+    
+    cy.contains('Do you want to save this project as a template?')
+    .closest('#focus-popup')
+    .contains('No')
+    .click()
+
+    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+  }
 })

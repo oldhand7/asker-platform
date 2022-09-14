@@ -1,26 +1,34 @@
 import classNames from 'classnames';
+import { forwardRef } from 'react';
 
 import styles from './Button.module.scss';
 
-const StandardButton = ({ className, children, onClick, ...props }) => {
-  return <button className={classNames(styles['button'], className)} onClick={onClick} {...props}>
+const StandardButton = forwardRef(({ className, children, onClick, ...props }, ref) => {
+  return <button ref={ref} className={classNames(styles['button'], className)} onClick={onClick} {...props}>
     {children}
   </button>
-}
+})
 
-const LinkButton = ({ children, href = '#', target='', className }) => {
-  return <a href={href} target={target} className={classNames(styles['button'], className)}>
+StandardButton.displayName = 'StandardButton'
+
+const LinkButton = forwardRef(({ children, href = '#', target='', className }, ref) => {
+  return <a ref={ref} href={href} target={target} className={classNames(styles['button'], className)}>
   {children}
   </a>
-}
+})
 
-const Button = props => {
+LinkButton.displayName = 'LinkButton'
+
+const Button = (props, ref) => {
   if (props.href) {
-    return <LinkButton {...props} />
+    return <LinkButton ref={ref} {...props} />
   }
 
-  return <StandardButton {...props} />
+  return <StandardButton ref={ref} {...props} />
 }
 
+const ButtonFowarded = forwardRef(Button)
 
-export default Button;
+ButtonFowarded.displayName = 'Button';
+
+export default ButtonFowarded;

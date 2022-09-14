@@ -21,9 +21,7 @@ describe('Project overview', () => {
           cy.contains('Are you familiar with C1?').closest('li').find('button').click()
       })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+    cy.saveProject()
 
     cy.contains('Philips Demo Project').closest('li')
       .should('contain', 'Philips Demo Project')

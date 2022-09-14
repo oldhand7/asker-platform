@@ -22,7 +22,7 @@ describe('stages', () => {
         .should('contain', '10m')
         .should('have.attr', 'data-error', '0')
 
-      cy.contains('Save project').click()
+      cy.saveProject(false)
 
       cy.get('[data-test-id="alert-error"]').contains('Some stages are invalid.')
 
@@ -37,9 +37,7 @@ describe('stages', () => {
       cy.get('[data-test-id="stage-tree-leaf"]')
         .should('have.attr', 'data-error', '0')
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').contains('Project saved')
+      cy.saveProject()
 
       cy.contains('Test project')
         .closest('li')
@@ -93,7 +91,7 @@ describe('stages', () => {
         .should('contain', '10m')
         .should('not.contain', 'Field required.')
 
-      cy.contains('Save project').click()
+      cy.saveProject(false)
 
       cy.get('[data-test-id="alert-error"]').contains('Some stages are invalid.')
 
@@ -109,9 +107,7 @@ describe('stages', () => {
         .closest('div')
         .should('contain', '10m')
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').contains('Project saved')
+      cy.saveProject()
 
       cy.contains('Test project')
         .closest('li')
@@ -292,9 +288,7 @@ describe('stages', () => {
         .closest('div')
         .should('contain', '10m')
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').contains('Project saved')
+      cy.saveProject()
 
       cy.contains('Test project')
       .closest('li')
@@ -380,9 +374,7 @@ describe('stages', () => {
       .closest('div')
       .should('contain', '10m')
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+      cy.saveProject()
 
       cy.contains('Test project')
         .closest('li')
@@ -450,9 +442,7 @@ describe('stages', () => {
           .closest('div')
           .should('contain', '10m')
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+      cy.saveProject()
 
       cy.contains('Test project')
         .closest('li')
@@ -521,9 +511,7 @@ describe('stages', () => {
         .closest('div')
         .should('contain', '6m')
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+      cy.saveProject()
 
       cy.contains('Test project')
         .closest('li')
@@ -605,9 +593,7 @@ describe('stages', () => {
         .closest('div')
         .should('contain', '6m')
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+      cy.saveProject()
 
       cy.contains('Test project')
         .closest('li')
@@ -686,9 +672,7 @@ describe('stages', () => {
         .closest('div')
         .should('contain', '6m')
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+      cy.saveProject()
 
       cy.contains('Test project')
         .closest('li')
@@ -765,9 +749,7 @@ describe('stages', () => {
         .closest('div')
         .should('contain', '6m')
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+      cy.saveProject()
 
       cy.contains('Test project')
         .closest('li')
@@ -843,9 +825,7 @@ describe('stages', () => {
         .closest('div')
         .should('contain', '6m')
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+      cy.saveProject()
 
       cy.contains('Test project')
         .closest('li')
@@ -921,9 +901,7 @@ describe('stages', () => {
         .closest('div')
         .should('contain', '6m')
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+      cy.saveProject()
 
       cy.contains('Test project')
         .closest('li')
@@ -999,9 +977,7 @@ describe('stages', () => {
         .closest('div')
         .should('contain', '6m')
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+      cy.saveProject()
 
       cy.contains('Test project')
         .closest('li')

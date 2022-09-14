@@ -26,10 +26,7 @@ describe('Candidate compare', () => {
             cy.contains('Do you have drivers license?').closest('li').find('button').click();
           })
             
-        cy.contains('Save project')
-          .click()
-
-        cy.get('[data-test-id="alert-success"]').contains('Project saved')
+        cy.saveProject()
 
         cy.contains('Project X').closest('li').click()
         

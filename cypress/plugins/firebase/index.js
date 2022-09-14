@@ -10,6 +10,8 @@ const beforeRun = async () => {
   await helpers.deleteCollection('translations');
   await helpers.deleteCollection('companies');
 
+  await (() => new Promise(resolve => setTimeout(resolve, 5000)))()
+
   //Creates superadmin
   await helpers.createRootCompany()
 
@@ -146,6 +148,8 @@ const beforeRun = async () => {
 
   const userId22Joe  = await helpers.createUser('Joe Woodkid', 'joe.foster@example.com', 'test123', companyId22, 'admin', true)
   const userId22Jane = await helpers.createUser('Jane Woodkid', 'jane.foster@example.com', 'test123', companyId22, 'hr', false)
+
+  await (() => new Promise(resolve => setTimeout(resolve, 5000)))()
 }
 
 module.exports = {

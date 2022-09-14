@@ -16,9 +16,7 @@ describe('WYSIWYG', () => {
         cy.get('button').eq(0).click()
       })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+    cy.saveProject()
 
     cy.contains('Just some project X').closest('li').click()
 
@@ -54,10 +52,7 @@ describe('WYSIWYG', () => {
           .type('Milan{enter}{enter}')
       })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').contains('Project saved')
-
+    cy.saveProject()
 
     cy.contains('Just some project Y').closest('li').click()
 
@@ -100,9 +95,7 @@ describe('WYSIWYG', () => {
           .type('Lion{enter}{enter}')
       })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+    cy.saveProject()
 
     cy.contains('Just some project Z').closest('li').click()
 

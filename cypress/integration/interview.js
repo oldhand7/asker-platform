@@ -60,9 +60,7 @@ describe('Interview', () => {
       cy.contains('Do you have drivers license?').closest('li').find('button').click()
     })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+    cy.saveProject()
 
     cy.contains('Some position X').closest('li').click()
 
@@ -196,9 +194,7 @@ describe('Interview', () => {
     cy.get('[data-test-id="feature-form"]')
       .findHtmlInputAndType("Lorem ipsum")
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved');
+    cy.saveProject()
 
     cy.contains('Some position Y').closest('li').click()
 

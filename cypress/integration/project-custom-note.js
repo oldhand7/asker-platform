@@ -31,10 +31,8 @@ describe('Project custom note', () => {
                 cy.get('button[type="submit"]').click()
             })
 
-         cy.contains('Save project').click()
+         cy.saveProject()
 
-         cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
-      
          cy.contains('Project ISO-123').closest('li').click()
     
          cy.addProjectCandidate('Tom', 'tom@foobar.net')

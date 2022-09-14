@@ -28,9 +28,7 @@ describe('Updating queestions', () => {
   
         })
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').contains('Project saved')
+      cy.saveProject()
 
       cy.contains('Project 123').closest('li').click()
 
@@ -64,6 +62,8 @@ describe('Updating queestions', () => {
         .should('contain', 'Questione 111')
 
       cy.visit('/projects')
+
+      cy.wait(5000)
 
       cy.contains('Project 123').closest('li').click()
 
@@ -119,6 +119,8 @@ describe('Updating queestions', () => {
         .contains('Question saved')
 
       cy.visit('/templates')
+
+      cy.wait(5000)
 
       cy.contains('Project ABC')
         .closest('ul')

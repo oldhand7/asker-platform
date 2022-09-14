@@ -35,9 +35,7 @@ describe('Backoffice company stats', () => {
             cy.contains('Are you familiar with CQ1?').closest('li').find('button').click()
           })
 
-        cy.contains('Save project').click()
-
-        cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+        cy.saveProject()
 
         cy.contains('Just some project 1').closest('li').listRowNavigate('Interviews')
 

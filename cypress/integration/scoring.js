@@ -67,9 +67,7 @@ describe('Scoring', () => {
           })
       })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+    cy.saveProject()
 
     cy.contains('Some position X').closest('li').click()
 
@@ -170,9 +168,7 @@ describe('Scoring', () => {
           })
         })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+    cy.saveProject()
 
     cy.contains('Some position Y').closest('li').click()
 

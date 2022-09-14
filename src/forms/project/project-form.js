@@ -23,6 +23,8 @@ import { useFieldArray, useWatch } from 'react-hook-form';
 import { useDocumentsApi } from 'libs/db';
 import { useTranslation } from 'libs/translation';
 import { validate } from 'libs/validator';
+import FocusPopup from 'components/FocusPopup/FocusPopup';
+import ProjectSaveAsTemplatePopup from 'components/ProjectSaveAsTemplatePopup/ProjectSaveAsTemplatePopup';
 
 import styles from './project-form.module.scss';
 
@@ -53,6 +55,7 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
   const docsApi = useDocumentsApi();
   const stageErrors = useRef({});
   const [stageErrorsLive, setStageErrorsLive] = useState({})
+  const [popup, setPopup] = useState(false);
 
   const validationRules = useMemo(() => {
     const rules = {
@@ -114,6 +117,18 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
       return;
     }
 
+    if (context == 'project' && !router.query.template) {
+      setPopup(true);
+
+      return;
+    }
+
+    onSave(values)
+  }
+
+  const onSave = async (values, templateName) => {
+    setLoading(true)
+
     values.stages = configureStages(values.stages, values.config, true);
 
     const scoringRules = {
@@ -145,8 +160,7 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
     let onSave;
 
     if (context == 'template') {
-
-      if (record && record.id) {
+      if (record && record.id && record.companyId == 'asker' && user.companyId != 'asker') {
         delete values.id;
       }
 
@@ -162,14 +176,17 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
         router.push('/templates/')
       }
     } else {
-      if (values.saveAsTemplate) {
+      if (templateName) {
         const copy = JSON.parse(JSON.stringify(values));
+
+        copy.name = templateName;
 
         delete copy.id;
 
         copy.interviewers = [];
 
         tasks.push(docsApi.save('templates', copy))
+
       }
 
       tasks.push(docsApi.save('projects', values))
@@ -185,7 +202,6 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
       }
     }
 
-    setLoading(true)
 
     Promise.all(tasks)
       .then(onSave)
@@ -288,6 +304,21 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
     }
   }, [setValue, formValues.config, formStages])
 
+  const renderTemplateNameForm = useCallback(() => {
+      return <ProjectSaveAsTemplatePopup onSave={templateName => {
+        setPopup(false);
+        onSave(formValues, templateName)
+      }} />
+  }, [formValues])
+
+  const buttonWithPopup = useCallback(ref => <Button ref={ref}  type="submit" className={styles['project-form-submit']}>
+  {!loading ? (record && record.id ? t('actions.save.project') : t('actions.create.project')) : t('status.loading')}
+</Button>, [loading, record])
+
+  const cancelTemplateForm = useCallback(() => {
+    setPopup(false)
+  }, [])
+
   return  <form data-test-id="project-form" onSubmit={handleSubmit(onSubmit)} className={classNames(styles['project-form'], className)}>
     <div className={classNames(styles['project-form-sidebar'], styles['project-form-sidebar-left'])}>
       <ProjectFormProcess config={formConfig} onStageAdd={handleStageAdd} errors={isSubmitted && stageErrorsLive} stage={stage} onStage={setStage} onChange={handleStages} stages={formStages} className={styles['project-form-process']} />
@@ -324,9 +355,8 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
         <TimeLabel className={styles['project-form-total-time']} time={formValues.time} />
         {
           context == 'project' ?
-        <Button disabled={loading} type="submit" className={styles['project-form-submit']}>
-          {!loading ? (record && record.id ? t('actions.save.project') : t('actions.create.project')) : t('status.loading')}
-        </Button> :
+        <FocusPopup loading={loading} position='br' render={renderTemplateNameForm}
+        onCancel={cancelTemplateForm} active={popup}>{buttonWithPopup}</FocusPopup> :
         <Button disabled={loading} type="submit" className={styles['project-form-submit']}>
           {!loading ? (record && record.id ? t('actions.save.template') : t('actions.create-template')) : t('status.loading')}
         </Button>

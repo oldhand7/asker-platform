@@ -224,9 +224,7 @@ describe('Backoffice evaluation questions', () => {
             .find('button[data-test-id="add-question"]').first().click()
         })
 
-        cy.contains('Save project').click()
-
-        cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+        cy.saveProject()
 
        cy.contains('Project C1').closest('li').click()
 
@@ -474,9 +472,7 @@ describe('Backoffice evaluation questions', () => {
         cy.contains('Are you familiar with HS1_SE?').closest('li').find('button').click()
       })
   
-      cy.contains('Save project').click()
-  
-      cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+      cy.saveProject()
   
      cy.contains('Project HS1').closest('li').click()
   
@@ -713,9 +709,7 @@ describe('Backoffice evaluation questions', () => {
       })
       .trigger('keyup', { code: "Escape" })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+    cy.saveProject()
 
    cy.contains('Project E1').closest('li').click()
 
@@ -888,9 +882,7 @@ it('Should create motivation question', () => {
       })
       .trigger('keyup', { code: "Escape" })
   
-  cy.contains('Save project').click()
-  
-  cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+  cy.saveProject()
   
   cy.contains('Project M1').closest('li').click()
   
@@ -1065,9 +1057,7 @@ it('Should create culture question', () => {
         })
         .trigger('keyup', { code: "Escape" })
     
-    cy.contains('Save project').click()
-    
-    cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+    cy.saveProject()
     
     cy.contains('Project C1').closest('li').click()
     

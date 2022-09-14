@@ -90,6 +90,12 @@ const StageTree = ({ className, stage, time, error, active = false, draggable=tr
     }, [feature, criterias, questions])
 
     const handleRootClick = useCallback((ev) => {
+        if (!active && open.root) {
+            onClick && onClick(ev)
+
+            return;
+        }
+
         const openState = {
             ...open,
             'root': !open.root
@@ -99,7 +105,7 @@ const StageTree = ({ className, stage, time, error, active = false, draggable=tr
         
         onTreeState && onTreeState(openState)
         onClick && onClick(ev)
-    }, [open, onTreeState, onClick])
+    }, [open, onTreeState, onClick, active])
 
     const toggleCriteria = useCallback((criteria) => {
         setOpen({

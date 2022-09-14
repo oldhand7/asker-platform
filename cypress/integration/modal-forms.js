@@ -111,9 +111,7 @@ describe('Modal froms', () => {
       cy.get('[data-test-id="question-manager"]')
         .should('contain', 'Sample question')
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved');
+      cy.saveProject()
 
       cy.visit('/questions/')
 
@@ -172,9 +170,7 @@ describe('Modal froms', () => {
     cy.get('[data-test-id="question-manager"]')
       .should('contain', 'Do you like fruits?')
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved');
+    cy.saveProject();
 
     cy.visit('/questions/')
 
@@ -215,10 +211,8 @@ describe('Modal froms', () => {
     cy.get('[data-test-id="question-manager"]')
       .should('contain', "What's your favorite movie character?")
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved');
-
+    cy.saveProject();
+    
     cy.visit('/questions/')
 
     cy.get('table tbody tr')

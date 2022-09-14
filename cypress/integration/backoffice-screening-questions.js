@@ -94,9 +94,7 @@ describe('Backoffice screening questions', () => {
             .find('button[data-test-id="add-question"]').first().click()
         })
 
-        cy.contains('Save project').click()
-
-        cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+        cy.saveProject()
 
        cy.contains('Project fruits').closest('li').click()
 
@@ -237,9 +235,7 @@ describe('Backoffice screening questions', () => {
           .find('button[data-test-id="add-question"]').first().click()
       })
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+      cy.saveProject()
 
      cy.contains('Project music').closest('li').click()
 
@@ -378,9 +374,7 @@ describe('Backoffice screening questions', () => {
           .find('button[data-test-id="add-question"]').first().click()
       })
 
-      cy.contains('Save project').click()
-
-      cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+      cy.saveProject()
 
      cy.contains('Project ocean').closest('li').click()
 

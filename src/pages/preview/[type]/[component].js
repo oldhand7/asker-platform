@@ -26,7 +26,8 @@ const components = {
         'InterviewerSelect': dynamic(() => import('components/InterviewerSelect/InterviewerSelectPreview')),
         'InterviewFormTimer': dynamic(() => import('components/InterviewFormTimer/InterviewFormTimerPreview')),
         'FileDropInputField': dynamic(() => import('components/FileDropInputField/FileDropInputFieldPreview')),
-        'QuestionScoreBoard': dynamic(() => import('components/QuestionScoreBoard/QuestionScoreBoardPreview'))
+        'QuestionScoreBoard': dynamic(() => import('components/QuestionScoreBoard/QuestionScoreBoardPreview')),
+        'FocusPopup': dynamic(() => import('components/FocusPopup/FocusPopupPreview'))
     },
     form: {
         'followup-question-form': dynamic(() => import('forms/followup-question/followup-question-form')),
