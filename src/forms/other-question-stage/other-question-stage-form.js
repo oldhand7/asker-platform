@@ -94,7 +94,7 @@ const OtherQuestionStageForm = ({ className, values, onValues, feature, onError,
   }, [setValue, questions, questionsTimetable])
 
   return <div className={classNames(styles['form'], className)}>
-    <TimedTitle className={styles['form-title']} time={formValues.time}>{t('stages.other-questions.name')}</TimedTitle>
+    <TimedTitle className={styles['form-title']} time={formValues.time}>{t('stages.other-questions.name-long')}</TimedTitle>
     <QuestionExplorer className={styles['form-question-explorer']} label=' ' questions={questions} onQuestions={questionsHandler} type='other' />
     <SelectedQuestionsManager onQuestionTime={handleQuestionTime} onQuestions={questionsHandler} onQuestionNote={handleQuestionNote} className={styles['form-question-manager']} feature={feature} notes={formValues.notes} questions={questions} timetable={questionsTimetable} type='other' />
   </div>

@@ -32,7 +32,7 @@ Cypress.Commands.add('createDummyProject', (name = 'Demo ABC', template = '') =>
 
   if (!template) {
     cy.contains('Do you want to save this project as a template?')
-      .closest('#focus-popup')
+    cy.get('#focus-popup')
       .contains('No')
       .click()
   }
@@ -121,9 +121,9 @@ Cypress.Commands.add('saveProject', (expectTemplateSequence = true) => {
     cy.wait(500)
     
     cy.contains('Do you want to save this project as a template?')
-    .closest('#focus-popup')
-    .contains('No')
-    .click()
+    cy.get('#focus-popup')
+      .contains('No')
+      .click()
 
     cy.get('[data-test-id="alert-success"]').contains('Project saved')
   }

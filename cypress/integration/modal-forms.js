@@ -31,7 +31,7 @@ describe('Modal froms', () => {
 
         cy.document().its('body')
           .find('#criteria-option-modal')
-          .should('contain', 'Competency option')
+          .should('contain', 'Criteria option')
           .within(() => {
             cy.get('input[name="name.en"]').type('Criteria A')
             cy.get('button[type="submit"]').click()

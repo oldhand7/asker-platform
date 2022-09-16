@@ -47,7 +47,7 @@ const CandidateQuestionsStageForm = ({ values, onValues, onError, className }) =
 
   return <div className={classNames(styles['form'], className)}>
     <TimedTitle className={styles['form']}  time={formValues.time} onChange={handleTime}>
-      {t('stages.candidate-questions.name')}
+      {t('stages.candidate-questions.name-long')}
     </TimedTitle>
 
     <div className={styles['form-desc']}>

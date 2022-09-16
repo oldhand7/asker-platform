@@ -1,3 +1,5 @@
+@import 'styles/vars';
+
 .tiny-input-form {
     position: relative;
     right: -12rem;
@@ -39,7 +41,7 @@
 
     &-button {
         border-radius: 5px;
-        background: #43B88C;
+        background: $brand-green;
         border-radius: 5px;
         font-weight: 500;
         font-size: 14rem;
@@ -51,7 +53,20 @@
         cursor: pointer;
 
         &:hover {
-            background: #3DA67E;
+            background: $brand-green-hover;
+        }
+
+        &-has-extra {
+            border-radius: 5px 0px 0px 5px;
+        }
+
+        &-extra {
+            border-radius: 0 5px 5px 0;
+            background-color: $asker-dark;
+
+            &:hover {
+                background: #1E453E;
+            }
         }
     }
 }

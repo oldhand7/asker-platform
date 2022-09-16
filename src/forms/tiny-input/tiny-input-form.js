@@ -14,7 +14,11 @@ const TinyInputForm = ({
     name='name',
     placeholder = 'Type here',
     buttonLabel = 'Save',
-    className
+    extraButtonLabel = 'Save as new',
+    extraButton = false,
+    className,
+    maxLength = 25,
+    onExtraSubmit
 }) => {
     const initValues = useMemo(() => values, [])
 
@@ -29,7 +33,6 @@ const TinyInputForm = ({
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const {
-        input,
         errors,
         setValue,
         control
@@ -38,6 +41,10 @@ const TinyInputForm = ({
         rules: validationRules,
         messages: validationMessages,
     });
+
+    useEffect(() => {
+        setIsSubmitted(false)
+    }, [values])
 
     const formValues = useWatch({ control, defaultValue: initValues })
 
@@ -59,6 +66,14 @@ const TinyInputForm = ({
         }
     }, [formValues, errors, onSubmit])
 
+    const handleExtraSubmit = useCallback(() => {
+        setIsSubmitted(true);
+
+        if (!errors) {
+            onExtraSubmit(formValues)
+        }
+    }, [formValues, errors, onExtraSubmit])
+
     const handleValue = useCallback((ev) => {
         setValue('value', ev.target.value)
     }, [setValue])
@@ -69,8 +84,15 @@ const TinyInputForm = ({
     )}>
         <div className={styles['tiny-input-form-input-field']}>
             <div className={styles['tiny-input-form-input-field-body']}>
-                <TextInput maxLength="25" className={styles['tiny-input-form-input']} onEnter={handleSubmit} placeholder={placeholder} type="text" name={name} autoComplete="false" value={formValues.value} onChange={handleValue} />
-                <button className={styles['tiny-input-form-button']} type="button" onClick={handleSubmit}>{buttonLabel}</button>
+                <TextInput maxLength={maxLength} className={styles['tiny-input-form-input']} onEnter={handleSubmit} placeholder={placeholder} type="text" name={name} autoComplete="false" value={formValues.value} onChange={handleValue} />
+                <button className={classNames(
+                    styles['tiny-input-form-button'],
+                    extraButton ? styles['tiny-input-form-button-has-extra'] : ''
+                )} type="button" onClick={handleSubmit}>{buttonLabel}</button>
+                {extraButton ? <button className={classNames(
+                    styles['tiny-input-form-button'],
+                    styles['tiny-input-form-button-extra']
+                )} type="button" onClick={handleExtraSubmit}>{extraButtonLabel}</button> : null}
             </div>
             {isSubmitted && errors && errors.value && <p className="form-error">{errors.value}</p>}
         </div>

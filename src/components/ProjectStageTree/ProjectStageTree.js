@@ -35,7 +35,8 @@ import styles from './ProjectStageTree.module.scss';
 const ProjectStageTree = ({ stages = [], stage, onStage, onChange, timetable = {}, errors = {}, className, config }) => {
     const initValues = useMemo(() => ({ stages }), [])
     const [treeState, setTreeState] = useState({})
-    
+    const [prevConfig, setPrevConfig] = useState({});
+
     const {
         control,
         setValue
@@ -109,6 +110,23 @@ const ProjectStageTree = ({ stages = [], stage, onStage, onChange, timetable = {
         return handlers;
     }, [treeStages, treeState])
 
+    useEffect(() => {
+        if (stage && prevConfig != config) {
+            const stageId = getStageKey(stage);
+
+            if (!prevConfig[stageId] && config[stageId] || JSON.stringify(prevConfig[stageId]) != JSON.stringify(config[stageId])) {
+                setPrevConfig(config);
+
+                setTreeState({
+                    ...treeState,
+                    [stageId]: {
+                        ...(treeState[stageId] || {}),
+                        root: true
+                    } 
+                });
+            }
+        }
+    }, [config, stage, prevConfig, treeState])
 
     return <DragDropContext onDragEnd={handleDragEnd}>
     <Droppable direction="vertical" droppableId='stage'>{

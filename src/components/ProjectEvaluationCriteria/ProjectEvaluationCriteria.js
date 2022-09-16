@@ -9,15 +9,17 @@ import ScoringRulesModal from 'modals/scoring-rules/scoring-rules-modal';
 import { useModal } from 'libs/modal';
 import { getProjectEvaluationCriterias } from 'libs/project'
 import { useTranslation } from 'libs/translation';
+import { useRouter } from 'next/router';
 
 const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
   const [error, setError] = useState(null);
   const { t, i18nField } = useTranslation();
   const openScoringRulesModal = useModal(ScoringRulesModal)
+  const { locale } = useRouter();
 
   const criterias = useMemo(
     () => getProjectEvaluationCriterias(project, { t, i18nField }),
-    [project]
+    [project, locale]
     )
 
   useEffect(() => {
@@ -63,7 +65,7 @@ const ProjectEvaluationCriteria = ({ className, project, onScoringRules }) => {
            stroke=''
          >
            {criterias.map((c, index) => (
-             <Cell key={`cell-${c.id}`} fill={COLOR_MAP[c.type] ? COLOR_MAP[c.type] : '#CCC'} />
+             <Cell key={`${locale}-cell-${c.id}`} fill={COLOR_MAP[c.type] ? COLOR_MAP[c.type] : '#CCC'} />
            ))}
          </Pie>
        </PieChart>

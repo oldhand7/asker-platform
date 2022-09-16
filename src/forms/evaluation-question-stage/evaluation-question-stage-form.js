@@ -98,23 +98,23 @@ const EvaluationQuestionStageForm = ({ className, values, onValues, feature, onE
     const { subtype } = feature;
 
     if (subtype == 'competency') {
-      return t('stages.competency-questions.name')
+      return t('stages.competency-questions.name-long')
     }
 
     if (subtype == 'experience') {
-      return t('stages.experience-questions.name')
+      return t('stages.experience-questions.name-long')
     }
 
     if (subtype == 'hard-skill') {
-      return t('stages.hard-skill-questions.name')
+      return t('stages.hard-skill-questions.name-long')
     }
 
     if (subtype == 'culture') {
-      return t('stages.culture-questions.name')
+      return t('stages.culture-questions.name-long')
     }
 
     if (subtype == 'motivation') {
-      return t('stages.motivation-questions.name')
+      return t('stages.motivation-questions.name-long')
     }
 
     return feature.shortName || feature.name;

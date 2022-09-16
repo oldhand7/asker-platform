@@ -50,7 +50,7 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
   const [error, setError] =  useState(null);
   const { user } = useUser();
   const router = useRouter();
-  const { t } = useTranslation()
+  const { t, i18nField } = useTranslation()
   const [loading, setLoading] = useState(true);
   const docsApi = useDocumentsApi();
   const stageErrors = useRef({});
@@ -132,7 +132,7 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
     values.stages = configureStages(values.stages, values.config, true);
 
     const scoringRules = {
-      ...calcDefaultScoringRules(values),
+      ...calcDefaultScoringRules(values, { t, i18nField }),
       ...(values.scoringRules || {})
     }
 
@@ -307,7 +307,7 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
   const renderTemplateNameForm = useCallback(() => {
       return <ProjectSaveAsTemplatePopup onSave={templateName => {
         setPopup(false);
-        onSave(formValues, templateName)
+        onSave(JSON.parse(JSON.stringify(formValues)), templateName)
       }} />
   }, [formValues])
 

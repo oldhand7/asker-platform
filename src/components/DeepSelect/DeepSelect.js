@@ -75,11 +75,12 @@ const DeepSelect = ({ className, option, options = [], placeholder = 'Choose', a
                             const optionActions = [
                                 ...(o.actions || []),
                                 ...actions
-                            ]
+                            ];
 
                             return <li onClick={() => handleSelect(o)} className={styles['deep-select-menu-item']} key={index}>
                                 <span className={styles['deep-select-menu-item-name']}>{o.name}</span>
-                                <PopupMenu className={styles['deep-select-menu-item-control']} onChange={a => handleAction(a, o)} items={optionActions} />
+                                {!o.noActions ?
+                                <PopupMenu className={styles['deep-select-menu-item-control']} onChange={a => handleAction(a, o)} items={optionActions} /> : null}
                             </li>
                         })}
                     </ul>

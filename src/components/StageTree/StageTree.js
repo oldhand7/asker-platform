@@ -10,7 +10,6 @@ import TrashIcon from "components/Icon/TrashIcon";
 import styles from './StageTree.module.scss';
 
 const StageTree = ({ className, stage, time, error, active = false, draggable=true, onClick, onDelete, dragProps = {}, drag = false, treeState = {}, onTreeState, config }) => {
-    const [open, setOpen] = useState(treeState)
     const { i18nField } = useTranslation();
     const { t } = useTranslation();
     
@@ -90,44 +89,42 @@ const StageTree = ({ className, stage, time, error, active = false, draggable=tr
     }, [feature, criterias, questions])
 
     const handleRootClick = useCallback((ev) => {
-        if (!active && open.root) {
+        if (!active && treeState.root) {
             onClick && onClick(ev)
 
             return;
         }
 
         const openState = {
-            ...open,
-            'root': !open.root
+            ...treeState,
+            'root': !treeState.root
         }
-
-        setOpen(openState)
         
         onTreeState && onTreeState(openState)
         onClick && onClick(ev)
-    }, [open, onTreeState, onClick, active])
+    }, [onTreeState, treeState, onClick, active])
 
     const toggleCriteria = useCallback((criteria) => {
-        setOpen({
-            ...open,
-            [criteria.id]: !open[criteria.id]
+        onTreeState({
+            ...treeState,
+            [criteria.id]: !treeState[criteria.id]
         })
-    }, [open])
+    }, [treeState, onTreeState])
 
     return <ul {...dragProps} className={classNames(
         styles['stage-tree'],
         className
     )}>
         <li data-level="1" className={styles['stage-tree-item']}> 
-            <StageTreeLeaf drag={drag} draggable={draggable} active={active} error={error} onClick={handleRootClick} expanded={open['root']} level={1} hasChildren={criterias.length || questions.length} Icon={DragIcon} time={time} label={stageLabel} actions={actions} onAction={handleAction} />
+            <StageTreeLeaf drag={drag} draggable={draggable} active={active} error={error} onClick={handleRootClick} expanded={treeState['root']} level={1} hasChildren={criterias.length || questions.length} Icon={DragIcon} time={time} label={stageLabel} actions={actions} onAction={handleAction} />
             {
-                criterias.length && open['root'] ?
+                criterias.length && treeState['root'] ?
                 <ul className={styles['stage-tree']}>
                     {criterias.map(({ criteria, questions }) => (
                         <li data-level="2" className={styles['stage-tree-item']} key={criteria.id}>
-                            <StageTreeLeaf draggable={false} onClick={() => toggleCriteria(criteria)} expanded={open[criteria.id]} hasChildren={true} level={2} label={`${i18nField(criteria.name)} (${questions.length})`} />
+                            <StageTreeLeaf draggable={false} onClick={() => toggleCriteria(criteria)} expanded={treeState[criteria.id]} hasChildren={true} level={2} label={`${i18nField(criteria.name)} (${questions.length})`} />
             
-                            {open[criteria.id] ?
+                            {treeState[criteria.id] ?
                             <ul  className={styles['stage-tree']}>
                                 {questions.map(question => {
                                     const questionName = i18nField(question.name);
@@ -143,7 +140,7 @@ const StageTree = ({ className, stage, time, error, active = false, draggable=tr
             }
 
             {
-                !criterias.length && questions.length && open['root'] ?
+                !criterias.length && questions.length && treeState['root'] ?
                 <ul className={styles['stage-tree']}>
                     {questions.map((question) => (
                        <li data-level="2"

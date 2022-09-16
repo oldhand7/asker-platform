@@ -85,7 +85,7 @@ export const getProjectEvaluationCriterias = (project, trans = {}) => {
       }
 
       const evaluationAggregate = {
-        name: ucFirst(key),
+        name: t ? t(`labels.${key}`) : key,
         type: key,
         weight: 0,
         children: []
@@ -120,8 +120,8 @@ export const getProjectEvaluationCriterias = (project, trans = {}) => {
   return result.filter(r => r.weight);
 }
 
-export const calcDefaultScoringRules = project => {
-  const criteriaTree = getProjectEvaluationCriterias(project);
+export const calcDefaultScoringRules = (project, trans = {}) => {
+  const criteriaTree = getProjectEvaluationCriterias(project, trans);
 
   return flattenCriteriaTree(criteriaTree);
 }

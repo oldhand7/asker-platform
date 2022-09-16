@@ -9,6 +9,7 @@ const beforeRun = async () => {
   await helpers.deleteCollection('criteriaOptions');
   await helpers.deleteCollection('translations');
   await helpers.deleteCollection('companies');
+  await helpers.deleteCollection('configTemplates');
 
   await (() => new Promise(resolve => setTimeout(resolve, 5000)))()
 

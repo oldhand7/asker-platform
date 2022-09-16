@@ -65,7 +65,7 @@ const StageTemplateForm = ({ className, type = '', values = null, onValues, docu
         ];
 
         if (user) {
-            dbQuery.push(['companyId', '==', user.companyId])
+            dbQuery.push(['companyId', 'in', ['asker', user.companyId]])
         }
         
         const dbSort = [
@@ -83,46 +83,62 @@ const StageTemplateForm = ({ className, type = '', values = null, onValues, docu
     
     useEffect(() => {
         if (onValues && templateOption) {
-            onValues(templateOption.value.values)
+            onValues(templateOption.value)
         }
     }, [templateOption])
 
-    const handleTemplateSave = useCallback(async ({ value: name }) => {
+    const saveTemplate = async (name, newTemplate = false) => {
         setLoading(true);
+
+        if (newTemplate && formValues.id) {
+            delete formValues.id;
+        }
+
+        if (user.companyId != 'asker' && formValues.companyId == 'asker') {
+            delete formValues.id;
+        }
 
         const configTemplate = {
             ...formValues,
             name
         }
-
+    
         if (user) {
             configTemplate.companyId = user.companyId;
         }
-
+    
         try {
             const id = await documentsApi.saveCollectionDocument(
                 'configTemplates',
                 configTemplate
             );
-
+    
             configTemplate.id = id;
-
+    
             setValue('id', id);
-
+    
             const configTemplateOption = config2option(configTemplate);
-
+    
             setTemplateOptions([
                 ...templateOptions.filter(to => to.value.id != configTemplate.id),
                 configTemplateOption
             ])
-
+    
             setTemplateOption(configTemplateOption)
-
+    
             setLoading(false);
         } catch (error) {
             setError(error)
         }
-}, [formValues, user, templateOption, templateOptions])
+    }
+
+    const handleTemplateSave = useCallback(async ({ value: name }) => {
+        await saveTemplate(name, false)
+    }, [formValues, user, templateOption, templateOptions])
+
+    const handleTemplateSaveAs = useCallback(async ({ value: name }) => {
+        await saveTemplate(name, true)
+    }, [formValues, user, templateOption, templateOptions])
 
     useEffect(() => {
         setLoading(false);
@@ -148,22 +164,43 @@ const StageTemplateForm = ({ className, type = '', values = null, onValues, docu
         }
     }
 
-    return <div className={classNames(styles['stage-template-form'], className)}>
-        <div className={styles['stage-template-form-select']}>
-            <span className={styles['stage-template-form-select-label']}>{t('labels.template.plural')}</span>
-            <DeepSelect onAction={handleAction} actions={[
+    useEffect(() => {
+        if (!templateOption && templateOptions.length && values && values.templateId) {
+            const target = templateOptions.find(to => to.value.id == values.templateId)
+
+            setTemplateOption(target)
+        }
+    }, [templateOption, templateOptions, values])
+
+    const templateOptionsProtected = useMemo(() => templateOptions.map(opt => {
+        if (opt.value.companyId == 'asker' && user.companyId != 'asker') {
+            opt.noActions = true;
+        }
+
+        return opt;
+    }), [user, templateOptions])
+
+    const showExtra = useMemo(() => {
+        return values && values.templateId && templateOption && templateOption.value.id && values.templateId == templateOption.value.id && (templateOption.value.companyId != 'asker' || user.companyId == 'asker');
+    }, [values, templateOption, user])
+
+    return <div className={classNames(styles['form'], className)}>
+        <div className={styles['form-select']}>
+            <span className={styles['form-select-label']}>{t('labels.template.plural')}</span>
+            <DeepSelect placeholder={t('actions.choose')} protect={true} onAction={handleAction} actions={[
                 { id: 'delete', icon: TrashIcon, name: t('actions.delete') }
-            ]} onChange={setTemplateOption} option={templateOption} options={templateOptions} setTemplateOption={setTemplateOption} className={styles['stage-template-form-select-input']} />
+            ]} onChange={setTemplateOption} option={templateOption} options={templateOptionsProtected} setTemplateOption={setTemplateOption} className={styles['form-select-input']} />
         </div>
         
-        <div className={styles['stage-template-form-control']}>
+        <div className={styles['form-control']}>
             {
                 templateOption || mode == 'new' ?
-                <TinyInputForm name="template_name" required={true} requiredMessage={t('errors.field.required')} className={styles['stage-template-form-input']} placeholder={t('labels.name')} buttonLabel={t('actions.save')} values={{ value: formValues.name || '' }} onValues={handleTemplateSave} /> :
-                <button className={styles['stage-template-form-control-save']} type="button" onClick={() => setMode('new')}>{t('actions.save.as-template')}</button>
+                <TinyInputForm onExtraSubmit={handleTemplateSaveAs} extraButtonLabel={t('actions.save-as-new')} extraButton={showExtra} maxLength={100} name="template_name" required={true} requiredMessage={t('errors.field.required')} className={styles['form-input']} placeholder={t('labels.name')} buttonLabel={t('actions.save')} values={{ value: formValues.name || '' }} onValues={handleTemplateSave} /> :
+                <button className={styles['form-control-save']} type="button" onClick={() => setMode('new')}>{t('actions.save.as-template')}</button>
             }
             {error ? <p className="form-error">{error.message}</p> : null}
         </div>
+
         {loading ? <Preloader /> : null}
     </div>
 }

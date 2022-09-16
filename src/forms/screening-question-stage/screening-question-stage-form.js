@@ -95,7 +95,7 @@ const ScreeningQuestionStageForm = ({ className, values, onValues, feature, onEr
   }, [setValue, questions, questionsTimetable])
 
   return <div className={classNames(styles['from'], className)}>
-    <TimedTitle className={styles['form-title']} time={formValues.time}>{t('stages.screening-questions.name')}</TimedTitle>
+    <TimedTitle className={styles['form-title']} time={formValues.time}>{t('stages.screening-questions.name-long')}</TimedTitle>
     <QuestionExplorer type={'screening'} label={' '} className={styles['form-question-explorer']} questions={questions} onQuestions={questionsHandler} />
     <SelectedQuestionsManager onQuestionTime={handleQuestionTime} onQuestions={questionsHandler} onQuestionNote={handleQuestionNote} className={styles['form-question-manager']} feature={feature} notes={formValues.notes} questions={questions} timetable={questionsTimetable} type='screening' />
   </div>

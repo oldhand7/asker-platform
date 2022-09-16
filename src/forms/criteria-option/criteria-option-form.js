@@ -16,12 +16,6 @@ import { useUser } from 'libs/user';
 
 import styles from './criteria-option-form.module.scss';
 
-const CRITERIA_LABELS = {
-  'competency': 'Competency option',
-  'experience': 'Experience option',
-  'hard-skill': 'Hard skill option'
-}
-
 const defaultValues = {
   name: {
     en: ''
@@ -97,7 +91,7 @@ const CriteriaOptionForm = ({ className, onValues, values, type }) => {
   }, [setValue, locale])
 
   return <form data-test-id="criteria-option-form" method="POST" noValidate className={classNames(styles['criteria-option-form'], className)} onSubmit={handleSubmit(onSubmit)}>
-    <h2 className={styles['criteria-option-form-title']}>{t(CRITERIA_LABELS[type])}</h2>
+    <h2 className={styles['criteria-option-form-title']}>{t(`labels.criteria-option`)}</h2>
 
     {error && <Alert type="error">{error.message}</Alert>}
 
@@ -109,7 +103,7 @@ const CriteriaOptionForm = ({ className, onValues, values, type }) => {
     }
     <PlatformButton disabled={loading} type="submit" className={styles['criteria-option-form-submit']}>
       {!loading ?
-      (!formValues.id ? <><PlusIcon />  {t('labels.add.option')}</> : t('labels.save.option')) : t('status.loading')}
+      (!formValues.id ? <><PlusIcon />  {t('actions.add.option')}</> : t('actions.save.option')) : t('status.loading')}
     </PlatformButton>
     {loading ? <Preloader /> : null}
   </form>

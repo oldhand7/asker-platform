@@ -31,7 +31,7 @@ const ProjectStageChoose = ({ className, onChoose, onClose }) => {
                         <ul className={styles['project-stage-choose-stage-group-list']}>
                             {ft.features.map(f => (
                                 <li key={f.id} onClick={() => onChoose && onChoose(f)} className={styles['project-stage-choose-stage-group-list-item']}>
-                                    {f.name}
+                                    {t(`stages.${f.id}.name`)}
                                 </li>
                             ))}
                         </ul>

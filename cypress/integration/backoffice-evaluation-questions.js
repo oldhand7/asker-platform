@@ -172,7 +172,7 @@ describe('Backoffice evaluation questions', () => {
 
         cy.document().its('body')
           .find('#criteria-option-modal')
-          .should('contain', 'Competency option')
+          .should('contain', 'Criteria option')
           .within(() => {
             cy.get('input[name="name.se"]').should('have.value', 'C1_SE')
             cy.get('[contenteditable="true"]').should('contain', 'C1C1C1_SE')
@@ -426,7 +426,7 @@ describe('Backoffice evaluation questions', () => {
   
       cy.document().its('body')
         .find('#criteria-option-modal')
-        .should('contain', 'Hard skill option')
+        .should('contain', 'Criteria option')
         .within(() => {
           cy.get('input[name="name.se"]').should('have.value', 'HS1_SE')
       })
@@ -658,7 +658,7 @@ describe('Backoffice evaluation questions', () => {
 
     cy.document().its('body')
       .find('#criteria-option-modal')
-      .should('contain', 'Experience option')
+      .should('contain', 'Criteria option')
       .within(() => {
         cy.get('input[name="name.se"]').should('have.value', 'E1_SE')
     })

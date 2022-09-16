@@ -63,29 +63,57 @@ describe('Clone Asker resources', () => {
       })
   })
 
-  after(() => {
-    cy.logout()
-
+  it('modified introduction text users owned', () => {
     cy.simpleLogin('admin@askertech.com', 'test123', true)
 
-    const confirmStub = cy.stub();
-    cy.on('window:confirm', confirmStub)
+    cy.createDummyProject('Just some project 1')
 
-    cy.visit('/templates/')
+    cy.contains('Just some project 1').closest('li').listRowNavigate('Edit')
 
-    cy.get('[data-test-id="template-list"]').listFirstRowNavigate('Delete')
+    cy.get('[data-test-id="feature-form"]')
+      .within(() => {
+        cy.contains('English').click()
+        cy.root().findHtmlInputAndType('{selectAll}Mickey mouse loves everybody.')
+        cy.contains('Swedish').click()
+        cy.root().findHtmlInputAndType('{selectAll}Mickey mouse loves everybody. SE')
+        cy.contains('Save as template').click()
+        cy.get('input[name="template_name"]').type('Introduction (Asker)')
+        cy.contains('Save').click()
+      })
 
-    cy.get("[data-test-id='alert-success']").should('contain', 'Template deleted')
-
-    cy.visit('/questions/')
-
-    cy.tableFirstRowNavigate('Delete');
-
-    cy.get("[data-test-id='alert-success']").should('contain', 'Question deleted')
-
-    cy.wrap(confirmStub)
-      .should('be.called', 2)
+    cy.saveProject()
 
     cy.logout()
+
+    cy.simpleLogin('joe.spencer@example.com', 'test123', true)
+
+    cy.visit('/projects/')
+
+    cy.createDummyProject('Just some project FOO')
+
+    cy.contains('Just some project FOO').closest('li').listRowNavigate('Edit')
+
+    cy.get('[data-test-id="feature-form"]')
+      .within(() => {
+        cy.contains('Templates').closest('div').as('templates')
+        cy.get('@templates').contains('Choose').click()
+        cy.contains('Introduction (Asker)').click()
+        cy.contains('English').click()
+        cy.get('[data-test-id="html-input-field"]').should('contain', 'Mickey mouse loves everybody.')
+        cy.root().findHtmlInputAndType('{selectAll}+en')
+        cy.contains('Swedish').click()
+        cy.get('[data-test-id="html-input-field"]').should('contain', 'Mickey mouse loves everybody. SE')
+        cy.root().findHtmlInputAndType('{selectAll}+se')
+        cy.get('input[name="template_name"]').type('{selectAll}My template')
+        cy.contains('Save').click()
+
+        cy.get('@templates').should('contain', 'My template').click()
+
+        cy.get('@templates').find('ul')
+          .within(() => {
+            cy.get('li').eq(0).should('contain', 'Introduction (Asker)')
+            cy.get('li').eq(1).should('contain', 'My template')
+          })
+      })
   })
 })

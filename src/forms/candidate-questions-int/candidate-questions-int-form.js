@@ -42,7 +42,7 @@ const CandidateQuestionsIntForm = ({ className, values, onValues, onError, confi
   }, [setValue])
 
   return <div className={classNames(styles['form'], className)}>
-    <h2 className={styles['form-title']}>{t('stages.candidate-questions.name')}</h2>
+    <h2 className={styles['form-title']}>{t('stages.candidate-questions.name-long')}</h2>
 
     <div className={styles['form-desc']}>
       {t('headings.time-for-candidate-questions')}
