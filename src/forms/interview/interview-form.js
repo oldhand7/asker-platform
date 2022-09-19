@@ -207,7 +207,7 @@ const InterviewForm = ({ className, interview, project }) => {
       const key = getStageKey(stage)
 
       handlers[key] = values => {
-        setValue(`evaluations.${key}`, values)
+        setValue(`evaluations.${key}`, typeof values !== "undefined" ? values : null)
       }
 
       return handlers;

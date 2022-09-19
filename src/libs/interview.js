@@ -23,7 +23,7 @@ export const getInterviewAggregate = ({ evaluations }) => {
     }
 
     if (feature.criteria) {
-      const criteriaEvaluations = Object.values(evaluations[eKey]);
+      const criteriaEvaluations = Object.values(evaluations[eKey] || {});
 
       for (let n = 0; n < criteriaEvaluations.length; n++) {
         const { criteria, subtype } = criteriaEvaluations[n]
@@ -39,7 +39,7 @@ export const getInterviewAggregate = ({ evaluations }) => {
 
       aggregate[id] = [
         ...aggregate[id],
-        ...Object.values(evaluations[eKey])
+        ...Object.values(evaluations[eKey] || {})
       ]
     }
   }
