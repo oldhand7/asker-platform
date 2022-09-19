@@ -32,9 +32,9 @@ const Draggable = dynamic(
 
 import styles from './ProjectStageTree.module.scss';
 
-const ProjectStageTree = ({ stages = [], stage, onStage, onChange, timetable = {}, errors = {}, className, config }) => {
+const ProjectStageTree = ({ stages = [], stage, onStage, onChange, treeState: _treeState = {}, onTreeState, timetable = {}, errors = {}, className, config }) => {
     const initValues = useMemo(() => ({ stages }), [])
-    const [treeState, setTreeState] = useState({})
+    const [treeState, setTreeState] = useState(_treeState)
     const [prevConfig, setPrevConfig] = useState({});
 
     const {
@@ -127,6 +127,10 @@ const ProjectStageTree = ({ stages = [], stage, onStage, onChange, timetable = {
             }
         }
     }, [config, stage, prevConfig, treeState])
+
+    useEffect(() => {
+        onTreeState && onTreeState(treeState);
+    }, [onTreeState, treeState])
 
     return <DragDropContext onDragEnd={handleDragEnd}>
     <Droppable direction="vertical" droppableId='stage'>{

@@ -48,6 +48,7 @@ const StageTree = ({ className, stage, time, error, active = false, draggable=tr
             } else {
                 criteriaMap[criteria.id] = {
                     criteria,
+                    sort: i,
                     questions: [questions[i]]
                 }
             }
@@ -56,11 +57,11 @@ const StageTree = ({ className, stage, time, error, active = false, draggable=tr
         const criterias = Object.values(criteriaMap);
 
         criterias.sort((a, b) => {
-            const { criteria: criteriaA, questions: questionsA } = a;
-            const { criteria: criteriaB, questions: questionsB } = b;
+            const { criteria: criteriaA, sort: sortA } = a;
+            const { criteria: criteriaB, sort: sortB } = b;
 
-            if (questionsA.length > questionsA.length) return -1;
-            if (questionsA.length < questionsB.length) return 1;
+            if (sortA > sortB) return 1;
+            if (sortA < sortB) return -1;
 
             const nameA = i18nField(criteriaA.name)
             const nameB = i18nField(criteriaB.name)
