@@ -13,7 +13,7 @@ export const calcInterviewScore = (interview, projectOrTemplate) => {
     ...calcDefaultScoringRules(projectOrTemplate),
     ...(projectOrTemplate.scoringRules || {})
   }
-  
+
   const aggregate = getInterviewAggregate(interview)
 
   let interviewScore = 0;
@@ -27,11 +27,13 @@ export const calcInterviewScore = (interview, projectOrTemplate) => {
   for (let i = 0; i < criteriaEvaluations.length; i++) {
     const { criteria, score, subtype } = criteriaEvaluations[i]
 
-    const p = (scoringRules[criteria.id] || 0) / aggregate[subtype][criteria.id].length;
+    if (score) {
+      const p = (scoringRules[criteria.id] || 0) / aggregate[subtype][criteria.id].length;
 
-    const localScore = scoreTable[score-1] * (p / 100);
-
-    interviewScore += localScore
+      const localScore = scoreTable[score-1] * (p / 100);
+  
+      interviewScore += localScore
+    }
   }
 
   const categoryEvaluations = [
@@ -41,11 +43,14 @@ export const calcInterviewScore = (interview, projectOrTemplate) => {
 
   for (let i = 0; i < categoryEvaluations.length; i++) {
     const { subtype, score } = categoryEvaluations[i]
-    const p = (scoringRules[subtype] || 0) / aggregate[subtype].length;
 
-    const localScore = scoreTable[score-1] * (p / 100);
+    if (score) {
+      const p = (scoringRules[subtype] || 0) / aggregate[subtype].length;
 
-    interviewScore += localScore
+      const localScore = scoreTable[score-1] * (p / 100);
+  
+      interviewScore += localScore
+    }
   }
 
   return Math.round(interviewScore);
