@@ -64,7 +64,7 @@
     margin-top: 16rem;
   }
 
-  & &-submit {
+  &-submit {
     cursor: pointer;
     font-weight: 700;
     font-size: 14rem;
@@ -73,8 +73,8 @@
     color: #FFFFFF;
     background: #1E453E;
     border-radius: 7px;
-    height: 48rem;
-    line-height: 48rem;
+    height: 48rem !important;
+    line-height: 48rem !important;
 
     &-text {
       vertical-align: middle;
