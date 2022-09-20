@@ -146,6 +146,27 @@
     }
   }
 
+  &-prev {
+    background: #ECECEC;
+    border-radius: 5px;
+    width: 100%;
+    display: block;
+    color: $brandish-dark-green;
+    cursor: pointer;
+    margin-top: 30rem;
+    font-size: 14rem;
+
+    &-icon {
+      fill: currentColor;
+      stroke: currentColor;
+      transform: rotate(180deg);
+    }
+
+    &:hover {
+      background: #eeeeee;
+    }
+  }
+
   &-brandish {
     background: $brandish-dark-green;
     border-radius: 5px;

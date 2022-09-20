@@ -149,6 +149,8 @@ const FocusPopup = ({ className, children = null, active = false, onCancel, rend
             })
 
             const cleanup = () => {
+                document.body.classList.remove('modal')
+
                 if (div) {
                     div.remove();
                 }

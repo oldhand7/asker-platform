@@ -54,6 +54,8 @@ describe('Updating queestions', () => {
 
       cy.visit('/projects')
 
+      cy.wait(5000)
+
       cy.contains('Project 123').closest('li').listRowNavigate('Edit')
 
       cy.contains('Other (1)').click()
@@ -62,8 +64,6 @@ describe('Updating queestions', () => {
         .should('contain', 'Questione 111')
 
       cy.visit('/projects')
-
-      cy.wait(5000)
 
       cy.contains('Project 123').closest('li').click()
 

@@ -70,6 +70,7 @@ const LanguageChooseForm = ({ className, values, onValues }) => {
         <div data-test-id="language-choose">
         <StyledReactSelect
                 instanceId='langselect1'
+                isSearchable={false}
                 classNamePrefix="react-select" 
                 placeholder={t('actions.choose-language')}
                 className={styles['form-select-input']}

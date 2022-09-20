@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { useInView } from 'react-intersection-observer';
 import InterviewStageTimeLabel from 'components/InterviewStageTimeLabel/InterviewStageTimeLabel';
 import styles from './StageInterviewForm.module.scss';
-import { DEFAULT_STAGE_TIME } from 'libs/config';
+import { DEFAULT_QUESTION_TIME, DEFAULT_STAGE_TIME } from 'libs/config';
 import { useForm } from 'libs/react-hook-form';
 import { isMultistage } from 'libs/stage';
 
@@ -23,7 +23,7 @@ const stageForms = {
   'summary': dynamic(() => import('forms/summary-int/summary-int-form'))
 }
 
-const StageInterviewForm = ({ onValues, values, stage, stages = stageForms, question, taxStageSecond, markComplete, id, onFocusId, className, ...props}) => {
+const StageInterviewForm = ({ onValues, values, stage, stages = stageForms, question, taxStageSecond, markComplete, id, onFocusId, className, time: stageTime, ...props}) => {
   const initValues = useMemo(() => values, []);
 
   const {
@@ -84,8 +84,12 @@ const StageInterviewForm = ({ onValues, values, stage, stages = stageForms, ques
   }, [formValues, notQuestionMultistage, onValues])
 
   const time = useMemo(() => {
-    return stage.config && stage.config.time || DEFAULT_STAGE_TIME;
-  }, [stage]);
+    if (typeof stageTime !== "undefined") {
+      return stageTime;
+    }
+    
+    return stage.config && stage.config && stage.config.time || DEFAULT_STAGE_TIME;
+  }, [stageTime, stage]);
 
   const FormComponent = useMemo(() => stages[stage.id], [stage, stages])
 
@@ -96,6 +100,7 @@ const StageInterviewForm = ({ onValues, values, stage, stages = stageForms, ques
         values={formValues && formValues[q.id]}
         onValues={questionInputHandlers[q.id]}
         config={stage.config.questions[q.id]}
+        time={Number.parseInt(stage.config && stage.config.questionsTimetable && stage.config.questionsTimetable[q.id] || DEFAULT_QUESTION_TIME)}
         question={q}
         onFocusId={onFocusId}
         stages={stages}

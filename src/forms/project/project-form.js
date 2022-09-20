@@ -145,7 +145,8 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
     values.userId = user.id;
     values.companyId = user.companyId;
     values.stagesCount = values.stages.filter(s => s).length;
-    values.interviewerCount = values.interviewers.length;
+    values.interviewers = values.interviewers || [];
+    values.interviewerCount = values.interviewers.length || 0;
     values.scoringRules = scoringRules;
     values.user = {
       id: user.id,

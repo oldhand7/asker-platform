@@ -85,7 +85,7 @@ const RangeQuestionForm = ({ values, className, onValues, onCancel, loading }) =
 
   return <form data-test-id="range-question-form" onSubmit={handleSubmit(onValues)} className={classNames(styles['range-question-form'], className)}>
     <TextInputField error={isSubmitted && errors && errors.name && errors.name[locale]} className={styles['range-question-form-field']} onChange={handleName} value={formValues.name[locale]} label={t("labels.title")} name={`name.${locale}`} placeholder={t("placeholders.salary-requirement")} />
-    <HtmlInputField id="desc" diff={locale} error={errors && errors.desc && errors.desc[locale]} className={styles['range-question-form-field']} onChange={handleDesc} value={formValues.desc[locale]} label={t("labels.description")} name={`desc.${locale}`} placeholder={t("labels.description")} />
+    <HtmlInputField id="desc" diff={locale} error={errors && errors.desc && errors.desc[locale]} className={styles['range-question-form-field']} onChange={handleDesc} value={formValues.desc && formValues.desc[locale]} label={t("labels.description")} name={`desc.${locale}`} placeholder={t("labels.description")} />
 
     <FlexRow>
       <TextInputField error={isSubmitted && errors && errors.min} className={styles['range-question-form-field']} onChange={handleMin} value={formValues.min} label={t("labels.start-value")} name='min' placeholder={t("placeholders.eg0")}  />

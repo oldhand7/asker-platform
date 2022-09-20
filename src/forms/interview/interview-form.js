@@ -19,6 +19,7 @@ import BackIcon from 'components/Icon/BackIcon';
 import { createStats } from 'libs/interview';
 import { useTranslation } from 'libs/translation';
 import { useWatch } from 'react-hook-form';
+import PrevButton from 'components/Button/PrevButton';
 
 import styles from './interview-form.module.scss';
 
@@ -44,6 +45,7 @@ const InterviewForm = ({ className, interview, project }) => {
   const [stats, setStats] = useState(createStats(project.stages, interview.stats))
   const [stage, setStage] = useState(null);
   const [nextElement, setNextElement] = useState(null);
+  const [prevElement, setPrevElement] = useState(null);
 
   const initValue = useMemo(() => ({
     evaluations: interview.evaluations || {},
@@ -186,18 +188,33 @@ const InterviewForm = ({ className, interview, project }) => {
     setStages(project.stages.filter(s => s))
   }, [project])
 
-  const scrollNext = () => {
-    nextElement.scrollIntoView({
+  const scrollPrev = useCallback(() => {
+    prevElement && prevElement.scrollIntoView({
       behavior: process.env['NEXT_PUBLIC_TESTING'] ? 'auto' : 'smooth',
       block: 'start'
     })
-  }
+  }, [prevElement])
+
+  const scrollNext = useCallback(() => {
+    nextElement && nextElement.scrollIntoView({
+      behavior: process.env['NEXT_PUBLIC_TESTING'] ? 'auto' : 'smooth',
+      block: 'start'
+    })
+  }, [nextElement])
 
   const focusId = useCallback(id => {
       const el  = document.querySelector(`#${id}`)
 
       if (el) {
         setNextElement(el.nextElementSibling)
+
+        let prevElement = el.previousElementSibling;
+
+        if (prevElement.getAttribute('data-test-id') != 'feature-form') {
+          prevElement = null;
+        }
+
+        setPrevElement(prevElement)
       }
   }, [])
   
@@ -264,8 +281,15 @@ const InterviewForm = ({ className, interview, project }) => {
             project={project} />
         })}
       </div>
-      {nextElement ? <NextButton className={styles['interview-form-next']} onClick={scrollNext} /> : null}
-      {!nextElement && stage ? <BrandishButton className={styles['interview-form-complete']}>{!loading ? t('actions.complete-interview') : t('status.loading')}</BrandishButton> : null}
+
+      <div className={styles['interview-form-navigator']}>
+        {prevElement && nextElement ? <PrevButton className={styles['interview-form-prev']} onClick={scrollPrev} text={t('labels.prev')} /> : null}
+        {nextElement ? <NextButton className={classNames(
+          styles['interview-form-next'],
+          !prevElement ? styles['interview-form-next-fw'] : ''
+        )} onClick={scrollNext} text={t('labels.next')} /> : null}
+        {!nextElement && stage ? <BrandishButton className={styles['interview-form-complete']}>{!loading ? t('actions.complete-interview') : t('status.loading')}</BrandishButton> : null}
+      </div>
     </div>
 
     <InterviewFormSidebar className={styles['interview-form-sidebar']}>

@@ -72,6 +72,8 @@
     "labels.candidate": "Candidate",
     "labels.criteria-option": "Criteria option",
     "labels.action-plural": "Actions",
+    "labels.next": "Next",
+    "labels.prev": "Prev",
     "headings.followup-questions": "Follow-up questions",
     "headings.project-progress": "Project progress",
     "headings.interview-progress": "Interview progress",

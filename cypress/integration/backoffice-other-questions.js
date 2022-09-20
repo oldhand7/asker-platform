@@ -90,7 +90,7 @@ describe('Backoffice other questions', () => {
             cy.processOverviewConfirmStageCount(2);
             cy.processOverviewConfirmStageStatus(1, 'Other', 'Not started')
 
-            cy.contains('Next step').click();
+            cy.contains('Next').click();
     
             cy.get('[data-test-id="feature-form"]').eq(1)
               .within(() => {

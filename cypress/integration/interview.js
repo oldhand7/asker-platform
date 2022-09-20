@@ -250,29 +250,33 @@ describe('Interview', () => {
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'Introduction')
+      .should('contain', '5m')
 
-    cy.contains('Next step').click()
+    cy.contains('Next').click()
 
     cy.get('[data-test-id="feature-form"]').eq(1)
       .should('contain', 'Competency')
+      .should('contain', '5m')
       .should('contain', 'Are you familiar with ISO-111?')
       .within(() => {
         cy.contains('Good').click()
       })
 
-    cy.contains('Next step').click()
+    cy.contains('Next').click()
 
     cy.get('[data-test-id="feature-form"]').eq(2)
       .should('contain', 'Competency')
+      .should('contain', '5m')
       .should('contain', 'Are you familiar with ISO-222?')
       .within(() => {
         cy.contains('Good').click()
       })
 
-    cy.contains('Next step').click().wait(1000)
+    cy.contains('Next').click().wait(1000)
 
     cy.get('[data-test-id="feature-form"]').eq(3)
       .should('contain', 'Summary')
+      .should('contain', '5m')
 
     cy.contains('Project progress')
       .closest('div')
@@ -341,13 +345,13 @@ describe('Interview', () => {
         cy.contains('English')
           .closest('[data-test-id="language-choose"]')
           .click()
-          .wait(1000)
-          .type('Swe{downArrow}{enter}')
+
+        cy.contains('Swedish').click()
 
         cy.get('button').contains('Choose').click()
       })
 
-    cy.wait(2000)
+    cy.wait(4000)
     
     cy.location().then(loc => {
       let match = Cypress.minimatch(loc.pathname , '/se/interviews/*/conduct/', {

@@ -39,7 +39,10 @@ const getColumns = ({ handleAction, compare = [],  project, sort, order, t, onEd
     </Link>,
     dataIndex: 'name',
     render: (_, row) => <div className={styles['project-interviews-table-col-name']}>
-    {!anonimize ? row.candidate.name : row.candidate.alias} <EditButton onClick={() => onEditCandidate(row)} className={styles['project-interviews-table-col-name-edit']} />
+    {!anonimize ? row.candidate.name : row.candidate.alias} <EditButton onClick={(ev) => {
+      ev.stopPropagation();
+      onEditCandidate(row);
+    }} className={styles['project-interviews-table-col-name-edit']} />
     </div>
   },
   {

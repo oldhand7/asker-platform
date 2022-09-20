@@ -84,7 +84,7 @@ const getColumns = ({ handleCompactMenuChoice, sortOrder, setSortOrder, user, t,
   },
   {
     title: <a href='#' onClick={handleSortOrder('followupCount')}>
-      {t('Follow-up questions')} {getSortArrowIcon('followupCount')}</a>,
+      {t('headings.followup-questions')} {getSortArrowIcon('followupCount')}</a>,
     dataIndex: 'followup',
     key: 'followup',
     render: (questions) => questions && questions.length ? <ul className={styles['questions-table-followup-questions']}>

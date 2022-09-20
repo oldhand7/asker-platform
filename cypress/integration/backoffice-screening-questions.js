@@ -409,7 +409,7 @@ describe('Backoffice screening questions', () => {
         .wait(1000)
 
 
-      cy.contains('Next step').click();
+      cy.contains('Next').click();
       cy.contains('Complete interview').click();
 
       cy.location('pathname').should('contain', '/overview/')

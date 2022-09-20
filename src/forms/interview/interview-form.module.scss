@@ -97,8 +97,10 @@
   }
 
   &-next,
+  &-prev,
   &-complete {
-    width: calc(100% - 32rem);
+    max-width: calc(50% - 16rem);
+    flex: 1;
     margin: 0;
     height: 48rem;
     line-height: 48rem;
@@ -112,5 +114,16 @@
       background: #226B5E;
       color: white;
     }
+  }
+
+  &-complete,
+  &-next-fw {
+    flex: 1;
+    max-width: unset;
+  }
+
+  &-navigator {
+    display: flex;
+    justify-content: space-between;
   }
 }
