@@ -1,12 +1,15 @@
 import { features, featureTypes } from 'libs/features';
 import classNames from 'classnames';
 import FeatureList from 'components/FeatureList/FeatureList';
+import { useTranslation } from 'libs/translation';
 
 import styles from './feature-select-form.module.scss';
 
 const FeatureSelectForm = ({ className, onValues }) => {
+  const { t } = useTranslation();
+
   return <div className={classNames(styles['feature-select-form'], className)}>
-    <h2 className={styles['feature-select-form-title']}>Cick on a label</h2>
+    <h2 className={styles['feature-select-form-title']}>{t('actions.click-label')}</h2>
 
     <div className={styles['feature-select-form-field']}>
       {featureTypes.map((featureType) => {

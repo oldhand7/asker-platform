@@ -1,8 +1,8 @@
 import { getCriteriaTypeById } from 'libs/criteria';
 import classNames from 'classnames';
 import QuestionScoreBoard from 'components/QuestionScoreBoard/QuestionScoreBoard';
-import { useEffect, useMemo, useState } from 'react';
-import {useForm} from 'libs/form';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import {useForm} from 'libs/react-hook-form';
 import { calcScore, createDummyVotes } from 'libs/helper';
 import InterviewNotes from 'components/InterviewNotes/InterviewNotes';
 import { EVALUATION_SUBTYPES_NO_CRITERIA } from 'libs/config';
@@ -15,8 +15,9 @@ import Tooltip from 'components/Tooltip/Tooltip';
 import InfoIcon from 'components/Icon/InfoIcon'
 import QuestionIcon from 'components/Icon/QuestionIcon';
 import { useInView } from 'react-intersection-observer';
-import { useSite } from 'libs/site';
-import { useUser } from 'libs/user';
+import { useTranslation } from 'libs/translation';
+import { useRouter } from 'next/router';
+import { useWatch } from 'react-hook-form';
 
 const defaultValues = {
   notes: '',
@@ -29,7 +30,7 @@ const rules = {}
 const messages = {}
 
 const adjust = (values, question) => {
-  values.criteria = question.criteria;
+  values.criteria = question.criteria || null;
   values.subtype = question.subtype;
   values.maxScore = question.rules.length;
 
@@ -41,7 +42,7 @@ const adjust = (values, question) => {
 }
 
 const QuestionCriteria = ({ criteria }) => {
-  const { i18nField }  = useSite();
+  const { i18nField }  = useTranslation();
 
   const criteriaNameInt = i18nField(criteria.name);
   const criteriaDescInt = i18nField(criteria.desc);
@@ -60,18 +61,24 @@ const QuestionCriteria = ({ criteria }) => {
 </div>
 }
 
-const EvaluationQuestionIntForm = ({ className, question, values, markComplete, onValues, config, note, taxStageSecond, onError }) => {
-  const { values: formValues, errors, control } = useForm({
-    values: adjust(
-      values ? values : defaultValues,
-      question
-    ),
+const EvaluationQuestionIntForm = ({ className, question, values, markComplete, onValues, config, note, onError, taxStageSecond }) => {
+  const { i18nField, t }  = useTranslation();
+  const { locale } = useRouter();
+
+  const initValues = useMemo(() => adjust(values || defaultValues, question), [])
+
+  const {
+    errors,
+    setValue,
+    control
+  } = useForm({
+    values: initValues,
     rules,
     messages
   })
+
+  const formValues = useWatch({ control, defaultValue: initValues })
   const [criteria, setCriteria] = useState(null);
-  const { i18nField, t }  = useSite();
-  const { locale } = useUser();
 
   const { ref, inView } = useInView({
     threshold: 0.7
@@ -98,46 +105,34 @@ const EvaluationQuestionIntForm = ({ className, question, values, markComplete, 
   }, [question])
 
   useEffect(() => {
-    if (!errors) {
-      onValues && onValues(formValues)
-    } else {
-      onError(new Error(t('Some fields not valid')))
-    }
-  }, [formValues])
+    onValues && onValues(formValues)
+  }, [formValues, onValues])
 
   useEffect(() => {
-    const adjust = {}
+    onError && onError(errors && new Error(t("errors.form.invalid")))
+  }, [errors, onError])
 
-    if (!formValues.subtype && question) {
-      control.set('subtype', question.subtype)
-    }
-
-    if (!formValues.maxScore && question.rules.length) {
-      control.set('subtype', question.subtype)
-    }
-  }, [question, formValues])
-
-  const handleVotes = (votes) => {
-    control.setValues({
-      ...formValues,
-      score: calcScore(votes),
-      votes: votes
-    })
+  const handleVotes = useCallback((votes) => {
+    setValue('score', calcScore(votes))
+    setValue('votes', votes);
 
     const voted = votes.some(v => v.head);
 
     if (voted) {
       markComplete(question.id)
     }
-  }
+  }, [setValue, markComplete])
 
   const questionNameInt = useMemo(() => i18nField(question.name), [locale, question]);
   const questionNoteInt = useMemo(() => {
     const customNote = config && config.notes && config.notes[question.id];
 
-  
     return customNote ?  i18nField(customNote.text) : i18nField(question.note)
   }, [locale, question, config]);
+
+  const handleNotes = useCallback((notes) => {
+    setValue('notes', notes)
+  }, [setValue])
 
   return question ? <div ref={ref} className={classNames(styles['evaluation-question-int-form'], className)}>
     <h2 className={styles['evaluation-question-int-form-title']}>
@@ -162,10 +157,10 @@ const EvaluationQuestionIntForm = ({ className, question, values, markComplete, 
       </div>
 
       <div className={styles['evaluation-question-int-form-notes']}>
-        <InterviewNotes className={styles['evaluation-question-int-form-notes-input']} value={formValues.notes} onChange={control.input('notes', false)} />
-            
+        <InterviewNotes className={styles['evaluation-question-int-form-notes-input']} value={formValues.notes} onChange={handleNotes} />
+
         {questionNoteInt && !formValues.alertDismissed ?
-          <DismissAlert className={styles['evaluation-question-int-form-alert']} onDismiss={() => control.set('alertDismissed', true)}>
+          <DismissAlert className={styles['evaluation-question-int-form-alert']} onDismiss={() => setValue('alertDismissed', true)}>
             <Html>{questionNoteInt}</Html>
           </DismissAlert> : null}
         </div>

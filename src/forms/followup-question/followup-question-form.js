@@ -1,57 +1,101 @@
 import classNames from 'classnames';
+import TrashButton from 'components/TrashButton/TrashButton';
+import { useForm } from 'libs/react-hook-form';
+import { useFieldArray, useWatch } from 'react-hook-form';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'libs/translation';
+import { v4 as uuidv4 } from 'uuid';
 import TextInputField from 'components/TextInputField/TextInputField';
 import OutlineButton from 'components/Button/OutlineButton';
+import { useRouter } from 'next/router';
 import PlusIcon from 'components/Icon/PlusIcon';
-import {useForm} from 'libs/react-hook-form'
-import { useMemo, useState } from 'react';
 
 import styles from './followup-question-form.module.scss';
-import { useSite } from 'libs/site';
-import { useUser } from 'libs/user';
 
-const defaultValues = {
-  name: {
-    en: ''
-  }
+const defaultQuestion = {
+  en: ''
 }
 
-const FollowupQuestionForm = ({ question, className, onValues }) => {
-  const { t } = useSite();
-  const { locale } = useUser();
+const FollowupQuestionForm = ({  className, values, onValues }) => {
+  const { t } = useTranslation()
+  const [mode, setMode] = useState('listing');
+  const router = useRouter();
 
   const validationRules = useMemo(() => ({
-    [`name.${locale}`]: 'required|max:9000'
-  }), [locale])
+    [`question.${router.locale}`]: 'required|max:9000'
+  }), [router.locale])
 
   const validationMessages = useMemo(() => ({
-    [`required name.${locale}`]: 'required|max:9000'
-  }), [locale])
+    required: t('errors.field.required'),
+    max: t('errors.field.max')
+  }), [router.locale])
 
-  const { values, errors, input, reset, handleSubmit, isSubmitted } = useForm({
-    values: question ? question : defaultValues,
-    rules: validationRules,
+  const initValues = useMemo(() => ({
+    questions: values,
+    question: defaultQuestion
+  }), [])
+
+  const {
+    handleSubmit,
+    control,
+    isSubmitted,
+    setValue
+  } = useForm({
+    values: initValues,
+    validation: validationRules,
     messages: validationMessages
   })
 
-  const [pristine, setPristine] = useState(true);
+  const {
+    fields: followupQuestions,
+    append: addQuestion,
+    remove: removeQuestion
+  } = useFieldArray({
+    control,
+    name: 'questions',
+    keyName: '_id'
+  })
 
-  const onSubmit = (values) => {
-    onValues(values)
+  const formValues = useWatch({ control, defaultValue: initValues })
 
-    setTimeout(() => {
-      reset({
-        name: {
-          en: ''
-        }
-      }, { keepIsSubmitted: false})
-    }, 0)
+  useEffect(() => {
+    onValues && onValues(followupQuestions)
+  }, [followupQuestions, onValues])
+
+  const ids = useMemo(() => ({
+    heading: uuidv4()
+  }), [])
+
+  const onSubmit = ({ question }) => {
+    addQuestion(question)
+    setValue('question', defaultQuestion)
+    setMode('listing')
   }
 
-  return <div className={classNames(styles['followup-question-form'], className)}>
+  const handleAddQuestion = () => {
+    setMode('edit');
+  }
+
+  const handleQuestion = useCallback(ev => {
+    setValue(`question.${router.locale}`, ev.target.value)
+  }, [setValue])
+
+  return <div data-test-id="followup-question-form" className={classNames(styles['form'], className)}>
+    <h4 id={ids.heading} className={styles['form-label']}>
+      {t('headings.followup-questions')}
+      <small>{t('labels.optional')}</small>
+    </h4>
+
+    <ul aria-labelledby={ids.heading} className={styles['form-list']}>
+      {followupQuestions.map((q, index) => <li key={`q${index}`} className={styles['form-list-item']}>
+        <span className={styles['form-list-item']}>{q.en}</span>
+        <TrashButton className={styles['form-list-item-remove']} onClick={() => removeQuestion(index)} />
+      </li>)}
+    </ul>
     {
-      !pristine ?
-      <TextInputField value={values.name[locale]} onEnter={handleSubmit(onSubmit)} className={styles['followup-question-form-input-field']} name={`name.${locale}`} autoComplete="off" onChange={input(`name.${locale}`)} error={errors && errors.name && errors.name[locale]} placeholder={t("E.g. What was your responsibility?")} /> :
-      <OutlineButton type="button" disabled={errors} onClick={() => setPristine(false)} className={styles['followup-question-form-submit']}><PlusIcon /> {t('Add new follow-up question')}</OutlineButton>
+      mode == 'listing' ?
+      <OutlineButton type="button" onClick={handleAddQuestion} className={styles['form-submit']}><PlusIcon /> {t('actions.add.followup-question')}</OutlineButton> :
+      <TextInputField focus={true} value={formValues.question[router.locale]} onEnter={handleSubmit(onSubmit)} className={styles['form-input-field']} name={`question.${router.locale}`} autoComplete="off" onChange={handleQuestion} error={isSubmitted && errors && errors.question && errors.question[locale]} placeholder={t("placeholders.responsability")} />
     }
   </div>
 }

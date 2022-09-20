@@ -15,7 +15,9 @@ const DismissAlert = ({ className, text='', children, onDismiss }) => {
         }
     }
 
-    return open ? <div className={classNames(
+    return open ? <div
+    data-test-id="dismiss-alert"
+    className={classNames(
         styles['dismiss-alert'],
         className
     )}>

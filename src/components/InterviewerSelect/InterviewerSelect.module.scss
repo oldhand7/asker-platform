@@ -1,0 +1,18 @@
+@import 'styles/vars';
+
+.interviewer-select {
+    &-input {
+        & > *:nth-child(3) {
+            border-radius: 5px;
+            min-height: 48rem;
+        }
+    }
+
+    &-error  &-input {
+        & > *:nth-child(3) {
+            border-radius: 5px;
+            min-height: 48rem;
+            border: 1px solid $asker-red;
+        }
+    }
+}

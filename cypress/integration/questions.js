@@ -69,6 +69,8 @@ describe('Questions', () => {
   it('adding competency question', () => {
     cy.visit('/questions/')
 
+    let CRITERIA_NAME = 'Criteria A' + Math.round(Math.random() * 100)
+
     cy.get('[data-test-id="dropdown-button"]')
       .contains('Create new question').click()
       .parent()
@@ -77,10 +79,10 @@ describe('Questions', () => {
       .contains('Competency based')
       .click()
 
-    cy.title().should('include', 'Create a new competency based question')
+    cy.title().should('include', 'Create new question')
 
     cy.get('form[data-test-id="evaluation-question-form"]')
-      .should('contain', 'Create a new competency based question')
+      .should('contain', 'Create competency based question')
       .within(() => {
         cy.get('input[name="name.en"]').first().type('Sample question')
         cy.get('[data-test-id="html-input-field"]').first().click()
@@ -89,39 +91,41 @@ describe('Questions', () => {
         cy.get('[data-test-id="criteria-option"]').as('criteria')
           .within(() => {
             cy.contains('Competency')
-            cy.get('input[name="q"]').type("Criteria A")
+            cy.get('input[name="q"]').type(CRITERIA_NAME)
             cy.get('ul').should('contain', 'No results.')
-            cy.get('button').should('contain', 'Create new').click({ force: true})
+            cy.get('button').should('contain', 'Create new').click({ force: true })
           })
 
         cy.document().its('body')
           .find('#criteria-option-modal')
-          .should('contain', 'Competency option')
+          .should('contain', 'Criteria option')
           .within(() => {
-            cy.get('input[name="name.en"]').type('Criteria A')
+            cy.get('input[name="name.en"]').type(CRITERIA_NAME)
             cy.get('button[type="submit"]').click()
         })
 
         cy.get('@criteria')
-          .should('contain', 'Criteria A')
+          .should('contain', CRITERIA_NAME)
           .find('button[data-test-id="trash-button"]')
           .click()
 
         cy.get('@criteria')
-          .should('not.contain', 'Criteria A')
+          .should('not.contain', CRITERIA_NAME)
           .within(() => {
             cy.get('input[name="q"]').click()
-            cy.contains('Criteria A').click()
+            cy.contains(CRITERIA_NAME).click()
           })
-          .should('contain', 'Criteria A')
+          .should('contain', CRITERIA_NAME)
 
-        cy.get('[data-test-id="followup-question-field"]').within(() => {
-            cy.get('button').click()
+        cy.get('[data-test-id="followup-question-form"]').within(() => {
+            cy.contains('Add new follow-up question').click()
+            cy.get('input').type('Followup question 1{enter}')
 
-            cy.get('input')
-              .type('Followup question 1{enter}')
-              .type('Followup question 2{enter}')
-              .type('Followup question 3{enter}')
+            cy.contains('Add new follow-up question').click()
+            cy.get('input').type('Followup question 2{enter}')
+
+            cy.contains('Add new follow-up question').click()
+            cy.get('input').type('Followup question 3{enter}')
 
             cy.get('ul')
               .children()
@@ -146,25 +150,58 @@ describe('Questions', () => {
                 cy.root().should('contain', 'Very bad')
               })
               .parent()
-              .children().should('have.length', 4)
+              .children()
+              .should('have.length', 4)
 
             cy.contains('Fair')
-              .closest('ul')
+              .closest('li')
+              .within(() => {
+                cy.get('input').should('not.exist')
+                cy.get('button').click()
+                cy.get('input').should('exist').type('{selectAll}{backspace}Fair enough{enter}')
+                cy.get('input').should('not.exist')
+                cy.root().should('contain', 'Fair enough')
+              })
+              .parent()
               .children()
               .should('have.length', 1)
 
             cy.contains('Good')
-              .closest('ul')
+              .closest('li')
+              .within(() => {
+                cy.get('input').should('not.exist')
+                cy.get('button').click()
+                cy.get('input').should('exist').type('{selectAll}{backspace}Good not bad{enter}')
+                cy.get('input').should('not.exist')
+                cy.root().should('contain', 'Good not bad')
+              })
+              .parent()
               .children()
               .should('have.length', 4)
 
             cy.contains('Great')
-              .closest('ul')
+              .closest('li')
+              .within(() => {
+                cy.get('input').should('not.exist')
+                cy.get('button').click()
+                cy.get('input').should('exist').type('{selectAll}{backspace}Great!!!{enter}')
+                cy.get('input').should('not.exist')
+                cy.root().should('contain', 'Great!!!')
+              })
+              .parent()
               .children()
               .should('have.length', 1)
 
             cy.contains('Excellent')
-              .closest('ul')
+              .closest('li')
+              .within(() => {
+                cy.get('input').should('not.exist')
+                cy.get('button').click()
+                cy.get('input').should('exist').type('{selectAll}{backspace}Excellente{enter}')
+                cy.get('input').should('not.exist')
+                cy.root().should('contain', 'Excellente')
+              })
+              .parent()
               .children()
               .should('have.length', 4)
           })
@@ -176,7 +213,7 @@ describe('Questions', () => {
       .first()
       .within(() => {
         cy.get('td').eq(0).should('contain', 'Competency')
-        cy.get('td').eq(1).should('contain', 'Criteria A')
+        cy.get('td').eq(1).should('contain', CRITERIA_NAME)
         cy.get('td').eq(2).should('contain', 'Sample question')
         cy.get('td').eq(3)
           .should('contain', 'Followup question 1')

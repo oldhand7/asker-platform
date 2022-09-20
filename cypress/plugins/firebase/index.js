@@ -9,6 +9,9 @@ const beforeRun = async () => {
   await helpers.deleteCollection('criteriaOptions');
   await helpers.deleteCollection('translations');
   await helpers.deleteCollection('companies');
+  await helpers.deleteCollection('configTemplates');
+
+  await (() => new Promise(resolve => setTimeout(resolve, 5000)))()
 
   //Creates superadmin
   await helpers.createRootCompany()
@@ -141,71 +144,13 @@ const beforeRun = async () => {
   const userId21Joe  = await helpers.createUser('Joe Pink', 'joe.pink@example.com', 'test123', companyId21, 'admin', true)
   const userId21Jane = await helpers.createUser('Jane Pink', 'jane.pink@example.com', 'test123', companyId21, 'hr', false)
 
-  //Translations
+   //User 22
+  const companyId22 = await helpers.createCompany('Foster & Co')
 
-  await helpers.createTranslation({
-    text: 'Projects',
-    translation: {
-      se: "Projects_SE"
-    }
-  })
+  const userId22Joe  = await helpers.createUser('Joe Woodkid', 'joe.foster@example.com', 'test123', companyId22, 'admin', true)
+  const userId22Jane = await helpers.createUser('Jane Woodkid', 'jane.foster@example.com', 'test123', companyId22, 'hr', false)
 
-  await helpers.createTranslation({
-    text: 'Competency',
-    translation: {
-      se: "Competency_SE"
-    }
-  })
-
-  await helpers.createTranslation({
-    text: 'Hard skill',
-    translation: {
-      se: "Hard skill_SE"
-    }
-  })
-
-  await helpers.createTranslation({
-    text: 'Hard skill',
-    translation: {
-      se: "Hard skill_SE"
-    }
-  })
-
-  await helpers.createTranslation({
-    text: 'Experience',
-    translation: {
-      se: "Experience_SE"
-    }
-  })
-
-  await helpers.createTranslation({
-    text: 'Motivation',
-    translation: {
-      se: "Motivation_SE"
-    }
-  })
-
-  await helpers.createTranslation({
-    text: 'Culture',
-    translation: {
-      se: "Culture_SE"
-    }
-  })
-
-  await helpers.createTranslation({
-    text: 'Screening',
-    translation: {
-      se: "Screening (SE)"
-    }
-  })
-
-  await helpers.createTranslation({
-    text: 'Other',
-    translation: {
-      se: "Other (SE)"
-    }
-  })
-
+  await (() => new Promise(resolve => setTimeout(resolve, 5000)))()
 }
 
 module.exports = {

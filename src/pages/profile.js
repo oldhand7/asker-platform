@@ -1,4 +1,4 @@
-import { getSettings, getTranslations } from 'libs/firestore-admin';
+import { getSettings } from 'libs/firestore-admin';
 import { useUser } from 'libs/user';
 import { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -7,7 +7,7 @@ import { withUserGuardSsr } from 'libs/iron-session';
 import classNames from 'classnames';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useSite } from 'libs/site';
+import { useTranslation } from 'libs/translation';
 
 import 'react-tabs/style/react-tabs.css';
 import styles from 'styles/pages/profile.module.scss';
@@ -18,7 +18,7 @@ const CompanyEmployeesForm = dynamic(() => import('forms/company-employees/compa
 const ProfilePage = () => {
   const { user } = useUser()
   const [loading, setLoading] = useState(true)
-  const { t} = useSite();
+  const { t } = useTranslation();
 
   useEffect(() => {
     setLoading(false);
@@ -26,14 +26,14 @@ const ProfilePage = () => {
 
   return <div className={styles['profile-page']}>
     <Head>
-      <title>{t('Profile')} - Asker</title>
+      <title>{t('menu.profile')} - Asker</title>
       <meta name="robots" content="noindex" />
     </Head>
     {user && !loading ? <Tabs className={styles['profile-page-tabs']}>
       <TabList className={styles['profile-page-tab-list']}>
-        <Tab className={styles['profile-page-tab']}>Profile</Tab>
-        {user && user.type == 'admin' && user.companyId ? <Tab>{t('Company')}</Tab> : null}
-        {user && user.type == 'admin' && user.companyId ? <Tab>{t('Employees')}</Tab> : null}
+        <Tab className={styles['profile-page-tab']}>{t('menu.profile')}</Tab>
+        {user && user.type == 'admin' && user.companyId ? <Tab>{t('labels.company')}</Tab> : null}
+        {user && user.type == 'admin' && user.companyId ? <Tab>{t('labels.employees')}</Tab> : null}
       </TabList>
 
       <TabPanel className={styles['profile-page-tab-panel']}>
@@ -45,7 +45,7 @@ const ProfilePage = () => {
       {user && user.type == 'admin' && user.companyId ? <TabPanel className={styles['profile-page-tab-panel']}>
         <CompanyEmployeesForm className={classNames(styles['profile-page-form'], styles['profile-page-form-ra'])} />
       </TabPanel> : null}
-    </Tabs> : <span>Loading...</span>}
+    </Tabs> : <span>{t('status.loading')}</span>}
   </div>
 }
 
@@ -64,8 +64,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ req, locale}) => {
   
   return {
     props: {
-      config: await getSettings(),
-      translations: await getTranslations()
+      config: await getSettings()
     }
   }
 })

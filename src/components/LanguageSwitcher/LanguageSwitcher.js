@@ -1,15 +1,14 @@
 import classNames from 'classnames';
 import CarretDown from 'components/Icon/CarretDownIcon';
-import { useSite } from 'libs/site';
 import { useUser } from 'libs/user';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
 import styles from './LanguageSwitcher.module.scss';
 
-const defaultLanguages = [
+export const LANGUAGES = [
     { id: 'en', name: 'English', icon: null, emoji: '🇬🇧' },
-    { id: 'se', name: 'Sweedish', icon: null, emoji: '🇸🇪' },
+    { id: 'se', name: 'Swedish', icon: null, emoji: '🇸🇪' },
 ]
 
 const LanguageSwitcherItem = ({ language }) => (
@@ -22,8 +21,7 @@ const LanguageSwitcherItem = ({ language }) => (
         </div>
 )
 
-const LanguageSwitcher = ({ className, language = 'en', languages = defaultLanguages}) => {
-    const {config, t} = useSite();
+const LanguageSwitcher = ({ className, language = 'en', languages = LANGUAGES}) => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
     const ref = useRef();

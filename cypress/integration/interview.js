@@ -6,69 +6,65 @@ describe('Interview', () => {
   it('should rate interview', () => {
     cy.on('window:confirm', () => true)
 
-    cy.createScreeningChoiceQuestion({ name: 'Do you have drivers license?'})
-    cy.createMotivationQuestion({ name : 'Does money motivate you?'});
-    cy.createCultureFitQuestion({ name: 'Are you peoples person?'});
     cy.createCompetencyQuestion({ name: 'Are you familiar with ISO standards?', criteria: { name: 'ISO-90210'} });
     cy.createExperienceQuestion({ name: 'Do you like traveling?', criteria: { name: 'Traveling'} });
     cy.createHardSkillQuestion({name: 'Comment MS Office experience', criteria: { name: 'MS Word'}});
+    cy.createMotivationQuestion({ name : 'Does money motivate you?'});
+    cy.createCultureQuestion({ name: 'Are you peoples person?'});
+    cy.createScreeningChoiceQuestion({ name: 'Do you have drivers license?'})
 
     cy.createDummyProject('Some position X')
 
-    cy.contains('Some position X')
-      .closest('ul')
-      .listFirstRowNavigate('Edit')
+    cy.contains('Some position X').closest('li').listRowNavigate('Edit')
 
-    cy.contains('Add stage')
-      .click()
-      .click()
-      .click()
-      .click()
-      .click()
+    cy.addStage('Competency')
 
-    cy.get('[data-test-id="stage-1"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Motivation').click()
     cy.get('[data-test-id="feature-form"]')
-      .find('button[data-test-id="add-question"]').first()
-      .click()
+      .within(() => {
+        cy.contains('Are you familiar with ISO standards?').closest('li').find('button').click()
+      })
+  
+    cy.addStage('Experience')
 
-    cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Culture').click()
     cy.get('[data-test-id="feature-form"]')
-      .find('button[data-test-id="add-question"]').first()
-      .click()
+      .within(() => {
+        cy.contains('Do you like traveling?').closest('li').find('button').click()
+      })
 
-    cy.get('[data-test-id="stage-3"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Competency').click()
+    cy.addStage('Hard skill')
+
     cy.get('[data-test-id="feature-form"]')
-      .find('button[data-test-id="add-question"]').first()
-      .click()
+      .within(() => {
+        cy.contains('Comment MS Office experience').closest('li').find('button').click()
+      })
 
-    cy.get('[data-test-id="stage-4"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Experience').click()
+    cy.addStage('Motivation')
+
     cy.get('[data-test-id="feature-form"]')
-      .find('button[data-test-id="add-question"]').first()
-      .click()
+      .within(() => {
+        cy.contains('Does money motivate you?').closest('li').find('button').click()
+      })
 
-    cy.get('[data-test-id="stage-5"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Hard').click()
+    cy.addStage('Culture')
+
     cy.get('[data-test-id="feature-form"]')
-      .find('button[data-test-id="add-question"]').first()
-      .click()
+      .within(() => {
+        cy.contains('Are you peoples person?').closest('li').find('button').click()
+      })
 
-    cy.get('[data-test-id="stage-6"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Screening').click()
+
+    cy.addStage('Screening')
+
     cy.get('[data-test-id="feature-form"]')
-      .find('button[data-test-id="add-question"]').first()
-      .click()
+    .within(() => {
+      cy.contains('Do you have drivers license?').closest('li').find('button').click()
+    })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+    cy.saveProject()
 
     cy.contains('Some position X').closest('li').click()
 
-    cy.get('[data-test-id="flex-table"]').should('contain', 'No interviews');
+    cy.get('[data-test-id="flex-table"]').should('contain', 'No candidates');
 
     cy.addProjectCandidate('John Smith', 'john.smith@hotmail.net')
 
@@ -77,35 +73,37 @@ describe('Interview', () => {
       .contains('Start interview')
       .click()
 
-    cy.get('[data-test-id="feature-form"]').eq(0)
-      .should('contain', 'Motivation')
-      .should('contain', 'Does money motivate you?')
-      .contains('Not motivated').click()
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(1)
-      .should('contain', 'Culture')
-      .should('contain', 'Are you peoples person?')
-      .contains('Low fit').click()
-
-    cy.get('[data-test-id="feature-form"]').eq(2)
       .should('contain', 'Competency')
       .should('contain', 'ISO-90210')
       .should('contain', 'Are you familiar with ISO standards?')
       .contains('Good').click()
 
-    cy.get('[data-test-id="feature-form"]').eq(3)
+    cy.get('[data-test-id="feature-form"]').eq(2)
       .should('contain', 'Experience')
       .should('contain', 'Traveling')
       .should('contain', 'Do you like traveling?')
       .contains('Very experienced').click()
 
-    cy.get('[data-test-id="feature-form"]').eq(4)
-      .should('contain', 'Hard')
+    cy.get('[data-test-id="feature-form"]').eq(3)
+      .should('contain', 'Hard skill')
       .should('contain', 'MS Word')
       .should('contain', 'Comment MS Office experience')
       .contains('Master').click()
 
+    cy.get('[data-test-id="feature-form"]').eq(4)
+      .should('contain', 'Motivation')
+      .should('contain', 'Does money motivate you?')
+      .contains('Not motivated').click()
+
     cy.get('[data-test-id="feature-form"]').eq(5)
+      .should('contain', 'Culture')
+      .should('contain', 'Are you peoples person?')
+      .contains('Low fit').click()
+
+    cy.get('[data-test-id="feature-form"]').eq(6)
       .should('contain', 'Screening')
       .should('contain', 'Do you have drivers license?')
       .find('[data-test-id="question-answers"]')
@@ -167,55 +165,47 @@ describe('Interview', () => {
               .should('contain', '5')
           })
 
-
         cy.contains('Screening')
           .closest('[data-test-id="interview-details-row"]')
           .should('contain', 'Do you have drivers license?')
           .find('[data-test-id="pill-label"]').invoke('text')
           .should('contain', 'No')
-      })
+    })
   })
 
-  it('should have interview steps',  { scrollBehavior: 'center' }, () => {
+ it('should have interview steps',  { scrollBehavior: 'center' }, () => {
     cy.createCompetencyQuestion({ name: 'Are you familiar with ISO-111?', criteria: { name: 'ISO-111'} });
     cy.createCompetencyQuestion({ name: 'Are you familiar with ISO-222?', criteria: { name: 'ISO-222'} });
 
     cy.createDummyProject('Some position Y')
 
-    cy.contains('Some position Y')
-      .closest('ul')
-      .listFirstRowNavigate('Edit')
+    cy.contains('Some position Y').closest('li').listRowNavigate('Edit');
 
-    cy.contains('Add stage')
-      .click()
-      .click()
+    cy.addStage('Competency')
 
-    cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Competency').click()
     cy.get('[data-test-id="feature-form"]')
-      .find('[data-test-id="question-explorer"] ul')
-      .last()
       .within(() => {
-        cy.contains('ISO-111').closest('li').find('[data-test-id="add-question"]').click()
-        cy.contains('ISO-222').closest('li').find('[data-test-id="add-question"]').click()
+        cy.contains('Are you familiar with ISO-111?').closest('li').find('button').click()
+        cy.contains('Are you familiar with ISO-222?').closest('li').find('button').click()
       })
 
-    cy.get('[data-test-id="stage-3"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Summary').click()
+    cy.addStage('Summary')
 
-    cy.contains('Save project').click()
+    cy.get('[data-test-id="feature-form"]')
+      .findHtmlInputAndType("Lorem ipsum")
 
-    cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved');
+    cy.saveProject()
 
     cy.contains('Some position Y').closest('li').click()
 
     cy.addProjectCandidate('XOXO XIXI', 'xoxo.xixi@hotmail.net')
 
     cy.contains('XOXO XIXI')
-      .first()
       .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
+
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.location('pathname').should('contain', '/conduct/')
 
@@ -223,7 +213,7 @@ describe('Interview', () => {
 
     cy.get('[data-test-id="interview-timer"]')
       .within(() => {
-        cy.get('button').should('contain', 'Start timer (20 min)').click()
+        cy.get('button').should('contain', 'Start timer (20m)').click()
         cy.get('button').should('contain', 'Pause timer')
 
         cy.contains('Project progress')
@@ -260,29 +250,33 @@ describe('Interview', () => {
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'Introduction')
+      .should('contain', '5m')
 
-    cy.contains('Next step').click()
+    cy.contains('Next').click()
 
     cy.get('[data-test-id="feature-form"]').eq(1)
       .should('contain', 'Competency')
+      .should('contain', '5m')
       .should('contain', 'Are you familiar with ISO-111?')
       .within(() => {
         cy.contains('Good').click()
       })
 
-    cy.contains('Next step').click()
+    cy.contains('Next').click()
 
     cy.get('[data-test-id="feature-form"]').eq(2)
       .should('contain', 'Competency')
+      .should('contain', '5m')
       .should('contain', 'Are you familiar with ISO-222?')
       .within(() => {
         cy.contains('Good').click()
       })
 
-    cy.contains('Next step').click().wait(1000)
+    cy.contains('Next').click().wait(1000)
 
     cy.get('[data-test-id="feature-form"]').eq(3)
       .should('contain', 'Summary')
+      .should('contain', '5m')
 
     cy.contains('Project progress')
       .closest('div')
@@ -324,9 +318,47 @@ describe('Interview', () => {
       .last()
       .click()
 
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
+
     cy.contains('Project progress')
       .closest('div')
       .should('contain', '100%')
   })
 
+  it('should allow for language choosing when starting interview',  { scrollBehavior: 'center' }, () => {
+    cy.createDummyProject('Some int position X')
+
+    cy.contains('Some int position X').closest('li').click()
+
+    cy.addProjectCandidate('AAA DDD', 'aaa.ddd@hotmail.net')
+
+    cy.contains('AAA DDD')
+      .closest('[data-test-id="flex-table-row"]')
+      .contains('Start interview')
+      .click()
+
+    
+    cy.get('#language-choose-modal')
+      .within(() => {
+        cy.root().should('contain', 'Choose language')
+
+        cy.contains('English')
+          .closest('[data-test-id="language-choose"]')
+          .click()
+
+        cy.contains('Swedish').click()
+
+        cy.get('button').contains('Choose').click()
+      })
+
+    cy.wait(4000)
+    
+    cy.location().then(loc => {
+      let match = Cypress.minimatch(loc.pathname , '/se/interviews/*/conduct/', {
+        matchBase: true,
+      })
+
+      expect(match).to.be.true
+    })
+  })
 })

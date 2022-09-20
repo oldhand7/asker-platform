@@ -2,14 +2,12 @@ import classNames from 'classnames';
 import { Range, getTrackBackground } from 'react-range';
 import striptags from 'striptags';
 import { allowedHtmlTags } from 'libs/config';
-
-
+import { useTranslation } from 'libs/translation';
 
 import styles from './range-question-int-form.module.scss'
-import { useSite } from 'libs/site';
 
 const RangeQuestionIntForm = ({ className, question, values, onValues }) => {
-  const { i18nField} = useSite();
+  const { i18nField} = useTranslation();
 
   const vor = () => values || [
     question.min,

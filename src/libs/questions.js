@@ -10,7 +10,7 @@ export const questionTypes = [
   {
     id: 'screening',
     name: 'Screening',
-    cta: 'Create a new screening question',
+    cta: 'Create screening question',
     desc: 'Aims to check whether the candidate has the absolute minimum requirements needed for the job, such as driver’s license, education or years of experience. The questions should aim to assess things that are deemed absolutely critical for the role.'
   },
   {

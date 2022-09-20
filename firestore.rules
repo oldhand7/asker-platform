@@ -113,5 +113,12 @@ service cloud.firestore {
     	/* resource is null when react-admin checks for existing doc */
       allow read: if request.auth != null && (resource == null || userId == request.auth.uid || isAccessingCompanyData());
     }
+
+    match /configTemplates/{configTemplateId} {
+      allow create: if request.auth != null && isWritingCompanyData();
+      allow update: if request.auth != null && isAccessingCompanyData() && notUpdatingCompanyId();
+      allow delete: if request.auth != null && isAccessingCompanyData();
+      allow read: if request.auth != null && (isAccessingCompanyData() || isAskerCompanyResource());
+    }
   }
 }

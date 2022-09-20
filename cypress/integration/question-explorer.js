@@ -14,12 +14,9 @@ describe('Question explorer', () => {
 
         cy.visit('/templates')
 
-        cy.get('[data-test-id="template-list"]').listFirstRowNavigate('Edit')
+        cy.contains('Demo template').closest('li').listRowNavigate('Edit')
 
-        cy.contains('Add stage').click()
-
-        cy.get('[data-test-id="feature-experience-questions"]').drag('[data-test-id="stage-2"] .Droppable')
-            .wait(1000)
+        cy.addStage('Experience')
 
         cy.get('[data-test-id="feature-form"] [data-test-id="question-explorer"]')
             .within(() => {
@@ -86,7 +83,6 @@ describe('Question explorer', () => {
                         .click()
                   })
                   .trigger('keyup', { code: "Escape" })
-    
 
                   cy.get('ul').last().find('li').should('have.length', 1).first().should('contain', 'QE3')
             })

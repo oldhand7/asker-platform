@@ -3,12 +3,12 @@ import EvaluationScoreBar from 'components/EvaluationScoreBar/EvaluationScoreBar
 import { COLOR_MAP} from 'libs/config';
 import InterviewDetailsRow from './InterviewDetailsRow';
 import CriteriaRating from 'components/CriteriaRating/CriteriaRating';
-import { useSite } from 'libs/site';
+import { useTranslation } from 'libs/translation';
 
 import styles from './InterviewDetailsRow.module.scss'
 
 export const List = ({ evaluation }) => {
-  const { i18nField } = useSite();
+  const { i18nField } = useTranslation();
 
 return <ul className={styles['interview-details-row-list']}>
 {evaluation.children.map(c => {

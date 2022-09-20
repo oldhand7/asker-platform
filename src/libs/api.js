@@ -24,7 +24,7 @@ export const createPairSession = (uid, idToken) => {
     })
   }
 
-  return fetcher(`/api/auth/pair`, options);
+  return fetcher(`/api/auth/pair`, options)
 }
 
 export const storeRemoteUserLocale = (locale) => {

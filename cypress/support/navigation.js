@@ -29,7 +29,7 @@ Cypress.Commands.add(
 })
 
 Cypress.Commands.add(
-  'listNavigate',
+  'listRowNavigate',
   {  prevSubject: true },
   (subject, code = 'Edit') => {
     cy.wrap(subject)

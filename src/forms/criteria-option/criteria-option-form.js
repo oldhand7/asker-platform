@@ -5,20 +5,16 @@ import PlusIcon from 'components/Icon/PlusIcon'
 import { saveCollectionDocument } from 'libs/firestore';
 import Preloader from 'components/Preloader/Preloader';
 import Alert from 'components/Alert/Alert';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { ctxError } from 'libs/helper';
-import { useUser } from 'libs/user';
 import HtmlInputField from 'components/HtmlInputField/HtmlInputField'
 import { useForm } from 'libs/react-hook-form'
+import { useTranslation } from 'libs/translation';
+import { useRouter } from 'next/router';
+import { useWatch } from 'react-hook-form';
+import { useUser } from 'libs/user';
 
 import styles from './criteria-option-form.module.scss';
-import { useSite } from 'libs/site';
-
-const CRITERIA_LABELS = {
-  'competency': 'Competency option',
-  'experience': 'Experience option',
-  'hard-skill': 'Hard skill option'
-}
 
 const defaultValues = {
   name: {
@@ -30,19 +26,37 @@ const defaultValues = {
 }
 
 const CriteriaOptionForm = ({ className, onValues, values, type }) => {
-  const { user, locale } = useUser();
-  const { t } = useSite()
+  const { locale } = useRouter();
+  const { t } = useTranslation()
+  const { user } = useUser();
+
+  const initValues = useMemo(() => ({
+    ...(values || defaultValues),
+    type
+  }), [])
 
   const validationRules = useMemo(() => ({
     [`name.${locale}`]: 'required',
     type: 'required'
   }), [locale])
 
-  const { values: formValues, errors, input, handleSubmit } = useForm({ values: values ? values : {
-    ...defaultValues,
-    type
-  }, rules: validationRules })
+  const validationMessages = useMemo(() => ({
+    required: t('errors.field.required')
+  }), [locale])
 
+  const {
+    errors,
+    setValue,
+    handleSubmit,
+    formState: { isSubmitted },
+    control
+  } = useForm({
+    values: initValues,
+    rules: validationRules,
+    messages: validationMessages
+  })
+  
+  const formValues = useWatch({ control, defaultValue: initValues })
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -60,7 +74,7 @@ const CriteriaOptionForm = ({ className, onValues, values, type }) => {
         id
       })
     } catch (error) {
-      setError(ctxError('Creating option failed.', error));
+      setError(ctxError(t('errors.server'), error));
     }
   }
 
@@ -68,22 +82,28 @@ const CriteriaOptionForm = ({ className, onValues, values, type }) => {
     setLoading(false)
   }, [error])
 
+  const handleName = useCallback(ev => {
+    setValue(`name.${locale}`, ev.target.value)
+  }, [setValue, locale])
+
+  const handleDesc = useCallback(val => {
+    setValue(`desc.${locale}`, val)
+  }, [setValue, locale])
+
   return <form data-test-id="criteria-option-form" method="POST" noValidate className={classNames(styles['criteria-option-form'], className)} onSubmit={handleSubmit(onSubmit)}>
-   <h2 className={styles['criteria-option-form-title']}>{t(CRITERIA_LABELS[type])}</h2>
+    <h2 className={styles['criteria-option-form-title']}>{t(`labels.criteria-option`)}</h2>
 
-    {error ? <Alert type="error">{error.message}</Alert> : null}
+    {error && <Alert type="error">{error.message}</Alert>}
 
-    <TextInputField value={formValues.name[locale]} placeholder={t('Name')} error={errors && errors.name && errors.name[locale]} onChange={input(`name.${locale}`)} autoComplete='off' name={`name.${locale}`} className={styles['criteria-option-form-field']} />
+    <TextInputField value={formValues.name[locale]} placeholder={t('labels.name')} error={isSubmitted && errors && errors.name && errors.name[locale]} onChange={handleName} autoComplete='off' name={`name.${locale}`} className={styles['criteria-option-form-field']} />
     {
       type == 'competency' ?
-      <HtmlInputField value={formValues.desc[locale]} placeholder={`${t('Definition')} (${t('optional')})`} error={errors ? errors.desc : null} onChange={input(`desc.${locale}`, false)} name={`desc.${locale}`} className={styles['criteria-option-form-field']} /> :
+      <HtmlInputField value={formValues.desc[locale]} placeholder={`${t('labels.description')} (${t('optional')})`} error={isSubmitted && errors && errors.desc && errors.desc[locale]} onChange={handleDesc} name={`desc.${locale}`} className={styles['criteria-option-form-field']} /> :
       null
     }
     <PlatformButton disabled={loading} type="submit" className={styles['criteria-option-form-submit']}>
       {!loading ?
-      (!formValues.id ? <><PlusIcon />  {t('Add option')}</> : t('Save option')) :
-      t('Loading...')
-      }
+      (!formValues.id ? <><PlusIcon />  {t('actions.add.option')}</> : t('actions.save.option')) : t('status.loading')}
     </PlatformButton>
     {loading ? <Preloader /> : null}
   </form>

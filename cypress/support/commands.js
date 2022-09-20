@@ -5,6 +5,7 @@ require('./navigation')
 require('./templates')
 require('./questions')
 require('./interview')
+require('./misc')
 
 Cypress.Commands.add('login', (username, password, key = '') => {
   cy.session([username, password, key], () => {

@@ -1,0 +1,1 @@
+Label showing stage information and has popup menu.

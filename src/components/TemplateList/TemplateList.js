@@ -59,7 +59,7 @@ const TemplateList = ({ className, data = [], onDelete, emptyText = 'No data', .
           styles['template-list-details']
         )}>
             <div className={styles['template-list-details-head']}>
-              <h2 className={styles['template-list-item-title']}>{item.templateName}</h2>
+              <h2 className={styles['template-list-item-title']}>{item.name}</h2>
               <ProjectStat template={true} className={styles['template-list-stats']} project={item} />
             </div>
             <div className={styles['template-list-details-body']}>

@@ -1,121 +1,96 @@
-import { Range, getTrackBackground } from 'react-range';
 import TextInputField from 'components/TextInputField/TextInputField';
-import useForm from 'libs/use-form'
-import { useEffect } from 'react';
+import { useForm } from 'libs/react-hook-form'
+import { useCallback, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
-import FlexRow from 'components/FlexRow/FlexRow';
+import HtmlInputField from 'components/HtmlInputField/HtmlInputField';
+import { DEFAULT_QUESTION_TIME } from 'libs/config';
+import TimedTitle from 'components/TimedTitle/TimedTitle';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'libs/translation';
 
 import styles from './salary-stage-form.module.scss';
-
-const MIN = 0;
-const MAX = 1000000;
+import { useWatch } from 'react-hook-form';
 
 const defaultValues = {
-  currency: '€',
-  range: [0, 9000],
-  config: [1000, 3000]
+  min: '0',
+  max: '4000',
+  notes: '',
+  time: DEFAULT_QUESTION_TIME
 }
 
-const rules = {
-  range: 'range'
+const validationRules = {
+  min: 'required|numeric',
+  max: 'required|numeric',
+  notes: 'max:9000',
 }
 
-const SalaryStageForm = ({ className, values, onValues, onError }) => {
-  const [formValues, errors, control] = useForm({
-    values: values ? values : defaultValues,
-    rules,
-    pristine: false
+const SalaryStageForm = ({ className, values, onValues, onError, markComplete, pristine = true }) => {
+  const { t } = useTranslation();
+  const { locale } = useRouter();
+
+  const validationMessages = useMemo(() => ({
+    required: t('errors.field.required'),
+    numeric: t('errors.field.numeric')
+  }), [locale])
+
+  const initValues = useMemo(() => values || defaultValues, [])
+
+  const {
+    errors,
+    control,
+    setValue
+  } = useForm({
+    values: initValues,
+    rules: validationRules,
+    messages: validationMessages
   })
 
+  const formValues = useWatch({ control, defaultValue: initValues })
+  
   useEffect(() => {
-    if (!errors) {
-      onValues(formValues)
-    } else {
-      onError(new Error('Min max values incorrect or '))
-    }
-  }, [formValues, errors])
+    onValues && onValues(formValues)
+  }, [formValues, onValues])
 
-  const handleMin = ev => {
-    const v = Number.parseInt(ev.target.value || 0);
+  useEffect(() => {
+    onError && onError(errors && new Error(t("errors.form.invalid")))
+  }, [errors, onError])
 
-    control.setValues({
-      ...formValues,
-      range: [v, formValues.range[1]],
-      config: [v, formValues.range[1]]
-    })
-  }
+  const handleMin = useCallback(ev => {
+    setValue('min', ev.target.value)
+  }, [setValue])
 
-  const handleMax = ev => {
-    const v = Number.parseInt(ev.target.value || 0);
+  const handleMax = useCallback(ev => {
+    setValue('max', ev.target.value)
+  }, [setValue])
 
-    control.setValues({
-      ...formValues,
-      range: [formValues.range[0], v],
-      config: [formValues.range[0], v]
-    })
-  }
+  const handleTime = useCallback(val => {
+    setValue('time', val)
+  }, [setValue])
 
-  const handleChange = (vals) => {
-    control.input('config', false)
-  }
+  const handleNote = useCallback(val => {
+    setValue('note', val)
+  }, [setValue])
 
   return <div className={classNames(styles['salary-stage-form'], className)}>
-    <h3 className={styles['salary-stage-form-title']}>Salary range</h3>
+    <TimedTitle className={styles['introduction-stage-form-title']}  time={formValues.time} onChange={handleTime}>
+      {t('stages.salary.name')}
+    </TimedTitle>
 
-    <FlexRow>
-      <TextInputField label='Absolute min' className={styles['salary-stage-form-field']} onChange={handleMin} name="min" value={formValues.range[0]} />
-      <TextInputField label='Absolute max' className={styles['salary-stage-form-field']} onChange={handleMax} name="max" value={formValues.range[1]} />
-    </FlexRow>
+    <div className={styles['salary-stage-form-range']}>
+      <h5 className={styles['salary-stage-form-range-label']}>{t('labels.budget-range')}</h5>
+      <div className={styles['salary-stage-form-range-input-wrapper']}>
+        <span className={styles['salary-stage-form-range-divider-text']}>{t('labels.from')}</span>
+        <TextInputField error={!pristine && errors && errors.min} className={styles['salary-stage-form-range-input']} placeholder='0' onChange={handleMin} name="min" value={formValues.min} />
+        <span className={styles['salary-stage-form-range-divider-text']}>- {t('labels.to')}</span>
+        <TextInputField error={!pristine && errors && errors.max} className={styles['salary-stage-form-range-input']} placeholder='9999' onChange={handleMax} name="max" value={formValues.max} />
+      </div>
+    </div>
 
-    <TextInputField label='Currency' error={errors && errors.currency} className={styles['salary-stage-form-field']} onChange={control.input('currency')} name="currency" value={formValues.currency} />
-
-        <div className={classNames(styles['salary-stage-form-field'], styles['salary-stage-form-slider'])}>
-        <div className={styles['salary-stage-form-slider-info']}>
-          <h4 >Position boundry</h4>
-          <p className="form-help">Choose tolerable min/max values for this position.</p>
-        </div>
-
-      {!errors || !errors.range ?  <Range
-            step={100}
-            min={formValues.range[0]}
-            max={formValues.range[1]}
-            allowOverlap={false}
-            state={ { values: formValues.config }}
-            values={formValues.config}
-            onChange={control.input('config', false)}
-            renderTrack={({ props, children }) => (
-             <div
-               {...props}
-               style={{
-                 ...props.style,
-                 background: getTrackBackground({
-                      values: formValues.config,
-                      colors: ['#B7B7B733', '#43B88C', '#B7B7B733'],
-                      min: formValues.range[0],
-                      max: formValues.range[1]
-                    })
-
-               }}
-               className={styles['salary-stage-form-slider-track']}
-             >
-               {children}
-             </div>
-           )}
-           renderThumb={({ props }) => {
-             return <div
-               {...props}
-               style={{
-                 ...props.style
-               }}
-               className={styles['salary-stage-form-slider-marker']}
-             >
-             <span className={styles['salary-stage-form-slider-marker-value']}>{formValues.currency}{formValues.config[props.key] || 0}</span></div>
-           }}
-            /> : null}
-            {errors && errors.range ? <p className="form-error">
-            <small>{errors.range}</small>
-            </p> : null}
-        </div>
+    <div className={styles['salary-stage-form-note']}>
+      <h5 className={styles['salary-stage-form-note-label']}>{t('labels.notes-interviewer')}</h5>
+      <HtmlInputField diff={0} value={formValues.note} className={styles['salary-stage-form-field']} name="note" onChange={handleNote} placeholder={t("placeholders.enter-text")} />
+      {!pristine && errors && errors.note && <p className="form-error">{errors.note}</p>}
+    </div>
   </div>
 }
 export default SalaryStageForm;

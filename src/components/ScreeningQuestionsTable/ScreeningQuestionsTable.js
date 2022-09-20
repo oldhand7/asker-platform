@@ -5,19 +5,20 @@ import { getScreeningQuestionLabelBySubtype } from 'forms/screening-question/scr
 import TrashButton from 'components/TrashButton/TrashButton';
 
 import styles from './ScreeningQuestionsTable.module.scss';
+import { useTransition } from 'react';
 
-const getColumns = ({ onQuestion, criteria, onDelete }) => ([
+const getColumns = ({ onQuestion, criteria, onDelete, t }) => ([
   {
-    title: 'Questions',
+    title: t('labels.questions'),
     dataIndex: 'name',
     key: 'name',
   },
   {
-    title: 'Type',
+    title: t('labels.type'),
     dataIndex: 'subtype',
     key: 'type',
     render: (subtype) => {
-      return getScreeningQuestionLabelBySubtype(subtype);
+      return getScreeningQuestionLabelBySubtype(subtype, t);
     }
   },
   {
@@ -39,10 +40,12 @@ const tagRow = (rec) => {
 }
 
 const ScreeningQuestionsTable = ({ className, data = [], onQuestion, criteria, onDelete, ...props }) => {
-  return <Table onRow={tagRow} emptyText="No questions found." rowKey={row => row.id} className={classNames(
+  const { t } = useTransition();
+
+  return <Table onRow={tagRow} emptyText={t('status.no-questions')} rowKey={row => row.id} className={classNames(
     styles['screening-questions-table'],
     className
-  )} columns={getColumns({ onQuestion, criteria, onDelete })} data={data} {...props} />
+  )} columns={getColumns({ onQuestion, criteria, onDelete, t })} data={data} {...props} />
 }
 
 export default ScreeningQuestionsTable;

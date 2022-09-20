@@ -9,7 +9,7 @@ import Alert from 'components/Alert/Alert';
 
 import styles from './default-layout.module.scss';
 
-const DefaultLayout = ({ children }) => {
+const DefaultLayout = ({ children, fullWidth = false }) => {
   const {config} = useSite();
   const { user } = useUser();
 
@@ -40,8 +40,7 @@ const DefaultLayout = ({ children }) => {
   return (
     <Container className={styles['layout-container']}>
       <Navbar />
-      <Content>{user && user.disabled ? <Alert className={styles['layout-account-disabled']}>Your account has been deactivated. Please reach out to info@askertech.com if you want to reactivate your account.</Alert> : children}</Content>
-      <Footer />
+      <Content fullWidth={fullWidth}>{user && user.disabled ? <Alert className={styles['layout-account-disabled']}>Your account has been deactivated. Please reach out to info@askertech.com if you want to reactivate your account.</Alert> : children}</Content>
       {process.env.NEXT_PUBLIC_APP_ENV == 'beta' ? <span className="beta-label">Staging server</span> : null}
     </Container>
   )

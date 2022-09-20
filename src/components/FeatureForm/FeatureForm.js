@@ -1,45 +1,36 @@
-import { useState, useEffect } from 'react';
+import { memo } from 'react';
 import dynamic from 'next/dynamic'
+import { getStageKey } from 'libs/stage';
 
 const featureForms = {
-  'introduction': dynamic(() => import('forms/introduction-stage/introduction-stage-form')),
-  'company-presentation': dynamic(() => import('forms/company-presentation-stage/company-presentation-stage-form')),
-  'competency-questions': dynamic(() => import('forms/evaluation-question-stage/evaluation-question-stage-form')),
-  'motivation-questions': dynamic(() => import('forms/evaluation-question-stage/evaluation-question-stage-form')),
-  'experience-questions': dynamic(() => import('forms/evaluation-question-stage/evaluation-question-stage-form')),
-  'hard-skill-questions': dynamic(() => import('forms/evaluation-question-stage/evaluation-question-stage-form')),
-  'culture-questions': dynamic(() => import('forms/evaluation-question-stage/evaluation-question-stage-form')),
-  'salary': dynamic(() => import('forms/salary-stage/salary-stage-form')),
-  'candidate-questions': dynamic(() => import('forms/candidate-questions-stage/candidate-questions-stage-form')),
-  'screening-questions': dynamic(() => import('forms/screening-question-stage/screening-question-stage-form')),
-  'other-questions': dynamic(() => import('forms/other-question-stage/other-question-stage-form')),
-  'summary': dynamic(() => import('forms/summary-stage/summary-stage-form'))
+  'introduction': () => import('forms/introduction-stage/introduction-stage-form'),
+  'company-presentation': () => import('forms/company-presentation-stage/company-presentation-stage-form'),
+  'competency-questions': () => import('forms/evaluation-question-stage/evaluation-question-stage-form'),
+  'motivation-questions': () => import('forms/evaluation-question-stage/evaluation-question-stage-form'),
+  'experience-questions': () => import('forms/evaluation-question-stage/evaluation-question-stage-form'),
+  'hard-skill-questions': () => import('forms/evaluation-question-stage/evaluation-question-stage-form'),
+  'culture-questions': () => import('forms/evaluation-question-stage/evaluation-question-stage-form'),
+  'salary': () => import('forms/salary-stage/salary-stage-form'),
+  'candidate-questions': () => import('forms/candidate-questions-stage/candidate-questions-stage-form'),
+  'screening-questions': () => import('forms/screening-question-stage/screening-question-stage-form'),
+  'other-questions': () => import('forms/other-question-stage/other-question-stage-form'),
+  'summary': () => import('forms/summary-stage/summary-stage-form')
 }
 
-const FeatureForm = (props) => {
-  const [FormComponent, setFormComponent] = useState(0);
-  const [formComponentProps, setProps] = useState({});
+const FeatureForm = ({ feature, isSubmitted, ...props }) => {
+  const FormComponent = dynamic(featureForms[feature.id])
 
-  useEffect(() => {
-    const { feature } = props;
-
-    if (feature && featureForms[feature.id]) {
-      setFormComponent(0);
-    }
-  }, [props.feature])
-
-  useEffect(() => {
-    if (FormComponent !== 0) return;
-
-    const { feature } = props;
-
-    if (feature && featureForms[feature.id]) {
-      setFormComponent(featureForms[feature.id]);
-      setProps({ ...props });
-    }
-  }, [props, FormComponent])
-
-  return FormComponent ? <FormComponent {...formComponentProps} /> : null;
+  return <FormComponent className={props.className} test={props.test} feature={feature} values={props.values} isSubmitted={isSubmitted} onValues={props.onValues} onError={props.onError} />
 }
 
-export default FeatureForm;
+const FeatureFormMemo = memo(FeatureForm, (prev, next) => {
+  if (prev.isSubmitted != next.isSubmitted) {
+    return false;
+  }
+
+  return getStageKey(prev.feature) == getStageKey(next.feature)
+});
+
+FeatureFormMemo.displayName = 'FeatureForm';
+
+export default FeatureFormMemo;

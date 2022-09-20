@@ -1,15 +1,18 @@
 import { useRouter } from 'next/router';
 import ForgottenForm from 'forms/forgotten/forgotten-form';
-import { getSettings, getTranslations } from 'libs/firestore-admin';
+import { getSettings } from 'libs/firestore-admin';
 import { useUser } from 'libs/user';
 import { useEffect} from 'react';
 import Head from 'next/head';
+import { useTranslation } from 'libs/translation';
 
 import styles from 'styles/pages/forgotten.module.scss';
 
 const ForgottenPage = () => {
   const router = useRouter();
-  const { user, login} = useUser()
+  const { user } = useUser()
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (user) {
@@ -19,7 +22,7 @@ const ForgottenPage = () => {
 
   return <div className={styles['forgotten-page']}>
     <Head>
-      <title>Forgotten - Login - Asker</title>
+      <title>{t('headings.forgotten')} - {t('actions.login')}  - Asker</title>
       <meta name="robots" content="noindex" />
     </Head>
     <ForgottenForm className={styles['forgotten-page-form']}  />
@@ -29,8 +32,7 @@ const ForgottenPage = () => {
 export const getServerSideProps = async ({ req }) => {
   return {
     props: {
-      config: await getSettings(),
-      translations: await getTranslations()
+      config: await getSettings()
     }
   }
 }

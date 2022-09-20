@@ -1,7 +1,9 @@
 describe('Backoffice company stats', () => {
+    beforeEach(() => {
+      cy.login('joe.pink@example.com', 'test123');
+    })
+
     it('Should create competency question', () => {
-        cy.login('joe.pink@example.com', 'test123');
-        
         // 1 Question
         cy.createCompetencyQuestion({
             name: 'Are you familiar with CQ1?',
@@ -24,27 +26,18 @@ describe('Backoffice company stats', () => {
 
         cy.contains('Just some project 1')
           .closest('li')
-          .listNavigate('Edit')
+          .listRowNavigate('Edit')
 
-        cy.contains('Add stage').click()
+        cy.addStage('Competency')
 
-        cy.get('[data-test-id="feature-competency-questions"]').drag('[data-test-id="stage-2"] .Droppable')
-          .wait(1000)
-  
           cy.get('[data-test-id="feature-form"]')
           .within(() => {
-            cy.contains('Are you familiar with CQ1?')
-              .closest('li')
-              .find('button[data-test-id="add-question"]').first().click()
+            cy.contains('Are you familiar with CQ1?').closest('li').find('button').click()
           })
 
-        cy.contains('Save project').click()
+        cy.saveProject()
 
-        cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
-
-        cy.contains('Just some project 1')
-          .closest('li')
-          .listNavigate('Interviews')
+        cy.contains('Just some project 1').closest('li').listRowNavigate('Interviews')
 
         // 4 Candidates
         cy.addProjectCandidate('Candidate 1', 'c1@example.com')
@@ -57,15 +50,17 @@ describe('Backoffice company stats', () => {
           .contains('Start interview')
           .click();
 
+        cy.get('#language-choose-modal').find('button').contains('Choose').click()
+
         cy.contains('Are you familiar with CQ1?')
           .closest('[data-test-id="feature-form"]')
           .contains('Great')
           .click()
 
         cy.contains('Complete interview').click();
-        
+
         cy.location('pathname').should('contain', '/overview/')
-        
+
         cy.contains('Candidate 1').first().closest('[data-test-id="flex-table-row"]')
           .should('contain', '75%')
 
@@ -74,18 +69,20 @@ describe('Backoffice company stats', () => {
           .contains('Start interview')
           .click();
 
+        cy.get('#language-choose-modal').find('button').contains('Choose').click()
+
         cy.contains('Are you familiar with CQ1?')
           .closest('[data-test-id="feature-form"]')
           .contains('Good')
           .click()
 
         cy.contains('Complete interview').click();
-        
+
         cy.location('pathname').should('contain', '/overview/')
-        
+
         cy.contains('Candidate 2').first().closest('[data-test-id="flex-table-row"]')
           .should('contain', '50%')
-        
+
         cy.visit('/admin/#/companies')
 
         cy.get('table thead tr')

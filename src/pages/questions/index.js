@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { getSettings, getTranslations } from 'libs/firestore-admin';
+import { getSettings } from 'libs/firestore-admin';
 import { useEffect, useState, useMemo, useCallback} from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import QuestionsTable from 'components/QuestionsTable/QuestionsTable';
@@ -21,9 +21,9 @@ import { deleteSingle } from 'libs/firestore';
 import { questionTypes } from 'libs/questions';
 import { ctxError } from 'libs/helper';
 import { useQueryState } from 'next-usequerystate'
+import { useTranslation } from 'libs/translation';
 
 import styles from 'styles/pages/questions.module.scss';
-import { useSite } from 'libs/site';
 
 const PER_PAGE = 15;
 const DEFAULT_SORT = 'createdAt';
@@ -54,7 +54,7 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [qMax, setMaxQ] = useQueryState('fl')
-  const { t, i18nField } = useSite();
+  const { t, i18nField } = useTranslation();
   
   useEffect(() => {
     if (!filter.pristine) {
@@ -118,7 +118,7 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
   }
 
   const deleteQuestion = (q) => {
-    if (!confirm('Are you sure?')) {
+    if (!confirm(t('actions.confirm'))) {
       return;
     }
 
@@ -133,10 +133,10 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
 
         setLoading(false);
 
-        setSuccess('Question deleted')
+        setSuccess(t('status.question-deleted'))
       })
       .catch(error => {
-        setError(ctxError('Server error', error))
+        setError(ctxError(t('errors.server'), error))
       })
   }
 
@@ -189,14 +189,14 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
 
   return <div className={styles['questions-page']}>
       <Head>
-        <title>{t('Questions listing')} - Asker</title>
+        <title>{t('headings.questions-listing')} - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
 
       <div className={styles['questions-page-filter']}>
         <div data-test-id="company-filter" className={styles['questions-page-filter-company']}>
-          <FilterButton className={styles['questions-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>{t('Asker questions')}</FilterButton>
-          <FilterButton className={styles['questions-page-filter-company-button']} theme="dark" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>{t('Your questions')}</FilterButton>
+          <FilterButton className={styles['questions-page-filter-company-button']} active={filter.company.indexOf('asker') > -1} onClick={() => toggleCompany('asker')}>{t('labels.asker-questions')}</FilterButton>
+          <FilterButton className={styles['questions-page-filter-company-button']} theme="dark" active={filter.company.indexOf(companyId) > -1} onClick={() => toggleCompany(user.companyId)}>{t('labels.your-questions')}</FilterButton>
         </div>
         <QuestionFilter className={styles['questions-page-filter-question-filter']} selected={filter.questionTypes} onFilter={handleQuestionFilterOptions} />
       </div>
@@ -207,14 +207,14 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
             ...criteriaTypes,
             ...questionTypes.filter(qt => qt.id != 'evaluation')
           ]}>
-            <PlusIcon /> {t('Create new question')}
+            <PlusIcon /> {t('headings.create-new-question')}
           </DropDownButton>
       </div>
 
       {success ? <Alert type="success">{success}</Alert> : null}
       {error ? <Alert type="error">{error.message}</Alert> : null}
 
-      <QuestionsTable onDelete={deleteQuestion} emptyText="No questions to show." data={tableData} className={styles['questions-page-table']} />
+      <QuestionsTable onDelete={deleteQuestion} emptyText={t('warnings.no-questions')} data={tableData} className={styles['questions-page-table']} />
       <Pagination page={filter.page} className={styles['questions-page-pagination']} onChange={handlePageChange} total={relativeTotal} perPage={filter.perPage} />
 
       {loading ? <Preloader /> : null}
@@ -270,7 +270,6 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }
   return {
     props: {
       config: await getSettings(),
-      translations: await getTranslations(),
       companyId: req.session.user.companyId,
       questions,
       total

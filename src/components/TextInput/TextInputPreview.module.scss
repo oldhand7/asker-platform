@@ -1,0 +1,20 @@
+.preview-input {
+    &-wrapper {
+        & > * {
+            margin-bottom: 10px;
+        }
+    }
+
+    &-red {
+        background: palevioletred;
+        color: white;
+    }
+
+    &-yellow {
+        background:palegoldenrod;
+    }
+
+    &-green {
+        background: palegreen;
+    }
+}

@@ -1,0 +1,41 @@
+.popup {
+    background: #FFFFFF;
+    text-align: center;
+    padding: 8rem;
+
+    &-head {
+        font-weight: 400;
+        font-size: 14rem;
+        line-height: 21rem;
+        text-align: center;
+        color: #5B5B5B;
+    }
+
+    &-input-template-name {
+        margin: 12rem 0;
+
+        input {
+            line-height: 32rem;
+            font-weight: 400;
+            font-size: 13rem;
+            border: 1px solid #ECECEC;
+        }
+    }
+
+    &-footer {
+        margin: 15rem 0 0 0;
+
+        button {
+            margin: 0 5rem;
+        }
+
+        &-button {
+            line-height: 2em;
+
+            &-fw {
+             width: 100%;   
+            }
+        }
+    }
+
+}

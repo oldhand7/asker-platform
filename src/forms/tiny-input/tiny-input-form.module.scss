@@ -1,0 +1,77 @@
+@import 'styles/vars';
+
+.tiny-input-form {
+    position: relative;
+    right: -12rem;
+    text-align: right;
+
+    &-input-field {
+        position: relative;
+
+        &-body {
+            position: relative;
+            display: flex;
+            justify-content: flex-end;
+
+            & > * {
+                line-height: 37rem;
+                height: 37rem;
+                flex: 1;
+            }
+        }
+    }
+
+    &-input {
+        background: #F6F6F6;
+        border: 1px solid #DEDEDE;
+        border-radius: 5px;
+        font-weight: 400;
+        font-size: 14rem;
+        line-height: 21rem;
+        color: #969696;
+        padding-left: 12rem;
+        position: relative;
+        right: -12rem;
+        z-index: 1;
+        padding-right: 24rem;
+        display: inline-block;
+        flex: 0 1 290rem;
+
+        &:focus {
+            outline: 0;
+        }
+    }
+
+    &-button {
+        border-radius: 5px;
+        background: $brand-green;
+        border-radius: 5px;
+        font-weight: 500;
+        font-size: 14rem;
+        color: #FFFFFF;
+        padding: 0 16rem;
+        z-index: 2;
+        position: relative;
+        border: 0;
+        cursor: pointer;
+        flex: 1;
+
+        &:hover {
+            background: $brand-green-hover;
+        }
+
+        &-has-extra {
+            border-radius: 5px 0px 0px 5px;
+        }
+
+        &-extra {
+            border-radius: 0 5px 5px 0;
+            background-color: $asker-dark;
+            flex: 0 0 130rem;
+
+            &:hover {
+                background: #1E453E;
+            }
+        }
+    }
+}

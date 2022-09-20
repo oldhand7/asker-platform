@@ -1,0 +1,49 @@
+.stage-tree {
+    list-style: none;
+    padding: 0;
+    overflow-y: hidden;
+    overflow-x: visible;
+
+    &-item {
+        list-style: none;
+        padding: 0;
+        margin: 4rem 0;
+    }
+
+    &-item {
+    }
+
+    &-item &-item {
+        padding-left: 16rem;
+        position: relative;
+    }
+
+    &-item[data-level="3"]::after {
+        content: '';
+        display: block;
+        height: 50px;
+        width: 1em;
+        position: absolute;
+        background-image: url('./assets/images/bar.png');
+        background-repeat: no-repeat;
+        background-position: right bottom;
+        left: 0;
+        bottom: 50%;
+        height: 200px;
+    }
+
+    &-item[data-level="2"]::after {
+        content: '';
+        display: block;
+        height: 50px;
+        width: 1em;
+        position: absolute;
+        background-image: url('./assets/images/bar.png');
+        background-repeat: no-repeat;
+        background-position: right bottom;
+        left: 0;
+        top: 20rem;
+        height: 200px;
+        transform: translate(0%, -100%);
+    }
+}

@@ -55,7 +55,7 @@ const CompareBox = ({ compare = [], className, interviews = [], project, onCompa
         <div className={styles['compare-box-body']}>
             {selectAll()}
             <ul className={styles['compare-box-interviews']}>
-                {interviews.map(i => (<li key={`${compare.length}-${i.id}`}>
+                {interviews.map(i => (<li key={`${compare.length}-${i.id}-${project.anonimize ? 'a' : 'na'}`}>
                     <CheckboxInputField
                         checked={compare.indexOf(i) > -1}
                         onChange={() => onCompare(i)}

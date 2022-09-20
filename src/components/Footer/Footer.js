@@ -1,19 +1,12 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
 import SocialMenu from 'components/SocialMenu/SocialMenu';
 import ContactMenu from 'components/ContactMenu/ContactMenu';
 import Logo from 'components/Logo/Logo';
 import Copyright from 'components/Copyright/Copyright';
-import { useSite } from 'libs/site';
-import ContactModal from 'modals/contact/contact-modal';
-import MessageUsButton from 'components/MessageUsButton/MessageUsButton';
-import { useModal } from 'libs/modal';
-import CallUsButton from 'components/CallUsButton/CallUsButton';
 
 import styles from './Footer.module.scss';
 
 const Footer = () => {
-  const { config, t } = useSite();
-  const openContactModal = useModal(ContactModal);
+  const { config } = useSite();
 
   return <><div className={styles['footer']}>
     <div className={styles['footer-inner']}>
@@ -28,11 +21,6 @@ const Footer = () => {
 
       <div className={styles['footer-footer']}>
           <Copyright className={styles['footer-copyright']} />
-
-          <div className={styles['footer-links']}>
-            <a href={`${process.env.NEXT_PUBLIC_LANDING_PAGE_URL}terms`}>Terms and conditions</a>
-            <a href={`${process.env.NEXT_PUBLIC_LANDING_PAGE_URL}cookie-policy`}>Cookie policy</a>
-          </div>
 
           <SocialMenu links={{
             facebook: config && config['company-facebook'],

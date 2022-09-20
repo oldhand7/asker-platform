@@ -2,14 +2,15 @@ import classNames from 'classnames';
 import TextInputField from 'components/TextInputField/TextInputField';
 import PlatformButton from 'components/Button/PlatformButton';
 import Alert from 'components/Alert/Alert';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import Table from 'rc-table';
 import { validate } from 'libs/validator'
 import { flattenCriteriaTree } from 'libs/criteria';
 import { useForm } from 'libs/react-hook-form';
+import { useTranslation } from 'libs/translation';
 
 import styles from './scoring-rules-form.module.scss';
-import { useSite } from 'libs/site';
+import { useWatch } from 'react-hook-form';
 
 const adjust = (values, criteria) => {
   const criteriaMap = flattenCriteriaTree(criteria || [])
@@ -25,24 +26,29 @@ const adjust = (values, criteria) => {
   return Object.assign(criteriaMap, oldCriteriaMap)
 }
 
-const ScoringRulesForm = ({ className, onValues, criteria = [], values, type }) => {
+const ScoringRulesForm = ({ className, onValues, criteria = [], values }) => {
   const [error, setError] = useState(false);
   const [sumTotal, setSumTotal] = useState(null);
   const [criteriaNameMap, setCriteriaNameMap] = useState({});
+  const { t, i18nField}= useTranslation();
+
+  const initValues = useMemo(() => adjust(values, criteria), [])
+
   const {
-    values: formValues,
     handleSubmit,
-    input
+    setValue,
+    control
   } = useForm({
-    values: adjust(values, criteria),
+    values: initValues,
   })
-  const { t, i18nField}=useSite();
+
+  const formValues = useWatch({ control, defaultValue: initValues })
 
   const onSubmit = (data) => {
     if (sumTotal == 100) {
       onValues(data)
     } else {
-      setError(new Error(t('Your total does not equal 100%')))
+      setError(new Error(t('errors.total100')))
     }
   }
 
@@ -57,23 +63,58 @@ const ScoringRulesForm = ({ className, onValues, criteria = [], values, type }) 
     setCriteriaNameMap(flattenCriteriaTree(criteria, 'name'))
   }, [criteria])
 
+  const inputHandlers = useMemo(() => {
+    const handlers = {}
+
+    for (let i = 0; i < criteria.length; i++) {
+      const { type, children } = criteria[i];
+
+      if (!children) {
+        handlers[type] = e => setValue(type, e.target.value)
+
+        continue;
+      }
+
+      for (let k = 0; k < children.length; k++) {
+        const { type } = children[k];
+
+        handlers[type] = e => setValue(type, e.target.value)
+      }
+    }
+
+    return handlers;
+  }, [criteria, setValue])
+
   const columns = [
     {
       key: 'name',
-      title: 'Name',
+      title: t('labels.name'),
       render: (_, key) => i18nField(criteriaNameMap[key]) || '?'
     },
     {
       key: 'weight',
-      title: t('Weight')+' (%)',
+      title: t('labels.weight')+' (%)',
       render: (_, key) => {
-        const errors = validate({ value: formValues[key] }, { value: 'required|numeric|min:0' })
+        const errors = validate(
+          { value: formValues[key] },
+          { value: 'required|numeric|min:0' }
+        )
+
         return <TextInputField
           className={styles['scoring-rules-form-input']}
-          value={formValues[key]} onChange={input(key)} placeholder='%' error={errors && errors['value']} />
+          value={formValues[key]}
+          onChange={inputHandlers[key]}
+          placeholder='%'
+          error={errors && errors['value']} />
       }
     }
   ]
+
+  useEffect(() => {
+    if (sumTotal == 100) {
+      setError(null)
+    }
+  }, [sumTotal])
 
   const data = useMemo(() => {
     const data = Object.keys(formValues)
@@ -95,21 +136,20 @@ const ScoringRulesForm = ({ className, onValues, criteria = [], values, type }) 
   const tagRow = rec => rec
 
   return <form data-test-id="scoring-rules-form" method="POST" noValidate className={classNames(styles['scoring-rules-form'], className)} onSubmit={handleSubmit(onSubmit)}>
-    <h2 className={styles['scoring-rules-form-title']}>{t('Project scoring rules')}</h2>
+    <h2 className={styles['scoring-rules-form-title']}>{t('headings.project-scoring-rules')}</h2>
 
-    <p className="form-help">{t('Your total must equal 100%')}</p>
+    <p className="form-help">{t('help.total100')}</p>
 
-    {error ? <Alert type="error">{error.message}</Alert> : null}
+    {error && <Alert type="error">{error.message}</Alert>}
 
     <Table rowKey={tagRow} className={styles['scoring-rules-table']} columns={columns} data={data} />
 
     <p className={styles['scoring-rules-form-total']}>
-      <span>{t('Current total:')} </span>
+      <span>{t('labels.total')}: </span>
       {sumTotal !== null ? <span className={styles['scoring-rules-form-total-value']}>{sumTotal} %</span> : null}
     </p>
 
-
-    <PlatformButton type="submit" className={styles['scoring-rules-form-submit']}>{t('Save')}</PlatformButton>
+    <PlatformButton type="submit" className={styles['scoring-rules-form-submit']}>{t('actions.save')}</PlatformButton>
   </form>
 }
 

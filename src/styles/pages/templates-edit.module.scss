@@ -1,3 +1,8 @@
 .templates-edit-page {
-    padding: 20rem 0;
+    padding: 0 0 0 0;
+
+    &-form {
+        border-top: 2px solid #E9E9E9;
+        border-bottom: 2px solid #E9E9E9;
+    }
 }

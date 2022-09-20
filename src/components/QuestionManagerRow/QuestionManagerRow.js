@@ -4,18 +4,15 @@ import TrashButton from "components/TrashButton/TrashButton";
 import NoteButton from "components/NoteButton/NoteButton";
 import classNames from "classnames";
 import { getScreeningQuestionLabelBySubtype } from 'forms/screening-question/screening-question-form';
-import { useSite } from "libs/site";
+import MinutesInput from "components/MinutesInput/MinutesInput";
+import { useTranslation } from "libs/translation";
 
 import styles from './QuestionManagerRow.module.scss';
 
-const QuestionManagerRow = ({ className, question, dragDropProps, hasNote = false, onEdit, onDelete, onNote }) => {
-    const { i18nField } = useSite()
+const QuestionManagerRow = ({ className, question, time = 0, note = '', onEdit, onTimeChange, onDelete, onNote }) => {
+    const { i18nField, t } = useTranslation()
 
-    return <li
-    data-test-id="selected-question"
-    ref={dragDropProps.innerRef}
-    {...dragDropProps.draggableProps}
-    {...dragDropProps.dragHandleProps}
+    return <div
     className={classNames(
         styles['question-manager-row'],
         className
@@ -30,17 +27,18 @@ const QuestionManagerRow = ({ className, question, dragDropProps, hasNote = fals
 
             {
                 question.type == 'screening' || question.type == 'other' ?
-                <div className={styles['question-manager-row-type']}>{getScreeningQuestionLabelBySubtype(question.subtype+2)}</div> :
+                <div className={styles['question-manager-row-type']}>{getScreeningQuestionLabelBySubtype(question.subtype, t)}</div> :
                 <div className={styles['question-manager-row-type']}>{question.criteria && i18nField(question.criteria.name)}</div>
             }
 
             <div className={styles['question-manager-row-control']}>
+                <MinutesInput className={styles['question-manager-row-control-time']} value={time} onChange={onTimeChange} />
                 <EditButton onClick={onEdit} className={styles['question-manager-row-control-button']} />
-                {question.type == 'evaluation' ? <NoteButton active={hasNote} onClick={onNote} className={styles['question-manager-row-control-button']} /> : null}
+                {question.type == 'evaluation' ? <NoteButton active={note} onClick={onNote} className={styles['question-manager-row-control-button']} /> : null}
                 <TrashButton onClick={onDelete} className={styles['question-manager-row-control-button']} />
             </div>
         </div>
-    </li>
+    </div>
 }
 
 export default QuestionManagerRow;

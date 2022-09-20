@@ -14,13 +14,22 @@ module.exports = {
 
     // Handle image imports
     // https://jestjs.io/docs/webpack#handling-static-assets
-    '^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp|svg)$/i': `<rootDir>/__mocks__/fileMock.js`,
-
+    '^.+\\.(jpg|jpeg|gif|webp|avif|ico|bmp|svg)$/i': `<rootDir>/__mocks__/fileMock.js`,
+    '\\.(png|jpg|gif)$': `<rootDir>/__mocks__/fileMock.js`,
     // Handle module aliases
+    'libs/firestorage': '<rootDir>/__mocks__/libs/firestorage.js',
+    'libs/firestore': '<rootDir>/__mocks__/libs/firestore.js',
+    // 'libs/user': '<rootDir>/__mocks__/libs/user.js',
     '^libs/(.*)$': '<rootDir>/src/libs/$1',
+    '^translation/(.*)$': '<rootDir>/src/translation/$1',
+    '^components/HtmlInputField/HtmlInputField': '<rootDir>/__mocks__/HtmlInputFieldMock.jsx',
     '^components/(.*)$': '<rootDir>/src/components/$1',
     '^modals/(.*)$': '<rootDir>/src/modals/$1',
-    '^forms/(.*)$': '<rootDir>/src/forms/$1'
+    '^forms/(.*)$': '<rootDir>/src/forms/$1',
+    'uuid': '<rootDir>/__mocks__/uuidMock.js',
+    'next/router': '<rootDir>/__mocks__/nextRouterMock.js',
+    'react-intersection-observer': '<rootDir>/__mocks__/react-intersection-observer-mock.js',
+    'components/Uploader/Uploader': '<rootDir>/__mocks__/components/Uploader/Uploader.jsx',
   },
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],

@@ -1,0 +1,1 @@
+Shows interview progress and time.

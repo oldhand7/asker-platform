@@ -1,30 +1,54 @@
 import RuleInputField from 'components/RuleInputField/RuleInputField';
 import classNames from 'classnames';
-import { useSite } from 'libs/site';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'libs/react-hook-form';
+import { useFieldArray } from 'react-hook-form';
+import { useTranslation } from 'libs/translation';
+import { createRule } from 'components/RuleInputField/RuleInputField';
 
 import styles from './QuestionScoreInputField.module.scss'
 
-const QuestionScoreInputField = ({ className='', rules = [], onChange }) => {
-  const { t} = useSite();
+const createDemoRules = () => ([
+  createRule('Basic', 3),
+  createRule('Advanced', 3),
+  createRule('Professional', 3),
+  createRule('Expert', 3)
+])
 
-  const handleRulesChange = (val, index) => {
-    const newRules = [
-        ...rules
-    ]
+const QuestionScoreInputField = ({ className='', rules, onChange }) => {
+  const { t } = useTranslation();
 
-    newRules[index] = val;
+  const initValues = useMemo(() => ({ rules: rules || createDemoRules() }), [])
+  
+  const {
+    control
+  } = useForm({
+    values: initValues
+  })
 
-    onChange([
-      ...newRules
-    ])
-  }
+  const { fields: scoreRules, update: updateRule } = useFieldArray({
+    control,
+    name: 'rules',
+    keyName: '_id'
+  })
+
+  useEffect(() => {
+    onChange && onChange(scoreRules)
+  }, [scoreRules, onChange])
+
+  const inputHandlers = useMemo(() => {
+    return scoreRules.map((_, index) => (
+      rule => {
+        updateRule(index, rule)
+      }
+    ))
+  }, [updateRule])
 
   return <div data-test-id="question-score-input-field" className={classNames(styles['question-score-input-field'], className)}>
-    <span className={styles['question-score-input-field-label']}>{t('Score')}</span>
-
+    <span className={styles['question-score-input-field-label']}>{t('labels.score')}</span>
     <ul className={styles['question-score-input-field-rules']}>
-      {rules.map((rule, index) => <li className={styles['question-score-input-field-rules-item']} key={index}>
-        <RuleInputField index={index + 1} rule={rule} onChange={val => handleRulesChange(val, index)} className={styles['question-score-input-field-rules-input']} />
+      {scoreRules.map((rule, index) => <li className={styles['question-score-input-field-rules-item']} key={index}>
+        <RuleInputField index={index} rule={rule} onChange={inputHandlers[index]} className={styles['question-score-input-field-rules-input']} />
       </li>)}
     </ul>
   </div>

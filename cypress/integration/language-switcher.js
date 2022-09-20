@@ -10,9 +10,8 @@ describe('Language switcher', () => {
 
         cy.changeLanguage('SE')
             
-        cy.contains('Projects_SE')
-
         cy.location('pathname').should('contain', '/se/projects/')
+        cy.title().should('contain', 'Projects (SE) listing')
 
         cy.visit('/en/projects/')
 

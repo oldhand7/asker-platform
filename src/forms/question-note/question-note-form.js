@@ -1,14 +1,14 @@
 
-import CheckboxInputField from 'components/CheckboxInputField/CheckboxInputField';
 import HtmlInputField from 'components/HtmlInputField/HtmlInputField';
 import { useForm } from 'libs/react-hook-form';
-import { useUser } from 'libs/user';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import ThemedButton from 'components/Button/ThemedButton';
+import { useWatch } from 'react-hook-form';
+import { useTranslation } from 'libs/translation';
+import { useRouter } from 'next/router';
 
 import styles from './question-note-form.module.scss';
-import { useSite } from 'libs/site';
 
 const defaultValue = {
     text: {
@@ -18,38 +18,46 @@ const defaultValue = {
 }
 
 const QuestionNoteForm = ({ values, onValues, className }) => {
-   const { locale } = useUser();
-   const { t } = useSite();
+   const { locale } = useRouter();
+   const { t } = useTranslation();
 
    const validationRules = useMemo(() => ({
     [`text.${locale}`]: 'required',
    }), [locale])
 
    const validationMessages = useMemo(() => ({
-    [`required.text.${locale}`]: t('Add some text'),
+    required: t('errors.field.required')
    }), [locale])
 
+   const initValues = useMemo(() => values || defaultValue, [])
+
    const {
-    values: formValues,
     errors,
     handleSubmit,
     input,
+    formState: { isSubmitted },
+    control,
     setValue
    }  = useForm({
-    values: values || defaultValue,
+    values: initValues,
     rules: validationRules,
-    messages: validationMessages});
+    messages: validationMessages
+  });
+  
+  const formValues = useWatch({ control, defaultValue: initValues })
+
+  const handleText = useCallback((text) => {
+    setValue(`text.${locale}`, text)
+  }, [locale, setValue])
     
   return <form onSubmit={handleSubmit(onValues)} className={classNames(className, styles['form'])}>
-    <h3 className={styles['form-title']}>{t('Add note to question')}</h3>
+    <h3 className={styles['form-title']}>{t('headings.add-question-note')}</h3>
 
-
-    <HtmlInputField error={errors && errors.text && errors.text[locale]} className={styles['form-input-field']} diff={locale} value={formValues.text[locale]} onChange={input(`text.${locale}`, false)} />
+    <HtmlInputField error={isSubmitted && errors && errors.text && errors.text[locale]} className={styles['form-input-field']} diff={locale} value={formValues.text[locale]} onChange={handleText} />
 
     <div className={styles['form-footer']}>
-        {/*<CheckboxInputField className={styles['form-footer-share-input']} label={t('Share not for all projects')} checked={formValues.share} onChange={() => setValue('share', !formValues.share)} />*/}
-        <ThemedButton className={styles['form-footer-button']} type="submit" theme='green'>{t('Save note')}</ThemedButton>
-        <ThemedButton className={styles['form-footer-button']} type="button" theme='red' onClick={() => onValues(0)}>{t('Delete')}</ThemedButton>
+        <ThemedButton className={styles['form-footer-button']} type="submit" theme='green'>{t('actions.save.note')}</ThemedButton>
+        <ThemedButton className={styles['form-footer-button']} type="button" theme='red' onClick={() => onValues(0)}>{t('actions.delete')}</ThemedButton>
     </div>
   </form>
 }

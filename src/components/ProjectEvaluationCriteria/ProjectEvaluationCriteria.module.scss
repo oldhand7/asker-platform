@@ -17,11 +17,12 @@
   }
 
   &-title {
-    font-weight: 500;
+    font-weight: 600;
     font-size: 20rem;
     line-height: 30rem;
     color: #494949;
-
+    white-space: nowrap;
+    
     &-warning {
       font-size: 0.9em;
 

@@ -1,116 +1,152 @@
 import classNames from 'classnames';
-import { useSite } from 'libs/site';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import QuestionManagerRow from 'components/QuestionManagerRow/QuestionManagerRow';
 import ScreeningQuestionModal from 'modals/screening-question/screening-question-modal';
 import { useModal } from 'libs/modal';
 import EvaluationQuestionModal from 'modals/evaluation-question/evaluation-question-modal';
-import { useCallback } from 'react';
+import { useCallback, useMemo, useEffect, memo } from 'react';
 import QuestionNoteModal from 'modals/question-note/question-note-modal'
+import { useTranslation } from 'libs/translation';
+import { DEFAULT_QUESTION_TIME } from 'libs/config';
+import { useFieldArray, useForm, useWatch, useEfffect } from 'react-hook-form';
 
 import styles from './SelectedQuestionsManager.module.scss';
 
-const SelectedQuestionsManager = ({ title = 'Selected questions', className, questions, notes = {}, onNotes, onChange, type }) => {
-  const { config, t } = useSite();
+const defaultValue = {
+  questions: []
+}
+
+const SelectedQuestionsManager = ({ className, questions = [], timetable = {}, notes = {}, onQuestions, onQuestionTime, onQuestionNote, type, subtype }) => {
+  const { t } = useTranslation();
 
   const openScreeningQuestionModal = useModal(ScreeningQuestionModal, { size: 'medium'});
   const openEvaluationQuestionModal = useModal(EvaluationQuestionModal, { size: 'large'});
   const openQuestionNoteModal = useModal(QuestionNoteModal, { size: 'medium'})
 
-  const handleQuestionDelete = (question) => {
-    if (!confirm('Are you sure?')) {
+  const initValue = useMemo(() => ({ questions }), []);
+
+  const {
+    control,
+    setValue
+  } = useForm({
+    defaultValues: initValue
+  })
+
+  const questionsApi= useFieldArray({ control, name: 'questions', keyName: '_id' })
+  const formQuestions = useWatch({
+    control,
+    name: 'questions',
+    defaultValue: initValue.questions,
+  })
+
+  const formValues = useWatch({
+    control,
+    defaultValue: initValue
+  })
+  
+  useEffect(() => {
+    setValue('questions', questions)
+  }, [questions])
+
+  useEffect(() => {
+      onQuestions && onQuestions(formValues.questions)
+  }, [formValues.questions, onQuestions])
+
+  const handleQuestionDelete = (index) => {
+    if (!confirm(t('actions.confirm'))) {
       return;
     }
 
-    onChange(questions.filter(q => q != question))
+    questionsApi.remove(index)
   }
 
-  const handleQuestionEdit = useCallback((question) => {
-    if (type == 'screening' || type == 'other') {
-      openScreeningQuestionModal(updatedQuestion => {
-        if (updatedQuestion) {
-          const updatedQuestions = [...questions];
-
-          updatedQuestions[updatedQuestions.indexOf(question)] = updatedQuestion;
-  
-          onChange(updatedQuestions)
-        }
-      }, { question, type })     
-    } else {
-
-      openEvaluationQuestionModal(updatedQuestion => {
-        if (updatedQuestion) {
-          const updatedQuestions = [...questions];
-
-          updatedQuestions[updatedQuestions.indexOf(question)] = updatedQuestion;
-  
-          onChange(updatedQuestions)
-        }
-      }, { question, type: question.subtype })     
-    }
-  }, [questions, onChange, type])
-
-  const onDragEnd = (result) => {
-      const { destination, source, draggableId } = result;
-
-      if (!destination || destination.index == source.index) {
-      return;
+  const handleQuestionEdit = (question, index) => {
+    const updateQuestion = (updatedQuestion) => {
+      if (updatedQuestion !== null) {
+        questionsApi.update(index, updatedQuestion)
       }
+    }
 
-      const newQuestions = [
-          ...questions
-      ]
-
-      newQuestions.splice(source.index, 1)
-      newQuestions.splice(
-          destination.index,
-          0,
-          questions.find(q => q && q.id == draggableId)
-      )
-
-      onChange(newQuestions)
+    if (type == 'screening' || type == 'other') {
+      openScreeningQuestionModal(updateQuestion, { question, type })     
+    } else {
+      openEvaluationQuestionModal(updateQuestion, { question, type: question.subtype })     
+    }
   }
 
-  const handleQuestionNote = q => {
+  const handleDragEnd = useCallback((result) => {
+    const { destination, source } = result;
+
+    if (!destination || destination.index == source.index) {
+        return;
+    }
+
+    questionsApi.move(source.index, destination.index)
+  }, [questionsApi])
+  
+
+  const handleQuestionNote = (q) => {
     openQuestionNoteModal(val => {
       //null -> closed without saving
       //object -> saved
       //0 -> deleted
       if (val === null) return;
-
-      const newNotes = {
-        ...(notes || {})
-      }
-
-      if (!val) {
-        delete newNotes[q.id]
-      } else {
-        newNotes[q.id] = val
-      }
-
-      onNotes && onNotes(newNotes)
-    }, { note: notes && notes[q.id] })
+      onQuestionNote && onQuestionNote(q, val)
+    }, { note: notes[q.id] })
   }
 
-  return <div data-test-id="question-manager" className={classNames(styles['selected-questions-manager'], className)}>
-    <h3 className={styles['selected-questions-manager-title']}>{t('Selected questions')}</h3>
+  const questionTimeHandlers = useMemo(() => {
+    const handlers = {};
 
-    {questions.length ? <DragDropContext onDragEnd={onDragEnd}>
+    for (let i = 0; i < formQuestions.length; i++) {
+      const question = formQuestions[i];
+
+      handlers[question.id] = time => onQuestionTime(question, time)
+    }
+
+    return handlers;
+  }, [formQuestions, onQuestionTime])
+
+  return <div data-test-id="question-manager" className={classNames(styles['selected-questions-manager'], className)}>
+    <h3 className={styles['selected-questions-manager-title']}>{t('headings.selected-questions')} ({formQuestions.length})</h3>
+    {formQuestions.length ? <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable direction="vertical" droppableId='compare'>{
           (provided) => (
           <ul ref={provided.innerRef} {...provided.droppableProps} className={styles['selected-questions-manager-list']}>
             {
-              questions.map((q, index) => <Draggable key={q.id} data-test-id={`question-${index}`} draggableId={q.id} index={index}>{
+              formQuestions.map((q, index) => <Draggable key={`${q.id}-${timetable[q.id]}`} data-test-id={`question-${index}`} draggableId={q.id} index={index}>{
                 (provided) => (
-                  <QuestionManagerRow hasNote={notes && notes[q.id]} onNote={() => handleQuestionNote(q)} dragDropProps={provided} onEdit={() => handleQuestionEdit(q)} onDelete={() => handleQuestionDelete(q)} question={q} className={styles['selected-questions-manager-list-item']} />
+                  <li 
+                  data-test-id="selected-question"
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                  className={styles['selected-questions-manager-list-item']} 
+                  >
+                  <QuestionManagerRow onEdit={() => handleQuestionEdit(q, index)} onDelete={() => handleQuestionDelete(index)} time={timetable[q.id] || q.time || DEFAULT_QUESTION_TIME} onTimeChange={questionTimeHandlers[q.id]} note={notes && notes[q.id]}  question={q} onNote={() => handleQuestionNote(q)}/>
+                  </li>
                 )}</Draggable>)
             }
           </ul>)
         }</Droppable>
     </DragDropContext> : null}
 
-    {!questions.length ? <p className={styles['selected-questions-manager-list']}>{t('No questions.')}</p> : null}
+    {!formQuestions.length ? <p className={styles['selected-questions-manager-list']}>{t('status.no-questions')}</p> : null}
   </div>
 }
 
-export default SelectedQuestionsManager;
+const SelectedQuestionsManagerMemo = memo(SelectedQuestionsManager, (prev, next) => {
+  if (JSON.stringify(prev.timetable) != JSON.stringify(next.timetable)) {
+    return false;
+  }
+
+  if (JSON.stringify(prev.notes) != JSON.stringify(next.notes)) {
+    return false;
+  }
+
+  return prev.questions.length == next.questions.length;
+});
+
+SelectedQuestionsManagerMemo.displayName = 'SelectedQuestionsManager';
+
+export default SelectedQuestionsManagerMemo;

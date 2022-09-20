@@ -1,0 +1,1 @@
+A higher order text component with style.

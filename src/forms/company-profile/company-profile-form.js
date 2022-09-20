@@ -1,7 +1,7 @@
-import useForm from 'libs/use-form';
+import {useForm} from 'libs/react-hook-form';
 import classNames from 'classnames';
 import Alert from 'components/Alert/Alert';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import TextInputField from 'components/TextInputField/TextInputField';
 import { useUser } from 'libs/user';
 import { useCompany } from 'libs/company'
@@ -9,20 +9,16 @@ import Preloader from 'components/Preloader/Preloader'
 import Uploader from 'components/Uploader/Uploader';
 import { uploadCompanyFile } from 'libs/firestorage';
 import { ctxError } from 'libs/helper';
+import CompanyLogoPlaceholder from './assets/images/placeholder.png'
+import { useTranslation } from 'libs/translation';
+import { useRouter } from 'next/router';
+import { useWatch } from 'react-hook-form';
 
 import styles from './company-profile-form.module.scss';
-
-import CompanyLogoPlaceholder from './assets/images/placeholder.png'
-
-const defaultValues = {
-  name: ''
-}
 
 const rules = {
   name: 'required'
 }
-
-const messages = {}
 
 const CompanyProfileForm = ({ className }) => {
   const [error, setError] = useState(null);
@@ -30,29 +26,47 @@ const CompanyProfileForm = ({ className }) => {
   const [success, setSuccess] = useState(null);
   const { user } = useUser()
   const [company, updateCompany] = useCompany(user && user.companyId)
-  const [values, errors, control] = useForm({ values: company ? company : defaultValues, rules, messages })
+  const { t } = useTranslation();
+  const { locale } = useRouter();
+
+  const messages = useMemo(() => ({
+    required: t('errors.field.required')
+  }), [locale])
+
+  const {
+    errors,
+    reset,
+    setValue,
+    handleSubmit,
+    formState: { isSubmitted },
+    control
+  } = useForm({
+    values: company,
+    rules,
+    messages
+  })
+
+  const formValues = useWatch({ control, defaultValue: company })
 
   useEffect(() => {
-    if (company) {
-      control.setValues({ ...company })
-    }
-  }, [company])
+    company && reset(company)
+  }, [company, reset])
 
   useEffect(() => {
-    if (errors) {
-      setError(new Error('Form fields invalid.'))
-    } else {
-      setError(null);
-    }
-  }, [errors])
+    isSubmitted && setError(errors && new Error(t('errors.form.invalid')))
+  }, [errors, isSubmitted, locale])
 
-  const handleSubmit = () => {
+  const onSubmit = (values) => {
+    setLoading(true);
+
     updateCompany(values)
       .then(() => {
-        setSuccess('Company data updated!');
+        setSuccess(t('status.company-updated'));
+        setLoading(false);
       })
       .catch(error => {
-        setError(ctxError('Update failed', error))
+        setError(ctxError(t('errors.server'), error))
+        setLoading(false);
       })
   }
 
@@ -76,11 +90,11 @@ const CompanyProfileForm = ({ className }) => {
         updateCompany({
           ...company,
           images: [
-            { src: imageURL, title: 'Logo'}
+            { src: imageURL, title: t('labels.logo')}
           ]
         });
       } catch (error) {
-        setError(ctxError('Uploading photo failed.', error))
+        setError(ctxError(t('errors.upload'), error))
       }
 
       setLoading(false);
@@ -88,14 +102,18 @@ const CompanyProfileForm = ({ className }) => {
       return Promise.reject();
     },
     onError: (error) => {
-      setError(ctxError('Uploading photo failed.', error))
+      setError(ctxError(t('errors.upload'), error))
     },
     accept: "image/jpeg, image/png"
   }
 
-  return company ? <form method="POST" noValidate className={classNames(styles['company-profile-form'], className)} onSubmit={control.submit(handleSubmit)}>
-    {error ? <Alert className={styles['company-profile-form-alert']} type="error">{error.message}</Alert> : null}
-    {success ? <Alert className={styles['company-profile-form-alert']} type="success">{success}</Alert> : null}
+  const handleName = useCallback(ev => {
+    setValue('name', ev.target.value)
+  }, [setValue])
+
+  return formValues ? <form method="POST" noValidate className={classNames(styles['company-profile-form'], className)} onSubmit={handleSubmit(onSubmit)}>
+    {error && <Alert className={styles['company-profile-form-alert']} type="error">{error.message}</Alert>}
+    {success && <Alert className={styles['company-profile-form-alert']} type="success">{success}</Alert>}
 
     <div className={styles['company-profile-form-logo']}>
       <Uploader className={styles['company-profile-form-logo-uploader']} {...uploadProps}>
@@ -103,9 +121,9 @@ const CompanyProfileForm = ({ className }) => {
       </Uploader>
     </div>
 
-    <TextInputField value={values.name} placeholder={'Name'} label={'Name'}  error={errors ? errors.name : null} onChange={control.input('name')}  name='name' type='text' className={styles['company-profile-form-field']} />
+    <TextInputField value={formValues.name} placeholder={t('labels.name')} label={t('labels.name')}  error={isSubmitted && errors && errors.name} onChange={handleName}  name='name' type='text' className={styles['company-profile-form-field']} />
 
-    <button className={styles['company-profile-form-submit']} disabled={loading} type="submit">{!loading ? 'Save' : 'Loading...'}</button>
+    <button className={styles['company-profile-form-submit']} disabled={loading} type="submit">{!loading ? t('actions.save') : t('status.loading')}</button>
   </form> : <Preloader />
 }
 

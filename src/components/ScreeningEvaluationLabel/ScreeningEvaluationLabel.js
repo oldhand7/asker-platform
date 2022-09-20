@@ -1,13 +1,13 @@
 import classNames from 'classnames';
 import PillLabel from 'components/PillLabel/PillLabel';
 import { getAnswerColor } from 'libs/answers';
-import { useSite } from 'libs/site';
+import { useTranslation } from 'libs/translation';
 
 import styles from './ScreeningEvaluationLabel.module.scss';
 
 const ScreeningEvaluationLabel = ({ evaluation, className }) => {
     const { question, answer } = evaluation;
-    const { i18nField } = useSite();
+    const { i18nField } = useTranslation();
 
     return <div className={classNames(
         styles['screening-evaluation-label'],

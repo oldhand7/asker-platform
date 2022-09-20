@@ -1,0 +1,86 @@
+@import 'styles/vars';
+
+.stage-tree-leaf {
+    position: relative;
+
+    &-head {
+        position: relative;
+        padding: 8rem;
+        border: 1px solid #E7E7E7;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        background: white;
+    }
+
+    &-active &-head {
+        background: #E3FCF2;
+        border: 1px solid #E3FCF2;
+    }
+
+    &-name {
+        font-size: 16rem;
+        color: #5B5B5B;
+        display: inline-block;
+        vertical-align: middle;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow:ellipsis;
+    }
+
+    &-time {
+        font-weight: 400;
+        font-size: 12rem;
+        line-height: 18rem;
+        color: #5B5B5B;
+
+        &-icon {
+            margin-right: 4rem;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        &-text {
+
+        }
+    }
+
+    &[data-level="1"] &-name {
+        font-weight: 600;
+    }
+
+    &[data-level="2"] &-name {
+        font-weight: 400;
+    }
+
+    &[data-level="3"] {
+        font-weight: 400;
+    }
+
+    &-popup-menu {
+        float: right;
+    }
+
+    &-error &-head{
+        border: 1px solid $asker-red !important;
+    }
+
+    &-icon {
+        margin-right: 8rem;
+        font-size: 0.75em;
+        fill: #297466;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    &-triangle {
+        fill: #D9D9D9;
+        font-size: 10rem;
+        margin-right: 8rem;
+    }
+
+    &-expanded &-triangle {
+        transform: rotate(90deg);
+    }
+}

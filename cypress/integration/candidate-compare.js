@@ -9,38 +9,24 @@ describe('Candidate compare', () => {
 
         cy.createDummyProject('Project X')
 
-        cy.get('[data-test-id="project-list"]').listFirstRowNavigate('Edit')
+        cy.contains('Project X').closest('li').listRowNavigate('Edit')
 
-        cy.contains('Add stage')
-          .click()
-          .click()
+        cy.addStage('Competency')
             
-        cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
-        cy.get('#feature-select-modal').contains('Competency').click()
+        cy.get('[data-test-id="feature-form"]')
+          .within(() => {
+            cy.contains('How well do you know CA?').closest('li').find('button').click();
+          })
+
+
+        cy.addStage('Screening')
 
         cy.get('[data-test-id="feature-form"]')
           .within(() => {
-            cy.get('[data-test-id="question-explorer"]')
-              .within(() => {
-                  cy.get('ul').contains('CA').closest('li').find('button').click()
-              })
-              .should('contain', 'No questions')
-
-            cy.get('[data-test-id="question-manager"] li').first().should('contain', 'CA')
+            cy.contains('Do you have drivers license?').closest('li').find('button').click();
           })
-
-        cy.get('[data-test-id="stage-3"] [data-test-id="load-button"]').click()
-        cy.get('#feature-select-modal').contains('Screening').click()
-
-        cy.get('[data-test-id="feature-form"]')
-            .find('ul').first()
-            .find('button[data-test-id="add-question"]').first()
-            .click()
             
-        cy.contains('Save project')
-          .click()
-
-        cy.get('[data-test-id="alert-success"]').contains('Project saved')
+        cy.saveProject()
 
         cy.contains('Project X').closest('li').click()
         
@@ -50,6 +36,8 @@ describe('Candidate compare', () => {
           .closest('[data-test-id="flex-table-row')
           .contains('Start interview')
           .click()
+
+          cy.get('#language-choose-modal').find('button').contains('Choose').click()
         
         cy.get('[data-test-id="feature-form"]').eq(1)
             .should('contain', 'Competency')
@@ -73,6 +61,8 @@ describe('Candidate compare', () => {
           .closest('[data-test-id="flex-table-row')
           .contains('Start interview')
           .click()
+
+          cy.get('#language-choose-modal').find('button').contains('Choose').click()
         
         cy.get('[data-test-id="feature-form"]').eq(1)
             .should('contain', 'Competency')

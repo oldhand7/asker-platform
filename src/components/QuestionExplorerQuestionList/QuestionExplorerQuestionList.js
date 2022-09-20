@@ -1,19 +1,22 @@
 import classNames from "classnames";
 import PlusIcon from "components/Icon/PlusIcon";
 import { getScreeningQuestionLabelBySubtype } from 'forms/screening-question/screening-question-form';
-import { useSite } from "libs/site";
+import { useTranslation } from "libs/translation";
 
 import styles from './QuestionExplorerQuestionList.module.scss';
 
+const SelectButton = (props) => {
+    const { t } = useTranslation();
 
-const SelectButton = (props) => (<button data-test-id="add-question" type="button" {...props} className={styles['question-explorer-question-list-question-add']}>
+    return <button data-test-id="add-question" type="button" {...props} className={styles['question-explorer-question-list-question-add']}>
     <PlusIcon className={styles['question-explorer-question-list-question-add-icon']} />
-    <span className={styles['question-explorer-question-list-question-add-text']}>Select</span>
-</button>)
+    <span className={styles['question-explorer-question-list-question-add-text']}>{t('actions.select')}</span>
+</button>
+}
 
 
 const QuestionExplorerQuestionList = ({ className, questions = [], onQuestion }) => {
-    const { i18nField }  = useSite();
+    const { t, i18nField } = useTranslation();
     
     return <ul data-test-id="question-explorer-questions" className={classNames(
         styles['question-explorer-question-list'],
@@ -23,7 +26,7 @@ const QuestionExplorerQuestionList = ({ className, questions = [], onQuestion })
             let type;
 
             if (q.type == 'screening' || q.type == 'other') {
-                type = getScreeningQuestionLabelBySubtype(q.subtype)
+                type = getScreeningQuestionLabelBySubtype(q.subtype, t)
             } else {
                 type = q.criteria && i18nField(q.criteria.name)
             }

@@ -7,4 +7,8 @@
   margin-left: auto;
   margin-right: auto;
   position: relative;
+
+  &-full-width {
+    width: 100%;
+  }
 }

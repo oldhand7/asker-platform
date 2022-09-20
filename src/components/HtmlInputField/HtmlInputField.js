@@ -4,8 +4,10 @@ import { init } from 'pell';
 
 import styles from './HtmlInputField.module.scss';
 
-const HtmlInputField = ({ error, value = '', diff = '', id, onChange, className, placeholder = 'Start typing...', focus = false }) => {
+const HtmlInputField = ({ error, value = '', diff = '0', id, onChange, className, placeholder = 'Start typing...', focus = false }) => {
   const editorRef = useRef();
+
+  const [active, setActive] = useState(false);
 
   useEffect(() => {
     const div = document.createElement('div');
@@ -15,6 +17,7 @@ const HtmlInputField = ({ error, value = '', diff = '', id, onChange, className,
     const editor = init({
       element: div,
       onChange: content => {
+        setActive(true)
         onChange && onChange(content)
       },
       actions: [
@@ -53,6 +56,7 @@ const HtmlInputField = ({ error, value = '', diff = '', id, onChange, className,
     }
 
     editorRef.current.onclick = editorClickHandler
+    editorRef.current.querySelectorAll('button').forEach(button => button.setAttribute('tabIndex', "-1"))
 
     if (focus) {
       editor.content.focus()
@@ -63,7 +67,21 @@ const HtmlInputField = ({ error, value = '', diff = '', id, onChange, className,
     }
   }, [diff])
 
-  return <div id={id} data-test-id="html-input-field" className={classNames(styles['html-input-field'], className)}>
+  useEffect(() => {
+    if (active) {
+      const timer = setTimeout(() => {
+        setActive(false);
+      }, 5000)
+
+      return () =>  clearTimeout(timer);
+    }
+  }, [active])
+
+  return <div  onClick={() => setActive(true)} id={id} data-test-id="html-input-field" className={classNames(
+    styles['html-input-field'],
+    active ?  styles['html-input-field-active'] : '',
+    error ? styles['html-input-field-error'] : '',
+    className)}>
     <div className={styles['html-input-field-placeholder']}>{!value ? placeholder : null}</div>
     <div ref={editorRef} className={styles['html-input-field-input']}></div>
     {error ? <p className="form-error">{error}</p> : null}

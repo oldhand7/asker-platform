@@ -3,13 +3,15 @@ import Stager from 'components/Stager/Stager';
 import ProjectStat from 'components/ProjectStat/ProjectStat';
 import { useRouter } from 'next/router';
 import CompactMenu from 'components/CompactMenu/CompactMenu';
+import { useUser } from 'libs/user';
+import { useTranslation } from 'libs/translation';
 
 import styles from './ProjectList.module.scss';
-import { useUser } from 'libs/user';
 
-const ProjectList = ({ className, data = [], onDelete, emptyText = 'No data', ...props }) => {
+const ProjectList = ({ className, data = [], onDelete, saveAsTemplate, emptyText = 'No data', ...props }) => {
   const router = useRouter()
   const { user } = useUser();
+  const { t } = useTranslation();
 
   const handleCompactMenuChoice = (c, row) => {
     if (c.id == 'edit') {
@@ -20,8 +22,12 @@ const ProjectList = ({ className, data = [], onDelete, emptyText = 'No data', ..
       router.push(`/projects/${row.id}/overview/`)
     }
 
-    if (c.id == 'delete' && onDelete) {
-      onDelete(row)
+    if (c.id == 'delete') {
+      onDelete && onDelete(row)
+    }
+
+    if (c.id == 'save-as-template') {
+      saveAsTemplate && saveAsTemplate(row)
     }
   }
 
@@ -32,14 +38,15 @@ const ProjectList = ({ className, data = [], onDelete, emptyText = 'No data', ..
    )}>
     {data.map(item => {
       const options = [
-        { id: 'overview', name: 'Interviews' },
-        { id: 'edit', name: 'Edit' }
+        { id: 'overview', name: t('labels.interviews') },
+        { id: 'edit', name: t('actions.edit') },
+        { id: 'save-as-template', name: t('actions.save.as-template') }
       ]
 
       if (user && user.companyId == item.companyId) {
         options.push({
           id: 'delete',
-          name: 'Delete'
+          name: t('actions.delete')
         })
       }
 
@@ -47,16 +54,15 @@ const ProjectList = ({ className, data = [], onDelete, emptyText = 'No data', ..
         <div className={styles['project-list-item-column']}>
           {item.template && item.template.name ?
           <div className={styles['project-list-info']}>
-            <span className={styles['project-list-info-name']}>Template name</span>
+            <span className={styles['project-list-info-name']}>{t('headings.template-name')}</span>
             <span className={styles['project-list-info-value']}>{item.template.name}</span>
           </div> : null}
 
           <div className={styles['project-list-info']}>
-            <span className={styles['project-list-info-name']}>Interviewer</span>
+            <span className={styles['project-list-info-name']}>{t('labels.interviewer')}</span>
             <span className={styles['project-list-info-value']}></span>
-
             <ul className={styles['project-list-interviewer-list']}>
-              {item.interviewers.map(i => <li key={i.id} className={styles['project-list-interviewer-list-item']}>{i.name}</li>)}
+              {item.interviewers && item.interviewers.map(i => <li key={i.id} className={styles['project-list-interviewer-list-item']}>{i.name}</li>)}
             </ul>
           </div>
         </div>

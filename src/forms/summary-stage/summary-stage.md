@@ -1,0 +1,1 @@
+User simply formats a text to be displayed in later stages. 

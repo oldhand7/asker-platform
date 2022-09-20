@@ -1,7 +1,7 @@
-import useForm from 'libs/use-form';
+import {useForm} from 'libs/react-hook-form';
 import classNames from 'classnames';
 import Alert from 'components/Alert/Alert';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import TextInputField from 'components/TextInputField/TextInputField';
 import Avatar from 'components/Avatar/Avatar';
 import { uploadCompanyFile, uploadUserFile } from 'libs/firestorage';
@@ -15,8 +15,15 @@ import EmailIcon from 'components/Icon/EmailIcon';
 import UserIcon from 'components/Icon/UserIcon';
 import { ctxError } from 'libs/helper';
 import Preloader from 'components/Preloader/Preloader';
+import { useTranslation } from 'libs/translation';
+import { useRouter } from 'next/router';
 
 import styles from './admin-profile-form.module.scss';
+
+const defaultFirestorageApi = {
+  uploadCompanyFile,
+  uploadUserFile
+}
 
 const defaultValues = {
   name: '',
@@ -25,43 +32,63 @@ const defaultValues = {
   avatar: ''
 }
 
-const validationRules = {
+const rules = {
   name: 'required',
   email: 'required|email',
   phone: 'phone_e164',
   avatar: 'url'
 }
 
-const messages = {
 
-}
-
-const AdminProfileForm = ({ className }) => {
-  const [rules, setRules] = useState(validationRules);
-  const [values, errors, control] = useForm({ values: defaultValues, rules, messages })
+const AdminProfileForm = ({ className, userApi, onValues, firestorageApi = defaultFirestorageApi }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
-  const { user, updateProfile, getAvatar, changePassword, changeEmail } = useUser()
+  const { user, updateProfile, getAvatar, changePassword, changeEmail } = userApi || useUser()
   const [isChangingPassword, setChangePassword] = useState(false);
+  const { t } = useTranslation();
+  const { locale } = useRouter();
+
+  const validationMessages = useMemo(() => ({
+    required: t('errors.field.required'),
+    email: t('errors.field.email')
+  }), [locale])
+
+  const validationRules = useMemo(() => {
+    if (isChangingPassword) {
+        return {
+          ...rules,
+          password: 'required|min:6|confirmed',
+          password_confirmation: 'required|min:6'
+        }
+    }
+
+    return rules;
+  }, [isChangingPassword])
+
+  const {
+    values: formValues,
+    input,
+    errors: errors,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { isSubmitted }
+  } = useForm({
+    values: defaultValues,
+    rules: validationRules,
+    messages: validationMessages
+  })
+
+  useEffect(() => {
+    onValues && onValues(formValues)
+  }, [formValues, onValues])
 
   const openPasswordModal  = useModal(PasswordModal)
 
   useEffect(() => {
-    if (isChangingPassword) {
-      setRules({
-        ...rules,
-        password: 'required|min:6|confirmed',
-        password_confirmation: 'required|min:6'
-      })
-    } else {
-
-    }
-  }, [isChangingPassword])
-
-  useEffect(() => {
     if (user) {
-      control.setValues({
+      reset({
         ...defaultValues,
         ...user,
         avatar: getAvatar()
@@ -69,7 +96,7 @@ const AdminProfileForm = ({ className }) => {
     }
   }, [user])
 
-  const handleSubmit = async () => {
+  const onSubmit = async (values) => {
     setLoading(true);
 
     window.scrollTo(0, 0)
@@ -81,12 +108,14 @@ const AdminProfileForm = ({ className }) => {
         })
 
         if (!password) {
-          setError(new Error("You did not provide us your password!"))
+          setError(new Error(t("errors.password.not-provided")))
 
           return;
         }
 
-        await changeEmail(values.email, password)
+        if (values.email != user.email) {
+          await changeEmail(values.email, password)
+        }
 
         if (isChangingPassword) {
           await changePassword(values.password, password)
@@ -107,9 +136,9 @@ const AdminProfileForm = ({ className }) => {
         ] : []
       })
 
-      setSuccess('Your profile was updated!!');
+      setSuccess(t('success.profile.update'));
     } catch (error) {
-      setError(ctxError('Updating user profile failed!', error))
+      setError(ctxError(t('errors.profile.update'), error))
     }
 
     setLoading(false);
@@ -121,16 +150,16 @@ const AdminProfileForm = ({ className }) => {
 
       try {
         let photoURL;
-
+        
         if (user.companyId) {
-          photoURL = await uploadCompanyFile(user.companyId, file, 'images')
+          photoURL = await firestorageApi.uploadCompanyFile(user.companyId, file, 'images')
         } else {
-          photoURL = await uploadUserFile(file, 'images')
+          photoURL = await firestorageApi.uploadUserFile(file, 'images')
         }
 
-        control.set('avatar', photoURL);
+        setValue('avatar', photoURL);
       } catch (error) {
-        setError(ctxError('Uploading photo failed.', error))
+        setError(ctxError(t('errors.upload.file'), error))
       }
 
       setLoading(false);
@@ -138,7 +167,7 @@ const AdminProfileForm = ({ className }) => {
       return Promise.reject();
     },
     onError: (error) => {
-      setError(ctxError('Uploading photo failed.', error))
+      setError(ctxError(t('errors.upload.file'), error))
     },
     accept: "image/jpeg"
   }
@@ -163,33 +192,53 @@ const AdminProfileForm = ({ className }) => {
     }
   }, [success])
 
-  return <form data-test-id="admin-profile-form" method="POST" noValidate className={classNames(styles['admin-profile-form'], className)} onSubmit={control.submit(handleSubmit)}>
+  const handleName = useCallback(ev => {
+    setValue('name', ev.target.value)
+  }, [setValue])
+
+  const handleEmail = useCallback(ev => {
+    setValue('email', ev.target.value)
+  }, [setValue])
+
+  const handlePhone = useCallback(ev => {
+    setValue('phone', ev.target.value)
+  }, [setValue])
+
+  const handlePassword = useCallback(ev => {
+    setValue('password', ev.target.value)
+  }, [setValue])
+
+  const handlePasswordConfirmation = useCallback(ev => {
+    setValue('password_confirmation', ev.target.value)
+  }, [setValue])
+
+  return <form data-test-id="admin-profile-form" method="POST" noValidate className={classNames(styles['admin-profile-form'], className)} onSubmit={handleSubmit(onSubmit)}>
     {error ? <Alert className={styles['admin-profile-form-alert']} type="error">{error.message}</Alert> : null}
     {success ? <Alert close={false} className={styles['admin-profile-form-alert']}  type="success">{success}</Alert> : null}
+
     <div className={styles['admin-profile-form-uploader-area']}>
       <Uploader className={styles['admin-profile-form-uploader']} {...uploadProps}>
-        <Avatar className={styles['admin-profile-form-avatar']} src={values.avatar} />
+        <Avatar className={styles['admin-profile-form-avatar']} src={formValues.avatar} />
       </Uploader>
     </div>
 
-    <TextInputField placeholder={'Name'} value={values.name}  label={'Name'} icon={UserIcon} error={errors ? errors.name : null} onChange={control.input('name')} autoComplete='off' name='name' type='text' className={styles['admin-profile-form-field']} />
-    <TextInputField placeholder={'Mail'} value={values.email} label={'Mail'} icon={EmailIcon} error={errors ? errors.email : null} onChange={control.input('email')} name='email' type='email' className={styles['admin-profile-form-field']} />
-    <TextInputField placeholder={'Phone'} value={values.phone}  label={'Phone'} icon={TelephoneIcon} error={errors ? errors.phone : null} onChange={control.input('phone')} name='phone' type='text' className={styles['admin-profile-form-field']} />
+    <TextInputField placeholder={t('labels.name')} value={formValues.name}  label={t('labels.name')} icon={UserIcon} error={isSubmitted && errors && errors.name} onChange={handleName} autoComplete='off' name='name' type='text' className={styles['admin-profile-form-field']} />
+    <TextInputField placeholder={t('labels.email')} value={formValues.email} label={t('labels.email')} icon={EmailIcon} error={isSubmitted && errors && errors.email} onChange={handleEmail} name='email' type='email' className={styles['admin-profile-form-field']} />
+    <TextInputField placeholder={t('labels.phone')} value={formValues.phone}  label={t('labels.phone')} icon={TelephoneIcon} error={isSubmitted && errors && errors.phone} onChange={handlePhone} name='phone' type='text' className={styles['admin-profile-form-field']} />
 
     <div style={{ marginBottom: '10rem' }}>
     {
       isChangingPassword ?
       <>
-        <PasswordInputField placeholder={'New password'} value={values.password || ''}  label={'New password'} error={errors ? errors.password : null} onChange={control.input('password')} name='password' className={styles['admin-profile-form-field']} />
-        <PasswordInputField placeholder={'New password (confirm)'} value={values.password_confirmation || ''}  label={'New password (confirm)'} error={errors ? errors.password_confirmation : null} onChange={control.input('password_confirmation')} name='password_confirmation' className={styles['admin-profile-form-field']} />
-      </> :  <button type="button" onClick={() => setChangePassword(true)} style={{ textDecoration: 'underline', border: 0, background: 0, cursor: 'pointer', color: 'blue'}}>{'Change password'}</button>
+        <PasswordInputField placeholder={t('labels.password.new')} value={formValues.password || ''}  label={t('labels.password.new')} error={isSubmitted && errors && errors.password} onChange={handlePassword} name='password' className={styles['admin-profile-form-field']} />
+        <PasswordInputField placeholder={t('labels.password.new-confirm')} value={formValues.password_confirmation || ''}  label={t('labels.password.new-confirm')} error={isSubmitted && errors && errors.password_confirmation} onChange={handlePasswordConfirmation} name='password_confirmation' className={styles['admin-profile-form-field']} />
+      </> :  <button type="button" onClick={() => setChangePassword(true)} style={{ textDecoration: 'underline', border: 0, background: 0, cursor: 'pointer', color: 'blue'}}>{t('actions.change.password')}</button>
     }
     </div>
 
-
     <br />
 
-    <button className={styles['admin-profile-form-submit']} type="submit" disabled={loading}>{!loading ? 'Save' : 'Loading...'}</button>
+    <button className={styles['admin-profile-form-submit']} type="submit" disabled={loading}>{!loading ? t('actions.save') : t('status.loading')}</button>
 
     {loading ? <Preloader /> : null}
   </form>

@@ -1,20 +1,20 @@
-import { getSettings, getTranslations } from 'libs/firestore-admin';
+import { getSettings } from 'libs/firestore-admin';
 import { withUserGuardSsr } from 'libs/iron-session'
-import TemplateForm from 'forms/template/template-form';
 import Head from 'next/head';
-import { useSite } from 'libs/site';
+import ProjectForm from 'forms/project/project-form';
+import { useTranslation } from 'libs/translation';
 
 import styles from 'styles/pages/templates-create.module.scss';
 
 const TemplatesCreatePage = () => {
-  const { t } = useSite();
+  const { t } = useTranslation();
 
   return <div className={styles['templates-create-page']}>
       <Head>
-        <title>{t('Create template')} - Asker</title>
+        <title>{t('actions.create-template')} - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
-      <TemplateForm className={styles['templates-create-page-form']} />
+      <ProjectForm context='template' className={styles['templates-create-page-form']} />
   </div>
 }
 
@@ -39,10 +39,11 @@ export const getServerSideProps = withUserGuardSsr(async ({ req, locale }) => {
 
   return {
     props: {
-      config: await getSettings(),
-      translations: await getTranslations()
+      config: await getSettings()
     }
   }
 })
+
+TemplatesCreatePage.fullWidth = true;
 
 export default TemplatesCreatePage;

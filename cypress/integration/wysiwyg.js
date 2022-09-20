@@ -8,8 +8,6 @@ describe('WYSIWYG', () => {
 
     cy.contains('Just some project X').closest('ul').listFirstRowNavigate('Edit')
 
-    cy.get('[data-test-id="stage-1"]').click().wait(1000)
-
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
         cy.get('[contenteditable="true"]').click()
@@ -18,9 +16,7 @@ describe('WYSIWYG', () => {
         cy.get('button').eq(0).click()
       })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+    cy.saveProject()
 
     cy.contains('Just some project X').closest('li').click()
 
@@ -31,6 +27,8 @@ describe('WYSIWYG', () => {
       .contains('Start interview')
       .click()
 
+      cy.get('#language-choose-modal').find('button').contains('Choose').click()
+
     cy.get('[data-test-id="feature-form"]').eq(0)
       .find('b')
       .should('contain', 'The world is bold.')
@@ -39,8 +37,6 @@ describe('WYSIWYG', () => {
   it('should create an unordered list', () => {
     cy.createDummyProject('Just some project Y')
     cy.contains('Just some project Y').closest('ul').listFirstRowNavigate('Edit')
-
-    cy.get('[data-test-id="stage-1"]').click().wait(1000)
 
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
@@ -56,10 +52,7 @@ describe('WYSIWYG', () => {
           .type('Milan{enter}{enter}')
       })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').contains('Project saved')
-
+    cy.saveProject()
 
     cy.contains('Just some project Y').closest('li').click()
 
@@ -69,6 +62,8 @@ describe('WYSIWYG', () => {
       .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
+
+      cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'List of cities:')
@@ -86,8 +81,6 @@ describe('WYSIWYG', () => {
 
     cy.contains('Just some project Z').closest('ul').listFirstRowNavigate('Edit')
 
-    cy.get('[data-test-id="stage-1"]').click().wait(1000)
-
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
         cy.get('[contenteditable="true"]').click()
@@ -102,9 +95,7 @@ describe('WYSIWYG', () => {
           .type('Lion{enter}{enter}')
       })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+    cy.saveProject()
 
     cy.contains('Just some project Z').closest('li').click()
 
@@ -114,6 +105,8 @@ describe('WYSIWYG', () => {
       .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
+
+      cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'List of animals:')

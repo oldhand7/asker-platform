@@ -12,9 +12,10 @@ import MultichoiceIcon from 'components/Icon/MultichoiceIcon';
 import RangeIcon from 'components/Icon/RangeIcon';
 import TextIcon from 'components/Icon/TextIcon';
 import { ctxError }from 'libs/helper';
+import YesNoIcon from 'components/Icon/YesNoIcon';
+import { useTranslation } from 'libs/translation';
 
 import styles from './screening-question-form.module.scss';
-import YesNoIcon from 'components/Icon/YesNoIcon';
 
 const featureForms = {
   'choice': dynamic(() => import('forms/choice-question/choice-question-form')),
@@ -23,18 +24,18 @@ const featureForms = {
   'text': dynamic(() => import('forms/text-question/text-question-form'))
 }
 
-export const getScreeningQuestionLabelBySubtype = (subtype) => {
+export const getScreeningQuestionLabelBySubtype = (subtype, t) => {
   if (subtype == 'range') {
-    return <IconicLabel Icon={RangeIcon}>Range</IconicLabel>;
+    return <IconicLabel Icon={RangeIcon}>{t('labels.range')}</IconicLabel>;
   }
 
   if (subtype == 'text') {
-    return <IconicLabel Icon={TextIcon}>Text</IconicLabel>;
+    return <IconicLabel Icon={TextIcon}>{t('labels.text')}</IconicLabel>;
   }
 
   return subtype == 'choice' ?
-    <IconicLabel Icon={YesNoIcon}>Yes/No</IconicLabel> :
-    <IconicLabel Icon={MultichoiceIcon}>Multiple choice</IconicLabel>;
+    <IconicLabel Icon={YesNoIcon}>{t('labels.yes-no')}</IconicLabel> :
+    <IconicLabel Icon={MultichoiceIcon}>{t('labels.multiple-choice')}</IconicLabel>;
 }
 
 
@@ -45,6 +46,7 @@ const ScreeningQuestionForm = ({ className, question, type = 'screening', onValu
   const [error, setError] = useState(null);
   const router = useRouter()
   const { user } = useUser();
+  const { t } = useTranslation();
 
   const handleQuestion = (values) => {
     values.type = type;
@@ -77,17 +79,17 @@ const ScreeningQuestionForm = ({ className, question, type = 'screening', onValu
             id
           })
         } else {
-          if (question && !clone) {
-            addFlash('Question saved', 'success')
+          if (question) {
+            addFlash(t('status.question-saved'), 'success')
           } else {
-            addFlash('Question created', 'success')
+            addFlash(t('status.question-created'), 'success')
           }
 
           router.push('/questions/')
         }
       })
       .catch(error => {
-        setError(ctxError('Server error', error))
+        setError(ctxError(t('errors.server'), error))
       })
   }
 
@@ -109,11 +111,11 @@ const ScreeningQuestionForm = ({ className, question, type = 'screening', onValu
     {
       !question ?
       <h2 data-test-id="title" className={styles['screening-question-form-title']}>
-        {type == 'screening' ? 'Create a screening question' : 'Create other question'}
-        {subtype ? <small>({getScreeningQuestionLabelBySubtype(subtype)})</small> : null}</h2> :
+        {type == 'screening' ? 'Create a screening question' : t('actions.create-other-question')}
+        {subtype ? <small>({getScreeningQuestionLabelBySubtype(subtype, t)})</small> : null}</h2> :
       <h2 data-test-id="title" className={styles['screening-question-form-title']}>
-        {type == 'screening' ? 'Edit screening question' : 'Edit other question'}
-        <small>({getScreeningQuestionLabelBySubtype(question.subtype)})</small>
+        {type == 'screening' ? t('actions.edit-screening-question') : t('actions.edit-other-question')}
+        <small>({getScreeningQuestionLabelBySubtype(question.subtype, t)})</small>
       </h2>
     }
 
@@ -123,12 +125,12 @@ const ScreeningQuestionForm = ({ className, question, type = 'screening', onValu
         {
           type == 'screening' ?
           <>
-            <li onClick={() => setSubtype('choice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('choice')}</li>
-            <li onClick={() => setSubtype('multichoice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('multichoice')}</li>
-            <li onClick={() => setSubtype('range')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('range')}</li>
+            <li onClick={() => setSubtype('choice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('choice', t)}</li>
+            <li onClick={() => setSubtype('multichoice')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('multichoice', t)}</li>
+            <li onClick={() => setSubtype('range')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('range', t)}</li>
           </> :
           <>
-            <li onClick={() => setSubtype('text')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('text')}</li>
+            <li onClick={() => setSubtype('text')} className={styles['screening-question-form-options-option']}>{getScreeningQuestionLabelBySubtype('text', t)}</li>
           </>
         }
       </ul> :

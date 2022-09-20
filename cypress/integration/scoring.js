@@ -16,21 +16,19 @@ describe('Scoring', () => {
       .closest('ul')
       .listFirstRowNavigate('Edit')
 
-    cy.contains('Add stage').click()
+    cy.addStage('Competency')
 
-    cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Competency').click().wait(1000)
     cy.get('[data-test-id="feature-form"]')
+      .should('contain', 'Competency')
       .contains('Are you familiar with ISO standards?')
       .closest('li')
       .find('button')
       .click()
 
-    cy.contains('Add stage').click()
+    cy.addStage('Motivation')
 
-    cy.get('[data-test-id="stage-3"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Motivation').click().wait(1000)
     cy.get('[data-test-id="feature-form"]')
+    .should('contain', 'Motivation')
     .contains('Does money motivate you?')
     .closest('li')
     .find('button')
@@ -46,7 +44,7 @@ describe('Scoring', () => {
             cy.get('li').eq(0).should('contain', 'ISO-90210').should('contain', '50%')
           })
       })
-      .contains('Edit')
+      .find('[data-test-id="edit-button"]')
       .click()
 
     cy.get('[role="dialog"]')
@@ -69,9 +67,7 @@ describe('Scoring', () => {
           })
       })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+    cy.saveProject()
 
     cy.contains('Some position X').closest('li').click()
 
@@ -82,6 +78,8 @@ describe('Scoring', () => {
       .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
+
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(1)
       .should('contain', 'Competency')
@@ -126,10 +124,9 @@ describe('Scoring', () => {
       .closest('ul')
       .listFirstRowNavigate('Edit')
 
-    cy.contains('Add stage').click()
+    cy.addStage('Competency')
+      .wait(1000)
 
-    cy.get('[data-test-id="stage-2"] [data-test-id="load-button"]').click()
-    cy.get('#feature-select-modal').contains('Competency').click().wait(1000)
     cy.get('[data-test-id="feature-form"]')
       .within(() => {
         cy.get('input[name="q"]').type('X')
@@ -147,7 +144,7 @@ describe('Scoring', () => {
               cy.get('li').eq(2).should('contain', 'XCS').should('contain', '20%')
             })
         })
-      .contains('Edit')
+      .find('[data-test-id="edit-button"]')
       .click()
 
     cy.get('[role="dialog"]')
@@ -171,9 +168,7 @@ describe('Scoring', () => {
           })
         })
 
-    cy.contains('Save project').click()
-
-    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+    cy.saveProject()
 
     cy.contains('Some position Y').closest('li').click()
 
@@ -184,6 +179,8 @@ describe('Scoring', () => {
       .closest('[data-test-id="flex-table-row"]')
       .contains('Start interview')
       .click()
+
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.contains('QM1').closest('[data-test-id="feature-form"]')
       .contains('Excellent').click()

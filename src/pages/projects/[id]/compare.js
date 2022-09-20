@@ -1,4 +1,4 @@
-import { getSettings, getTranslations } from 'libs/firestore-admin';
+import { getSettings } from 'libs/firestore-admin';
 import { useState, useMemo } from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import Head from 'next/head';
@@ -15,6 +15,7 @@ import { useSite } from 'libs/site';
 import ProjectAnonimizeToggle from 'components/ProjectAnonimizeToggle/ProjectAnonimizeToggle';
 import styles from 'styles/pages/project-compare.module.scss';
 import CandidateChooseModal from 'modals/candidate-choose/candidate-choose-modal';
+import { useTranslation } from 'libs/translation';
 // import CompareBox from 'components/CompareBox/CompareBox';
 
 const defaultSort = [
@@ -25,8 +26,8 @@ const defaultSort = [
 const ProjectComparePage = ({ project, interviews = [] }) => {
   const router = useRouter();
   const [compare, setCompare] = useState([])
-  const { t } = useSite();
-  const [_project, setProject] = useState(project);
+  const { t } = useTranslation();
+  const [_project, setProject] = useState(project)
 
   const completeInterviews = useMemo(
     () => interviews.filter(i => i.status == 'complete'),
@@ -63,7 +64,7 @@ const ProjectComparePage = ({ project, interviews = [] }) => {
 
   return <div className={styles['project-compare-page']}>
       <Head>
-        <title>{project.name} - {t('Candidate compare')} - Asker</title>
+        <title>{project.name} - {t('headings.candidate-compare')} - Asker</title>
         <meta name="robots" content="noindex" />
       </Head>
 
@@ -71,7 +72,7 @@ const ProjectComparePage = ({ project, interviews = [] }) => {
         <Link href={`/projects/${_project.id}/overview`}>
             <a className={styles['project-compare-page-back']}>
               <BackIcon className={styles['project-compare-page-back-icon']} />
-              <span className={styles['project-compare-page-back-text']}>{t('Back')}</span>
+              <span className={styles['project-compare-page-back-text']}>{t('actions.back')}</span>
             </a>
         </Link>
 
@@ -141,8 +142,7 @@ export const getServerSideProps = withUserGuardSsr(async ({ query, req, locale }
     props: {
       project: JSON.parse(JSON.stringify(project)),
       interviews,
-      config: await getSettings(),
-      translations: await getTranslations()
+      config: await getSettings()
     }
   }
 })

@@ -1,9 +1,0 @@
-.modal {
-  & > div {
-    width: 460px;
-
-    @media (max-width: 768px) {
-      border-radius: 20px;
-    }
-  }
-}

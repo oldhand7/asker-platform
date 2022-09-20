@@ -56,8 +56,7 @@ describe('Backoffice other questions', () => {
       
             cy.get('table tbody tr').first()
               .should('contain', 'Your favorite movie? (SE)')
-              .should('contain', 'Other (SE)')
-              .listNavigate('Edit')
+              .listRowNavigate('Edit')
       
             cy.get('input[name="name.se"]').should('have.value', 'Your favorite movie? (SE)');
       
@@ -65,11 +64,9 @@ describe('Backoffice other questions', () => {
       
            cy.createDummyProject('Project movie')
       
-           cy.contains('Project movie').closest('li').listNavigate('Edit')
+           cy.contains('Project movie').closest('li').listRowNavigate('Edit')
       
-           cy.contains('Add stage').click()
-      
-           cy.get('[data-test-id="feature-other-questions"]').drag('[data-test-id="stage-2"] .Droppable')
+           cy.addStage('Other')
             .wait(1000)
       
             cy.get('[data-test-id="feature-form"]')
@@ -79,9 +76,7 @@ describe('Backoffice other questions', () => {
                 .find('button[data-test-id="add-question"]').first().click()
             })
       
-            cy.contains('Save project').click()
-      
-            cy.get('[data-test-id="alert-success"]').should('contain', 'Project saved')
+            cy.saveProject()
       
            cy.contains('Project movie').closest('li').click()
       
@@ -89,13 +84,13 @@ describe('Backoffice other questions', () => {
       
            cy.contains('Start interview').click()
 
-            cy.wait(1000)
+           cy.get('#language-choose-modal').find('button').contains('Choose').click()
       
             cy.processOverviewConfirmQuestioncount(1)
             cy.processOverviewConfirmStageCount(2);
             cy.processOverviewConfirmStageStatus(1, 'Other', 'Not started')
 
-            cy.contains('Next step').click();
+            cy.contains('Next').click();
     
             cy.get('[data-test-id="feature-form"]').eq(1)
               .within(() => {

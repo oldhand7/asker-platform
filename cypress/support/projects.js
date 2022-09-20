@@ -5,22 +5,66 @@ Cypress.Commands.add('createDummyProject', (name = 'Demo ABC', template = '') =>
 
     cy.contains(template)
       .closest('li')
-      .listNavigate('Create project')
+      .listRowNavigate('Create project')
+      .wait(1000)
   } else {
     cy.visit('/projects/create/')
   }
 
-  cy.get('form[data-test-id="project-form"]').within(() => {
-    cy.get('input[name="name"]').type(name)
-    cy.get('[data-test-id="interviewers"]')
-      .find('input').click()
-      .closest('[data-test-id="interviewers"]')
-      .find('[data-test-id="autocomplete-option"]')
-      .first()
-      .click()
+  cy.get('input[name="name"]').type(name)
 
-    cy.get('button').contains('Create project').click()
+  cy.contains('Select interviewer')
+    .closest('[data-test-id="interviewer-select"]')
+    .click()
+    .wait(1000)
+    .trigger('keyup', { code: "Enter" })
+    .type('{downArrow}{enter}')
+
+  cy.get('[data-test-id="feature-form"]')
+  .within(() => {
+    cy.get('[contenteditable="true"]')
+      .click()
+      .wait(500)
+      .type('{selectAll}{backspace}Lorem ipsum dolor sit amet')
   })
+
+  cy.get('button').contains('Create project').click()
+
+  if (!template) {
+    cy.contains('Do you want to save this project as a template?')
+    cy.get('#focus-popup')
+      .contains('No')
+      .click()
+  }
+
+  cy.get('[data-test-id="alert-success"]').should('contain', 'Project created')
+})
+
+Cypress.Commands.add('createEmptyProject', (name = 'Demo ABC') => {
+  cy.visit('/projects/create/')
+  
+  cy.get('input[name="name"]').type(name)
+
+  cy.contains('Select interviewer')
+    .closest('[data-test-id="interviewer-select"]')
+    .click()
+    .wait(1000)
+    .trigger('keyup', { code: "Enter" })
+    .type('{downArrow}{enter}')
+
+  cy.get('[data-test-id="stage-tree-leaf"]')
+    .should('contain', 'Introduction')
+    .within(() => {
+      cy.get('button').click()
+      cy.contains('Delete').click()
+    })
+
+  cy.get('button').contains('Create project').click()
+
+  cy.contains('Do you want to save this project as a template?')
+  .closest('#focus-popup')
+  .contains('No')
+  .click()
 
   cy.get('[data-test-id="alert-success"]').should('contain', 'Project created')
 })
@@ -34,4 +78,53 @@ Cypress.Commands.add('addProjectCandidate', (name, email) => {
     cy.get('input[name="email"]').type(email)
     cy.get('button[type="submit"]').click()
   })
+})
+
+Cypress.Commands.add('addStage', (name, minutes) => {
+  cy.contains('Add interview stage')
+    .click()
+
+  cy.get('[data-test-id="project-process"]')
+    .contains(name)
+    .click()
+
+  if (typeof minutes !== "undefined") {
+    cy.get('[data-test-id="minutes-input"]')
+      .click()
+      .type(`{selectAll}{backspace}${minutes}{enter}`)
+  }
+})
+
+Cypress.Commands.add('focusStage', (name) => {
+  cy.get('[data-test-id="project-process"]')
+    .contains(name)
+    .click()
+})
+
+Cypress.Commands.add(
+  'confirmStageOrder',
+  {  prevSubject: true },
+  (subject, list = []) => {
+    cy.wrap(subject)
+      .within(() => {
+        for (let i = 0; i < list.length; i++) {
+          cy.get('[data-test-id="stage"]').eq(i)
+            .should('contain', list[i])
+        }
+      })
+})
+
+Cypress.Commands.add('saveProject', (expectTemplateSequence = true) => {
+  cy.contains('Save project').click()
+
+  if (expectTemplateSequence) {
+    cy.wait(500)
+    
+    cy.contains('Do you want to save this project as a template?')
+    cy.get('#focus-popup')
+      .contains('No')
+      .click()
+
+    cy.get('[data-test-id="alert-success"]').contains('Project saved')
+  }
 })
