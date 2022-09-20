@@ -39,7 +39,7 @@ describe('Project custom note', () => {
     
          cy.contains('Start interview').click()
 
-         cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+         cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
         cy.get('[data-test-id="feature-form"]').eq(1)
             .should('contain', 'ISO-123')
@@ -55,6 +55,8 @@ describe('Project custom note', () => {
         cy.location('pathname').should('contain', '/overview/')
 
         cy.contains('Tom').closest('[data-test-id="flex-table-row"]').find('button[data-test-id="edit-button"]').last().click()
+
+        cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
         cy.get('[data-test-id="feature-form"]').eq(1)
             .within(() => {

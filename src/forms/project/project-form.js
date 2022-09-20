@@ -312,7 +312,7 @@ const ProjectForm = ({ record, className, context = 'project', test = 0 }) => {
   }, [formValues])
 
   const buttonWithPopup = useCallback(ref => <Button ref={ref}  type="submit" className={styles['project-form-submit']}>
-  {!loading ? (record && record.id ? t('actions.save.project') : t('actions.create.project')) : t('status.loading')}
+  <span className={styles['project-form-submit-text']}>{!loading ? (record && record.id ? t('actions.save.project') : t('actions.create.project')) : t('status.loading')}</span>
 </Button>, [loading, record])
 
   const cancelTemplateForm = useCallback(() => {

@@ -56,6 +56,8 @@ const ProjectSaveAsTemplatePopup = ({ className, onSave }) => {
             mode == 'choice' ?
             <>
                 <div className={styles['popup-footer']}>
+                    <ThemedButton className={styles['popup-footer-button']} type="button" theme='red' onClick={() => onSave(null)}>{t('labels.no')}</ThemedButton>
+
                     <ThemedButton className={styles['popup-footer-button']} type="button" theme='green' onClick={(ev) => {
                         ev.stopPropagation();
 
@@ -63,7 +65,6 @@ const ProjectSaveAsTemplatePopup = ({ className, onSave }) => {
 
 
                     }}>{t('labels.yes')}</ThemedButton>
-                    <ThemedButton className={styles['popup-footer-button']} type="button" theme='red' onClick={() => onSave(null)}>{t('labels.no')}</ThemedButton>
                 </div>
             </> : null
         }

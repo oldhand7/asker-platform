@@ -56,7 +56,7 @@ const SalaryIntForm = ({ className, values, markComplete, onValues, config, onEr
     setValue('max', ev.target.value)
   }, [setValue])
 
-  const handleNotes = useCallback(ev => {
+  const handleNotes = useCallback(val => {
     setValue('notes', val)
   }, [setValue])
 

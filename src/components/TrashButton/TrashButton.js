@@ -6,10 +6,10 @@ import { useTranslation } from 'libs/translation';
 
 import styles from './TrashButton.module.scss';
 
-const TrashButton = ({ className, ...props }, ref) => {
+const TrashButton = ({ className, title, ...props }, ref) => {
   const { t } = useTranslation();
 
-  return <IconButton title={t("actions.delete")} ref={ref} data-test-id="trash-button" className={classNames(styles['trash-button'], className)} Icon={TrashIcon} {...props} />
+  return <IconButton title={typeof title === "undefined" ? t('actions.delete') : title} ref={ref} data-test-id="trash-button" className={classNames(styles['trash-button'], className)} Icon={TrashIcon} {...props} />
 }
 
 export default forwardRef(TrashButton);

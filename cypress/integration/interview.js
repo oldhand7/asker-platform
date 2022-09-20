@@ -73,7 +73,7 @@ describe('Interview', () => {
       .contains('Start interview')
       .click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(1)
       .should('contain', 'Competency')
@@ -205,7 +205,7 @@ describe('Interview', () => {
       .contains('Start interview')
       .click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.location('pathname').should('contain', '/conduct/')
 
@@ -314,6 +314,8 @@ describe('Interview', () => {
       .last()
       .click()
 
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
+
     cy.contains('Project progress')
       .closest('div')
       .should('contain', '100%')
@@ -331,15 +333,7 @@ describe('Interview', () => {
       .contains('Start interview')
       .click()
 
-
-    cy.location().then(loc => {
-      let match = Cypress.minimatch(loc.pathname , '/interviews/*/conduct/', {
-        matchBase: true,
-      })
-
-      expect(match).to.be.true
-    })
-
+    
     cy.get('#language-choose-modal')
       .within(() => {
         cy.root().should('contain', 'Choose language')

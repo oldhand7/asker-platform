@@ -37,7 +37,7 @@ describe('Candidate compare', () => {
           .contains('Start interview')
           .click()
 
-          cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+          cy.get('#language-choose-modal').find('button').contains('Choose').click()
         
         cy.get('[data-test-id="feature-form"]').eq(1)
             .should('contain', 'Competency')
@@ -62,7 +62,7 @@ describe('Candidate compare', () => {
           .contains('Start interview')
           .click()
 
-          cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+          cy.get('#language-choose-modal').find('button').contains('Choose').click()
         
         cy.get('[data-test-id="feature-form"]').eq(1)
             .should('contain', 'Competency')

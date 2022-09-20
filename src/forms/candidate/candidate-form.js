@@ -27,7 +27,7 @@ const CandidateForm = ({ className, values, onValues, alias }) => {
   const { t } = useTranslation();
 
   const initValues = useMemo(() => ({
-    ...(values || defaultValues, []),
+    ...(values || defaultValues),
     alias: alias || getRandomAlias()
   }), [])
 
@@ -61,7 +61,7 @@ const CandidateForm = ({ className, values, onValues, alias }) => {
   return <form data-test-id="candidate-form" method="POST" noValidate className={classNames(styles['candidate-form'], className)} onSubmit={handleSubmit(onValues)}>
     <TextInputField value={formValues.name} placeholder={t('labels.candidate-name')} error={isSubmitted && errors && errors.name} onChange={handleCandidateName} autoComplete='off' name="name" className={styles['candidate-form-field']} />
     <TextInputField value={formValues.email} placeholder={t('labels.email')} error={isSubmitted && errors && errors.email} onChange={handleCandidateEmail} autoComplete='off' name='email' className={styles['candidate-form-field']} />
-    <PlatformButton type="submit" className={styles['candidate-form-submit']}><PlusIcon /> {t('actions.add-candidate')}</PlatformButton>
+    <PlatformButton type="submit" className={styles['candidate-form-submit']}><PlusIcon /> {values ? t('actions.save-candidate') : t('actions.add-candidate')}</PlatformButton>
   </form>
 }
 

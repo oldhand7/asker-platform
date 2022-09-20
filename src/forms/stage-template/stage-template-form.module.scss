@@ -4,10 +4,21 @@
     z-index: 1;
     position: relative;
 
+    @media (max-width: 1024px) {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
     &-select {
         display: flex;
         align-items: center;
-        width: 320rem;
+        flex: 0 1 320rem;
+
+        @media (max-width: 1024px) {
+            flex: 1;
+            margin-bottom: 24rem;
+        }
 
         &-label {
             font-weight: 400;
@@ -19,11 +30,21 @@
 
         &-input {
             flex: 1;
+            max-width: 290rem;
         }
+    }
+
+    &-input {
+        padding-left: 20rem;
     }
 
     &-control {
         z-index: 1;
+
+        @media (max-width: 1024px) {
+            flex: 1;
+        }
+
         &-save {
             background: #43B88C;
             border-radius: 5px;

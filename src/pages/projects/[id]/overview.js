@@ -1,5 +1,5 @@
 import { getSettings } from 'libs/firestore-admin';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { withUserGuardSsr } from 'libs/iron-session'
 import Head from 'next/head';
 import { getSingleDocument, filterManyDocuments } from 'libs/firestore-admin'
@@ -21,6 +21,8 @@ import { getRandomAlias } from 'libs/candidate';
 import ProjectAnonimizeToggle from 'components/ProjectAnonimizeToggle/ProjectAnonimizeToggle';
 import CompareBox from 'components/CompareBox/CompareBox';
 import { useTranslation } from 'libs/translation';
+import { useUser } from 'libs/user';
+import LanguageChooseModal from 'modals/language-choose/language-choose-modal';
 
 import styles from 'styles/pages/project-overview.module.scss';
 
@@ -41,6 +43,11 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
   const [compare, setCompare] = useState([])
   const [_project, setProject] = useState(project);
   const { t } = useTranslation();
+  const openLanguageChooseModal = useModal(LanguageChooseModal)
+  const {
+    getUserLocale,
+    storeUserLocale
+  } = useUser();
 
   useEffect(() => {
     if (flashSuccess) {
@@ -142,18 +149,32 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
 
       interview.candidate = candidate
 
+
       saveCollectionDocument('interviews', {...interview})
         .then(() => {
           setInterviews([...interviews])
           setLoading(false);
         })
         .catch(() => {
-          setError(new Error("Saving candidate failed."))
+          setError(new Error(t('errors.server')))
           setLoading(false);
         })
     }, { candidate })
   }
 
+  const handleConductInterview = useCallback((int) => {
+    const locale = getUserLocale();
+
+    openLanguageChooseModal(async lang => {
+      if (lang && lang != locale) {
+        await storeUserLocale(lang.id)
+
+        setLoading(true)
+
+        router.push(`/interviews/${int.id}/conduct/`, null, { locale: lang.id })
+      }
+    }, { values: locale })
+  }, [])
 
   return <div className={styles['project-overview-page']}>
       <Head>
@@ -178,6 +199,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
 
         <ProjectInterviewsTable
           project={_project}
+          onConductInterview={handleConductInterview}
           onEditCandidate={handleCandidateEdit}
           onDelete={handleDeleteInterview}
           className={styles['project-overview-page-interviews-table']}

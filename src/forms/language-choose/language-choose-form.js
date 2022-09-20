@@ -1,7 +1,7 @@
 import { LANGUAGES } from 'components/LanguageSwitcher/LanguageSwitcher';
 import { useForm } from 'libs/react-hook-form';
 import { useUser } from 'libs/user';
-import { useEffect, useMemo, useState, useCallback } from 'react';
+import { useEffect, useMemo, useRef, useCallback } from 'react';
 import classNames from 'classnames';
 import ThemedButton from 'components/Button/ThemedButton';
 import dynamic from 'next/dynamic';
@@ -64,7 +64,7 @@ const LanguageChooseForm = ({ className, values, onValues }) => {
         setValue('languageOption', languageOption)
     }, [setValue])
 
-    return <form  onSubmit={handleSubmit(onSubmit)} className={classNames(className, styles['form'])}>
+    return <form onSubmit={handleSubmit(onSubmit)} className={classNames(className, styles['form'])}>
         <h3 className={styles['form-title']}>{t('actions.choose-language')}</h3>
 
         <div data-test-id="language-choose">
@@ -76,6 +76,7 @@ const LanguageChooseForm = ({ className, values, onValues }) => {
                 value={languageOption}
                 onChange={handleLanguageChange}
                 options={langOptions}
+                autoFocus={true}
             /></div>
 
         <div className={styles['form-footer']}>

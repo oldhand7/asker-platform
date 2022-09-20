@@ -27,7 +27,7 @@ describe('WYSIWYG', () => {
       .contains('Start interview')
       .click()
 
-      cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+      cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .find('b')
@@ -63,7 +63,7 @@ describe('WYSIWYG', () => {
       .contains('Start interview')
       .click()
 
-      cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+      cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'List of cities:')
@@ -106,7 +106,7 @@ describe('WYSIWYG', () => {
       .contains('Start interview')
       .click()
 
-      cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+      cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'List of animals:')

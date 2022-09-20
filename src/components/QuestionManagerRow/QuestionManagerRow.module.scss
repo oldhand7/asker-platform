@@ -27,17 +27,22 @@
         font-size: 14rem;
         line-height: 24rem;
         color: #000000;
-        flex: 0 0 370rem;
         margin: 0;
+        flex: 0 0 60%;
         padding: 0 16rem 0 8rem;
+        position: relative;
 
         span {
-            max-width: 350rem;
+            max-width: calc(100% - 24rem);
             display: inline-block;
             overflow-x: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             vertical-align: middle;
+            position: absolute;
+            top: 50%;
+            left: 8rem;
+            transform: translateY(-50%);
         }
     }
 

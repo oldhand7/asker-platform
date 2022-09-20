@@ -50,7 +50,7 @@ describe('Backoffice company stats', () => {
           .contains('Start interview')
           .click();
 
-        cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+        cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
         cy.contains('Are you familiar with CQ1?')
           .closest('[data-test-id="feature-form"]')
@@ -69,7 +69,7 @@ describe('Backoffice company stats', () => {
           .contains('Start interview')
           .click();
 
-        cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+        cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
         cy.contains('Are you familiar with CQ1?')
           .closest('[data-test-id="feature-form"]')

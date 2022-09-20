@@ -79,7 +79,7 @@ describe('Scoring', () => {
       .contains('Start interview')
       .click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(1)
       .should('contain', 'Competency')
@@ -180,7 +180,7 @@ describe('Scoring', () => {
       .contains('Start interview')
       .click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.contains('QM1').closest('[data-test-id="feature-form"]')
       .contains('Excellent').click()

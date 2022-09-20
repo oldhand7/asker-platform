@@ -92,7 +92,9 @@ const TinyInputForm = ({
                 {extraButton ? <button className={classNames(
                     styles['tiny-input-form-button'],
                     styles['tiny-input-form-button-extra']
-                )} type="button" onClick={handleExtraSubmit}>{extraButtonLabel}</button> : null}
+                )} type="button" onClick={handleExtraSubmit}>
+                    <span>{extraButtonLabel}</span>
+                </button> : null}
             </div>
             {isSubmitted && errors && errors.value && <p className="form-error">{errors.value}</p>}
         </div>

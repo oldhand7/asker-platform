@@ -92,7 +92,7 @@ describe('Project overview', () => {
     cy.contains('Candidate A').closest('[data-test-id="flex-table-row"]')
       .contains('Start interview').click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
     
     cy.contains('Great').click()
 

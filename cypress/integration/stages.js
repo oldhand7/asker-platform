@@ -52,7 +52,7 @@ describe('stages', () => {
 
       cy.contains('Start interview').click()
 
-      cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+      cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
       cy.get('[data-test-id="feature-form"]').eq(0)
         .should('contain', 'Introduction')
@@ -122,7 +122,7 @@ describe('stages', () => {
 
       cy.contains('Start interview').click()
 
-      cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+      cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
       cy.get('[data-test-id="feature-form"]').eq(0)
         .should('contain', 'Summary')
@@ -303,7 +303,7 @@ describe('stages', () => {
 
       cy.contains('Start interview').click()
 
-      cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+      cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
       cy.get('[data-test-id="feature-form"]').eq(0)
         .should('contain', 'Company')
@@ -390,7 +390,7 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', '1000 - 5000')
@@ -458,7 +458,7 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'Candidate questions')
@@ -527,7 +527,7 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .within(() => {
@@ -609,7 +609,7 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'Are you familiar with ISO-111-A?')
@@ -688,7 +688,7 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'E1A?')
@@ -765,7 +765,7 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'HS1A?')
@@ -841,7 +841,7 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'C1?')
@@ -917,7 +917,7 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .should('contain', 'M1?')
@@ -993,7 +993,7 @@ describe('stages', () => {
 
     cy.contains('Start interview').click()
 
-    cy.get('#language-choose-modal').trigger('keyup', { code: "Escape" })
+    cy.get('#language-choose-modal').find('button').contains('Choose').click()
 
     cy.get('[data-test-id="feature-form"]').eq(0)
       .within(() => {
