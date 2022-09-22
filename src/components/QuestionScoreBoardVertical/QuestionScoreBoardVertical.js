@@ -47,7 +47,6 @@ const QuestionScoreBoardVertical = ({ className, index, rule, scores = [], lock 
       {(rule.steps || []).map((step, index) => (
         <li style={{ minHeight: (heights && heights[index] || '0') + 'px'}} onMouseOver={() => onRow && onRow(index)} onMouseLeave={() => onRow && onRow(-1)} onClick={() => toggleStep(index)} key={index} className={classNames(
           styles['question-score-board-vertical-steps-step'],
-          rowActive === index ? styles['question-score-board-vertical-steps-step-candidate'] : '',
           'format',
           scores[index] ? styles['question-score-board-vertical-steps-step-active'] : ''
         )} dangerouslySetInnerHTML={{__html: striptags(i18nField(step), allowedHtmlTags)}}></li>

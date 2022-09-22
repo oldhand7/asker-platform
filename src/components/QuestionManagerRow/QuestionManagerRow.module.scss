@@ -28,7 +28,7 @@
         line-height: 24rem;
         color: #000000;
         margin: 0;
-        flex: 0 0 60%;
+        flex: 0 0 50%;
         padding: 0 16rem 0 8rem;
         position: relative;
 
@@ -51,6 +51,8 @@
         padding-right: 16rem;
         flex: 0 0 130rem;
         white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
     }
 
     &-control {
