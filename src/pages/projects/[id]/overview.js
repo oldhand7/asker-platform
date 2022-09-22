@@ -106,7 +106,7 @@ const ProjectOverviewPage = ({ project, interviews = [] }) => {
         .then(() => {
           setInterviews(_interviews.filter(i => i.id != interview.id))
           setLoading(false);
-          setSuccess('status.interview-deleted')
+          setSuccess(t('status.interview-deleted'))
         })
         .catch(error => {
           setError(ctxError('errors.server', error))
