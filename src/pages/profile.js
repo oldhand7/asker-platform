@@ -8,6 +8,8 @@ import classNames from 'classnames';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'libs/translation';
+import Alert from 'components/Alert/Alert';
+import { textToMailtoHtml } from 'libs/helper';
 
 import 'react-tabs/style/react-tabs.css';
 import styles from 'styles/pages/profile.module.scss';
@@ -43,7 +45,10 @@ const ProfilePage = () => {
         <CompanyProfileForm className={styles['profile-page-form']} />
       </TabPanel> : null}
       {user && user.type == 'admin' && user.companyId ? <TabPanel className={styles['profile-page-tab-panel']}>
-        <CompanyEmployeesForm className={classNames(styles['profile-page-form'], styles['profile-page-form-ra'])} />
+        <div className={styles['alert']} >
+          <Alert type="warning" html={true}>{textToMailtoHtml(t('warnings.function-employees-not-available'))}</Alert>
+        </div>
+        {/*<CompanyEmployeesForm className={classNames(styles['profile-page-form'], styles['profile-page-form-ra'])} />*/}
       </TabPanel> : null}
     </Tabs> : <span>{t('status.loading')}</span>}
   </div>

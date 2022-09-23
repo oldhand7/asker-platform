@@ -237,6 +237,7 @@
     "warnings.criteria-unbalanced": "Criteria unbalanced!",
     "warnings.no-questions": "No questions to show.",
     "warnings.website-update": "Website is will be updated soon. Please save all changes immediatly to avoid loosing data.",
+    "warnings.function-employees-not-available": "This function temporarily not available. If you need additional accounts created please contact info@askertech.com",
     "success.profile.update": "Your profile was updated!",
     "success.company-profile.update": "Company data updated!",
     "success.upload": "Files uploaded.",
