@@ -86,7 +86,7 @@ const QuestionPage = ({ questions = [], companyId, total = 0 }) => {
 
       filteredQuestions = filteredQuestions.filter(q => {
         const questionIntName = i18nField(q.name);
-        const criteriaIntName = q.criteria && i18nField(q.criteria) || '';
+        const criteriaIntName = q.criteria && i18nField(q.criteria.name) || '';
 
         return regex.test(questionIntName.toLowerCase()) || regex.test(criteriaIntName.toLowerCase())
       })

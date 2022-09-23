@@ -1,6 +1,6 @@
 import { getInterviewAggregate } from 'libs/interview';
 import { calcDefaultScoringRules } from 'libs/project';
-import { nameSort } from 'libs/helper';
+import { idSort} from 'libs/helper';
 
 const scoreTable = [0, 25, 50, 75, 100]
 
@@ -56,7 +56,7 @@ export const calcInterviewScore = (interview, projectOrTemplate) => {
   return Math.round(interviewScore);
 }
 
-export const scoreMap = (interview, { scoringRules }, t) => {
+export const scoreMap = (interview) => {
   const aggregate = getInterviewAggregate(interview)
 
   const table = {
@@ -127,7 +127,7 @@ export const scoreMap = (interview, { scoringRules }, t) => {
         score += scoreTable[cScore-1];
       }
 
-      table[key].children.sort(nameSort);
+      table[key].children.sort(idSort);
       table[key].score = Math.round(score / Object.keys(aggregate[key]).length);
     }
   }

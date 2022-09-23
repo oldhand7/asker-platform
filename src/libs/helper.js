@@ -282,8 +282,12 @@ export const scoreSort = function(ca, cb) {
   if (ca.score < cb.score) return 1;
   if (ca.score > cb.score) return -1;
 
-  if (ca.candidate.name < cb.candidate.name) return -1;
-  if (ca.candidate.name > cb.candidate.name) return 1;
+  return 0;
+}
+
+export const idSort = function(ca, cb) {
+  if (ca.id < cb.id) return 1;
+  if (ca.id > cb.id) return -1;
 
   return 0;
 }
