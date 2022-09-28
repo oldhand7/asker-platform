@@ -17,7 +17,7 @@ const defaultQuestion = {
 }
 
 const FollowupQuestionForm = ({  className, values, onValues }) => {
-  const { t } = useTranslation()
+  const { t, i18nField } = useTranslation()
   const [mode, setMode] = useState('listing');
   const router = useRouter();
 
@@ -86,9 +86,10 @@ const FollowupQuestionForm = ({  className, values, onValues }) => {
       <small>{t('labels.optional')}</small>
     </h4>
 
+
     <ul aria-labelledby={ids.heading} className={styles['form-list']}>
       {followupQuestions.map((q, index) => <li key={`q${index}`} className={styles['form-list-item']}>
-        <span className={styles['form-list-item']}>{q.en}</span>
+        <span className={styles['form-list-item']}>{i18nField(q)}</span>
         <TrashButton className={styles['form-list-item-remove']} onClick={() => removeQuestion(index)} />
       </li>)}
     </ul>

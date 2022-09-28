@@ -184,7 +184,7 @@ const EvaluationQuestionForm = ({ className, question, type, onValues }) => {
         null
       }
       <TextInputField diff={locale} value={formValues.name[locale]}  error={isSubmitted && errors && errors.name && errors.name[locale]} autoComplete="off" name={`name.${locale}`} onChange={handleName} label={t("labels.question")} placeholder={t("placeholders.question-here")} className={styles['evaluation-question-form-input-field']} />
-      <HtmlInputField id="note" value={formValues.note[locale]} diff={locale} error={isSubmitted && errors && errors.note && errors.note[locale]} name={`note.${locale}`} onChange={handleNote} label={t("labels.note")} placeholder={t("labels.notes-interviewer")} className={styles['evaluation-question-form-input-field']} />
+      <HtmlInputField id="note" value={formValues.note && formValues.note[locale]} diff={locale} error={isSubmitted && errors && errors.note && errors.note[locale]} name={`note.${locale}`} onChange={handleNote} label={t("labels.note")} placeholder={t("labels.notes-interviewer")} className={styles['evaluation-question-form-input-field']} />
       <FollowupQuestionForm values={formValues.followup} onValues={handleFollowupQuestions} className={styles['evaluation-question-form-input-field']} />
     </div>
 
