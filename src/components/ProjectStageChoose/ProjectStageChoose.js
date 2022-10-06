@@ -25,7 +25,7 @@ const ProjectStageChoose = ({ className, onChoose, onClose }) => {
                 featureTypes.map(ft => {
                     return <div key={ft.id} className={styles['project-stage-choose-stage-group']}>
                          <h4 className={styles['project-stage-choose-stage-group-title']}>
-                                {t(ft.name)}
+                                {t(`labels.${ft.id}`)}
                         </h4>
 
                         <ul className={styles['project-stage-choose-stage-group-list']}>

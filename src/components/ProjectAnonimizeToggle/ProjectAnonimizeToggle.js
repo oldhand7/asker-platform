@@ -44,7 +44,7 @@ const ProjectAnonimizeToggle = ({ className, project, onChange }) => {
       onChange={toggleAnonimization}
       className={styles["project-anonimize-toggle-input"]}
     />
-    <label className={styles["project-anonimize-toggle-label"]} htmlFor='anonimization-status'>{t('Anonymize candidates')}</label>
+    <label className={styles["project-anonimize-toggle-label"]} htmlFor='anonimization-status'>{t('actions.anonymise-candidates')}</label>
     {loading ? <Preloader /> : null}
   </div>
 }

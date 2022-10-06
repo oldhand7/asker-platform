@@ -1,6 +1,7 @@
 import { criteriaTypes } from 'libs/criteria';
 import classNames from 'classnames';
 import { questionTypes } from 'libs/questions';
+import { useTranslation } from 'libs/translation';
 
 import styles from './QuestionFilter.module.scss';
 
@@ -10,6 +11,8 @@ const options = [
 ]
 
 const QuestionFilter = ({ className, selected = [], onFilter }) => {
+  const { t } = useTranslation();
+
   const toggleOption = (option) => {
     const exists = selected.indexOf(option) > -1;
 
@@ -24,7 +27,7 @@ const QuestionFilter = ({ className, selected = [], onFilter }) => {
     {options.map(c => <li onClick={() => toggleOption(c)} key={c.id} className={classNames(
       styles['question-filter-item'],
       selected.indexOf(c) > -1 ? styles['question-filter-item-active'] : '',
-    )}>{c.name}</li>)}
+    )}>{t(`labels.${c.id}`)}</li>)}
   </ul>
 }
 

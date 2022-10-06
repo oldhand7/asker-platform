@@ -5,11 +5,13 @@ import UserCard from 'components/UserCard/UserCard';
 import Link from 'next/link';
 import CarretDown from 'components/Icon/CarretDownIcon';
 import styles from './UserMenu.module.scss';
+import { useTranslation } from 'libs/translation';
 
 const UserMenu = ({ className }) => {
   const [open, setOpen] = useState(false);
   const { user, loading, getAvatar } = useUser();
   const menuRef = useRef();
+  const { t } = useTranslation();
 
   const getClassNames = () => {
     return classNames(
@@ -44,8 +46,8 @@ const UserMenu = ({ className }) => {
       <CarretDown className={styles['usermenu-head-carret']} />
     </div>
     <ul className={styles['usermenu-submenu']}>
-      <li><Link href="/profile"><a>Profile</a></Link></li>
-      <li><Link href="/logout"><a>Logout</a></Link></li>
+      <li><Link href="/profile"><a>{t('menu.profile')}</a></Link></li>
+      <li><Link href="/logout"><a>{t('actions.logout')}</a></Link></li>
     </ul>
   </div>
 }
